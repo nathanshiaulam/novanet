@@ -26,9 +26,14 @@ class HomeViewController: UIViewController {
         return false;
     }
     
+    func goToSettingsPage() {
+        self.performSegueWithIdentifier("goToSettingsPage", sender: nil);
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad();
         // Go to login page if no user logged in
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "goToSettingsPage", name: "goToSettingsPage", object: nil);
         if (!self.userLoggedIn()) {
             self.performSegueWithIdentifier("toUserLogin", sender: self);
         }

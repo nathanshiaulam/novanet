@@ -22,7 +22,7 @@ class LogInViewController: UIViewController {
     }
     
     func userLogin(username: String, password:String) {
-        
+        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         var usernameLen = count(username);
         var passwordLen = count(password);
         
@@ -36,6 +36,7 @@ class LogInViewController: UIViewController {
         PFUser.logInWithUsernameInBackground(username, password: password) {
             (user, error) -> Void in
             if (user != nil) {
+                defaults.setObject(self.usernameField.text, forKey: Constants.UserKeys.usernameKey);
                 self.dismissViewControllerAnimated(true, completion: nil);
             }
             else {

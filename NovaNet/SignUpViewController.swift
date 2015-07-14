@@ -31,8 +31,8 @@ class SignUpViewController: UIViewController {
     
     func createUser(username: String, password: String, email: String) {
         var newUser = PFUser();
-        
-        // Ensures that fields are not equal
+        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+                // Ensures that fields are not equal
         if (count(username) == 0 || count(password) == 0 || count(email) == 0) {
             var alert = UIAlertController(title: "Submission Failure", message: "Invalid username, password, or email", preferredStyle: UIAlertControllerStyle.Alert);
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
@@ -48,8 +48,9 @@ class SignUpViewController: UIViewController {
         newUser.signUpInBackgroundWithBlock {
             (succeeded, error) -> Void in
             if (error == nil) {
+                defaults.setObject(self.usernameField.text, forKey: Constants.UserKeys.usernameKey);
                 self.dismissViewControllerAnimated(true, completion: { () -> Void in
-                    NSNotificationCenter.defaultCenter().postNotificationName("showTutorial", object: nil);
+                    NSNotificationCenter.defaultCenter().postNotificationName("goToSettingsPage", object: nil);
                     NSNotificationCenter.defaultCenter().postNotificationName("dismissToHomePage", object: nil);
                 })
                 self.dismissViewControllerAnimated(true, completion: nil);

@@ -7,12 +7,25 @@
 //
 
 import UIKit
-
+import Parse
+import Bolts
 class HomeViewController: UIViewController {
 
+    // Checks if user is logged in
+    func userLoggedIn() -> Bool{
+        var currentUser = PFUser.currentUser();
+        if ((currentUser) != nil) {
+            return true;
+        }
+        return false;
+    }
+    
     override func viewDidLoad() {
-        super.viewDidLoad()
-
+        super.viewDidLoad();
+        // Go to login page if no user logged in
+        if (!self.userLoggedIn()) {
+            self.performSegueWithIdentifier("toUserLogin", sender: self);
+        }
         // Do any additional setup after loading the view.
     }
 

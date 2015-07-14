@@ -28,6 +28,8 @@
 		16A0E73B1B5507B700DDAE95 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0E73A1B5507B700DDAE95 /* Accounts.framework */; };
 		16A0E73D1B5507BD00DDAE95 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0E73C1B5507BD00DDAE95 /* Social.framework */; };
 		16A0E73F1B55086A00DDAE95 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E73E1B55086A00DDAE95 /* HomeViewController.swift */; };
+		16A0E7411B55096F00DDAE95 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7401B55096F00DDAE95 /* LogInViewController.swift */; };
+		16A0E7431B55097A00DDAE95 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7421B55097A00DDAE95 /* SignUpViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +68,8 @@
 		16A0E73A1B5507B700DDAE95 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		16A0E73C1B5507BD00DDAE95 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		16A0E73E1B55086A00DDAE95 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		16A0E7401B55096F00DDAE95 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
+		16A0E7421B55097A00DDAE95 /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +129,8 @@
 			children = (
 				16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */,
 				16A0E7031B54FC7400DDAE95 /* Main.storyboard */,
+				16A0E7421B55097A00DDAE95 /* SignUpViewController.swift */,
+				16A0E7401B55096F00DDAE95 /* LogInViewController.swift */,
 				16A0E73E1B55086A00DDAE95 /* HomeViewController.swift */,
 				16A0E7061B54FC7400DDAE95 /* Images.xcassets */,
 				16A0E7081B54FC7400DDAE95 /* LaunchScreen.xib */,
@@ -283,6 +289,8 @@
 			files = (
 				16A0E7001B54FC7400DDAE95 /* AppDelegate.swift in Sources */,
 				16A0E73F1B55086A00DDAE95 /* HomeViewController.swift in Sources */,
+				16A0E7431B55097A00DDAE95 /* SignUpViewController.swift in Sources */,
+				16A0E7411B55096F00DDAE95 /* LogInViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="PDA-EG-F6k">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
@@ -12,10 +12,74 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <connections>
+                        <segue destination="bMb-ma-PhJ" kind="relationship" relationship="rootViewController" id="Cpx-I5-dNf"/>
+                    </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oqK-AU-Rir" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="118" y="424"/>
+            <point key="canvasLocation" x="-1428" y="388"/>
+        </scene>
+        <!--Home View Controller-->
+        <scene sceneID="jiQ-Zn-Dcj">
+            <objects>
+                <viewController id="bMb-ma-PhJ" customClass="HomeViewController" customModule="NovaNet" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Wh5-h8-1Mf"/>
+                        <viewControllerLayoutGuide type="bottom" id="Jph-ti-4ek"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="iHU-nK-yxS">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="46T-gh-Ric"/>
+                    <connections>
+                        <segue destination="mtX-bP-LOC" kind="presentation" id="bKs-mG-WMJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MWw-FI-Qcx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-672" y="388"/>
+        </scene>
+        <!--Log In View Controller-->
+        <scene sceneID="A7f-pK-cvJ">
+            <objects>
+                <viewController id="mtX-bP-LOC" customClass="LogInViewController" customModule="NovaNet" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Ne3-uT-Cbf"/>
+                        <viewControllerLayoutGuide type="bottom" id="rIi-KG-3BC"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="QqW-qf-i0r">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="X6L-iO-oVf" kind="presentation" id="3qW-kn-EIn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4M2-T0-295" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="35" y="-168"/>
+        </scene>
+        <!--Sign Up View Controller-->
+        <scene sceneID="acH-7s-Ws2">
+            <objects>
+                <viewController id="X6L-iO-oVf" customClass="SignUpViewController" customModule="NovaNet" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="NZG-l6-Bom"/>
+                        <viewControllerLayoutGuide type="bottom" id="6Kr-Ef-lRT"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="7ZN-zM-rOY">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GJz-22-EVq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="746" y="-168"/>
         </scene>
     </scenes>
 </document>

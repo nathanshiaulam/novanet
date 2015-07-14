@@ -50,9 +50,9 @@ class SignUpViewController: UIViewController {
             if (error == nil) {
                 self.dismissViewControllerAnimated(true, completion: { () -> Void in
                     NSNotificationCenter.defaultCenter().postNotificationName("showTutorial", object: nil);
+                    NSNotificationCenter.defaultCenter().postNotificationName("dismissToHomePage", object: nil);
                 })
                 self.dismissViewControllerAnimated(true, completion: nil);
-                self.navigationController?.popToRootViewControllerAnimated(true);
             } else {
                 let errorString = error!.userInfo!["error"] as! NSString;
                 var alert = UIAlertController(title: "Submission Failure", message: errorString as String, preferredStyle: UIAlertControllerStyle.Alert);

@@ -46,6 +46,10 @@ class LogInViewController: UIViewController {
         }
     }
     
+    func dismissToHomePage() {
+        self.dismissViewControllerAnimated(true, completion: nil);
+    }
+    
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         self.view.endEditing(true);
     }
@@ -63,6 +67,10 @@ class LogInViewController: UIViewController {
         passwordField.secureTextEntry = true;
 
         // Do any additional setup after loading the view.
+    }
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(true);
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "dismissToHomePage", name: "dismissToHomePage", object: nil);
     }
 
     override func didReceiveMemoryWarning() {

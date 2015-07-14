@@ -1,5 +1,5 @@
 //
-//  HomeViewController.swift
+//  SettingsViewController.swift
 //  NovaNet
 //
 //  Created by Nathan Lam on 7/14/15.
@@ -7,31 +7,12 @@
 //
 
 import UIKit
-import Parse
-import Bolts
-class HomeViewController: UIViewController {
 
-    @IBOutlet weak var helloLabel: UILabel!
-    @IBAction func userLogout(sender: AnyObject) {
-        PFUser.logOut();
-        self.performSegueWithIdentifier("toUserLogin", sender: self);
-    }
+class SettingsViewController: UIViewController {
 
-    // Checks if user is logged in
-    func userLoggedIn() -> Bool{
-        var currentUser = PFUser.currentUser();
-        if ((currentUser) != nil) {
-            return true;
-        }
-        return false;
-    }
-    
     override func viewDidLoad() {
-        super.viewDidLoad();
-        // Go to login page if no user logged in
-        if (!self.userLoggedIn()) {
-            self.performSegueWithIdentifier("toUserLogin", sender: self);
-        }
+        super.viewDidLoad()
+
         // Do any additional setup after loading the view.
     }
 

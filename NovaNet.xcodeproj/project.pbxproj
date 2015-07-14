@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B1881B55367800DBF11A /* SignUpViewController.swift */; };
 		16A0E7001B54FC7400DDAE95 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */; };
 		16A0E7051B54FC7400DDAE95 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16A0E7031B54FC7400DDAE95 /* Main.storyboard */; };
 		16A0E7071B54FC7400DDAE95 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16A0E7061B54FC7400DDAE95 /* Images.xcassets */; };
@@ -29,7 +30,6 @@
 		16A0E73D1B5507BD00DDAE95 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0E73C1B5507BD00DDAE95 /* Social.framework */; };
 		16A0E73F1B55086A00DDAE95 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E73E1B55086A00DDAE95 /* HomeViewController.swift */; };
 		16A0E7411B55096F00DDAE95 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7401B55096F00DDAE95 /* LogInViewController.swift */; };
-		16A0E7431B55097A00DDAE95 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7421B55097A00DDAE95 /* SignUpViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1616B1881B55367800DBF11A /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		16A0E6FA1B54FC7300DDAE95 /* NovaNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NovaNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		16A0E6FE1B54FC7400DDAE95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -69,7 +70,6 @@
 		16A0E73C1B5507BD00DDAE95 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		16A0E73E1B55086A00DDAE95 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		16A0E7401B55096F00DDAE95 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
-		16A0E7421B55097A00DDAE95 /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,8 +128,8 @@
 			isa = PBXGroup;
 			children = (
 				16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */,
+				1616B1881B55367800DBF11A /* SignUpViewController.swift */,
 				16A0E7031B54FC7400DDAE95 /* Main.storyboard */,
-				16A0E7421B55097A00DDAE95 /* SignUpViewController.swift */,
 				16A0E7401B55096F00DDAE95 /* LogInViewController.swift */,
 				16A0E73E1B55086A00DDAE95 /* HomeViewController.swift */,
 				16A0E7061B54FC7400DDAE95 /* Images.xcassets */,
@@ -289,7 +289,7 @@
 			files = (
 				16A0E7001B54FC7400DDAE95 /* AppDelegate.swift in Sources */,
 				16A0E73F1B55086A00DDAE95 /* HomeViewController.swift in Sources */,
-				16A0E7431B55097A00DDAE95 /* SignUpViewController.swift in Sources */,
+				1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */,
 				16A0E7411B55096F00DDAE95 /* LogInViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -496,6 +496,7 @@
 				16A0E71B1B54FC7400DDAE95 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		16A0E71C1B54FC7400DDAE95 /* Build configuration list for PBXNativeTarget "NovaNetTests" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +505,7 @@
 				16A0E71E1B54FC7400DDAE95 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

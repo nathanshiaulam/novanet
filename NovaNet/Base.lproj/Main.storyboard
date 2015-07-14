@@ -97,7 +97,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="X6L-iO-oVf" kind="presentation" id="gvx-UF-WpM"/>
+                                    <segue destination="Vup-Az-fhU" kind="presentation" id="nQj-eJ-m6v"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -115,11 +115,13 @@
                             <constraint firstItem="ZGG-VI-yE1" firstAttribute="top" relation="greaterThanOrEqual" secondItem="UZ2-8R-pKu" secondAttribute="bottom" constant="75" id="Wr1-QY-r24"/>
                             <constraint firstAttribute="centerY" secondItem="e9F-6d-SIM" secondAttribute="centerY" id="gZb-Oe-262"/>
                             <constraint firstItem="UZ2-8R-pKu" firstAttribute="centerX" secondItem="ZGG-VI-yE1" secondAttribute="centerX" id="hUR-1c-3Zi"/>
+                            <constraint firstItem="ZGG-VI-yE1" firstAttribute="top" relation="lessThanOrEqual" secondItem="UZ2-8R-pKu" secondAttribute="bottom" constant="108" id="nX0-2A-vxM"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="5WO-6v-Xyu"/>
                                 <exclude reference="Wr1-QY-r24"/>
+                                <exclude reference="nX0-2A-vxM"/>
                                 <exclude reference="9Og-4d-mFY"/>
                             </mask>
                         </variation>
@@ -129,23 +131,40 @@
             </objects>
             <point key="canvasLocation" x="30" y="-196"/>
         </scene>
-        <!--Sign Up View Controller-->
-        <scene sceneID="acH-7s-Ws2">
+        <!--Navigation Controller-->
+        <scene sceneID="RQ0-bF-9bV">
             <objects>
-                <viewController id="X6L-iO-oVf" customClass="SignUpViewController" customModule="NovaNet" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController id="Vup-Az-fhU" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="HO5-s5-dCU">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="7m3-ec-ca8" kind="relationship" relationship="rootViewController" id="Au2-bh-3TV"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nzl-qV-7E6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="754" y="-242"/>
+        </scene>
+        <!--Sign Up View Controller-->
+        <scene sceneID="e8b-Lp-RQk">
+            <objects>
+                <viewController id="7m3-ec-ca8" customClass="SignUpViewController" customModule="NovaNet" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="NZG-l6-Bom"/>
-                        <viewControllerLayoutGuide type="bottom" id="6Kr-Ef-lRT"/>
+                        <viewControllerLayoutGuide type="top" id="Rja-5T-7vx"/>
+                        <viewControllerLayoutGuide type="bottom" id="D9R-7h-FTh"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="7ZN-zM-rOY">
+                    <view key="view" contentMode="scaleToFill" id="1fw-qi-hKQ">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="5xS-MC-5Qp"/>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="GJz-22-EVq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="G1Q-PK-dMx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="746" y="-168"/>
+            <point key="canvasLocation" x="1468" y="-248"/>
         </scene>
     </scenes>
 </document>

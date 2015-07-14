@@ -31,12 +31,24 @@
                     <view key="view" contentMode="scaleToFill" id="iHU-nK-yxS">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LBW-v9-YP5">
+                                <rect key="frame" x="277" y="285" width="46" height="30"/>
+                                <state key="normal" title="Button">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="mtX-bP-LOC" kind="presentation" id="qby-Uu-qkX"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="LBW-v9-YP5" secondAttribute="centerX" id="hn2-bi-liX"/>
+                            <constraint firstAttribute="centerY" secondItem="LBW-v9-YP5" secondAttribute="centerY" id="kel-fe-m2L"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="46T-gh-Ric"/>
-                    <connections>
-                        <segue destination="mtX-bP-LOC" kind="presentation" id="bKs-mG-WMJ"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MWw-FI-Qcx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -53,15 +65,69 @@
                     <view key="view" contentMode="scaleToFill" id="QqW-qf-i0r">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZGG-VI-yE1">
+                                <rect key="frame" x="279" y="480" width="43" height="30"/>
+                                <state key="normal" title="Log In">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="e9F-6d-SIM">
+                                <rect key="frame" x="200" y="285" width="200" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="97" id="hcl-sG-poa"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="tN7-MP-aAW"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="hcl-sG-poa"/>
+                                    </mask>
+                                </variation>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UZ2-8R-pKu">
+                                <rect key="frame" x="200" y="342" width="200" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C1F-TE-Ugh">
+                                <rect key="frame" x="273" y="530" width="55" height="30"/>
+                                <state key="normal" title="Sign Up">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="X6L-iO-oVf" kind="presentation" id="gvx-UF-WpM"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="e9F-6d-SIM" secondAttribute="centerX" id="0ff-x0-dOU"/>
+                            <constraint firstAttribute="centerX" secondItem="ZGG-VI-yE1" secondAttribute="centerX" id="5WO-6v-Xyu"/>
+                            <constraint firstItem="rIi-KG-3BC" firstAttribute="top" secondItem="ZGG-VI-yE1" secondAttribute="bottom" constant="8" symbolic="YES" id="9Og-4d-mFY"/>
+                            <constraint firstItem="rIi-KG-3BC" firstAttribute="top" secondItem="C1F-TE-Ugh" secondAttribute="bottom" constant="40" id="CSj-nk-EIQ"/>
+                            <constraint firstItem="e9F-6d-SIM" firstAttribute="centerX" secondItem="UZ2-8R-pKu" secondAttribute="centerX" id="IaN-5l-O7g"/>
+                            <constraint firstItem="C1F-TE-Ugh" firstAttribute="centerX" secondItem="ZGG-VI-yE1" secondAttribute="centerX" id="Igc-7m-PBj"/>
+                            <constraint firstItem="e9F-6d-SIM" firstAttribute="width" secondItem="UZ2-8R-pKu" secondAttribute="width" id="LvL-p6-doA"/>
+                            <constraint firstItem="UZ2-8R-pKu" firstAttribute="top" secondItem="e9F-6d-SIM" secondAttribute="bottom" constant="27" id="NsU-Yd-A6m"/>
+                            <constraint firstItem="C1F-TE-Ugh" firstAttribute="top" secondItem="ZGG-VI-yE1" secondAttribute="bottom" constant="20" id="PZV-Mi-DFu"/>
+                            <constraint firstItem="ZGG-VI-yE1" firstAttribute="top" relation="greaterThanOrEqual" secondItem="UZ2-8R-pKu" secondAttribute="bottom" constant="75" id="Wr1-QY-r24"/>
+                            <constraint firstAttribute="centerY" secondItem="e9F-6d-SIM" secondAttribute="centerY" id="gZb-Oe-262"/>
+                            <constraint firstItem="UZ2-8R-pKu" firstAttribute="centerX" secondItem="ZGG-VI-yE1" secondAttribute="centerX" id="hUR-1c-3Zi"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="5WO-6v-Xyu"/>
+                                <exclude reference="Wr1-QY-r24"/>
+                                <exclude reference="9Og-4d-mFY"/>
+                            </mask>
+                        </variation>
                     </view>
-                    <connections>
-                        <segue destination="X6L-iO-oVf" kind="presentation" id="3qW-kn-EIn"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4M2-T0-295" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="35" y="-168"/>
+            <point key="canvasLocation" x="30" y="-196"/>
         </scene>
         <!--Sign Up View Controller-->
         <scene sceneID="acH-7s-Ws2">

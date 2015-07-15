@@ -17,8 +17,15 @@ struct Constants {
         static let interestsKey = "interestsKey";
         static let backgroundKey = "backgroundKey";
         static let profileImageKey = "profileImageKey";
+        static let websiteKey = "websiteKey";
     }
+    
     struct SelectedUserKeys {
+        static let selectedUsernameKey = "selectedUsernameKey";
+        static let selectedNameKey = "selectedNameKey";
+        static let selectedInterestsKey = "selectedInterestsKey";
+        static let selectedBackgroundKey = "selectedBackgroundKey";
+        static let selectedProfileImageKey = "selectedprofileImageKey";
         
     }
 }

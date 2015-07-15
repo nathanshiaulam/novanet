@@ -13,11 +13,7 @@ class ProfileViewController: UIViewController {
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var profileImageButton: UIButton!
-    
-
-    @IBAction func backToHomePage(sender: UIBarButtonItem) {
-        self.navigationController?.popToRootViewControllerAnimated(true);
-    }
+    @IBOutlet weak var interestsLabel: UILabel!
     
     func formatImage(var profileImage: UIButton) {
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
@@ -26,7 +22,14 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         formatImage(self.profileImageButton);
+        if let name = defaults.stringForKey(Constants.UserKeys.nameKey) {
+            nameLabel.text = name;
+        }
+        if let interests = defaults.stringForKey(Constants.UserKeys.interestsKey) {
+            interestsLabel.text = "Interests: " + interests;
+        }
         // Do any additional setup after loading the view.
     }
     

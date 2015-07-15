@@ -14,6 +14,14 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var helloLabel: UILabel!
     @IBAction func userLogout(sender: AnyObject) {
         PFUser.logOut();
+        let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+        
+        var dict = defaults.dictionaryRepresentation();
+        for key in dict.keys {
+            defaults.removeObjectForKey(key.description);
+        }
+        defaults.synchronize();
+        
         self.performSegueWithIdentifier("toUserLogin", sender: self);
     }
 

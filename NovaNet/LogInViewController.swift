@@ -37,6 +37,24 @@ class LogInViewController: UIViewController {
             (user, error) -> Void in
             if (user != nil) {
                 defaults.setObject(self.usernameField.text, forKey: Constants.UserKeys.usernameKey);
+                
+                var query = PFQuery(className:"Profile");
+                var currentID = PFUser.currentUser()!.objectId;
+                query.whereKey("ID", equalTo:currentID!);
+                
+                query.getFirstObjectInBackgroundWithBlock {
+                    (profile: PFObject?, error: NSError?) -> Void in
+                    if error != nil || profile == nil {
+                        println(error);
+                    } else if let profile = profile {
+                        defaults.setObject(profile["Name"], forKey: Constants.UserKeys.nameKey);
+                        defaults.setObject(profile["Interests"], forKey: Constants.UserKeys.interestsKey);
+                        defaults.setObject(profile["Background"], forKey: Constants.UserKeys.backgroundKey);
+                        defaults.setObject(profile["Website"], forKey: Constants.UserKeys.websiteKey);
+                    }
+                }
+
+                
                 self.dismissViewControllerAnimated(true, completion: nil);
             }
             else {

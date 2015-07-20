@@ -68,7 +68,7 @@ class SignUpViewController: UIViewController {
     func textFieldShouldReturn(textField: UITextField)-> Bool {
         var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         if (textField == usernameField) {
-            passwordField.becomeFirstResponder();
+            emailField.becomeFirstResponder();
         }
         else if (textField == emailField) {
             textField.resignFirstResponder()

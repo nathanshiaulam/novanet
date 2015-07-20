@@ -19,7 +19,8 @@ struct Constants {
         static let profileImageKey = "profileImageKey";
         static let websiteKey = "websiteKey";
         static let distanceKey = "distanceKey";
-        static let locationKey = "locationKey";
+        static let longitudeKey = "longitudeKey";
+        static let latitudeKey = "latitudeKey";
     }
     struct TempKeys {
         static let fromNew = "fromNew";

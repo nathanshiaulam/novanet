@@ -48,35 +48,47 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate {
         
         
         super.viewDidLoad();
-        
+       
         // Go to login page if no user logged in
         if (!self.userLoggedIn()) {
             self.performSegueWithIdentifier("toUserLogin", sender: self);
         }
         
-        // Sets up core location manager
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
         
+        // Sets up core location manager
         locationManager.distanceFilter = 50.0;
         locationManager.activityType = CLActivityType.AutomotiveNavigation;
         locationManager.delegate = self;
         
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+       
+        
         
         // Do any additional setup after loading the view.
     }
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+    
+    func findUsersInRange() {
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         
+        var latitude = defaults.doubleForKey(Constants.UserKeys.latitudeKey);
+        var longitude = defaults.doubleForKey(Constants.UserKeys.longitudeKey);
+        var distance = defaults.integerForKey(Constants.UserKeys.distanceKey);
+    }
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+        let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         var currentLocation = CLLocation()
         
         if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedWhenInUse ||
             CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways){
                 currentLocation = locationManager.location;
         }
-        defaults.setObject(currentLocation, forKey:Constants.UserKeys.locationKey);
-        if defaults.stringForKey(Constants.UserKeys.nameKey) != nil {
+        defaults.setObject(currentLocation.coordinate.longitude, forKey: Constants.UserKeys.longitudeKey);
+        defaults.setObject(currentLocation.coordinate.latitude, forKey: Constants.UserKeys.latitudeKey);
+        
+        
+        if defaults.stringForKey(Constants.UserKeys.latitudeKey) != nil {
             var query = PFQuery(className:"Profile");
             var currentID = PFUser.currentUser()!.objectId;
             query.whereKey("ID", equalTo:currentID!);
@@ -86,7 +98,7 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate {
                 if error != nil || profile == nil {
                     println(error);
                 } else if let profile = profile {
-                    var point:PFGeoPoint = PFGeoPoint(location: currentLocation);
+                    var point:PFGeoPoint = PFGeoPoint(latitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude);
                     profile["Location"] = point;
                     profile.saveInBackground();
                 }
@@ -101,13 +113,13 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate {
 
     override func viewDidAppear(animated: Bool) {
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
-
+        
         var fromNew = defaults.boolForKey(Constants.TempKeys.fromNew);
         if (fromNew) {
             defaults.setObject(false, forKey: Constants.TempKeys.fromNew);
             self.performSegueWithIdentifier("goToSettingsPage", sender: nil);
         }
-        if defaults.stringForKey(Constants.UserKeys.nameKey) != nil {
+        if defaults.objectForKey(Constants.UserKeys.latitudeKey) != nil {
             var query = PFQuery(className:"Profile");
             var currentID = PFUser.currentUser()!.objectId;
             query.whereKey("ID", equalTo:currentID!);
@@ -117,8 +129,9 @@ class HomeViewController: UIViewController, CLLocationManagerDelegate {
                 if error != nil || profile == nil {
                     println(error);
                 } else if let profile = profile {
-                    var currentLocation:CLLocation = defaults.objectForKey(Constants.UserKeys.locationKey) as! CLLocation;
-                    var point:PFGeoPoint = PFGeoPoint(location: currentLocation);
+                    var latitude = defaults.doubleForKey(Constants.UserKeys.latitudeKey);
+                    var longitude = defaults.doubleForKey(Constants.UserKeys.longitudeKey);
+                    var point:PFGeoPoint = PFGeoPoint(latitude: latitude, longitude: longitude);
                     profile["Location"] = point;
                     profile.saveInBackground();
                 }

@@ -1,0 +1,14 @@
+{
+  "global": {
+    "parseVersion": "1.5.0"
+  },
+  "applications": {
+    "NovaNet": {
+      "applicationId": "ni7bpwOhWr114Rom27cx4QSv27Ud3tyMl0tZchxw",
+      "masterKey": "KBdJd49t1TR5OmZ8ohxPitfOxFpRiL34BGKJO46M"
+    },
+    "_default": {
+      "link": "NovaNet"
+    }
+  }
+}

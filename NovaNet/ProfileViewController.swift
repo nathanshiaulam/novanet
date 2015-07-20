@@ -11,17 +11,36 @@ import UIKit
 class ProfileViewController: UIViewController {
 
     
+    @IBOutlet weak var aboutLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var profileImageButton: UIButton!
     @IBOutlet weak var interestsLabel: UILabel!
+    
+    @IBOutlet weak var websiteButton: UIButton!
+    
     
     func formatImage(var profileImage: UIButton) {
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
         profileImage.clipsToBounds = true;
     }
     
+
+    @IBAction func openURL(sender: UIButton) {
+        if let url = NSURL(string:"http://" + sender.titleLabel!.text!) {
+            print("http://" + sender.titleLabel!.text!);
+            UIApplication.sharedApplication().openURL(url);
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        
+        // Do any additional setup after loading the view.
+    }
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(true);
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         formatImage(self.profileImageButton);
         if let name = defaults.stringForKey(Constants.UserKeys.nameKey) {
@@ -30,11 +49,19 @@ class ProfileViewController: UIViewController {
         if let interests = defaults.stringForKey(Constants.UserKeys.interestsKey) {
             interestsLabel.text = "Interests: " + interests;
         }
-        // Do any additional setup after loading the view.
+        if let background = defaults.stringForKey(Constants.UserKeys.backgroundKey) {
+            aboutLabel.text = "About: " + background;
+        }
+        aboutLabel.numberOfLines = 0;
+        aboutLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+        aboutLabel.sizeToFit();
+        
+        if let website = defaults.stringForKey(Constants.UserKeys.websiteKey) {
+            websiteButton.titleLabel?.text = website;
+        }
     }
     
-    
-    
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

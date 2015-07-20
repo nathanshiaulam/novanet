@@ -51,6 +51,7 @@ class LogInViewController: UIViewController {
                         defaults.setObject(profile["Interests"], forKey: Constants.UserKeys.interestsKey);
                         defaults.setObject(profile["Background"], forKey: Constants.UserKeys.backgroundKey);
                         defaults.setObject(profile["Website"], forKey: Constants.UserKeys.websiteKey);
+                        defaults.setObject(profile["Distance"], forKey: Constants.UserKeys.distanceKey);
                     }
                 }
 

@@ -49,8 +49,9 @@ class SignUpViewController: UIViewController {
             (succeeded, error) -> Void in
             if (error == nil) {
                 defaults.setObject(self.usernameField.text, forKey: Constants.UserKeys.usernameKey);
+                defaults.setObject(5, forKey: Constants.UserKeys.distanceKey);
+                defaults.setObject(true, forKey: Constants.TempKeys.fromNew);
                 self.dismissViewControllerAnimated(true, completion: { () -> Void in
-                    NSNotificationCenter.defaultCenter().postNotificationName("goToSettingsPage", object: nil);
                     NSNotificationCenter.defaultCenter().postNotificationName("dismissToHomePage", object: nil);
                 })
                 self.dismissViewControllerAnimated(true, completion: nil);
@@ -69,9 +70,9 @@ class SignUpViewController: UIViewController {
         if (textField == usernameField) {
             passwordField.becomeFirstResponder();
         }
-        else if (textField == passwordField) {
+        else if (textField == emailField) {
             textField.resignFirstResponder()
-            emailField.becomeFirstResponder();
+            passwordField.becomeFirstResponder();
         }
         else {
             self.createUser(usernameField.text, password: passwordField.text, email:emailField.text);

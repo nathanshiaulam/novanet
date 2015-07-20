@@ -18,6 +18,11 @@ struct Constants {
         static let backgroundKey = "backgroundKey";
         static let profileImageKey = "profileImageKey";
         static let websiteKey = "websiteKey";
+        static let distanceKey = "distanceKey";
+        static let locationKey = "locationKey";
+    }
+    struct TempKeys {
+        static let fromNew = "fromNew";
     }
     
     struct SelectedUserKeys {

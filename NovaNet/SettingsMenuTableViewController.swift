@@ -16,21 +16,40 @@ class SettingsMenuTableViewController: UITableViewController {
     @IBOutlet weak var backgroundField: UITextField!
     @IBOutlet weak var interestsField: UITextField!
     
+    @IBOutlet weak var distanceLabel: UILabel!
+    @IBOutlet weak var distanceSlider: UISlider!
+    
+    // Changes label when slider value changes
+    @IBAction func sliderValueChanged(sender: UISlider) {
+        var floatDistance = floor(sender.value);
+        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        
+        if (floatDistance == 1) {
+            self.distanceLabel.text = NSString(format:"%.0f", floatDistance) as String + " kilometer";
+        } else {
+            self.distanceLabel.text = NSString(format:"%.0f", floatDistance) as String + " kilometers";
+        }
+        defaults.setObject(Int(floatDistance), forKey: Constants.UserKeys.distanceKey);
+    }
+    
     @IBAction func saveFunction(sender: UIBarButtonItem) {
         
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults(); // Create local datastore to change profile values
         let name = defaults.stringForKey(Constants.UserKeys.nameKey); // Checks if we should update or create new profile
+        let distance = defaults.integerForKey(Constants.UserKeys.distanceKey);
         
         if (count(nameField.text) > 0 && count(backgroundField.text) > 0 && count(interestsField.text) > 0) {
             if (name == nil) { // Save new profile
+                
                 var newProfile = PFObject(className:"Profile");
                 newProfile["ID"] = PFUser.currentUser()!.objectId;
                 newProfile["Name"] = nameField.text;
                 newProfile["Interests"] = interestsField.text;
                 newProfile["Background"] = backgroundField.text;
                 newProfile["Website"] = websiteField.text;
+                newProfile["Distance"] = distance;
+                newProfile.saveInBackground();
                 
-                newProfile.save();
             } else { // Update current profile
                 var query = PFQuery(className:"Profile");
                 var currentID = PFUser.currentUser()!.objectId;
@@ -45,6 +64,7 @@ class SettingsMenuTableViewController: UITableViewController {
                         profile["Interests"] = self.interestsField.text;
                         profile["Background"] = self.backgroundField.text;
                         profile["Website"] = self.websiteField.text;
+                        profile["Distance"] = distance;
                         profile.saveInBackground();
                     }
                 }
@@ -56,13 +76,42 @@ class SettingsMenuTableViewController: UITableViewController {
             if (count(websiteField.text) > 0) {
                 defaults.setObject(websiteField.text, forKey: Constants.UserKeys.websiteKey);
             }
+        
             self.dismissViewControllerAnimated(true, completion: nil);
-            
         } else {
             var alert = UIAlertController(title: "Empty Field", message: "Please enter all essential fields.", preferredStyle: UIAlertControllerStyle.Alert);
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
             self.presentViewController(alert, animated: true, completion: nil);
         }
+    }
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if (textField == nameField) {
+            backgroundField.becomeFirstResponder();
+        }
+        else if (textField == backgroundField) {
+            textField.resignFirstResponder()
+            interestsField.becomeFirstResponder();
+        }
+        else if (textField == interestsField) {
+            textField.resignFirstResponder()
+            websiteField.becomeFirstResponder();
+        }
+        else {
+            textField.resignFirstResponder();
+        }
+        return false;
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+        
+        var distanceValue = defaults.integerForKey(Constants.UserKeys.distanceKey);
+        if (distanceValue == 1) {
+            self.distanceLabel.text = String(distanceValue) + " kilometer";
+        } else {
+            self.distanceLabel.text = String(distanceValue)  + " kilometers";
+        }
+        distanceSlider.setValue(Float(distanceValue), animated: true);
     }
     
     override func viewDidLoad() {
@@ -104,5 +153,12 @@ class SettingsMenuTableViewController: UITableViewController {
         if let background = defaults.stringForKey(Constants.UserKeys.backgroundKey) {
             backgroundField.text = background;
         }
+        var distanceValue = defaults.integerForKey(Constants.UserKeys.distanceKey);
+        if (distanceValue == 1) {
+            self.distanceLabel.text = String(distanceValue) + " kilometer";
+        } else {
+            self.distanceLabel.text = String(distanceValue)  + " kilometers";
+        }
+        distanceSlider.setValue(Float(distanceValue), animated: true);
     }
 }

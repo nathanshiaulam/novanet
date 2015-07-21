@@ -25,6 +25,11 @@ class ProfileViewController: UIViewController {
     }
     
 
+    func userLogoutSegue() {
+        println("ho");
+        self.navigationController?.popToRootViewControllerAnimated(true);
+    }
+    
     @IBAction func openURL(sender: UIButton) {
         if let url = NSURL(string:"http://" + sender.titleLabel!.text!) {
             print("http://" + sender.titleLabel!.text!);
@@ -34,15 +39,19 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        formatImage(self.profileImageButton);
         
         
         // Do any additional setup after loading the view.
     }
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true);
+        println("hi");
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "userLogoutSegue", name: "userLogoutSegue", object: nil);
+        
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
-        formatImage(self.profileImageButton);
+        
+        
         if let name = defaults.stringForKey(Constants.UserKeys.nameKey) {
             nameLabel.text = name;
         }
@@ -52,6 +61,7 @@ class ProfileViewController: UIViewController {
         if let background = defaults.stringForKey(Constants.UserKeys.backgroundKey) {
             aboutLabel.text = "About: " + background;
         }
+        
         aboutLabel.numberOfLines = 0;
         aboutLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
         aboutLabel.sizeToFit();

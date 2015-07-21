@@ -31,6 +31,19 @@ class SettingsMenuTableViewController: UITableViewController {
         }
         defaults.setObject(Int(floatDistance), forKey: Constants.UserKeys.distanceKey);
     }
+
+    @IBAction func userLogout(sender: UIButton) {
+        PFUser.logOut();
+        let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+        
+        var dict = defaults.dictionaryRepresentation();
+        for key in dict.keys {
+            defaults.removeObjectForKey(key.description);
+        }
+        defaults.synchronize();
+        NSNotificationCenter.defaultCenter().postNotificationName("userLogoutSegue", object: nil);
+        self.dismissViewControllerAnimated(true, completion: nil);
+    }
     
     @IBAction func saveFunction(sender: UIBarButtonItem) {
         

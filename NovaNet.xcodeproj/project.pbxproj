@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		160D1F201B5E2AC300B3E4DB /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F1F1B5E2AC300B3E4DB /* HomeTableViewController.swift */; };
 		1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B1881B55367800DBF11A /* SignUpViewController.swift */; };
 		1616B18B1B554D0E00DBF11A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */; };
 		1616B18F1B55560300DBF11A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B18E1B55560300DBF11A /* Constants.swift */; };
@@ -46,6 +47,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		160D1F1F1B5E2AC300B3E4DB /* HomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
 		1616B1881B55367800DBF11A /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		1616B18E1B55560300DBF11A /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				16A0E7401B55096F00DDAE95 /* LogInViewController.swift */,
 				1616B18E1B55560300DBF11A /* Constants.swift */,
 				16A0E73E1B55086A00DDAE95 /* HomeViewController.swift */,
+				160D1F1F1B5E2AC300B3E4DB /* HomeTableViewController.swift */,
 				16A0E7061B54FC7400DDAE95 /* Images.xcassets */,
 				16A0E7081B54FC7400DDAE95 /* LaunchScreen.xib */,
 				16A0E6FD1B54FC7400DDAE95 /* Supporting Files */,
@@ -301,6 +304,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				160D1F201B5E2AC300B3E4DB /* HomeTableViewController.swift in Sources */,
 				16A0E7001B54FC7400DDAE95 /* AppDelegate.swift in Sources */,
 				16A0E73F1B55086A00DDAE95 /* HomeViewController.swift in Sources */,
 				1616B18B1B554D0E00DBF11A /* ProfileViewController.swift in Sources */,

@@ -14,8 +14,16 @@ import CoreLocation
 class HomeTableViewController: UITableViewController, CLLocationManagerDelegate {
     // Sets up CLLocationManager
     let locationManager = CLLocationManager()
-    var userListArr:NSMutableArray! = [Constants.UserKeys.loadText];
     
+    // Creates arrays to pass data
+    var userListArr: NSMutableArray! = [Constants.UserKeys.loadText];
+    var interestsArr: NSMutableArray! = NSMutableArray();
+    var imageArr: NSMutableArray! = NSMutableArray();
+    var nameArr: NSMutableArray! = NSMutableArray();
+    
+    @IBAction func Yay(sender: AnyObject) {
+        println("it works");
+    }
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         println("Error while updating location " + error.localizedDescription)
     }
@@ -41,10 +49,15 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UserProfileTableViewCell
         
         // Configure the cell...
-        cell.textLabel?.text = userListArr[indexPath.row] as? String
+        if (nameArr.count > 0) {
+            cell.nameLabel.text = nameArr[indexPath.row] as? String;
+            cell.profileInterestsLabel.text = nameArr[indexPath.row] as? String;
+        } else {
+            cell.textLabel?.text = userListArr[indexPath.row] as? String
+        }
         return cell
     }
     
@@ -83,7 +96,6 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
         var distance = defaults.integerForKey(Constants.UserKeys.distanceKey);
         var latitude = defaults.doubleForKey(Constants.UserKeys.latitudeKey);
         var currentID = PFUser.currentUser()!.objectId;
-        println("CurrentID" + currentID!);
         userListArr.removeAllObjects();
         
         PFCloud.callFunctionInBackground("findUsers", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {
@@ -95,8 +107,8 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
                     for (index, element) in enumerate(idList) {
                         if (!self.userListArr.containsObject(element) && element as? String != currentID) {
                             self.userListArr.addObject(element);
-                            println(element);
                         }
+                        // Checks to see if all the users are there
                         let size = self.userListArr.count;
                         if (self.userListArr.containsObject(Constants.UserKeys.loadText)){
                             if (size > 1) {
@@ -107,6 +119,7 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
                         }
                     }
                 }
+                
                 self.tableView.reloadData();
                 self.refreshControl?.endRefreshing();
             }

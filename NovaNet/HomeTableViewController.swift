@@ -83,6 +83,7 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
         var distance = defaults.integerForKey(Constants.UserKeys.distanceKey);
         var latitude = defaults.doubleForKey(Constants.UserKeys.latitudeKey);
         var currentID = PFUser.currentUser()!.objectId;
+        println("CurrentID" + currentID!);
         userListArr.removeAllObjects();
         
         PFCloud.callFunctionInBackground("findUsers", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {

@@ -24,8 +24,7 @@ Parse.Cloud.define("findUsers", function(request, response) {
 	  			var dist = currLoc.kilometersTo(geopoint);
 
 	  			if (dist <= bound){
-	  				console.log(object.id);
-	  				nearbyUserIDList.push(object.id);
+	  				nearbyUserIDList.push(object.get("ID"));
 	  			}
 	  		}
   		}

@@ -29,9 +29,11 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
     
     //MARK: Delegates
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
-        
+        picker.dismissViewControllerAnimated(true, completion: nil);
+        uploadedImage.image = info[UIImagePickerControllerOriginalImage] as? UIImage;
     }
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        println("Picker cancel.");
         
     }
 
@@ -66,6 +68,11 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone
         {
             self.presentViewController(picker, animated: true, completion: nil)
+        }
+        else
+        {
+            popover = UIPopoverController(contentViewController: picker);
+            popover?.presentPopoverFromRect(uploadedImage.frame, inView: self.view, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
         }
     }
     

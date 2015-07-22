@@ -67,6 +67,9 @@
                                             <state key="normal" title="Button">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                             </state>
+                                            <connections>
+                                                <segue destination="aNs-Yq-JaM" kind="showDetail" id="4AA-d3-Daf"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <constraints>
@@ -811,6 +814,49 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G1Q-PK-dMx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1763" y="-210"/>
+        </scene>
+        <!--Upload Picture View Controller-->
+        <scene sceneID="qci-Wh-h7f">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IOX-6i-Suw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="aNs-Yq-JaM" customClass="UploadPictureViewController" customModule="NovaNet" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="1oc-ea-7a1"/>
+                        <viewControllerLayoutGuide type="bottom" id="vhz-nm-fAg"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="m48-K4-2jf">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nathan" translatesAutoresizingMaskIntoConstraints="NO" id="942-RH-UzS">
+                                <rect key="frame" x="200" y="200" width="200" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="4wg-sn-ZOy"/>
+                                    <constraint firstAttribute="width" constant="200" id="mtS-BS-4HH"/>
+                                </constraints>
+                            </imageView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G5d-az-QAu">
+                                <rect key="frame" x="16" y="440" width="568" height="160"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="160" id="Zyq-xB-qau"/>
+                                </constraints>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="G5d-az-QAu" firstAttribute="leading" secondItem="m48-K4-2jf" secondAttribute="leadingMargin" id="H14-xB-MR5"/>
+                            <constraint firstItem="vhz-nm-fAg" firstAttribute="top" secondItem="G5d-az-QAu" secondAttribute="bottom" id="W2a-NQ-5l2"/>
+                            <constraint firstAttribute="centerY" secondItem="942-RH-UzS" secondAttribute="centerY" id="cU7-LL-mMH"/>
+                            <constraint firstAttribute="centerX" secondItem="942-RH-UzS" secondAttribute="centerX" id="uQP-yz-aBJ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="G5d-az-QAu" secondAttribute="trailing" id="upz-HG-5ew"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="uploadedImage" destination="942-RH-UzS" id="SPw-fG-KOc"/>
+                    </connections>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="398" y="824"/>
         </scene>
     </scenes>
     <resources>

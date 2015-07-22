@@ -87,7 +87,6 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
                     var longitude = defaults.doubleForKey(Constants.UserKeys.longitudeKey);
                     var point:PFGeoPoint = PFGeoPoint(latitude: latitude, longitude: longitude);
                     profile["Location"] = point;
-                    print(point);
                     profile.saveInBackground();
                 }
             }
@@ -104,6 +103,9 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
             CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways){
                 currentLocation = locationManager.location;
         }
+        println("here");
+        println(currentLocation.coordinate.longitude, forKey: Constants.UserKeys.longitudeKey);
+        println(currentLocation.coordinate.latitude, forKey: Constants.UserKeys.latitudeKey);
         defaults.setObject(currentLocation.coordinate.longitude, forKey: Constants.UserKeys.longitudeKey);
         defaults.setObject(currentLocation.coordinate.latitude, forKey: Constants.UserKeys.latitudeKey);
         

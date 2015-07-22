@@ -1,5 +1,5 @@
 // Takes in User's current PFGeopoint and distance bound 
-// as parameters and outputs a list of User IDs that are
+// as parameters and outputs a list of User Profiles that are
 // within the area
 Parse.Cloud.define("findUsers", function(request, response) {
   var currlat = request.params.lat;
@@ -18,13 +18,13 @@ Parse.Cloud.define("findUsers", function(request, response) {
   		console.log(results);	 
   		for (var i = 0; i < results.length; i++) {
   			var object = results[i];
-
+  			console.log(object);
   			var geopoint = object.get("Location"); // PFGeoPoint of other user's most recent location
   			if (geopoint != null) {
 	  			var dist = currLoc.kilometersTo(geopoint);
 
 	  			if (dist <= bound){
-	  				nearbyUserIDList.push(object.get("ID"));
+	  				nearbyUserIDList.push(object);
 	  			}
 	  		}
   		}

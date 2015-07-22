@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Bolts
+import Parse
 
 class ProfileViewController: UIViewController {
 
@@ -18,6 +20,9 @@ class ProfileViewController: UIViewController {
     
     @IBOutlet weak var websiteButton: UIButton!
     
+    @IBAction func uploadNewImage(sender: UIButton) {
+
+    }
     
     func formatImage(var profileImage: UIButton) {
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
@@ -26,7 +31,6 @@ class ProfileViewController: UIViewController {
     
 
     func userLogoutSegue() {
-        println("ho");
         self.navigationController?.popToRootViewControllerAnimated(true);
     }
     
@@ -39,15 +43,14 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "userLogoutSegue", name: "userLogoutSegue", object: nil);
         formatImage(self.profileImageButton);
         
         
         // Do any additional setup after loading the view.
     }
     override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(true);
-        println("hi");
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "userLogoutSegue", name: "userLogoutSegue", object: nil);
+        super.viewDidAppear(true);        
         
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         

@@ -8,8 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		160D1F201B5E2AC300B3E4DB /* HomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F1F1B5E2AC300B3E4DB /* HomeTableViewController.swift */; };
-		160D1F221B5E5D2900B3E4DB /* UserProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F211B5E5D2900B3E4DB /* UserProfileTableViewCell.swift */; };
-		160D1F241B5E62EE00B3E4DB /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F231B5E62EE00B3E4DB /* UserData.swift */; };
+		160D1F281B5E903B00B3E4DB /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */; };
+		160D1F2A1B5EFA3A00B3E4DB /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */; };
+		160D1F2E1B5F85A200B3E4DB /* UploadPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */; };
 		1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B1881B55367800DBF11A /* SignUpViewController.swift */; };
 		1616B18B1B554D0E00DBF11A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */; };
 		1616B18F1B55560300DBF11A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B18E1B55560300DBF11A /* Constants.swift */; };
@@ -34,7 +35,6 @@
 		16A0E7391B5507AA00DDAE95 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0E7381B5507AA00DDAE95 /* libsqlite3.dylib */; };
 		16A0E73B1B5507B700DDAE95 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0E73A1B5507B700DDAE95 /* Accounts.framework */; };
 		16A0E73D1B5507BD00DDAE95 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0E73C1B5507BD00DDAE95 /* Social.framework */; };
-		16A0E73F1B55086A00DDAE95 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E73E1B55086A00DDAE95 /* HomeViewController.swift */; };
 		16A0E7411B55096F00DDAE95 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7401B55096F00DDAE95 /* LogInViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -50,8 +50,9 @@
 
 /* Begin PBXFileReference section */
 		160D1F1F1B5E2AC300B3E4DB /* HomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
-		160D1F211B5E5D2900B3E4DB /* UserProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileTableViewCell.swift; sourceTree = "<group>"; };
-		160D1F231B5E62EE00B3E4DB /* UserData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
+		160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UploadPictureViewController.swift; path = ../UploadPictureViewController.swift; sourceTree = "<group>"; };
 		1616B1881B55367800DBF11A /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		1616B18E1B55560300DBF11A /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -80,7 +81,6 @@
 		16A0E7381B5507AA00DDAE95 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		16A0E73A1B5507B700DDAE95 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		16A0E73C1B5507BD00DDAE95 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
-		16A0E73E1B55086A00DDAE95 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		16A0E7401B55096F00DDAE95 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -141,15 +141,15 @@
 			children = (
 				16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */,
 				1616B1881B55367800DBF11A /* SignUpViewController.swift */,
+				160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */,
 				16A0E7031B54FC7400DDAE95 /* Main.storyboard */,
-				160D1F211B5E5D2900B3E4DB /* UserProfileTableViewCell.swift */,
+				160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */,
+				160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */,
 				1616B1901B555FC800DBF11A /* SettingsMenuTableViewController.swift */,
 				1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */,
 				16A0E7401B55096F00DDAE95 /* LogInViewController.swift */,
 				1616B18E1B55560300DBF11A /* Constants.swift */,
-				16A0E73E1B55086A00DDAE95 /* HomeViewController.swift */,
 				160D1F1F1B5E2AC300B3E4DB /* HomeTableViewController.swift */,
-				160D1F231B5E62EE00B3E4DB /* UserData.swift */,
 				16A0E7061B54FC7400DDAE95 /* Images.xcassets */,
 				16A0E7081B54FC7400DDAE95 /* LaunchScreen.xib */,
 				16A0E6FD1B54FC7400DDAE95 /* Supporting Files */,
@@ -311,14 +311,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				160D1F201B5E2AC300B3E4DB /* HomeTableViewController.swift in Sources */,
-				160D1F221B5E5D2900B3E4DB /* UserProfileTableViewCell.swift in Sources */,
 				16A0E7001B54FC7400DDAE95 /* AppDelegate.swift in Sources */,
-				16A0E73F1B55086A00DDAE95 /* HomeViewController.swift in Sources */,
 				1616B18B1B554D0E00DBF11A /* ProfileViewController.swift in Sources */,
 				1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */,
 				1616B18F1B55560300DBF11A /* Constants.swift in Sources */,
+				160D1F281B5E903B00B3E4DB /* HomeTableViewCell.swift in Sources */,
+				160D1F2E1B5F85A200B3E4DB /* UploadPictureViewController.swift in Sources */,
 				1616B1911B555FC800DBF11A /* SettingsMenuTableViewController.swift in Sources */,
-				160D1F241B5E62EE00B3E4DB /* UserData.swift in Sources */,
+				160D1F2A1B5EFA3A00B3E4DB /* UserProfileViewController.swift in Sources */,
 				16A0E7411B55096F00DDAE95 /* LogInViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

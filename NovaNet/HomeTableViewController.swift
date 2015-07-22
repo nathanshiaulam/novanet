@@ -16,10 +16,8 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
     let locationManager = CLLocationManager()
     
     // Creates arrays to pass data
-    var userListArr: NSMutableArray! = [Constants.UserKeys.loadText];
-    var interestsArr: NSMutableArray! = NSMutableArray();
-    var imageArr: NSMutableArray! = NSMutableArray();
-    var nameArr: NSMutableArray! = NSMutableArray();
+    var profileList:NSArray = NSArray();
+    
     
     @IBAction func Yay(sender: AnyObject) {
         println("it works");
@@ -37,32 +35,7 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
         return false;
     }
     
-    
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // Return the number of rows in the section.
-        return userListArr.count;
-    }
-    
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // Return the number of sections.
-        return 1
-    }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UserProfileTableViewCell
-        
-        // Configure the cell...
-        if (nameArr.count > 0) {
-            cell.nameLabel.text = nameArr[indexPath.row] as? String;
-            cell.profileInterestsLabel.text = nameArr[indexPath.row] as? String;
-        } else {
-            cell.textLabel?.text = userListArr[indexPath.row] as? String
-        }
-        return cell
-    }
-    
     override func viewDidLoad() {
-        
         
         super.viewDidLoad();
         
@@ -88,46 +61,41 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
     }
     
     
-    
-    func findUsersInRange() {
+    override func viewDidAppear(animated: Bool) {
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         
-        var longitude = defaults.doubleForKey(Constants.UserKeys.longitudeKey);
-        var distance = defaults.integerForKey(Constants.UserKeys.distanceKey);
-        var latitude = defaults.doubleForKey(Constants.UserKeys.latitudeKey);
-        var currentID = PFUser.currentUser()!.objectId;
-        userListArr.removeAllObjects();
-        
-        PFCloud.callFunctionInBackground("findUsers", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {
-            (result: AnyObject?, error:NSError?) -> Void in
-            if error == nil {
-                var idList:NSArray = result as! NSArray;
-                let length = idList.count;
-                if (length > 0) {
-                    for (index, element) in enumerate(idList) {
-                        if (!self.userListArr.containsObject(element) && element as? String != currentID) {
-                            self.userListArr.addObject(element);
-                        }
-                        // Checks to see if all the users are there
-                        let size = self.userListArr.count;
-                        if (self.userListArr.containsObject(Constants.UserKeys.loadText)){
-                            if (size > 1) {
-                                self.userListArr.removeObject(Constants.UserKeys.loadText);
-                            }
-                        } else if (size == 0) {
-                            self.userListArr.addObject(Constants.UserKeys.loadText);
-                        }
-                    }
-                }
-                
-                self.tableView.reloadData();
-                self.refreshControl?.endRefreshing();
-            }
-            else {
-                println(error);
-            }
+        if (!self.userLoggedIn()) {
+            self.performSegueWithIdentifier("toUserLogin", sender: self);
         }
+        
+        var fromNew = defaults.boolForKey(Constants.TempKeys.fromNew);
+        if (fromNew) {
+            defaults.setObject(false, forKey: Constants.TempKeys.fromNew);
+            self.performSegueWithIdentifier("goToSettingsPage", sender: nil);
+        }
+        if defaults.objectForKey(Constants.UserKeys.nameKey) != nil {
+            var query = PFQuery(className:"Profile");
+            var currentID = PFUser.currentUser()!.objectId;
+            query.whereKey("ID", equalTo:currentID!);
+            
+            query.getFirstObjectInBackgroundWithBlock {
+                (profile: PFObject?, error: NSError?) -> Void in
+                if error != nil || profile == nil {
+                    println(error);
+                } else if let profile = profile {
+                    var latitude = defaults.doubleForKey(Constants.UserKeys.latitudeKey);
+                    var longitude = defaults.doubleForKey(Constants.UserKeys.longitudeKey);
+                    var point:PFGeoPoint = PFGeoPoint(latitude: latitude, longitude: longitude);
+                    profile["Location"] = point;
+                    print(point);
+                    profile.saveInBackground();
+                }
+            }
+            findUsersInRange();
+        }
+        super.viewDidAppear(true);
     }
+
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         var currentLocation = CLLocation()
@@ -163,39 +131,56 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
         println("Error while updating location " + error.localizedDescription)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    
+    func findUsersInRange() {
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         
-        if (!self.userLoggedIn()) {
-            self.performSegueWithIdentifier("toUserLogin", sender: self);
-        }
+        var longitude = defaults.doubleForKey(Constants.UserKeys.longitudeKey);
+        var distance = defaults.integerForKey(Constants.UserKeys.distanceKey);
+        var latitude = defaults.doubleForKey(Constants.UserKeys.latitudeKey);
+        var currentID = PFUser.currentUser()!.objectId;
         
-        var fromNew = defaults.boolForKey(Constants.TempKeys.fromNew);
-        if (fromNew) {
-            defaults.setObject(false, forKey: Constants.TempKeys.fromNew);
-            self.performSegueWithIdentifier("goToSettingsPage", sender: nil);
-        }
-        if defaults.objectForKey(Constants.UserKeys.nameKey) != nil {
-            var query = PFQuery(className:"Profile");
-            var currentID = PFUser.currentUser()!.objectId;
-            query.whereKey("ID", equalTo:currentID!);
-            
-            query.getFirstObjectInBackgroundWithBlock {
-                (profile: PFObject?, error: NSError?) -> Void in
-                if error != nil || profile == nil {
-                    println(error);
-                } else if let profile = profile {
-                    var latitude = defaults.doubleForKey(Constants.UserKeys.latitudeKey);
-                    var longitude = defaults.doubleForKey(Constants.UserKeys.longitudeKey);
-                    var point:PFGeoPoint = PFGeoPoint(latitude: latitude, longitude: longitude);
-                    profile["Location"] = point;
-                    print(point);
-                    profile.saveInBackground();
-                }
+        // Wipes away old profiles in data stored
+        let clearProfileList = NSArray();
+        defaults.setObject(clearProfileList, forKey: Constants.UserKeys.profilesInRangeKey)
+        
+        PFCloud.callFunctionInBackground("findUsers", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {
+            (result: AnyObject?, error:NSError?) -> Void in
+            if error == nil {
+                self.profileList = result as! NSArray;
+                self.tableView.reloadData();
+                self.refreshControl?.endRefreshing();
+            } else {
+                println(error);
             }
-            findUsersInRange();
         }
-        super.viewDidAppear(true);
+    }
+    
+    
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // Return the number of rows in the section.
+        return profileList.count;
+    }
+    
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        // Return the number of sections.
+        return 1
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! HomeTableViewCell
+        
+        println(profileList.count);
+        if (profileList.count > 0) {
+            var profile: AnyObject = profileList[indexPath.row];
+            cell.textLabel?.text = "";
+            cell.nameLabel.text = profile["Name"] as? String;
+            cell.interestsLabel.text = profile["Interests"] as? String;
+        } else {
+            cell.textLabel?.text = Constants.UserKeys.loadText;
+        }
+        return cell
     }
     
     override func didReceiveMemoryWarning() {

@@ -8,6 +8,8 @@
 
 import UIKit
 import Parse
+import Bolts
+
 
 class SettingsMenuTableViewController: UITableViewController {
 

@@ -15,9 +15,11 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
     let picker = UIImagePickerController();
     var popover:UIPopoverController? = nil;
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
-    
+    func formatImage(var profileImage: UIButton) {
+        profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
+        profileImage.clipsToBounds = true;
+    }
     @IBAction func finishedOnboarding(sender: UIButton) {
-        defaults.setObject(uploadedImage.image, forKey: Constants.UserKeys.profileImageKey);
         defaults.setObject(false, forKey: Constants.TempKeys.fromNew);
         
         var query = PFQuery(className:"Profile");
@@ -31,10 +33,39 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
             } else if let profile = profile {
                 profile["Image"] = self.uploadedImage;
                 profile.saveInBackground();
+                self.navigationController?.popToRootViewControllerAnimated(true);
             }
         }
         
-        self.navigationController?.popToRootViewControllerAnimated(true);
+    }
+    
+    func saveImage(image: UIImage) {
+        let imageData = UIImageJPEGRepresentation(image, 1)
+        let relativePath = "image_\(NSDate.timeIntervalSinceReferenceDate()).jpg"
+        let path = self.documentsPathForFileName(relativePath)
+        imageData.writeToFile(path, atomically: true)
+        NSUserDefaults.standardUserDefaults().setObject(relativePath, forKey: Constants.UserKeys.profileImageKey)
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    
+    func readImage() -> UIImage {
+        let possibleOldImagePath = NSUserDefaults.standardUserDefaults().objectForKey(Constants.UserKeys.profileImageKey) as! String?
+        if let oldImagePath = possibleOldImagePath {
+            let oldFullPath = self.documentsPathForFileName(oldImagePath)
+            let oldImageData = NSData(contentsOfFile: oldFullPath)
+            // here is your saved image:
+            let oldImage = UIImage(data: oldImageData!)
+            return oldImage!;
+        }
+        return UIImage();
+    }
+    
+    func documentsPathForFileName(name: String) -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true);
+        let path = paths[0] as! String;
+        let fullPath = path.stringByAppendingPathComponent(name)
+        
+        return fullPath
     }
     @IBOutlet weak var takePhotoTableView: UITableView!
     override func viewDidLoad() {
@@ -63,9 +94,7 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         picker.dismissViewControllerAnimated(true, completion: nil);
         
-        defaults.setObject(info[UIImagePickerControllerOriginalImage] as? UIImage, forKey: Constants.UserKeys.profileImageKey);
         uploadedImage.image = info[UIImagePickerControllerOriginalImage] as? UIImage;
-        uploadedImage.frame = CGRectMake(100, 150, 150, 150);
     }
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         println("Picker cancel.");

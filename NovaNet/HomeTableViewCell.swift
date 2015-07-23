@@ -15,4 +15,8 @@ class HomeTableViewCell: UITableViewCell {
 
     @IBOutlet weak var interestsLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var backgroundLabel: UILabel!
+    @IBOutlet weak var profileImage: UIImageView!
+    
+    var selectedUserId:String = "";
 }

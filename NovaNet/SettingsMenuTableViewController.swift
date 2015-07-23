@@ -137,7 +137,7 @@ class SettingsMenuTableViewController: UITableViewController {
         
         goalsField.borderStyle = UITextBorderStyle.None;
         goalsField.backgroundColor = UIColor.clearColor();
-        var goalsPlaceholder = NSAttributedString(string: "Primary Goal", attributes:[NSForegroundColorAttributeName : UIColor.grayColor()]);
+        var goalsPlaceholder = NSAttributedString(string: "Main Goals", attributes:[NSForegroundColorAttributeName : UIColor.grayColor()]);
         goalsField.attributedPlaceholder = interestsPlaceholder;
         
         

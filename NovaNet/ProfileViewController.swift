@@ -17,6 +17,7 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var profileImageButton: UIButton!
     @IBOutlet weak var interestsLabel: UILabel!
+    @IBOutlet weak var goalsLabel: UILabel!
     
     @IBAction func uploadNewImage(sender: UIButton) {
 
@@ -48,7 +49,10 @@ class ProfileViewController: UIViewController {
             interestsLabel.text = "Interests: " + interests;
         }
         if let background = defaults.stringForKey(Constants.UserKeys.backgroundKey) {
-            aboutLabel.text = "About: " + background;
+            aboutLabel.text = "Background: " + background;
+        }
+        if let goals = defaults.stringForKey(Constants.UserKeys.backgroundKey) {
+            goalsLabel.text = "Goals: " + goals;
         }
         
         aboutLabel.numberOfLines = 0;

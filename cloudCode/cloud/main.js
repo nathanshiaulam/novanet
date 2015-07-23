@@ -15,15 +15,15 @@ Parse.Cloud.define("findUsers", function(request, response) {
   profileQuery.find({
   	success: function(results) {
   		// returns a list of all current users	
-  		console.log(results);	 
   		for (var i = 0; i < results.length; i++) {
   			var object = results[i];
-  			console.log(object);
+        var currentID = Parse.User.current().id;
+
   			var geopoint = object.get("Location"); // PFGeoPoint of other user's most recent location
   			if (geopoint != null) {
 	  			var dist = currLoc.kilometersTo(geopoint);
 
-	  			if (dist <= bound){
+	  			if (dist <= bound && currentID != object.get("ID")){
 	  				nearbyUserIDList.push(object);
 	  			}
 	  		}

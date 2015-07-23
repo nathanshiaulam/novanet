@@ -31,6 +31,7 @@ struct Constants {
     
     struct SelectedUserKeys {
         static let selectedUsernameKey = "selectedUsernameKey";
+        static let selectedIdKey = "selectedIdKey";
         static let selectedNameKey = "selectedNameKey";
         static let selectedInterestsKey = "selectedInterestsKey";
         static let selectedBackgroundKey = "selectedBackgroundKey";

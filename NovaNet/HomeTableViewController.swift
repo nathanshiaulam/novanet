@@ -52,6 +52,7 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
         locationManager.desiredAccuracy = kCLLocationAccuracyBest;
         locationManager.requestWhenInUseAuthorization();
         locationManager.startUpdatingLocation();
+        self.tableView.rowHeight = 85.0
         
         var refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: Selector("findUsersInRange"), forControlEvents: UIControlEvents.ValueChanged)
@@ -63,7 +64,7 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
     
     override func viewDidAppear(animated: Bool) {
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
-        
+        locationManager.startUpdatingLocation();
         if (!self.userLoggedIn()) {
             self.performSegueWithIdentifier("toUserLogin", sender: self);
         }
@@ -106,7 +107,7 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
         defaults.setObject(currentLocation.coordinate.latitude, forKey: Constants.UserKeys.latitudeKey);
         
         
-        if defaults.stringForKey(Constants.UserKeys.latitudeKey) != nil {
+        if userLoggedIn() && defaults.stringForKey(Constants.UserKeys.latitudeKey) != nil {
             var query = PFQuery(className:"Profile");
             var currentID = PFUser.currentUser()!.objectId;
             query.whereKey("ID", equalTo:currentID!);
@@ -168,16 +169,29 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! HomeTableViewCell
-        
+        var profile: AnyObject = profileList[indexPath.row];
+
         if (profileList.count > 0) {
-            var profile: AnyObject = profileList[indexPath.row];
             cell.textLabel?.text = "";
             cell.nameLabel.text = profile["Name"] as? String;
             cell.interestsLabel.text = profile["Interests"] as? String;
-        } else {
-            cell.textLabel?.text = Constants.UserKeys.loadText;
+            cell.backgroundLabel.text = profile["Background"] as? String;
+            cell.selectedUserId = (profile["ID"] as? String)!;
         }
-        return cell
+        return cell;
+        
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! HomeTableViewCell
+        let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+        var profile: AnyObject = profileList[indexPath.row];
+        
+        defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey);
+        println("clicked here");
+        println(profile["ID"]);
+        defaults.setObject(cell.nameLabel.text, forKey: Constants.SelectedUserKeys.selectedNameKey);
+        self.performSegueWithIdentifier("toMessageView", sender: self);
     }
     
     override func didReceiveMemoryWarning() {

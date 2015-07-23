@@ -1,2 +1,10 @@
-pod ‘Parse’, ‘~> 1.7.1′
-pod ‘ParseUI’, ‘~> 1.1.3′
+target 'NovaNet' do
+
+pod 'syncano-ios'
+pod 'JSQMessagesViewController'
+
+end
+
+target 'NovaNetTests' do
+
+end

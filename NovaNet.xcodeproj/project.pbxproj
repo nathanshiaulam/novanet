@@ -12,6 +12,7 @@
 		160D1F2A1B5EFA3A00B3E4DB /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */; };
 		160D1F2E1B5F85A200B3E4DB /* UploadPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */; };
 		160D1F341B5FCBE000B3E4DB /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F331B5FCBE000B3E4DB /* OnboardingViewController.swift */; };
+		160D1F3D1B61080C00B3E4DB /* MessagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F3C1B61080C00B3E4DB /* MessagerViewController.swift */; };
 		1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B1881B55367800DBF11A /* SignUpViewController.swift */; };
 		1616B18B1B554D0E00DBF11A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */; };
 		1616B18F1B55560300DBF11A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B18E1B55560300DBF11A /* Constants.swift */; };
@@ -37,6 +38,7 @@
 		16A0E73B1B5507B700DDAE95 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0E73A1B5507B700DDAE95 /* Accounts.framework */; };
 		16A0E73D1B5507BD00DDAE95 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0E73C1B5507BD00DDAE95 /* Social.framework */; };
 		16A0E7411B55096F00DDAE95 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7401B55096F00DDAE95 /* LogInViewController.swift */; };
+		7DFB60EA63A8AD92B037922E /* libPods-NovaNet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 398448FD417B1B90923C50B5 /* libPods-NovaNet.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,11 +52,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		05B5DD1A09E458030958BC47 /* Pods-NovaNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NovaNet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NovaNet/Pods-NovaNet.debug.xcconfig"; sourceTree = "<group>"; };
 		160D1F1F1B5E2AC300B3E4DB /* HomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewController.swift; sourceTree = "<group>"; };
 		160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
 		160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UploadPictureViewController.swift; path = ../UploadPictureViewController.swift; sourceTree = "<group>"; };
 		160D1F331B5FCBE000B3E4DB /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		160D1F351B60F49F00B3E4DB /* NovaNet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NovaNet-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		160D1F3C1B61080C00B3E4DB /* MessagerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagerViewController.swift; sourceTree = "<group>"; };
 		1616B1881B55367800DBF11A /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		1616B18E1B55560300DBF11A /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -84,6 +89,8 @@
 		16A0E73A1B5507B700DDAE95 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		16A0E73C1B5507BD00DDAE95 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		16A0E7401B55096F00DDAE95 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
+		398448FD417B1B90923C50B5 /* libPods-NovaNet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NovaNet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDDFF8B4ADAFD4E4E80870A3 /* Pods-NovaNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NovaNet.release.xcconfig"; path = "Pods/Target Support Files/Pods-NovaNet/Pods-NovaNet.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +113,7 @@
 				16A0E7251B55075D00DDAE95 /* AudioToolbox.framework in Frameworks */,
 				16A0E7221B55069600DDAE95 /* Parse.framework in Frameworks */,
 				16A0E7211B55069600DDAE95 /* Bolts.framework in Frameworks */,
+				7DFB60EA63A8AD92B037922E /* libPods-NovaNet.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +134,7 @@
 				16A0E7121B54FC7400DDAE95 /* NovaNetTests */,
 				16A0E6FB1B54FC7300DDAE95 /* Products */,
 				16A0E7231B5506D700DDAE95 /* Frameworks */,
+				9F935198E6B44DDDB3E434E4 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -141,12 +150,14 @@
 		16A0E6FC1B54FC7300DDAE95 /* NovaNet */ = {
 			isa = PBXGroup;
 			children = (
+				160D1F351B60F49F00B3E4DB /* NovaNet-Bridging-Header.h */,
 				16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */,
 				1616B1881B55367800DBF11A /* SignUpViewController.swift */,
 				160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */,
 				16A0E7031B54FC7400DDAE95 /* Main.storyboard */,
 				160D1F331B5FCBE000B3E4DB /* OnboardingViewController.swift */,
 				160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */,
+				160D1F3C1B61080C00B3E4DB /* MessagerViewController.swift */,
 				160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */,
 				1616B1901B555FC800DBF11A /* SettingsMenuTableViewController.swift */,
 				1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */,
@@ -203,9 +214,19 @@
 				16A0E7241B55075D00DDAE95 /* AudioToolbox.framework */,
 				16A0E71F1B55069600DDAE95 /* Bolts.framework */,
 				16A0E7201B55069600DDAE95 /* Parse.framework */,
+				398448FD417B1B90923C50B5 /* libPods-NovaNet.a */,
 			);
 			name = Frameworks;
 			path = NovaNet.xcodeproj;
+			sourceTree = "<group>";
+		};
+		9F935198E6B44DDDB3E434E4 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				05B5DD1A09E458030958BC47 /* Pods-NovaNet.debug.xcconfig */,
+				DDDFF8B4ADAFD4E4E80870A3 /* Pods-NovaNet.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -215,9 +236,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 16A0E7191B54FC7400DDAE95 /* Build configuration list for PBXNativeTarget "NovaNet" */;
 			buildPhases = (
+				E39CE6B412B63F5A779B8D66 /* Check Pods Manifest.lock */,
 				16A0E6F61B54FC7300DDAE95 /* Sources */,
 				16A0E6F71B54FC7300DDAE95 /* Frameworks */,
 				16A0E6F81B54FC7300DDAE95 /* Resources */,
+				11CA0EE6618F52DA41314DAA /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -308,12 +331,46 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		11CA0EE6618F52DA41314DAA /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NovaNet/Pods-NovaNet-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E39CE6B412B63F5A779B8D66 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		16A0E6F61B54FC7300DDAE95 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				160D1F201B5E2AC300B3E4DB /* HomeTableViewController.swift in Sources */,
+				160D1F3D1B61080C00B3E4DB /* MessagerViewController.swift in Sources */,
 				16A0E7001B54FC7400DDAE95 /* AppDelegate.swift in Sources */,
 				1616B18B1B554D0E00DBF11A /* ProfileViewController.swift in Sources */,
 				1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */,
@@ -450,8 +507,10 @@
 		};
 		16A0E71A1B54FC7400DDAE95 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 05B5DD1A09E458030958BC47 /* Pods-NovaNet.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/nathanlam/Downloads/parse-library-1.7.5",
@@ -459,13 +518,17 @@
 				INFOPLIST_FILE = NovaNet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "NovaNet-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		16A0E71B1B54FC7400DDAE95 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DDDFF8B4ADAFD4E4E80870A3 /* Pods-NovaNet.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/nathanlam/Downloads/parse-library-1.7.5",
@@ -473,6 +536,7 @@
 				INFOPLIST_FILE = NovaNet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "NovaNet-Bridging-Header.h";
 			};
 			name = Release;
 		};

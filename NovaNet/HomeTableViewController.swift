@@ -70,8 +70,7 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
         
         var fromNew = defaults.boolForKey(Constants.TempKeys.fromNew);
         if (fromNew) {
-            defaults.setObject(false, forKey: Constants.TempKeys.fromNew);
-            self.performSegueWithIdentifier("goToSettingsPage", sender: nil);
+            self.performSegueWithIdentifier("toOnboardingPage", sender: nil);
         }
         if defaults.objectForKey(Constants.UserKeys.nameKey) != nil {
             var query = PFQuery(className:"Profile");
@@ -103,9 +102,6 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
             CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways){
                 currentLocation = locationManager.location;
         }
-        println("here");
-        println(currentLocation.coordinate.longitude, forKey: Constants.UserKeys.longitudeKey);
-        println(currentLocation.coordinate.latitude, forKey: Constants.UserKeys.latitudeKey);
         defaults.setObject(currentLocation.coordinate.longitude, forKey: Constants.UserKeys.longitudeKey);
         defaults.setObject(currentLocation.coordinate.latitude, forKey: Constants.UserKeys.latitudeKey);
         
@@ -173,7 +169,6 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! HomeTableViewCell
         
-        println(profileList.count);
         if (profileList.count > 0) {
             var profile: AnyObject = profileList[indexPath.row];
             cell.textLabel?.text = "";

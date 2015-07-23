@@ -14,23 +14,58 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
     @IBOutlet weak var uploadedImage: UIImageView!
     let picker = UIImagePickerController();
     var popover:UIPopoverController? = nil;
+    let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
     
+    @IBAction func finishedOnboarding(sender: UIButton) {
+        defaults.setObject(uploadedImage.image, forKey: Constants.UserKeys.profileImageKey);
+        defaults.setObject(false, forKey: Constants.TempKeys.fromNew);
+        
+        var query = PFQuery(className:"Profile");
+        var currentID = PFUser.currentUser()!.objectId;
+        query.whereKey("ID", equalTo:currentID!);
+        
+        query.getFirstObjectInBackgroundWithBlock {
+            (profile: PFObject?, error: NSError?) -> Void in
+            if error != nil || profile == nil {
+                println(error);
+            } else if let profile = profile {
+                profile["Image"] = self.uploadedImage;
+                profile.saveInBackground();
+            }
+        }
+        
+        self.navigationController?.popToRootViewControllerAnimated(true);
+    }
     @IBOutlet weak var takePhotoTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad();
         
+        // Initializes gesture recognizer
         var tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tappedImage");
         tapGestureRecognizer.delegate = self;
         self.uploadedImage.addGestureRecognizer(tapGestureRecognizer);
         self.uploadedImage.userInteractionEnabled = true;
         
+        // Initializes the delegate of the picker to the view controller
         picker.delegate = self
+        
+        // Makes the profile image circular 
+        self.uploadedImage.layer.cornerRadius = 10.0;
+
+        
+        // Adds a border to the circular image 
+        self.uploadedImage.layer.borderWidth = 5.0;
+        self.uploadedImage.layer.borderColor = UIColor.grayColor().CGColor;
+
     }
     
     //MARK: Delegates
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         picker.dismissViewControllerAnimated(true, completion: nil);
+        
+        defaults.setObject(info[UIImagePickerControllerOriginalImage] as? UIImage, forKey: Constants.UserKeys.profileImageKey);
         uploadedImage.image = info[UIImagePickerControllerOriginalImage] as? UIImage;
+        uploadedImage.frame = CGRectMake(100, 150, 150, 150);
     }
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         println("Picker cancel.");

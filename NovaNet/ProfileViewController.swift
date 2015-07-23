@@ -18,8 +18,6 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var profileImageButton: UIButton!
     @IBOutlet weak var interestsLabel: UILabel!
     
-    @IBOutlet weak var websiteButton: UIButton!
-    
     @IBAction func uploadNewImage(sender: UIButton) {
 
     }
@@ -29,26 +27,14 @@ class ProfileViewController: UIViewController {
         profileImage.clipsToBounds = true;
     }
     
-
-    func userLogoutSegue() {
-        self.navigationController?.popToRootViewControllerAnimated(true);
-    }
-    
-    @IBAction func openURL(sender: UIButton) {
-        if let url = NSURL(string:"http://" + sender.titleLabel!.text!) {
-            print("http://" + sender.titleLabel!.text!);
-            UIApplication.sharedApplication().openURL(url);
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "userLogoutSegue", name: "userLogoutSegue", object: nil);
         formatImage(self.profileImageButton);
         
         
         // Do any additional setup after loading the view.
     }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true);        
         
@@ -69,9 +55,6 @@ class ProfileViewController: UIViewController {
         aboutLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
         aboutLabel.sizeToFit();
         
-        if let website = defaults.stringForKey(Constants.UserKeys.websiteKey) {
-            websiteButton.titleLabel?.text = website;
-        }
     }
     
 

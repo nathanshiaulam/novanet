@@ -22,6 +22,29 @@ class LogInViewController: UIViewController {
         userLogin(usernameField.text, password: passwordField.text);
     }
     
+    override func viewDidLayoutSubviews() {
+        let borderName = CALayer();
+        let widthName = CGFloat(2.0);
+        borderName.borderColor = UIColor.darkGrayColor().CGColor;
+        borderName.frame = CGRect(x: 0, y: usernameField.frame.size.height - widthName, width:  usernameField.frame.size.width, height: usernameField.frame.size.height);
+        
+        borderName.borderWidth = widthName;
+        
+        let borderPass = CALayer();
+        let widthPass = CGFloat(2.0);
+        borderPass.borderColor = UIColor.darkGrayColor().CGColor;
+        borderPass.frame = CGRect(x: 0, y: usernameField.frame.size.height - widthPass, width:  usernameField.frame.size.width, height: usernameField.frame.size.height);
+        
+        borderPass.borderWidth = widthPass;
+        
+        usernameField.layer.addSublayer(borderName)
+        usernameField.layer.masksToBounds = true
+        
+        passwordField.layer.addSublayer(borderPass);
+        passwordField.layer.masksToBounds = true
+        
+    }
+    
     func userLogin(username: String, password:String) {
         var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         var usernameLen = count(username);
@@ -51,7 +74,8 @@ class LogInViewController: UIViewController {
                         defaults.setObject(profile["Name"], forKey: Constants.UserKeys.nameKey);
                         defaults.setObject(profile["Interests"], forKey: Constants.UserKeys.interestsKey);
                         defaults.setObject(profile["Background"], forKey: Constants.UserKeys.backgroundKey);
-                        defaults.setObject(profile["Website"], forKey: Constants.UserKeys.websiteKey);
+                        defaults.setObject(profile["Goals"], forKey: Constants.UserKeys.goalsKey);
+                        defaults.setObject(profile["Image"], forKey: Constants.UserKeys.profileImageKey);
                         defaults.setObject(profile["Distance"], forKey: Constants.UserKeys.distanceKey);
                     }
                 }
@@ -86,7 +110,18 @@ class LogInViewController: UIViewController {
         usernameField.layer.cornerRadius = 0;
         passwordField.layer.cornerRadius = 0;
         passwordField.secureTextEntry = true;
-
+        
+        usernameField.borderStyle = UITextBorderStyle.None;
+        usernameField.backgroundColor = UIColor.clearColor();
+        var usernameFieldPlaceholder = NSAttributedString(string: "username", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        usernameField.attributedPlaceholder = usernameFieldPlaceholder;
+        usernameField.textColor = UIColor.whiteColor();
+        
+        passwordField.borderStyle = UITextBorderStyle.None;
+        passwordField.backgroundColor = UIColor.clearColor();
+        var passwordFieldPlaceholder = NSAttributedString(string: "password", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        passwordField.attributedPlaceholder = passwordFieldPlaceholder;
+        passwordField.textColor = UIColor.whiteColor();
         // Do any additional setup after loading the view.
     }
     override func viewDidAppear(animated: Bool) {

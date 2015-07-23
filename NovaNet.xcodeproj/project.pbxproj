@@ -11,6 +11,7 @@
 		160D1F281B5E903B00B3E4DB /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */; };
 		160D1F2A1B5EFA3A00B3E4DB /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */; };
 		160D1F2E1B5F85A200B3E4DB /* UploadPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */; };
+		160D1F341B5FCBE000B3E4DB /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F331B5FCBE000B3E4DB /* OnboardingViewController.swift */; };
 		1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B1881B55367800DBF11A /* SignUpViewController.swift */; };
 		1616B18B1B554D0E00DBF11A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */; };
 		1616B18F1B55560300DBF11A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B18E1B55560300DBF11A /* Constants.swift */; };
@@ -53,6 +54,7 @@
 		160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
 		160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UploadPictureViewController.swift; path = ../UploadPictureViewController.swift; sourceTree = "<group>"; };
+		160D1F331B5FCBE000B3E4DB /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		1616B1881B55367800DBF11A /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		1616B18E1B55560300DBF11A /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 				1616B1881B55367800DBF11A /* SignUpViewController.swift */,
 				160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */,
 				16A0E7031B54FC7400DDAE95 /* Main.storyboard */,
+				160D1F331B5FCBE000B3E4DB /* OnboardingViewController.swift */,
 				160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */,
 				160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */,
 				1616B1901B555FC800DBF11A /* SettingsMenuTableViewController.swift */,
@@ -319,6 +322,7 @@
 				160D1F2E1B5F85A200B3E4DB /* UploadPictureViewController.swift in Sources */,
 				1616B1911B555FC800DBF11A /* SettingsMenuTableViewController.swift in Sources */,
 				160D1F2A1B5EFA3A00B3E4DB /* UserProfileViewController.swift in Sources */,
+				160D1F341B5FCBE000B3E4DB /* OnboardingViewController.swift in Sources */,
 				16A0E7411B55096F00DDAE95 /* LogInViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

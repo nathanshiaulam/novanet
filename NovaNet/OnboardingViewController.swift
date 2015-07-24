@@ -83,8 +83,16 @@ class OnboardingViewController: UIViewController {
         backgroundField.layer.addSublayer(border)
         backgroundField.layer.masksToBounds = true
     }
+    
+    func backToHomeView() {
+        println("hi");
+        self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil);
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad();
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "backToHomeView", name: "backToHomeView", object: nil);
         
         nameField.borderStyle = UITextBorderStyle.None;
         nameField.backgroundColor = UIColor.clearColor();

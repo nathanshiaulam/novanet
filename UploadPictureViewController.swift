@@ -15,17 +15,19 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
     let picker = UIImagePickerController();
     var popover:UIPopoverController? = nil;
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+    
     func formatImage(var profileImage: UIButton) {
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
         profileImage.clipsToBounds = true;
     }
+    
     @IBAction func finishedOnboarding(sender: UIButton) {
         defaults.setObject(false, forKey: Constants.TempKeys.fromNew);
         
         var query = PFQuery(className:"Profile");
         var currentID = PFUser.currentUser()!.objectId;
         query.whereKey("ID", equalTo:currentID!);
-        
+
         query.getFirstObjectInBackgroundWithBlock {
             (profile: PFObject?, error: NSError?) -> Void in
             if error != nil || profile == nil {
@@ -33,9 +35,11 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
             } else if let profile = profile {
                 profile["Image"] = self.uploadedImage;
                 profile.saveInBackground();
-                self.navigationController?.popToRootViewControllerAnimated(true);
             }
         }
+        NSNotificationCenter.defaultCenter().postNotificationName("backToHomeView", object: nil);
+        self.dismissViewControllerAnimated(true, completion: nil);
+
         
     }
     

@@ -34,11 +34,19 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
         }
         return false;
     }
-    
+
+    func UIColorFromHex(rgbValue:UInt32, alpha:Double)->UIColor {
+        let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0
+        let green = CGFloat((rgbValue & 0xFF00) >> 8)/256.0
+        let blue = CGFloat(rgbValue & 0xFF)/256.0
+        
+        return UIColor(red:red, green:green, blue:blue, alpha:CGFloat(alpha))
+    }
     override func viewDidLoad() {
         
         super.viewDidLoad();
-        
+        navigationController?.navigationBar.barTintColor = UIColorFromHex(0x555555, alpha: 1.0);
+
         // Go to login page if no user logged in
         if (!self.userLoggedIn()) {
             self.performSegueWithIdentifier("toUserLogin", sender: self);
@@ -66,6 +74,8 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         locationManager.startUpdatingLocation();
         if (!self.userLoggedIn()) {
+            profileList = NSArray();
+            tableView.reloadData()
             self.performSegueWithIdentifier("toUserLogin", sender: self);
         }
         
@@ -188,10 +198,7 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
         var profile: AnyObject = profileList[indexPath.row];
         
         defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey);
-        println("clicked here");
-        println(profile["ID"]);
         defaults.setObject(cell.nameLabel.text, forKey: Constants.SelectedUserKeys.selectedNameKey);
-        self.performSegueWithIdentifier("toMessageView", sender: self);
     }
     
     override func didReceiveMemoryWarning() {

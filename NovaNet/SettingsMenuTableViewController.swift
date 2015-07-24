@@ -84,6 +84,14 @@ class SettingsMenuTableViewController: UITableViewController {
             self.presentViewController(alert, animated: true, completion: nil);
         }
     }
+    func UIColorFromHex(rgbValue:UInt32, alpha:Double)->UIColor {
+        let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0
+        let green = CGFloat((rgbValue & 0xFF00) >> 8)/256.0
+        let blue = CGFloat(rgbValue & 0xFF)/256.0
+        
+        return UIColor(red:red, green:green, blue:blue, alpha:CGFloat(alpha))
+    }
+    
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if (textField == nameField) {
             backgroundField.becomeFirstResponder();
@@ -114,32 +122,80 @@ class SettingsMenuTableViewController: UITableViewController {
         distanceSlider.setValue(Float(distanceValue), animated: true);
     }
     
+    override func viewDidLayoutSubviews() {
+        let borderName = CALayer();
+        let widthName = CGFloat(2.0);
+        borderName.borderColor = UIColor.darkGrayColor().CGColor;
+        borderName.frame = CGRect(x: 0, y: nameField.frame.size.height - widthName, width:  nameField.frame.size.width, height: nameField.frame.size.height);
+        
+        borderName.borderWidth = widthName
+        
+        let borderBackground = CALayer();
+        let widthBackground = CGFloat(2.0);
+        borderBackground.borderColor = UIColor.darkGrayColor().CGColor;
+        borderBackground.frame = CGRect(x: 0, y: backgroundField.frame.size.height - widthBackground, width:  backgroundField.frame.size.width, height: backgroundField.frame.size.height);
+        
+        borderBackground.borderWidth = widthBackground
+        
+        let borderInterests = CALayer();
+        let widthInterests = CGFloat(2.0);
+        borderInterests.borderColor = UIColor.darkGrayColor().CGColor;
+        borderInterests.frame = CGRect(x: 0, y: interestsField.frame.size.height - widthInterests, width:  interestsField.frame.size.width, height: interestsField.frame.size.height);
+        
+        borderInterests.borderWidth = widthInterests;
+        
+        let borderGoals = CALayer();
+        let widthGoals = CGFloat(2.0);
+        borderGoals.borderColor = UIColor.darkGrayColor().CGColor;
+        borderGoals.frame = CGRect(x: 0, y: backgroundField.frame.size.height - widthGoals, width:  backgroundField.frame.size.width, height: backgroundField.frame.size.height);
+        
+        borderGoals.borderWidth = widthGoals
+        
+        nameField.layer.addSublayer(borderName)
+        nameField.layer.masksToBounds = true
+        
+        backgroundField.layer.addSublayer(borderBackground);
+        backgroundField.layer.masksToBounds = true;
+        
+        interestsField.layer.addSublayer(borderInterests);
+        interestsField.layer.masksToBounds = true;
+        
+        goalsField.layer.addSublayer(borderGoals);
+        goalsField.layer.masksToBounds = true;
+    }
+    
     override func viewDidLoad() {
         
         super.viewDidLoad();
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults(); // Sets up local datastore to access profile values
         
+        navigationController?.navigationBar.barTintColor = UIColorFromHex(0x555555, alpha: 1.0);
+        self.title = "Settings";
+        self.title.
         // Sets all of the placeholder texts/removes borders for text fields
         nameField.borderStyle = UITextBorderStyle.None;
         nameField.backgroundColor = UIColor.clearColor();
         var nameFieldPlaceholder = NSAttributedString(string: "Name", attributes: [NSForegroundColorAttributeName : UIColor.grayColor()]);
         nameField.attributedPlaceholder = nameFieldPlaceholder;
-        
+        nameField.textColor = UIColor.whiteColor();
+
         backgroundField.borderStyle = UITextBorderStyle.None;
         backgroundField.backgroundColor = UIColor.clearColor();
         var backgroundPlaceholder = NSAttributedString(string: "About", attributes:[NSForegroundColorAttributeName : UIColor.grayColor()]);
         backgroundField.attributedPlaceholder = backgroundPlaceholder;
+        backgroundField.textColor = UIColor.whiteColor();
         
         interestsField.borderStyle = UITextBorderStyle.None;
         interestsField.backgroundColor = UIColor.clearColor();
         var interestsPlaceholder = NSAttributedString(string: "Interests (Please enter three)", attributes:[NSForegroundColorAttributeName : UIColor.grayColor()]);
         interestsField.attributedPlaceholder = interestsPlaceholder;
+        interestsField.textColor = UIColor.whiteColor();
         
         goalsField.borderStyle = UITextBorderStyle.None;
         goalsField.backgroundColor = UIColor.clearColor();
         var goalsPlaceholder = NSAttributedString(string: "Main Goals", attributes:[NSForegroundColorAttributeName : UIColor.grayColor()]);
         goalsField.attributedPlaceholder = interestsPlaceholder;
-        
+        goalsField.textColor = UIColor.whiteColor();
         
         // If profile is in existence, sets value for each field
         if let name = defaults.stringForKey(Constants.UserKeys.nameKey) {

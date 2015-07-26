@@ -16,7 +16,7 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
     var popover:UIPopoverController? = nil;
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
     
-    func formatImage(var profileImage: UIButton) {
+    func formatImage(var profileImage: UIImageView) {
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
         profileImage.clipsToBounds = true;
     }
@@ -27,20 +27,22 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
         var query = PFQuery(className:"Profile");
         var currentID = PFUser.currentUser()!.objectId;
         query.whereKey("ID", equalTo:currentID!);
-
+        
+        saveImage(uploadedImage.image!);
         query.getFirstObjectInBackgroundWithBlock {
             (profile: PFObject?, error: NSError?) -> Void in
             if error != nil || profile == nil {
                 println(error);
             } else if let profile = profile {
-                profile["Image"] = self.uploadedImage;
+                let pickedImage:UIImage = self.uploadedImage.image!;
+                let imageData = UIImagePNGRepresentation(pickedImage);
+                let imageFile:PFFile = PFFile(data: imageData)
+                profile["Image"] = imageFile;
                 profile.saveInBackground();
             }
         }
         NSNotificationCenter.defaultCenter().postNotificationName("backToHomeView", object: nil);
         self.dismissViewControllerAnimated(true, completion: nil);
-
-        
     }
     
     func saveImage(image: UIImage) {
@@ -52,17 +54,7 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
         NSUserDefaults.standardUserDefaults().synchronize()
     }
     
-    func readImage() -> UIImage {
-        let possibleOldImagePath = NSUserDefaults.standardUserDefaults().objectForKey(Constants.UserKeys.profileImageKey) as! String?
-        if let oldImagePath = possibleOldImagePath {
-            let oldFullPath = self.documentsPathForFileName(oldImagePath)
-            let oldImageData = NSData(contentsOfFile: oldFullPath)
-            // here is your saved image:
-            let oldImage = UIImage(data: oldImageData!)
-            return oldImage!;
-        }
-        return UIImage();
-    }
+    
     
     func documentsPathForFileName(name: String) -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true);
@@ -80,18 +72,11 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
         tapGestureRecognizer.delegate = self;
         self.uploadedImage.addGestureRecognizer(tapGestureRecognizer);
         self.uploadedImage.userInteractionEnabled = true;
+        formatImage(uploadedImage);
         
         // Initializes the delegate of the picker to the view controller
         picker.delegate = self
-        
-        // Makes the profile image circular 
-        self.uploadedImage.layer.cornerRadius = 10.0;
-
-        
-        // Adds a border to the circular image 
-        self.uploadedImage.layer.borderWidth = 5.0;
-        self.uploadedImage.layer.borderColor = UIColor.grayColor().CGColor;
-
+       
     }
     
     //MARK: Delegates

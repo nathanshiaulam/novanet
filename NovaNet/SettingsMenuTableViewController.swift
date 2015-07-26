@@ -122,46 +122,34 @@ class SettingsMenuTableViewController: UITableViewController {
         distanceSlider.setValue(Float(distanceValue), animated: true);
     }
     
-    override func viewDidLayoutSubviews() {
-        let borderName = CALayer();
-        let widthName = CGFloat(2.0);
-        borderName.borderColor = UIColor.darkGrayColor().CGColor;
-        borderName.frame = CGRect(x: 0, y: nameField.frame.size.height - widthName, width:  nameField.frame.size.width, height: nameField.frame.size.height);
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 {
+            return 0;
+        }
+        else {
+            return 40;
+        }
+    }
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
-        borderName.borderWidth = widthName
+        if (range.length + range.location > count(textField.text) )
+        {
+            return false;
+        }
         
-        let borderBackground = CALayer();
-        let widthBackground = CGFloat(2.0);
-        borderBackground.borderColor = UIColor.darkGrayColor().CGColor;
-        borderBackground.frame = CGRect(x: 0, y: backgroundField.frame.size.height - widthBackground, width:  backgroundField.frame.size.width, height: backgroundField.frame.size.height);
-        
-        borderBackground.borderWidth = widthBackground
-        
-        let borderInterests = CALayer();
-        let widthInterests = CGFloat(2.0);
-        borderInterests.borderColor = UIColor.darkGrayColor().CGColor;
-        borderInterests.frame = CGRect(x: 0, y: interestsField.frame.size.height - widthInterests, width:  interestsField.frame.size.width, height: interestsField.frame.size.height);
-        
-        borderInterests.borderWidth = widthInterests;
-        
-        let borderGoals = CALayer();
-        let widthGoals = CGFloat(2.0);
-        borderGoals.borderColor = UIColor.darkGrayColor().CGColor;
-        borderGoals.frame = CGRect(x: 0, y: backgroundField.frame.size.height - widthGoals, width:  backgroundField.frame.size.width, height: backgroundField.frame.size.height);
-        
-        borderGoals.borderWidth = widthGoals
-        
-        nameField.layer.addSublayer(borderName)
-        nameField.layer.masksToBounds = true
-        
-        backgroundField.layer.addSublayer(borderBackground);
-        backgroundField.layer.masksToBounds = true;
-        
-        interestsField.layer.addSublayer(borderInterests);
-        interestsField.layer.masksToBounds = true;
-        
-        goalsField.layer.addSublayer(borderGoals);
-        goalsField.layer.masksToBounds = true;
+        let newLength = count(textField.text) + count(string) - range.length
+        return newLength <= 60;
+    }
+    
+    
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        var label = UILabel();
+        if section == 0 {
+        }
+        label.backgroundColor = UIColorFromHex(0x555555, alpha: 1.0);
+        return label;
     }
     
     override func viewDidLoad() {
@@ -170,8 +158,14 @@ class SettingsMenuTableViewController: UITableViewController {
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults(); // Sets up local datastore to access profile values
         
         navigationController?.navigationBar.barTintColor = UIColorFromHex(0x555555, alpha: 1.0);
-        self.title = "Settings";
-        self.title.
+        
+        let titleDict: NSDictionary = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+        self.navigationController?.navigationBar.titleTextAttributes = titleDict as [NSObject : AnyObject];
+        
+        var view = UIView();
+        view.backgroundColor = UIColorFromHex(0x555555, alpha: 1.0);
+        
+        self.tableView.tableFooterView = view;
         // Sets all of the placeholder texts/removes borders for text fields
         nameField.borderStyle = UITextBorderStyle.None;
         nameField.backgroundColor = UIColor.clearColor();

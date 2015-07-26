@@ -23,6 +23,7 @@ struct Constants {
         static let latitudeKey = "latitudeKey";
         static let profilesInRangeKey = "profilesInRangeKey";
         static let goalsKey = "goalsKey";
+        static let availableKey = "availableKey";
         static let loadText = "Please wait while we find other Novas nearby...";
     }
     struct TempKeys {

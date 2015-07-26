@@ -26,6 +26,7 @@ class OnboardingViewController: UIViewController {
             defaults.setObject(backgroundField.text, forKey: Constants.UserKeys.backgroundKey);
             defaults.setObject(interestsField.text, forKey: Constants.UserKeys.interestsKey);
             defaults.setObject(goalsField.text, forKey: Constants.UserKeys.goalsKey);
+            defaults.setBool(true, forKey: Constants.UserKeys.availableKey);
             var newProfile = PFObject(className: "Profile");
             newProfile["ID"] = PFUser.currentUser()!.objectId;
             newProfile["Name"] = nameField.text;
@@ -33,6 +34,7 @@ class OnboardingViewController: UIViewController {
             newProfile["Background"] = backgroundField.text;
             newProfile["Goals"] = goalsField.text;
             newProfile["Distance"] = 5;
+            newProfile["Available"] = true;
             newProfile.saveInBackground();
         } else {
             var alert = UIAlertController(title: "Empty Field", message: "Please enter all essential fields.", preferredStyle: UIAlertControllerStyle.Alert);
@@ -88,7 +90,16 @@ class OnboardingViewController: UIViewController {
         println("hi");
         self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil);
     }
-    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        
+        if (range.length + range.location > count(textField.text) )
+        {
+            return false;
+        }
+        
+        let newLength = count(textField.text) + count(string) - range.length
+        return newLength <= 60
+    }
     override func viewDidLoad() {
         super.viewDidLoad();
         

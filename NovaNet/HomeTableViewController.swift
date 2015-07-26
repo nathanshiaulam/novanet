@@ -19,9 +19,7 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
     var profileList:NSArray = NSArray();
     
     
-    @IBAction func Yay(sender: AnyObject) {
-        println("it works");
-    }
+
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         println("Error while updating location " + error.localizedDescription)
     }
@@ -187,18 +185,34 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
             cell.interestsLabel.text = profile["Interests"] as? String;
             cell.backgroundLabel.text = profile["Background"] as? String;
             cell.selectedUserId = (profile["ID"] as? String)!;
+            let userImageFile = profile["Image"] as! PFFile;
+            userImageFile.getDataInBackgroundWithBlock {
+                (imageData, error) -> Void in
+                if (error == nil) {
+                    cell.profileImage.image = UIImage(data:imageData!);
+                }
+                else {
+                    println(error);
+                }
+            }
+            
+            formatImage(cell.profileImage);
         }
         return cell;
         
     }
-    
+    func formatImage(var profileImage: UIImageView) {
+        profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
+        profileImage.clipsToBounds = true;
+    }
+
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! HomeTableViewCell
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         var profile: AnyObject = profileList[indexPath.row];
         
         defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey);
-        defaults.setObject(cell.nameLabel.text, forKey: Constants.SelectedUserKeys.selectedNameKey);
+        defaults.setObject(profile["Name"], forKey: Constants.SelectedUserKeys.selectedNameKey);
     }
     
     override func didReceiveMemoryWarning() {

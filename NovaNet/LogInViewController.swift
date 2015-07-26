@@ -75,8 +75,21 @@ class LogInViewController: UIViewController {
                         defaults.setObject(profile["Interests"], forKey: Constants.UserKeys.interestsKey);
                         defaults.setObject(profile["Background"], forKey: Constants.UserKeys.backgroundKey);
                         defaults.setObject(profile["Goals"], forKey: Constants.UserKeys.goalsKey);
-                        defaults.setObject(profile["Image"], forKey: Constants.UserKeys.profileImageKey);
                         defaults.setObject(profile["Distance"], forKey: Constants.UserKeys.distanceKey);
+                        defaults.setObject(profile["Available"], forKey: Constants.UserKeys.availableKey);
+                        
+                        let userImageFile = profile["Image"] as! PFFile;
+                        userImageFile.getDataInBackgroundWithBlock {
+                            (imageData, error) -> Void in
+                            if (error == nil) {
+                                var image = UIImage(data:imageData!);
+                                self.saveImage(image!);
+                            }
+                            else {
+                                println(error);
+                            }
+                        }
+
                     }
                 }
 
@@ -90,7 +103,21 @@ class LogInViewController: UIViewController {
             }
         }
     }
-    
+    func documentsPathForFileName(name: String) -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true);
+        let path = paths[0] as! String;
+        let fullPath = path.stringByAppendingPathComponent(name)
+        
+        return fullPath
+    }
+    func saveImage(image: UIImage) {
+        let imageData = UIImageJPEGRepresentation(image, 1)
+        let relativePath = "image_\(NSDate.timeIntervalSinceReferenceDate()).jpg"
+        let path = self.documentsPathForFileName(relativePath)
+        imageData.writeToFile(path, atomically: true)
+        NSUserDefaults.standardUserDefaults().setObject(relativePath, forKey: Constants.UserKeys.profileImageKey)
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
     func dismissToHomePage() {
         self.dismissViewControllerAnimated(true, completion: nil);
     }

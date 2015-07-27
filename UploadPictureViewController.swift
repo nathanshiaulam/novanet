@@ -34,6 +34,7 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
             if error != nil || profile == nil {
                 println(error);
             } else if let profile = profile {
+                println("hello");
                 let pickedImage:UIImage = self.uploadedImage.image!;
                 let imageData = UIImagePNGRepresentation(pickedImage);
                 let imageFile:PFFile = PFFile(data: imageData)

@@ -151,6 +151,10 @@ class SettingsMenuTableViewController: UITableViewController {
         return label;
     }
     
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        self.view.endEditing(true);
+    }
+    
     override func viewDidLoad() {
         
         super.viewDidLoad();

@@ -13,6 +13,7 @@ import CoreLocation
 
 class HomeTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var goalsLabel: UILabel!
     @IBOutlet weak var fikkaButton: UIButton!
     @IBOutlet weak var interestsLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!

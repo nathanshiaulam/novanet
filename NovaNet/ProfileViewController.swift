@@ -10,7 +10,7 @@ import UIKit
 import Bolts
 import Parse
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate,UINavigationControllerDelegate {
 
     
     @IBOutlet weak var availableLabel: UILabel!
@@ -21,6 +21,8 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var availableSwitch: UISwitch!
     
+    let picker = UIImagePickerController();
+    var popover:UIPopoverController? = nil;
     
     override func viewWillDisappear(animated: Bool) {
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
@@ -46,6 +48,21 @@ class ProfileViewController: UIViewController {
         super.viewWillDisappear(true);
     }
     
+    func saveImage(image: UIImage) {
+        let imageData = UIImageJPEGRepresentation(image, 1)
+        let relativePath = "image_\(NSDate.timeIntervalSinceReferenceDate()).jpg"
+        let path = self.documentsPathForFileName(relativePath)
+        imageData.writeToFile(path, atomically: true)
+        NSUserDefaults.standardUserDefaults().setObject(relativePath, forKey: Constants.UserKeys.profileImageKey)
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    func documentsPathForFileName(name: String) -> String {
+        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true);
+        let path = paths[0] as! String;
+        let fullPath = path.stringByAppendingPathComponent(name)
+        
+        return fullPath
+    }
     func formatImage(var profileImage: UIImageView) {
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
         profileImage.clipsToBounds = true;
@@ -101,20 +118,15 @@ class ProfileViewController: UIViewController {
         }
         return oldImage;
     }
-    func saveImage(image: UIImage) {
-        let imageData = UIImageJPEGRepresentation(image, 1)
-        let relativePath = "image_\(NSDate.timeIntervalSinceReferenceDate()).jpg"
-        let path = self.documentsPathForFileName(relativePath)
-        imageData.writeToFile(path, atomically: true)
-        NSUserDefaults.standardUserDefaults().setObject(relativePath, forKey: Constants.UserKeys.profileImageKey)
-        NSUserDefaults.standardUserDefaults().synchronize()
-    }
-    func documentsPathForFileName(name: String) -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true);
-        let path = paths[0] as! String;
-        let fullPath = path.stringByAppendingPathComponent(name)
+    //MARK: Delegates
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        picker.dismissViewControllerAnimated(true, completion: nil);
         
-        return fullPath
+        profileImage.image = info[UIImagePickerControllerOriginalImage] as? UIImage;
+    }
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        println("Picker cancel.");
+        
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,7 +134,11 @@ class ProfileViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = UIColorFromHex(0x555555, alpha: 1.0);
         let titleDict: NSDictionary = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         self.navigationController?.navigationBar.titleTextAttributes = titleDict as [NSObject : AnyObject];
-       
+        var tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tappedImage");
+        tapGestureRecognizer.delegate = self;
+        self.profileImage.addGestureRecognizer(tapGestureRecognizer);
+        self.profileImage.userInteractionEnabled = true;
+
 //        manageiOSModelType();
         setValues();
         // Do any additional setup after loading the view.
@@ -134,6 +150,77 @@ class ProfileViewController: UIViewController {
    
         setValues();
         
+    }
+    func tappedImage() {
+        var alert:UIAlertController = UIAlertController(title: "Choose an Image", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet);
+        
+        var galleryAction = UIAlertAction(title: "Upload a Photo", style: UIAlertActionStyle.Default)
+            {
+                UIAlertAction in
+                self.openGallery()
+        }
+        var cameraAction = UIAlertAction(title: "Take a Photo", style: UIAlertActionStyle.Default)
+            {
+                UIAlertAction in
+                self.openCamera()
+        }
+        var cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel)
+            {
+                UIAlertAction in
+        }
+        // Add the actions
+        alert.addAction(galleryAction);
+        alert.addAction(cameraAction);
+        alert.addAction(cancelAction);
+        
+        // Present the actionsheet
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    func openGallery() {
+        picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone
+        {
+            self.presentViewController(picker, animated: true, completion: nil)
+        }
+        else
+        {
+            popover = UIPopoverController(contentViewController: picker);
+            popover?.presentPopoverFromRect(profileImage.frame, inView: self.view, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
+        }
+    }
+    
+    func openCamera() {
+        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera))
+        {
+            picker.sourceType = UIImagePickerControllerSourceType.Camera
+            self .presentViewController(picker, animated: true, completion: nil)
+        }
+        else
+        {
+            openGallery()
+        }
+    }
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+        self.dismissViewControllerAnimated(true, completion: { () -> Void in})
+        profileImage.image = image
+        var query = PFQuery(className:"Profile");
+        var currentID = PFUser.currentUser()!.objectId;
+        query.whereKey("ID", equalTo:currentID!);
+        
+        saveImage(profileImage.image!);
+        query.getFirstObjectInBackgroundWithBlock {
+            (profile: PFObject?, error: NSError?) -> Void in
+            if error != nil || profile == nil {
+                println(error);
+            } else if let profile = profile {
+                let pickedImage:UIImage = self.profileImage.image!;
+                let imageData = UIImagePNGRepresentation(pickedImage);
+                let imageFile:PFFile = PFFile(data: imageData)
+                profile["Image"] = imageFile;
+                profile.saveInBackground();
+            }
+        }
+
     }
     
     func setValues() {

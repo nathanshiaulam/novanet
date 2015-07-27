@@ -42,6 +42,9 @@ class OnboardingViewController: UIViewController {
             self.presentViewController(alert, animated: true, completion: nil);
         }
     }
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        self.view.endEditing(true);
+    }
     
     override func viewDidLayoutSubviews() {
         let border = CALayer();

@@ -188,6 +188,8 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
             cell.nameLabel.text = profile["Name"] as? String;
             cell.interestsLabel.text = profile["Interests"] as? String;
             cell.interestsLabel.text = "Interests: " + cell.interestsLabel.text!;
+            cell.interestsLabel.text = profile["Goals"] as? String;
+            cell.interestsLabel.text = "Goals: " + cell.interestsLabel.text!;
             cell.backgroundLabel.text = profile["Background"] as? String;
             cell.backgroundLabel.text = "Background: " + cell.backgroundLabel.text!;
             cell.selectedUserId = (profile["ID"] as? String)!;
@@ -204,20 +206,8 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
             defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey);
             defaults.setObject(profile["Name"], forKey: Constants.SelectedUserKeys.selectedNameKey);
             cell.fikkaButton.tag = indexPath.row;
-            println(cell.fikkaPressed)
-            if cell.fikkaPressed == false {
-                cell.fikkaButton.addTarget(self, action: "fikkaButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
-                formatImage(cell.profileImage);
-                cell.fikkaPressed = true;
-                self.performSegueWithIdentifier("toMessageView", sender: self)
-            } else {
-                println("hi");
-                cell.fikkaButton.removeTarget(self, action: "fikkaButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside);
-                var alert = UIAlertController(title: "You already said hi!", message: "Tap on the tab to start talking to " + cell.nameLabel.text! + "!", preferredStyle: UIAlertControllerStyle.Alert);
-                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
-                self.presentViewController(alert, animated: true, completion: nil);
-
-            }
+            cell.fikkaButton.addTarget(self, action: "fikkaButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+            formatImage(cell.profileImage);
         }
         return cell;
         
@@ -243,12 +233,25 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
     }
     func fikkaButtonClicked(sender:UIButton) {
         let defaults = NSUserDefaults.standardUserDefaults();
-        var message = PFObject(className: "Message");
-        message["Sender"] = PFUser.currentUser()?.objectId;
-        message["Date"] = NSDate();
-        message["Text"] = Constants.ConstantStrings.fikkaText;
-        message["Recipient"] = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey);
-        message.saveInBackground();
+        var buttonIndex = sender.tag;
+        var indexPath = NSIndexPath(forRow: buttonIndex, inSection: 0);
+        var cell = tableView.cellForRowAtIndexPath(indexPath) as! HomeTableViewCell;
+        if (cell.fikkaPressed) {
+            var alert = UIAlertController(title: "You already said hi!", message: "Tap on the tab to start talking to " + cell.nameLabel.text! + "!", preferredStyle: UIAlertControllerStyle.Alert);
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
+            self.presentViewController(alert, animated: true, completion: nil);
+        } else {
+            cell.fikkaPressed = true;
+            var message = PFObject(className: "Message");
+            message["Sender"] = PFUser.currentUser()?.objectId;
+            message["Date"] = NSDate();
+            message["Text"] = Constants.ConstantStrings.fikkaText;
+            message["Recipient"] = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey);
+            message.saveInBackground();
+            println("true");
+            self.performSegueWithIdentifier("toMessageView", sender: self)
+        }
+        
         
     }
     func formatImage(var profileImage: UIImageView) {

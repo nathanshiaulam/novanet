@@ -27,6 +27,7 @@ class SignUpViewController: UIViewController {
         self.view.endEditing(true);
         
     }
+  
     
 
     
@@ -50,7 +51,7 @@ class SignUpViewController: UIViewController {
             (succeeded, error) -> Void in
             if (error == nil) {
                 defaults.setObject(self.usernameField.text, forKey: Constants.UserKeys.usernameKey);
-                defaults.setObject(5, forKey: Constants.UserKeys.distanceKey);
+                defaults.setObject(25, forKey: Constants.UserKeys.distanceKey);
                 defaults.setObject(true, forKey: Constants.TempKeys.fromNew);
                 self.dismissViewControllerAnimated(true, completion: { () -> Void in
                     NSNotificationCenter.defaultCenter().postNotificationName("dismissToHomePage", object: nil);

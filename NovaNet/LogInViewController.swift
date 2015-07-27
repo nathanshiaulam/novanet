@@ -103,6 +103,10 @@ class LogInViewController: UIViewController {
             }
         }
     }
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        self.view.endEditing(true);
+    }
+    
     func documentsPathForFileName(name: String) -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true);
         let path = paths[0] as! String;
@@ -122,9 +126,7 @@ class LogInViewController: UIViewController {
         self.dismissViewControllerAnimated(true, completion: nil);
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        self.view.endEditing(true);
-    }
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()

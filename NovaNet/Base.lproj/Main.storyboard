@@ -594,7 +594,7 @@
                                     <segue destination="Vup-Az-fhU" kind="presentation" id="1T8-bx-s3H"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Bd1-35-ChL">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ipsum" translatesAutoresizingMaskIntoConstraints="NO" id="Bd1-35-ChL">
                                 <rect key="frame" x="225" y="59" width="150" height="150"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="150" id="dmm-9a-sXC"/>
@@ -746,7 +746,7 @@
                                     <outlet property="delegate" destination="7m3-ec-ca8" id="UFb-gi-Tj0"/>
                                 </connections>
                             </textField>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8nx-hl-dN3">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ipsum" translatesAutoresizingMaskIntoConstraints="NO" id="8nx-hl-dN3">
                                 <rect key="frame" x="225" y="83" width="150" height="150"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="150" id="4T3-VL-Ppd"/>
@@ -1093,6 +1093,7 @@
     </scenes>
     <resources>
         <image name="fika" width="300" height="300"/>
+        <image name="ipsum" width="140" height="140"/>
         <image name="nathan" width="960" height="960"/>
         <image name="selectImage" width="340" height="340"/>
     </resources>

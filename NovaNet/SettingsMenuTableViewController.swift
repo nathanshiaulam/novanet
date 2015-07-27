@@ -121,8 +121,7 @@ class SettingsMenuTableViewController: UITableViewController {
         }
         distanceSlider.setValue(Float(distanceValue), animated: true);
     }
-    
-    
+
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
             return 0;
@@ -155,6 +154,7 @@ class SettingsMenuTableViewController: UITableViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad();
+        tableView.allowsSelection = false;
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults(); // Sets up local datastore to access profile values
         
         navigationController?.navigationBar.barTintColor = UIColorFromHex(0x555555, alpha: 1.0);

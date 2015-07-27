@@ -13,6 +13,7 @@ import Parse
 class ProfileViewController: UIViewController {
 
     
+    @IBOutlet weak var availableLabel: UILabel!
     @IBOutlet weak var aboutLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var interestsLabel: UILabel!
@@ -56,6 +57,39 @@ class ProfileViewController: UIViewController {
         
         return UIColor(red:red, green:green, blue:blue, alpha:CGFloat(alpha))
     }
+
+    func manageiOSModelType() {
+        let modelName = UIDevice.currentDevice().modelName;
+        
+        switch modelName {
+        case "iPhone 4s":
+//            let currentX = profileImage.frame.origin.x;
+//            let currentY = profileImage.frame.origin.y;
+//            var rect = CGRect(x: currentX, y: currentY, width: 40, height: 40);
+//            var imageView = UIImageView(frame: rect);
+//            self.profileImage.frame = imageView.frame;
+            self.nameLabel.font = self.nameLabel.font.fontWithSize(17.0);
+            self.aboutLabel.font = self.aboutLabel.font.fontWithSize(11.0);
+            self.interestsLabel.font = self.interestsLabel.font.fontWithSize(11.0);
+            self.goalsLabel.font = self.goalsLabel.font.fontWithSize(11.0);
+            self.availableLabel.font = self.availableLabel.font.fontWithSize(12.0);
+        case "iPhone 5":
+//            let currentX = profileImage.frame.origin.x;
+//            let currentY = profileImage.frame.origin.y;
+//            var rect = CGRect(x: currentX, y: currentY, width: 60, height: 60);
+//            var imageView = UIImageView(frame: rect);
+//            self.profileImage.frame = imageView.frame;
+            self.nameLabel.font = self.nameLabel.font.fontWithSize(18.0);
+            self.aboutLabel.font = self.aboutLabel.font.fontWithSize(11.0);
+            self.interestsLabel.font = self.interestsLabel.font.fontWithSize(11.0);
+            self.goalsLabel.font = self.goalsLabel.font.fontWithSize(11.0);
+            self.availableLabel.font = self.availableLabel.font.fontWithSize(13.0);
+        case "iPhone 6":
+            return; // Essentially do nothing
+        default:
+            return; // Essentially do nothing
+        }
+    }
     func readImage() -> UIImage {
         let possibleOldImagePath = NSUserDefaults.standardUserDefaults().objectForKey(Constants.UserKeys.profileImageKey) as! String?
         var oldImage = UIImage();
@@ -66,6 +100,14 @@ class ProfileViewController: UIViewController {
             oldImage = UIImage(data: oldImageData!)!
         }
         return oldImage;
+    }
+    func saveImage(image: UIImage) {
+        let imageData = UIImageJPEGRepresentation(image, 1)
+        let relativePath = "image_\(NSDate.timeIntervalSinceReferenceDate()).jpg"
+        let path = self.documentsPathForFileName(relativePath)
+        imageData.writeToFile(path, atomically: true)
+        NSUserDefaults.standardUserDefaults().setObject(relativePath, forKey: Constants.UserKeys.profileImageKey)
+        NSUserDefaults.standardUserDefaults().synchronize()
     }
     func documentsPathForFileName(name: String) -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true);
@@ -80,17 +122,16 @@ class ProfileViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = UIColorFromHex(0x555555, alpha: 1.0);
         let titleDict: NSDictionary = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         self.navigationController?.navigationBar.titleTextAttributes = titleDict as [NSObject : AnyObject];
-        
        
+//        manageiOSModelType();
         setValues();
-        
-        
         // Do any additional setup after loading the view.
     }
-    
+
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true);        
-        
+        let size = CGSizeMake(10, 10)
+   
         setValues();
         
     }

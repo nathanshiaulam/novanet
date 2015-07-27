@@ -19,6 +19,7 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
     var profileList:NSArray = NSArray();
     
     
+    @IBOutlet weak var messageImage: UIImageView!
 
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         println("Error while updating location " + error.localizedDescription)
@@ -43,13 +44,15 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
     override func viewDidLoad() {
         
         super.viewDidLoad();
+        
+        
         navigationController?.navigationBar.barTintColor = UIColorFromHex(0x555555, alpha: 1.0);
 
         // Go to login page if no user logged in
         if (!self.userLoggedIn()) {
             self.performSegueWithIdentifier("toUserLogin", sender: self);
         }
-        
+
         // Sets up core location manager
         locationManager.distanceFilter = 50.0;
         locationManager.activityType = CLActivityType.AutomotiveNavigation;
@@ -178,12 +181,15 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! HomeTableViewCell
         var profile: AnyObject = profileList[indexPath.row];
-
+    
         if (profileList.count > 0) {
+            manageiOSModelType(cell);
             cell.textLabel?.text = "";
             cell.nameLabel.text = profile["Name"] as? String;
             cell.interestsLabel.text = profile["Interests"] as? String;
+            cell.interestsLabel.text = "Interests: " + cell.interestsLabel.text!;
             cell.backgroundLabel.text = profile["Background"] as? String;
+            cell.backgroundLabel.text = "Background: " + cell.backgroundLabel.text!;
             cell.selectedUserId = (profile["ID"] as? String)!;
             let userImageFile = profile["Image"] as! PFFile;
             userImageFile.getDataInBackgroundWithBlock {
@@ -195,24 +201,72 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
                     println(error);
                 }
             }
-            
-            formatImage(cell.profileImage);
+            defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey);
+            defaults.setObject(profile["Name"], forKey: Constants.SelectedUserKeys.selectedNameKey);
+            cell.fikkaButton.tag = indexPath.row;
+            println(cell.fikkaPressed)
+            if cell.fikkaPressed == false {
+                cell.fikkaButton.addTarget(self, action: "fikkaButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+                formatImage(cell.profileImage);
+                cell.fikkaPressed = true;
+                self.performSegueWithIdentifier("toMessageView", sender: self)
+            } else {
+                println("hi");
+                cell.fikkaButton.removeTarget(self, action: "fikkaButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside);
+                var alert = UIAlertController(title: "You already said hi!", message: "Tap on the tab to start talking to " + cell.nameLabel.text! + "!", preferredStyle: UIAlertControllerStyle.Alert);
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
+                self.presentViewController(alert, animated: true, completion: nil);
+
+            }
         }
         return cell;
+        
+    }
+
+    func manageiOSModelType(cell: HomeTableViewCell) {
+        let modelName = UIDevice.currentDevice().modelName;
+        
+        switch modelName {
+        case "iPhone 4s":
+            cell.nameLabel.font = cell.nameLabel.font.fontWithSize(12.0);
+            cell.interestsLabel.font = cell.interestsLabel.font.fontWithSize(8.0);
+            cell.backgroundLabel.font = cell.backgroundLabel.font.fontWithSize(8.0);
+        case "iPhone 5":
+            cell.nameLabel.font = cell.nameLabel.font.fontWithSize(13.0);
+            cell.interestsLabel.font = cell.interestsLabel.font.fontWithSize(10.0);
+            cell.backgroundLabel.font = cell.backgroundLabel.font.fontWithSize(10.0);
+        case "iPhone 6":
+            cell.nameLabel.font = cell.nameLabel.font; // Essentially do nothing
+        default:
+            cell.nameLabel.font = cell.nameLabel.font; // Essentially do nothing
+        }
+    }
+    func fikkaButtonClicked(sender:UIButton) {
+        let defaults = NSUserDefaults.standardUserDefaults();
+        var message = PFObject(className: "Message");
+        message["Sender"] = PFUser.currentUser()?.objectId;
+        message["Date"] = NSDate();
+        message["Text"] = Constants.ConstantStrings.fikkaText;
+        message["Recipient"] = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey);
+        message.saveInBackground();
         
     }
     func formatImage(var profileImage: UIImageView) {
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
         profileImage.clipsToBounds = true;
     }
+    
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! HomeTableViewCell
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         var profile: AnyObject = profileList[indexPath.row];
-        
         defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey);
         defaults.setObject(profile["Name"], forKey: Constants.SelectedUserKeys.selectedNameKey);
+
+        cell.fikkaButton.tag = indexPath.row;
+        cell.fikkaButton.addTarget(self, action: "fikkaButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
+        
     }
     
     override func didReceiveMemoryWarning() {

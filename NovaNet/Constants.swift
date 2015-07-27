@@ -24,12 +24,15 @@ struct Constants {
         static let profilesInRangeKey = "profilesInRangeKey";
         static let goalsKey = "goalsKey";
         static let availableKey = "availableKey";
-        static let loadText = "Please wait while we find other Novas nearby...";
     }
     struct TempKeys {
         static let fromNew = "fromNew";
     }
-    
+    struct ConstantStrings {
+        static let fikkaText = "Hi, nice to meet you. I'm interested in what you're doing, and I'd love to get a Fika sometime soon. Let me know when you're free!";
+        static let loadText = "Please wait while we find other Novas nearby...";
+
+    }
     struct SelectedUserKeys {
         static let selectedUsernameKey = "selectedUsernameKey";
         static let selectedIdKey = "selectedIdKey";

@@ -303,7 +303,7 @@
         <!--Messager View Controller-->
         <scene sceneID="aKS-f9-Tex">
             <objects>
-                <viewController id="0Cl-fI-djT" customClass="MessagerViewController" customModule="NovaNet" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MessageVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="0Cl-fI-djT" customClass="MessagerViewController" customModule="NovaNet" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="3av-84-O9x"/>
                         <viewControllerLayoutGuide type="bottom" id="2V1-fG-HMU"/>

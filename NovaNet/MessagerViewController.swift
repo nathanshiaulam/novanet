@@ -36,10 +36,6 @@ class MessagerViewController: JSQMessagesViewController {
         self.userName = PFUser.currentUser()!.objectId!;
         self.selectedUsername = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey)!;
         
-        println("Hi");
-        println(selectedUsername);
-        println(userName);
-        
         automaticallyScrollsToMostRecentMessage = true;
         inputToolbar.contentView.leftBarButtonItem = nil;
         
@@ -112,34 +108,62 @@ class MessagerViewController: JSQMessagesViewController {
     override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
         
         JSQSystemSoundPlayer.jsq_playMessageSentSound();
-        
         sendMessage(text, senderId: senderId, senderDisplayName: senderDisplayName, date: date);
     }
     
     func sendMessage(text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
         var newMessage = JSQMessage(senderId: senderId, displayName: senderDisplayName, text: text);
-        var message = PFObject(className: "Message");
-        message["Sender"] = senderId;
-        message["Date"] = date;
-        message["Text"] = text;
-        message["Recipient"] = selectedUsername;
-        message.saveInBackgroundWithBlock {
-            (succeeded, error) -> Void in
-            if (error == nil) {
-                self.messages += [newMessage];
-                self.finishSendingMessage();
-            } else {
-                let errorString = error!.userInfo!["error"] as! NSString;
-                var alert = UIAlertController(title: "Message not sent.", message: errorString as String, preferredStyle: UIAlertControllerStyle.Alert);
-                alert.addAction(UIAlertAction(title:"Ok", style: UIAlertActionStyle.Default, handler: nil));
+        
+        var dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        var DateInFormat = dateFormatter.stringFromDate(date);
+        println("hialsdkhglsad");
 
+        var name:String = defaults.stringForKey(Constants.SelectedUserKeys.selectedNameKey)!;
+        println("hidadsfdsafalsdkhglsad");
+
+        let data = [
+            "alert":text,
+            "id": PFUser.currentUser()?.objectId,
+            "date": DateInFormat,
+            "name": name,
+        ]
+        let push = PFPush();
+        var innerQuery : PFQuery = PFUser.query()!
+        innerQuery.whereKey("objectId", equalTo: defaults.objectForKey(Constants.SelectedUserKeys.selectedIdKey)!)
+        var pushQuery = PFInstallation.query()
+        pushQuery!.whereKey("user", matchesQuery: innerQuery)
+        push.setQuery(pushQuery) // Set our Installation query
+        push.setData(data);
+        push.sendPushInBackgroundWithBlock {
+            (succeeded, error) -> Void in
+            if (succeeded) {
+                // Saves message to load for conversation
+                var message = PFObject(className: "Message");
+                message["Sender"] = senderId;
+                message["Date"] = date;
+                message["Text"] = text;
+                message["Recipient"] = self.defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey);
+                message.saveInBackgroundWithBlock {
+                    (succeded, error) -> Void in
+                    if error == nil {
+                        self.messages += [newMessage];
+                        self.collectionView.reloadData();
+                        self.finishSendingMessage();
+                    } else {
+                        let errorString = error!.userInfo!["error"] as! NSString;
+                        var alert = UIAlertController(title: "Message not sent.", message: errorString as String, preferredStyle: UIAlertControllerStyle.Alert);
+                        alert.addAction(UIAlertAction(title:"Ok", style: UIAlertActionStyle.Default, handler: nil));
+                    }
+                }
             }
         }
-        
     }
     
     override func didPressAccessoryButton(sender: UIButton!) {
+        
     }
+
     
 
 }

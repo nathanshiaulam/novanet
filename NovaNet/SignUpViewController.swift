@@ -50,6 +50,9 @@ class SignUpViewController: UIViewController {
         newUser.signUpInBackgroundWithBlock {
             (succeeded, error) -> Void in
             if (error == nil) {
+                let installation = PFInstallation.currentInstallation()
+                installation["user"] = PFUser.currentUser()
+                installation.saveInBackground()
                 defaults.setObject(self.usernameField.text, forKey: Constants.UserKeys.usernameKey);
                 defaults.setObject(25, forKey: Constants.UserKeys.distanceKey);
                 defaults.setObject(true, forKey: Constants.TempKeys.fromNew);

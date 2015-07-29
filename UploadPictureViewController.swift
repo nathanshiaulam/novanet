@@ -39,6 +39,7 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
                 let imageData = UIImagePNGRepresentation(pickedImage);
                 let imageFile:PFFile = PFFile(data: imageData)
                 profile["Image"] = imageFile;
+                println(imageFile);
                 profile.saveInBackground();
             }
         }

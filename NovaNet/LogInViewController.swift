@@ -77,7 +77,10 @@ class LogInViewController: UIViewController {
                         defaults.setObject(profile["Goals"], forKey: Constants.UserKeys.goalsKey);
                         defaults.setObject(profile["Distance"], forKey: Constants.UserKeys.distanceKey);
                         defaults.setObject(profile["Available"], forKey: Constants.UserKeys.availableKey);
-                        
+                        let installation = PFInstallation.currentInstallation()
+                        installation["user"] = PFUser.currentUser()
+                        println(installation["user"]);
+                        installation.saveInBackground()
                         let userImageFile = profile["Image"] as! PFFile;
                         userImageFile.getDataInBackgroundWithBlock {
                             (imageData, error) -> Void in

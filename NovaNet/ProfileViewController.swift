@@ -206,7 +206,7 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
         var query = PFQuery(className:"Profile");
         var currentID = PFUser.currentUser()!.objectId;
         query.whereKey("ID", equalTo:currentID!);
-        
+        println("hi");
         saveImage(profileImage.image!);
         query.getFirstObjectInBackgroundWithBlock {
             (profile: PFObject?, error: NSError?) -> Void in

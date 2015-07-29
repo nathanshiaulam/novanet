@@ -18,7 +18,6 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
     // Creates arrays to pass data
     var profileList:NSArray = NSArray();
     
-    
     @IBOutlet weak var messageImage: UIImageView!
 
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
@@ -44,8 +43,7 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
     override func viewDidLoad() {
         
         super.viewDidLoad();
-        
-        
+
         navigationController?.navigationBar.barTintColor = UIColorFromHex(0x555555, alpha: 1.0);
 
         // Go to login page if no user logged in
@@ -193,8 +191,11 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
             cell.backgroundLabel.text = profile["Background"] as? String;
             cell.backgroundLabel.text = "Background: " + cell.backgroundLabel.text!;
             cell.selectedUserId = (profile["ID"] as? String)!;
-            let userImageFile = profile["Image"] as! PFFile;
-            userImageFile.getDataInBackgroundWithBlock {
+            var image = PFFile();
+            if let userImageFile = profile["Image"] as? PFFile {
+                image = userImageFile;
+            }
+            image.getDataInBackgroundWithBlock {
                 (imageData, error) -> Void in
                 if (error == nil) {
                     cell.profileImage.image = UIImage(data:imageData!);
@@ -203,6 +204,7 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
                     println(error);
                 }
             }
+            // Store all necessary information to send out push notification
             defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey);
             defaults.setObject(profile["Name"], forKey: Constants.SelectedUserKeys.selectedNameKey);
             cell.fikkaButton.tag = indexPath.row;
@@ -226,50 +228,97 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
             cell.interestsLabel.font = cell.interestsLabel.font.fontWithSize(10.0);
             cell.backgroundLabel.font = cell.backgroundLabel.font.fontWithSize(10.0);
         case "iPhone 6":
-            cell.nameLabel.font = cell.nameLabel.font; // Essentially do nothing
+            return; // Essentially do nothing
         default:
-            cell.nameLabel.font = cell.nameLabel.font; // Essentially do nothing
+            return; // Essentially do nothing
         }
     }
+    
+    func dateFromString(date: String, format: String) -> NSDate {
+        let formatter = NSDateFormatter()
+        let locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        
+        formatter.locale = locale
+        formatter.dateFormat = format
+        
+        return formatter.dateFromString(date)!
+    }
+    
     func fikkaButtonClicked(sender:UIButton) {
+        println("hi");
         let defaults = NSUserDefaults.standardUserDefaults();
         var buttonIndex = sender.tag;
         var indexPath = NSIndexPath(forRow: buttonIndex, inSection: 0);
         var cell = tableView.cellForRowAtIndexPath(indexPath) as! HomeTableViewCell;
+        println("hi2");
+        // Sets current username
+        var profile: AnyObject = profileList[indexPath.row];
+        defaults.setObject(profile["Username"], forKey: Constants.SelectedUserKeys.selectedUsernameKey);
+        println("hi3");
+        // Fika button already pressed so no need to send message.
         if (cell.fikkaPressed) {
+            println("hi4");
             var alert = UIAlertController(title: "You already said hi!", message: "Tap on the tab to start talking to " + cell.nameLabel.text! + "!", preferredStyle: UIAlertControllerStyle.Alert);
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
             self.presentViewController(alert, animated: true, completion: nil);
+        // Fika button not yet pressed
         } else {
-            cell.fikkaPressed = true;
-            var message = PFObject(className: "Message");
-            message["Sender"] = PFUser.currentUser()?.objectId;
-            message["Date"] = NSDate();
-            message["Text"] = Constants.ConstantStrings.fikkaText;
-            message["Recipient"] = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey);
-            message.saveInBackground();
-            println("true");
-            self.performSegueWithIdentifier("toMessageView", sender: self)
+            cell.fikkaPressed = true; // Set to true so next run doesn't execute
+            println("hi5");
+            var dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            var DateInFormat = dateFormatter.stringFromDate(NSDate());
+            
+            var text:String! = defaults.stringForKey(Constants.ConstantStrings.fikkaText) as String!;
+            var name:String = profile["Name"] as! String
+            let data = [
+                "alert":"Hi, nice to meet you. I'm interested in what you're doing, and I'd love to get a Fika sometime soon. Let me know when you're free!",
+                "id":profile["ID"] as! String,
+                "date": DateInFormat,
+                "name":name,
+            ]
+            println("hi6");
+            // Send push notification with message
+            let push = PFPush();
+            var innerQuery : PFQuery = PFUser.query()!
+            println("hi7");
+            innerQuery.whereKey("objectId", equalTo: defaults.objectForKey(Constants.SelectedUserKeys.selectedIdKey)!)
+            println("hi7");
+            var pushQuery = PFInstallation.query()
+            pushQuery!.whereKey("user", matchesQuery: innerQuery)
+            push.setQuery(pushQuery) // Set our Installation query
+            println(push.debugDescription);
+            push.setData(data);
+            push.sendPushInBackgroundWithBlock {
+                (succeeded, error) -> Void in
+                if (succeeded) {
+                    // Saves message to load for conversation
+                    var message = PFObject(className: "Message");
+                    message["Sender"] = PFUser.currentUser()?.objectId;
+                    message["Date"] = self.dateFromString(DateInFormat, format: "yyyy-MM-dd HH:mm:ss");
+                    message["Text"] = Constants.ConstantStrings.fikkaText;
+                    message["Recipient"] = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey);
+                    message.saveInBackground();
+                    self.performSegueWithIdentifier("toMessageView", sender: self)
+                } else {
+                    println(error);
+                }
+            }
         }
-        
-        
     }
+    
     func formatImage(var profileImage: UIImageView) {
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
         profileImage.clipsToBounds = true;
     }
     
-
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! HomeTableViewCell
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         var profile: AnyObject = profileList[indexPath.row];
         defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey);
         defaults.setObject(profile["Name"], forKey: Constants.SelectedUserKeys.selectedNameKey);
-
-        cell.fikkaButton.tag = indexPath.row;
-        cell.fikkaButton.addTarget(self, action: "fikkaButtonClicked:", forControlEvents: UIControlEvents.TouchUpInside)
-        
+        defaults.setObject(profile["Username"], forKey: Constants.SelectedUserKeys.selectedUsernameKey);
     }
     
     override func didReceiveMemoryWarning() {

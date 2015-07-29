@@ -81,10 +81,10 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iOv-37-fBa">
-                                            <rect key="frame" x="552" y="21" width="40" height="40"/>
+                                            <rect key="frame" x="547" y="18" width="45" height="45"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="40" id="5ru-Fx-3iE"/>
-                                                <constraint firstAttribute="width" constant="40" id="b4M-Hm-q1h"/>
+                                                <constraint firstAttribute="height" constant="45" id="5ru-Fx-3iE"/>
+                                                <constraint firstAttribute="width" constant="45" id="b4M-Hm-q1h"/>
                                             </constraints>
                                             <state key="normal" image="fika">
                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>

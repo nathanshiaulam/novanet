@@ -21,13 +21,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Parse.setApplicationId("ni7bpwOhWr114Rom27cx4QSv27Ud3tyMl0tZchxw",
             clientKey: "NqfIkHWioqiH93TsSijAvcoMNzWDgyx8Z9hoLJL2")
         PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
-        
+        println("hello")
         // Register for Push Notitications
         if application.applicationState != UIApplicationState.Background {
             // Track an app open here if we launch with a push, unless
             // "content_available" was used to trigger a background push (introduced in iOS 7).
             // In that case, we skip tracking here to avoid double counting the app-open.
-            
+            println("lkahdskglhasdgklhads");
             let preBackgroundPush = !application.respondsToSelector("backgroundRefreshStatus")
             let oldPushHandlerOnly = !self.respondsToSelector("application:didReceiveRemoteNotification:fetchCompletionHandler:")
             var pushPayload = false
@@ -49,13 +49,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         if (launchOptions != nil) {
             let storyboard = UIStoryboard(name: "Main", bundle: nil);
+            let appDelegate  = UIApplication.sharedApplication().delegate as! AppDelegate
+            let navigation = appDelegate.window!.rootViewController as! UINavigationController
             let rootVC = storyboard.instantiateViewControllerWithIdentifier("MessageVC") as! MessagerViewController
             if (PFUser.currentUser() != nil) {
                 if let notificationPayload = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
                     var name: AnyObject? = notificationPayload["name"];
                     var date: AnyObject? = notificationPayload["date"];
                     var id: AnyObject? = notificationPayload["id"];
-                    self.window!.rootViewController = rootVC;
+                    defaults.setObject(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
+                    defaults.setObject(id, forKey: Constants.SelectedUserKeys.selectedIdKey)
+                    navigation.pushViewController(rootVC, animated: true);
                 }
             }
         }
@@ -91,36 +95,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             println("application:didFailToRegisterForRemoteNotificationsWithError: %@", error)
         }
     }
-    
+   
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         PFPush.handlePush(userInfo)
-        if application.applicationState == UIApplicationState.Inactive {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil);
-            let rootVC = storyboard.instantiateViewControllerWithIdentifier("MessageVC") as! MessagerViewController
-            if (PFUser.currentUser() != nil) {
-                if let notificationPayload = userInfo[UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
-                    var name: AnyObject? = notificationPayload["name"];
-                    var date: AnyObject? = notificationPayload["date"];
-                    var id: AnyObject? = notificationPayload["id"];
-                    self.window!.rootViewController = rootVC;
-                }
-            }
-
-            PFAnalytics.trackAppOpenedWithRemoteNotificationPayload(userInfo)
-        }
-        else {
-            let currentVC = self.window?.rootViewController;
-            let storyboard = UIStoryboard(name: "Main", bundle: nil);
-            let rootVC = storyboard.instantiateViewControllerWithIdentifier("MessageVC") as! MessagerViewController
-            if (PFUser.currentUser() != nil) {
-                if let notificationPayload = userInfo[UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
-                    var name: AnyObject? = notificationPayload["name"];
-                    var date: AnyObject? = notificationPayload["date"];
-                    var id: AnyObject? = notificationPayload["id"];
-                    self.window!.rootViewController = rootVC;
+        let storyboard = UIStoryboard(name: "Main", bundle: nil);
+        let appDelegate  = UIApplication.sharedApplication().delegate as! AppDelegate
+        let navigation = appDelegate.window!.rootViewController as! UINavigationController
+        let rootVC = storyboard.instantiateViewControllerWithIdentifier("MessageVC") as! MessagerViewController
+        if (PFUser.currentUser() != nil) {
+            if let notificationPayload = userInfo as? NSDictionary {
+                var name: AnyObject? = notificationPayload["name"];
+                var date: AnyObject? = notificationPayload["date"];
+                var id: AnyObject? = notificationPayload["id"];
+                defaults.setObject(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
+                defaults.setObject(id, forKey: Constants.SelectedUserKeys.selectedIdKey)
+                if (navigation.topViewController.restorationIdentifier != "MessageVC") {
+                    navigation.pushViewController(rootVC, animated: true);
                 }
             }
         }
+        PFAnalytics.trackAppOpenedWithRemoteNotificationPayload(userInfo)
     }
    
 

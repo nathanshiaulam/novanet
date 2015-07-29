@@ -264,30 +264,27 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
         // Fika button not yet pressed
         } else {
             cell.fikkaPressed = true; // Set to true so next run doesn't execute
-            println("hi5");
+
+            // Create data that is passed through push notification
             var dateFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             var DateInFormat = dateFormatter.stringFromDate(NSDate());
-            
             var text:String! = defaults.stringForKey(Constants.ConstantStrings.fikkaText) as String!;
             var name:String = profile["Name"] as! String
             let data = [
-                "alert":"Hi, nice to meet you. I'm interested in what you're doing, and I'd love to get a Fika sometime soon. Let me know when you're free!",
+                "alert":name + ": Hi, nice to meet you. I'm interested in what you're doing, and I'd love to get a Fika sometime soon. Let me know when you're free!",
                 "id":profile["ID"] as! String,
                 "date": DateInFormat,
                 "name":name,
             ]
-            println("hi6");
+
             // Send push notification with message
             let push = PFPush();
             var innerQuery : PFQuery = PFUser.query()!
-            println("hi7");
             innerQuery.whereKey("objectId", equalTo: defaults.objectForKey(Constants.SelectedUserKeys.selectedIdKey)!)
-            println("hi7");
             var pushQuery = PFInstallation.query()
             pushQuery!.whereKey("user", matchesQuery: innerQuery)
             push.setQuery(pushQuery) // Set our Installation query
-            println(push.debugDescription);
             push.setData(data);
             push.sendPushInBackgroundWithBlock {
                 (succeeded, error) -> Void in

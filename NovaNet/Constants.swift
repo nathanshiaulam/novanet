@@ -27,6 +27,7 @@ struct Constants {
     }
     struct TempKeys {
         static let fromNew = "fromNew";
+        static let notificationPayloadKey = "notificationPayloadKey";
     }
     struct ConstantStrings {
         static let fikkaText = "Hi, nice to meet you. I'm interested in what you're doing, and I'd love to get a Fika sometime soon. Let me know when you're free!";

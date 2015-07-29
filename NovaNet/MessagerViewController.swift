@@ -29,7 +29,7 @@ class MessagerViewController: JSQMessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad();
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "loadData", name: "loadData", object: nil);
         navigationController?.navigationBar.barTintColor = UIColorFromHex(0x555555, alpha: 1.0);
         self.title = defaults.stringForKey(Constants.SelectedUserKeys.selectedNameKey);
         
@@ -73,6 +73,9 @@ class MessagerViewController: JSQMessagesViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true);
+        self.automaticallyScrollsToMostRecentMessage = true;
+
+        self.collectionView.reloadData();
         collectionView.collectionViewLayout.springinessEnabled = true
     }
     
@@ -111,23 +114,73 @@ class MessagerViewController: JSQMessagesViewController {
         sendMessage(text, senderId: senderId, senderDisplayName: senderDisplayName, date: date);
     }
     
+    func loadData() {
+        if let payload: AnyObject = defaults.objectForKey(Constants.TempKeys.notificationPayloadKey) {
+            self.title = payload["name"] as? String;
+            self.selectedUsername = payload["id"]as! String;
+        }
+        println("hi");
+        self.userName = PFUser.currentUser()!.objectId!;
+        
+        automaticallyScrollsToMostRecentMessage = true;
+        inputToolbar.contentView.leftBarButtonItem = nil;
+        
+        // User IDs are used as sender/recipient tags
+        self.senderDisplayName = defaults.stringForKey(Constants.UserKeys.nameKey);
+        self.senderId = self.userName;
+        
+        var query1 = PFQuery(className: "Message");
+        query1.whereKey("Sender", equalTo: senderId);
+        query1.whereKey("Recipient", equalTo:selectedUsername);
+        
+        var query2 = PFQuery(className: "Message");
+        query2.whereKey("Sender", equalTo: selectedUsername);
+        query2.whereKey("Recipient", equalTo:senderId);
+        
+        var queryAll = PFQuery.orQueryWithSubqueries([query1, query2]);
+        queryAll.orderByAscending("Date");
+        queryAll.findObjectsInBackgroundWithBlock {
+            (NSArray messages, NSError error) -> Void in
+            if (error != nil || messages == nil) {
+                println(error);
+            } else if let messages = messages as? [PFObject]{
+                for message in messages {
+                    var text = message["Text"] as! String;
+                    var sender = message["Sender"] as! String;
+                    var date = message["Date"] as! NSDate;
+                    var fullmessage = JSQMessage(senderId: sender, senderDisplayName: sender, date: date, text: text);
+                    self.messages += [fullmessage];
+                }
+                self.collectionView.reloadData();
+            }
+        }
+
+    }
+    func dateFromString(date: String, format: String) -> NSDate {
+        let formatter = NSDateFormatter()
+        let locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        
+        formatter.locale = locale
+        formatter.dateFormat = format
+        
+        return formatter.dateFromString(date)!
+    }
     func sendMessage(text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
         var newMessage = JSQMessage(senderId: senderId, displayName: senderDisplayName, text: text);
         
         var dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         var DateInFormat = dateFormatter.stringFromDate(date);
-        println("hialsdkhglsad");
-
         var name:String = defaults.stringForKey(Constants.SelectedUserKeys.selectedNameKey)!;
-        println("hidadsfdsafalsdkhglsad");
-
+        var fulltext:String! = name + ": " + text as String;
         let data = [
-            "alert":text,
+            "alert":fulltext,
             "id": PFUser.currentUser()?.objectId,
             "date": DateInFormat,
             "name": name,
         ]
+        
+        
         let push = PFPush();
         var innerQuery : PFQuery = PFUser.query()!
         innerQuery.whereKey("objectId", equalTo: defaults.objectForKey(Constants.SelectedUserKeys.selectedIdKey)!)

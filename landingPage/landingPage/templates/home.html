@@ -8,40 +8,46 @@
 	</head>
 	<body>
 		<div id="cover">
-			<img class="center-image" src="{{ url_for('static', filename='img/logo.png') }}">
-			<div class="container">
-				<div class="main-header-box">
-					<h1 class="center-text header main-header">Meet cool people nearby</h1>
-					<h1 class="center-text header main-header">Always find the right conversations</h1>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-4">
+			<div class="overlay">
 
-				</div>
-				<div class="col-md-4">
-				</div>
-				<div class="col-md-4">
-				</div>
-			{% if success %}
-				<div class="successMessage">
-					<p>Thank you for your message. We'll get back to you shortly.</p>
-				</div>
-	 		{% else %}
-				<!-- {% for message in get_flashed_messages() %}
-					<div class="flashMessage">
-						<p>{{ message }}></p>
+				<img class="center-image" src="{{ url_for('static', filename='img/logo.png') }}">
+				<div class="container">
+					<div class="main-header-box">
+						<h1 class="center-text header main-header">Grab a fika, grow your network</h1>
+					
 					</div>
-				{% endfor %} -->
-					<h3 class="center-text header sub-header">Sign up as a beta-tester and gain exclusive access to the community: </h3>
-				    <form class="pure-form center-form" action="{{ url_for('home') }}" method=post>
-				   		{{ form.hidden_tag() }}
-				    	{{ form.email(placeholder="Email", class="email") }}
-				    	{{ form.submit(class="btn") }}
-				   </form>  
-			{% endif %}
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+
+					</div>
+					<div class="col-md-4">
+					</div>
+					<div class="col-md-4">
+					</div>
+				{% if success %}
+					<div class="successMessage">
+						<p>Thank you for your message. We'll get back to you shortly.</p>
+					</div>
+		 		{% else %}
+					<!-- {% for message in get_flashed_messages() %}
+						<div class="flashMessage">
+							<p>{{ message }}></p>
+						</div>
+					{% endfor %} -->
+					<div class="sub-header-box">
+						<h3 class="center-text header sub-header">We help you meet cool young professionals nearby, because we believe every conversation should count.</h3>
+						<h3 class="center-text header sub-header">Sign up for our iOS TestFlight and gain exclusive access to the community: </h3>
+					</div>
+					    <form class="pure-form center-form" action="{{ url_for('home') }}" method=post>
+					   		{{ form.hidden_tag() }}
+					    	{{ form.email(placeholder="Email", class="email") }}
+					    	{{ form.submit(class="btn") }}
+					   </form>  
+				{% endif %}
+			</div>
 		</div>
-		
+
 	</body>
 	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>

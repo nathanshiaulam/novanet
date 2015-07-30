@@ -1,0 +1,16 @@
+from flask import Flask, render_template, request, flash
+from forms import ContactForm
+ 
+app = Flask(__name__) 
+ 
+app.secret_key = 'r0B30E4bD/1ZD72p:4&4y9O[7G9E<]'
+
+@app.route('/', methods=['GET', 'POST'])
+def contact():
+  form = ContactForm()
+ 
+  if request.method == 'POST':
+    return 'Form posted.'
+ 
+  elif request.method == 'GET':
+    return render_template('home.html', form=form)

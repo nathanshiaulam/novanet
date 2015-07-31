@@ -19,10 +19,10 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>1.15</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationWhenInUseUsageDescription</key>
+	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Please provide us access to your location so we can help you find new people in the area.</string>
 	<key>UIBackgroundModes</key>
 	<array>

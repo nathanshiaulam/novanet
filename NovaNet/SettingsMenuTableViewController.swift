@@ -35,10 +35,23 @@ class SettingsMenuTableViewController: UITableViewController {
         }
         defaults.setObject(Int(floatDistance), forKey: Constants.UserKeys.distanceKey);
     }
-
+    
+    // Marks user as offline and logs user out
     @IBAction func userLogout(sender: UIButton) {
+        var query = PFQuery(className:"Profile");
+        var currentID = PFUser.currentUser()!.objectId;
+        query.whereKey("ID", equalTo:currentID!);
+        
+        query.getFirstObjectInBackgroundWithBlock {
+            (profile: PFObject?, error: NSError?) -> Void in
+            if error != nil || profile == nil {
+                println(error);
+            } else if let profile = profile {
+                // Notes that the user is online
+                profile["Online"] = false;
+            }
+        }
         PFUser.logOut();
-        let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         
         var dict = defaults.dictionaryRepresentation();
         for key in dict.keys {
@@ -48,16 +61,13 @@ class SettingsMenuTableViewController: UITableViewController {
         self.navigationController?.popToRootViewControllerAnimated(true);
     }
     
+    // Saves all the information from the settings page after they hit back
     @IBAction func saveFunction(sender: UIBarButtonItem) {
-        
         let distance = defaults.integerForKey(Constants.UserKeys.distanceKey);
         
         if (count(nameField.text) > 0 && count(backgroundField.text) > 0 && count(interestsField.text) > 0) {
             
-            defaults.setObject(nameField.text, forKey: Constants.UserKeys.nameKey);
-            defaults.setObject(backgroundField.text, forKey: Constants.UserKeys.backgroundKey);
-            defaults.setObject(interestsField.text, forKey: Constants.UserKeys.interestsKey);
-            defaults.setObject(goalsField.text, forKey: Constants.UserKeys.goalsKey);
+            prepareDataStore();
             
             var query = PFQuery(className:"Profile");
             var currentID = PFUser.currentUser()!.objectId;
@@ -84,6 +94,15 @@ class SettingsMenuTableViewController: UITableViewController {
             self.presentViewController(alert, animated: true, completion: nil);
         }
     }
+
+    /*-------------------------------- HELPER METHODS ------------------------------------*/
+
+    func prepareDataStore() {
+        defaults.setObject(nameField.text, forKey: Constants.UserKeys.nameKey);
+        defaults.setObject(backgroundField.text, forKey: Constants.UserKeys.backgroundKey);
+        defaults.setObject(interestsField.text, forKey: Constants.UserKeys.interestsKey);
+        defaults.setObject(goalsField.text, forKey: Constants.UserKeys.goalsKey);
+    }
     func UIColorFromHex(rgbValue:UInt32, alpha:Double)->UIColor {
         let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0
         let green = CGFloat((rgbValue & 0xFF00) >> 8)/256.0
@@ -109,18 +128,21 @@ class SettingsMenuTableViewController: UITableViewController {
         }
         return false;
     }
-    
-    override func viewDidAppear(animated: Bool) {
-        let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
-        var distanceValue = defaults.integerForKey(Constants.UserKeys.distanceKey);
-        if (distanceValue == 1) {
-            self.distanceLabel.text = String(distanceValue) + " kilometer";
-        } else {
-            self.distanceLabel.text = String(distanceValue)  + " kilometers";
+        if (range.length + range.location > count(textField.text) )
+        {
+            return false;
         }
-        distanceSlider.setValue(Float(distanceValue), animated: true);
+        
+        let newLength = count(textField.text) + count(string) - range.length
+        return newLength <= 35
     }
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        self.view.endEditing(true);
+    }
+   
+    /*-------------------------------- TABLE VIEW METHODS ------------------------------------*/
 
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
@@ -131,18 +153,6 @@ class SettingsMenuTableViewController: UITableViewController {
         }
     }
     
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        
-        if (range.length + range.location > count(textField.text) )
-        {
-            return false;
-        }
-        
-        let newLength = count(textField.text) + count(string) - range.length
-        return newLength <= 60;
-    }
-    
-    
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         var label = UILabel();
         if section == 0 {
@@ -151,10 +161,10 @@ class SettingsMenuTableViewController: UITableViewController {
         return label;
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        self.view.endEditing(true);
-    }
-    
+   
+
+    /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
+
     override func viewDidLoad() {
         
         super.viewDidLoad();
@@ -208,6 +218,18 @@ class SettingsMenuTableViewController: UITableViewController {
         if let goals = defaults.stringForKey(Constants.UserKeys.goalsKey) {
             goalsField.text = goals;
         }
+        var distanceValue = defaults.integerForKey(Constants.UserKeys.distanceKey);
+        if (distanceValue == 1) {
+            self.distanceLabel.text = String(distanceValue) + " kilometer";
+        } else {
+            self.distanceLabel.text = String(distanceValue)  + " kilometers";
+        }
+        distanceSlider.setValue(Float(distanceValue), animated: true);
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+        
         var distanceValue = defaults.integerForKey(Constants.UserKeys.distanceKey);
         if (distanceValue == 1) {
             self.distanceLabel.text = String(distanceValue) + " kilometer";

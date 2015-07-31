@@ -38,6 +38,6 @@
         </view>
     </objects>
     <resources>
-        <image name="ipsum" width="140" height="140"/>
+        <image name="ipsum" width="350" height="350"/>
     </resources>
 </document>

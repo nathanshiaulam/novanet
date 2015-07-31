@@ -23,18 +23,34 @@ class SignUpViewController: UIViewController {
         self.createUser(usernameField.text, password:passwordField.text, email:emailField.text);
     }
     
+    let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         self.view.endEditing(true);
         
     }
   
+    /*-------------------------------- HELPER METHODS ------------------------------------*/
+   
+    // Sets up installation so that the current user receives push notifications
+    func setUpInstallations() {
+        let installation = PFInstallation.currentInstallation()
+        installation["user"] = PFUser.currentUser()
+        installation.saveInBackground()
+    }
     
-
+    // Prepares username, distance, and fromNew in datastore and puts the user online
+    func prepareDataStore() {
+        self.defaults.setObject(self.usernameField.text, forKey: Constants.UserKeys.usernameKey);
+        self.defaults.setObject(25, forKey: Constants.UserKeys.distanceKey);
+        self.defaults.setObject(true, forKey: Constants.TempKeys.fromNew);
+    }
     
+    // Creates user with information
     func createUser(username: String, password: String, email: String) {
         var newUser = PFUser();
-        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
-                // Ensures that fields are not equal
+        
+        // Ensures that fields are not equal
         if (count(username) == 0 || count(password) == 0 || count(email) == 0) {
             var alert = UIAlertController(title: "Submission Failure", message: "Invalid username, password, or email", preferredStyle: UIAlertControllerStyle.Alert);
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
@@ -50,26 +66,26 @@ class SignUpViewController: UIViewController {
         newUser.signUpInBackgroundWithBlock {
             (succeeded, error) -> Void in
             if (error == nil) {
-                let installation = PFInstallation.currentInstallation()
-                installation["user"] = PFUser.currentUser()
-                installation.saveInBackground()
-                defaults.setObject(self.usernameField.text, forKey: Constants.UserKeys.usernameKey);
-                defaults.setObject(25, forKey: Constants.UserKeys.distanceKey);
-                defaults.setObject(true, forKey: Constants.TempKeys.fromNew);
+                
+                // Sets up basic properites for user
+                self.setUpInstallations();
+                self.prepareDataStore()
+                
                 self.dismissViewControllerAnimated(true, completion: { () -> Void in
                     NSNotificationCenter.defaultCenter().postNotificationName("dismissToHomePage", object: nil);
                 })
                 self.dismissViewControllerAnimated(true, completion: nil);
             } else {
+                // Show the errorString somewhere and let the user try again.
                 let errorString = error!.userInfo!["error"] as! NSString;
                 var alert = UIAlertController(title: "Submission Failure", message: errorString as String, preferredStyle: UIAlertControllerStyle.Alert);
                 alert.addAction(UIAlertAction(title:"Ok", style: UIAlertActionStyle.Default, handler: nil));
                 self.presentViewController(alert, animated: true, completion: nil);
-                // Show the errorString somewhere and let the user try again.
             }
         }
     }
     
+    // Allows users to hit enter and move to the next text field
     func textFieldShouldReturn(textField: UITextField)-> Bool {
         var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         if (textField == usernameField) {
@@ -86,6 +102,7 @@ class SignUpViewController: UIViewController {
         return false;
     }
     
+    // Converts RGB values to hex
     func UIColorFromHex(rgbValue:UInt32, alpha:Double)->UIColor {
         let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0
         let green = CGFloat((rgbValue & 0xFF00) >> 8)/256.0
@@ -94,10 +111,11 @@ class SignUpViewController: UIViewController {
         return UIColor(red:red, green:green, blue:blue, alpha:CGFloat(alpha))
     }
     
+    /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
+
+    // Basically style and format all of the textfields
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults(); // Sets up local datastore to access profile values
         
         navigationController?.navigationBar.barTintColor = UIColorFromHex(0x555555, alpha: 1.0);
         

@@ -8,7 +8,7 @@ Parse.Cloud.define("findUsers", function(request, response) {
 
   var profileQuery = new Parse.Query("Profile");
   profileQuery.limit(1000);
-
+  profileQuery.ascending("Name");
   var nearbyUserIDList = [];
 
   var currLoc = new Parse.GeoPoint(currlat, currlong);
@@ -19,11 +19,12 @@ Parse.Cloud.define("findUsers", function(request, response) {
   			var object = results[i];
         var currentID = Parse.User.current().id;
         var available = object.get("Available");
+        var online = object.get("Online");
   			var geopoint = object.get("Location"); // PFGeoPoint of other user's most recent location
   			if (geopoint != null) {
 	  			var dist = currLoc.kilometersTo(geopoint);
 
-	  			if (dist <= bound && currentID != object.get("ID") && available){
+	  			if (dist <= bound && currentID != object.get("ID") && available && online){
 	  				nearbyUserIDList.push(object);
 	  			}
 	  		}

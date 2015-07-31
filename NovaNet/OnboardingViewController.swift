@@ -20,32 +20,88 @@ class OnboardingViewController: UIViewController {
     @IBOutlet weak var interestsField: UITextField!
     @IBOutlet weak var backgroundField: UITextField!
     
+    // Prepares local datastore for profile information and saves profile;
     @IBAction func continueButtonPressed(sender: UIButton) {
          if (count(nameField.text) > 0 && count(backgroundField.text) > 0 && count(goalsField.text) > 0 && count(interestsField.text) > 0) {
-            defaults.setObject(nameField.text, forKey: Constants.UserKeys.nameKey);
-            defaults.setObject(backgroundField.text, forKey: Constants.UserKeys.backgroundKey);
-            defaults.setObject(interestsField.text, forKey: Constants.UserKeys.interestsKey);
-            defaults.setObject(goalsField.text, forKey: Constants.UserKeys.goalsKey);
-            defaults.setBool(true, forKey: Constants.UserKeys.availableKey);
-            var newProfile = PFObject(className: "Profile");
-            newProfile["ID"] = PFUser.currentUser()!.objectId;
-            newProfile["Name"] = nameField.text;
-            newProfile["Interests"] = interestsField.text;
-            newProfile["Background"] = backgroundField.text;
-            newProfile["Goals"] = goalsField.text;
-            newProfile["Distance"] = 5;
-            newProfile["Available"] = true;
-            newProfile.saveInBackground();
+            prepareDataStore();
+            saveProfile();
         } else {
             var alert = UIAlertController(title: "Empty Field", message: "Please enter all essential fields.", preferredStyle: UIAlertControllerStyle.Alert);
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
             self.presentViewController(alert, animated: true, completion: nil);
         }
     }
+    
+    /*-------------------------------- HELPER METHODS ------------------------------------*/
+
+    // Saves all necessary fields of the profile
+    func saveProfile() {
+        var newProfile = PFObject(className: "Profile");
+        newProfile["ID"] = PFUser.currentUser()!.objectId;
+        newProfile["Name"] = nameField.text;
+        newProfile["Interests"] = interestsField.text;
+        newProfile["Background"] = backgroundField.text;
+        newProfile["Goals"] = goalsField.text;
+        newProfile["Distance"] = 5;
+        newProfile["Available"] = true;
+        newProfile["Online"] = true;
+        newProfile.saveInBackground();
+    }
+    
+    // Sets up the user's local datastore for profile information. Online is already set at create
+    func prepareDataStore() {
+        defaults.setObject(nameField.text, forKey: Constants.UserKeys.nameKey);
+        defaults.setObject(backgroundField.text, forKey: Constants.UserKeys.backgroundKey);
+        defaults.setObject(interestsField.text, forKey: Constants.UserKeys.interestsKey);
+        defaults.setObject(goalsField.text, forKey: Constants.UserKeys.goalsKey);
+        defaults.setBool(true, forKey: Constants.UserKeys.availableKey);
+    }
+    
+    // Removes keyboard when tap out of screen
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         self.view.endEditing(true);
     }
     
+    // Takes user back to homeview after coming from uploadProfilePictureVC
+    func backToHomeView() {
+        self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil);
+    }
+    
+    // Sets the character limit of each text field
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        
+        if (range.length + range.location > count(textField.text) )
+        {
+            return false;
+        }
+        
+        let newLength = count(textField.text) + count(string) - range.length
+        return newLength <= 35
+    }
+    
+    // Allows users to hit enter and move to the next text field
+    func textFieldShouldReturn(textField: UITextField)-> Bool {
+        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+        if (textField == nameField) {
+            backgroundField.becomeFirstResponder();
+        }
+        else if (textField == backgroundField) {
+            textField.resignFirstResponder()
+            interestsField.becomeFirstResponder();
+        }
+        else if (textField == interestsField) {
+            textField.resignFirstResponder()
+            goalsField.becomeFirstResponder();
+        }
+        else {
+            textField.resignFirstResponder();
+        }
+        return false;
+    }
+
+    /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
+
+    // Style all textfields
     override func viewDidLayoutSubviews() {
         let border = CALayer();
         let width = CGFloat(2.0);
@@ -89,20 +145,6 @@ class OnboardingViewController: UIViewController {
         backgroundField.layer.masksToBounds = true
     }
     
-    func backToHomeView() {
-        println("hi");
-        self.presentingViewController!.dismissViewControllerAnimated(true, completion: nil);
-    }
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        
-        if (range.length + range.location > count(textField.text) )
-        {
-            return false;
-        }
-        
-        let newLength = count(textField.text) + count(string) - range.length
-        return newLength <= 60
-    }
     override func viewDidLoad() {
         super.viewDidLoad();
         
@@ -122,7 +164,7 @@ class OnboardingViewController: UIViewController {
         
         backgroundField.borderStyle = UITextBorderStyle.None;
         backgroundField.backgroundColor = UIColor.clearColor();
-        var backgroundFieldPlaceholder = NSAttributedString(string: "a short history of you", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        var backgroundFieldPlaceholder = NSAttributedString(string: "background", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
         backgroundField.attributedPlaceholder = backgroundFieldPlaceholder;
         backgroundField.textColor = UIColor.whiteColor();
         

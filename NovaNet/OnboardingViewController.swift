@@ -23,6 +23,10 @@ class OnboardingViewController: UIViewController {
     // Prepares local datastore for profile information and saves profile;
     @IBAction func continueButtonPressed(sender: UIButton) {
          if (count(nameField.text) > 0 && count(backgroundField.text) > 0 && count(goalsField.text) > 0 && count(interestsField.text) > 0) {
+            
+            // Capitalize first letter of string
+            nameField.text.replaceRange(nameField.text.startIndex...nameField.text.startIndex, with: String(nameField.text[nameField.text.startIndex]).capitalizedString)
+
             prepareDataStore();
             saveProfile();
         } else {

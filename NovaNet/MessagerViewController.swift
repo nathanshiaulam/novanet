@@ -115,11 +115,12 @@ class MessagerViewController: JSQMessagesViewController {
     }
     
     func loadData() {
+        
+        self.messages = [JSQMessage]();
         if let payload: AnyObject = defaults.objectForKey(Constants.TempKeys.notificationPayloadKey) {
             self.title = payload["name"] as? String;
             self.selectedUsername = payload["id"]as! String;
         }
-        println("hi");
         self.userName = PFUser.currentUser()!.objectId!;
         
         automaticallyScrollsToMostRecentMessage = true;

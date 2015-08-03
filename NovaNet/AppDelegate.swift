@@ -20,14 +20,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Parse.enableLocalDatastore()
         Parse.setApplicationId("ni7bpwOhWr114Rom27cx4QSv27Ud3tyMl0tZchxw",
             clientKey: "NqfIkHWioqiH93TsSijAvcoMNzWDgyx8Z9hoLJL2")
+        
         PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
-        println("hello")
+
         // Register for Push Notitications
         if application.applicationState != UIApplicationState.Background {
             // Track an app open here if we launch with a push, unless
             // "content_available" was used to trigger a background push (introduced in iOS 7).
             // In that case, we skip tracking here to avoid double counting the app-open.
-            println("lkahdskglhasdgklhads");
             let preBackgroundPush = !application.respondsToSelector("backgroundRefreshStatus")
             let oldPushHandlerOnly = !self.respondsToSelector("application:didReceiveRemoteNotification:fetchCompletionHandler:")
             var pushPayload = false
@@ -57,8 +57,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     var name: AnyObject? = notificationPayload["name"];
                     var date: AnyObject? = notificationPayload["date"];
                     var id: AnyObject? = notificationPayload["id"];
+                    defaults.setObject(notificationPayload, forKey: Constants.TempKeys.notificationPayloadKey);
                     defaults.setObject(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
                     defaults.setObject(id, forKey: Constants.SelectedUserKeys.selectedIdKey)
+                    NSNotificationCenter.defaultCenter().postNotificationName("loadData", object: nil);
                     navigation.pushViewController(rootVC, animated: true);
                 }
             }
@@ -107,8 +109,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 var name: AnyObject? = notificationPayload["name"];
                 var date: AnyObject? = notificationPayload["date"];
                 var id: AnyObject? = notificationPayload["id"];
+                var text: AnyObject? = notificationPayload["alert"];
+                defaults.setObject(notificationPayload, forKey: Constants.TempKeys.notificationPayloadKey);
+                println(notificationPayload);
                 defaults.setObject(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
                 defaults.setObject(id, forKey: Constants.SelectedUserKeys.selectedIdKey)
+                NSNotificationCenter.defaultCenter().postNotificationName("loadData", object: nil);
                 if (navigation.topViewController.restorationIdentifier != "MessageVC") {
                     navigation.pushViewController(rootVC, animated: true);
                 }

@@ -174,8 +174,8 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
             cell.nameLabel.text = profile["Name"] as? String;
             cell.interestsLabel.text = profile["Interests"] as? String;
             cell.interestsLabel.text = "Interests: " + cell.interestsLabel.text!;
-            cell.interestsLabel.text = profile["Goals"] as? String;
-            cell.interestsLabel.text = "Goals: " + cell.goalsLabel.text!;
+            cell.goalsLabel.text = profile["Goals"] as? String;
+            cell.goalsLabel.text = "Goals: " + cell.goalsLabel.text!;
             cell.backgroundLabel.text = profile["Background"] as? String;
             cell.backgroundLabel.text = "Background: " + cell.backgroundLabel.text!;
             cell.selectedUserId = (profile["ID"] as? String)!;

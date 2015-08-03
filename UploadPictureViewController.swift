@@ -126,7 +126,7 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
     
 
     
-    /*-------------------------------- Image Picker Delegate Methods ------------------------------------*/
+    /*-------------------------------- IMAGE PICKER DELEGATE METHODS ------------------------------------*/
 
     // Upload completion events
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {

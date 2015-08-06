@@ -14,9 +14,9 @@ import Bolts
 class SettingsMenuTableViewController: UITableViewController {
 
     @IBOutlet weak var nameField: UITextField!
-    @IBOutlet weak var backgroundField: UITextField!
     @IBOutlet weak var interestsField: UITextField!
-    @IBOutlet weak var goalsField: UITextField!
+    @IBOutlet weak var experienceField: UITextField!
+    @IBOutlet weak var lookingForField: UITextField!
     
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var distanceSlider: UISlider!
@@ -65,7 +65,7 @@ class SettingsMenuTableViewController: UITableViewController {
     @IBAction func saveFunction(sender: UIBarButtonItem) {
         let distance = defaults.integerForKey(Constants.UserKeys.distanceKey);
         
-        if (count(nameField.text) > 0 && count(backgroundField.text) > 0 && count(interestsField.text) > 0) {
+        if (count(nameField.text) > 0 && count(experienceField.text) > 0 && count(interestsField.text) > 0 && count(lookingForField.text) > 0) {
             
             prepareDataStore();
             
@@ -80,8 +80,8 @@ class SettingsMenuTableViewController: UITableViewController {
                 } else if let profile = profile {
                     profile["Name"] = self.nameField.text;
                     profile["Interests"] = self.interestsField.text;
-                    profile["Background"] = self.backgroundField.text;
-                    profile["Goals"] = self.goalsField.text;
+                    profile["Experience"] = self.experienceField.text;
+                    profile["Looking"] = self.lookingForField.text;
                     profile["Distance"] = distance;
                     profile.saveInBackground();
                 }
@@ -99,9 +99,9 @@ class SettingsMenuTableViewController: UITableViewController {
 
     func prepareDataStore() {
         defaults.setObject(nameField.text, forKey: Constants.UserKeys.nameKey);
-        defaults.setObject(backgroundField.text, forKey: Constants.UserKeys.backgroundKey);
+        defaults.setObject(experienceField.text, forKey: Constants.UserKeys.experienceKey);
         defaults.setObject(interestsField.text, forKey: Constants.UserKeys.interestsKey);
-        defaults.setObject(goalsField.text, forKey: Constants.UserKeys.goalsKey);
+        defaults.setObject(lookingForField.text, forKey: Constants.UserKeys.lookingForKey);
     }
     func UIColorFromHex(rgbValue:UInt32, alpha:Double)->UIColor {
         let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0
@@ -113,15 +113,15 @@ class SettingsMenuTableViewController: UITableViewController {
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if (textField == nameField) {
-            backgroundField.becomeFirstResponder();
+            experienceField.becomeFirstResponder();
         }
-        else if (textField == backgroundField) {
+        else if (textField == experienceField) {
             textField.resignFirstResponder()
             interestsField.becomeFirstResponder();
         }
         else if (textField == interestsField){
             textField.resignFirstResponder();
-            goalsField.becomeFirstResponder();
+            lookingForField.becomeFirstResponder();
         }
         else {
             textField.resignFirstResponder();
@@ -187,11 +187,11 @@ class SettingsMenuTableViewController: UITableViewController {
         nameField.attributedPlaceholder = nameFieldPlaceholder;
         nameField.textColor = UIColor.whiteColor();
 
-        backgroundField.borderStyle = UITextBorderStyle.None;
-        backgroundField.backgroundColor = UIColor.clearColor();
-        var backgroundPlaceholder = NSAttributedString(string: "About", attributes:[NSForegroundColorAttributeName : UIColor.grayColor()]);
-        backgroundField.attributedPlaceholder = backgroundPlaceholder;
-        backgroundField.textColor = UIColor.whiteColor();
+        experienceField.borderStyle = UITextBorderStyle.None;
+        experienceField.backgroundColor = UIColor.clearColor();
+        var backgroundPlaceholder = NSAttributedString(string: "Profession", attributes:[NSForegroundColorAttributeName : UIColor.grayColor()]);
+        experienceField.attributedPlaceholder = backgroundPlaceholder;
+        experienceField.textColor = UIColor.whiteColor();
         
         interestsField.borderStyle = UITextBorderStyle.None;
         interestsField.backgroundColor = UIColor.clearColor();
@@ -199,11 +199,11 @@ class SettingsMenuTableViewController: UITableViewController {
         interestsField.attributedPlaceholder = interestsPlaceholder;
         interestsField.textColor = UIColor.whiteColor();
         
-        goalsField.borderStyle = UITextBorderStyle.None;
-        goalsField.backgroundColor = UIColor.clearColor();
-        var goalsPlaceholder = NSAttributedString(string: "Main Goals", attributes:[NSForegroundColorAttributeName : UIColor.grayColor()]);
-        goalsField.attributedPlaceholder = interestsPlaceholder;
-        goalsField.textColor = UIColor.whiteColor();
+        lookingForField.borderStyle = UITextBorderStyle.None;
+        lookingForField.backgroundColor = UIColor.clearColor();
+        var goalsPlaceholder = NSAttributedString(string: "Looking For...", attributes:[NSForegroundColorAttributeName : UIColor.grayColor()]);
+        lookingForField.attributedPlaceholder = interestsPlaceholder;
+        lookingForField.textColor = UIColor.whiteColor();
         
         // If profile is in existence, sets value for each field
         if let name = defaults.stringForKey(Constants.UserKeys.nameKey) {
@@ -212,11 +212,11 @@ class SettingsMenuTableViewController: UITableViewController {
         if let interests = defaults.stringForKey(Constants.UserKeys.interestsKey) {
             interestsField.text = interests;
         }
-        if let background = defaults.stringForKey(Constants.UserKeys.backgroundKey) {
-            backgroundField.text = background;
+        if let experience = defaults.stringForKey(Constants.UserKeys.experienceKey) {
+            experienceField.text = experience;
         }
-        if let goals = defaults.stringForKey(Constants.UserKeys.goalsKey) {
-            goalsField.text = goals;
+        if let lookingFor = defaults.stringForKey(Constants.UserKeys.lookingForKey) {
+            lookingForField.text = lookingFor;
         }
         var distanceValue = defaults.integerForKey(Constants.UserKeys.distanceKey);
         if (distanceValue == 1) {

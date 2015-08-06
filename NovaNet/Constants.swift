@@ -15,14 +15,14 @@ struct Constants {
         static let usernameKey = "usernameKey";
         static let nameKey = "nameKey";
         static let interestsKey = "interestsKey";
-        static let backgroundKey = "backgroundKey";
+        static let experienceKey = "experienceKey";
         static let profileImageKey = "profileImageKey";
         static let websiteKey = "websiteKey";
         static let distanceKey = "distanceKey";
         static let longitudeKey = "longitudeKey";
         static let latitudeKey = "latitudeKey";
         static let profilesInRangeKey = "profilesInRangeKey";
-        static let goalsKey = "goalsKey";
+        static let lookingForKey = "lookingForKey";
         static let availableKey = "availableKey";
     }
     struct TempKeys {
@@ -30,7 +30,7 @@ struct Constants {
         static let notificationPayloadKey = "notificationPayloadKey";
     }
     struct ConstantStrings {
-        static let fikkaText = "Hi, nice to meet you. I'm interested in what you're doing, and I'd love to get a Fika sometime soon. Let me know when you're free!";
+        static let fikaText = "Hey! I thought your profile was pretty interesting and I'd love to meet for a chat sometime! When are you free?";
         static let loadText = "Please wait while we find other Novas nearby...";
 
     }
@@ -39,7 +39,8 @@ struct Constants {
         static let selectedIdKey = "selectedIdKey";
         static let selectedNameKey = "selectedNameKey";
         static let selectedInterestsKey = "selectedInterestsKey";
-        static let selectedBackgroundKey = "selectedBackgroundKey";
+        static let selectedExperienceKey = "selectedExperienceKey";
+        static let selectedLookingForKey = "selectedLookingForKey";
         static let selectedProfileImageKey = "selectedprofileImageKey";
         
     }

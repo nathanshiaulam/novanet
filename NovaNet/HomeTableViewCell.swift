@@ -13,13 +13,13 @@ import CoreLocation
 
 class HomeTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var goalsLabel: UILabel!
+    @IBOutlet weak var experienceLabel: UILabel!
     @IBOutlet weak var interestsLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var backgroundLabel: UILabel!
     @IBOutlet weak var profileImage: UIImageView!
+    @IBOutlet weak var lookingForLabel: UILabel!
     var selectedUserId:String = "";
-    
+
     //    var fikkaPressed = false;
     //    @IBOutlet weak var fikkaButton: UIButton!
 

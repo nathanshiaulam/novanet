@@ -96,8 +96,8 @@ class LogInViewController: UIViewController {
     func prepareDataStore(profile: PFObject) {
         defaults.setObject(profile["Name"], forKey: Constants.UserKeys.nameKey);
         defaults.setObject(profile["Interests"], forKey: Constants.UserKeys.interestsKey);
-        defaults.setObject(profile["Background"], forKey: Constants.UserKeys.backgroundKey);
-        defaults.setObject(profile["Goals"], forKey: Constants.UserKeys.goalsKey);
+        defaults.setObject(profile["Experience"], forKey: Constants.UserKeys.experienceKey);
+        defaults.setObject(profile["Looking"], forKey: Constants.UserKeys.lookingForKey);
         defaults.setObject(profile["Distance"], forKey: Constants.UserKeys.distanceKey);
         defaults.setObject(profile["Available"], forKey: Constants.UserKeys.availableKey);
     }

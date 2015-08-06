@@ -71,11 +71,13 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
         case "iPhone 4s":
             cell.nameLabel.font = cell.nameLabel.font.fontWithSize(12.0);
             cell.interestsLabel.font = cell.interestsLabel.font.fontWithSize(8.0);
-            cell.backgroundLabel.font = cell.backgroundLabel.font.fontWithSize(8.0);
+            cell.lookingForLabel.font = cell.lookingForLabel.font.fontWithSize(8.0);
+            cell.experienceLabel.font = cell.experienceLabel.font.fontWithSize(8.0);
         case "iPhone 5":
             cell.nameLabel.font = cell.nameLabel.font.fontWithSize(13.0);
             cell.interestsLabel.font = cell.interestsLabel.font.fontWithSize(10.0);
-            cell.backgroundLabel.font = cell.backgroundLabel.font.fontWithSize(10.0);
+            cell.lookingForLabel.font = cell.lookingForLabel.font.fontWithSize(10.0);
+            cell.experienceLabel.font = cell.experienceLabel.font.fontWithSize(10.0);
         case "iPhone 6":
             return; // Essentially do nothing
         default:
@@ -158,14 +160,14 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
         var profile: AnyObject = profileList[indexPath.row];
         
         // If run out of room, go to next line so it doesn't go off page
-        cell.backgroundLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
-        cell.backgroundLabel.sizeToFit();
+        cell.experienceLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+        cell.experienceLabel.sizeToFit();
         cell.nameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
         cell.nameLabel.sizeToFit();
         cell.interestsLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
         cell.interestsLabel.sizeToFit();
-        cell.goalsLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
-        cell.goalsLabel.sizeToFit();
+        cell.lookingForLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+        cell.lookingForLabel.sizeToFit();
         
         // Loads all of the data for each cell generated
         if (profileList.count > 0) {
@@ -174,10 +176,10 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
             cell.nameLabel.text = profile["Name"] as? String;
             cell.interestsLabel.text = profile["Interests"] as? String;
             cell.interestsLabel.text = "Interests: " + cell.interestsLabel.text!;
-            cell.goalsLabel.text = profile["Goals"] as? String;
-            cell.goalsLabel.text = "Goals: " + cell.goalsLabel.text!;
-            cell.backgroundLabel.text = profile["Background"] as? String;
-            cell.backgroundLabel.text = "Background: " + cell.backgroundLabel.text!;
+            cell.experienceLabel.text = profile["Experience"] as? String;
+            cell.experienceLabel.text = "Profession: " + cell.experienceLabel.text!;
+            cell.lookingForLabel.text = profile["Looking"] as? String;
+            cell.lookingForLabel.text = "Looking: " + cell.lookingForLabel.text!;
             cell.selectedUserId = (profile["ID"] as? String)!;
             var image = PFFile();
             if let userImageFile = profile["Image"] as? PFFile {
@@ -254,22 +256,22 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
     }
     
     override func viewDidAppear(animated: Bool) {
-        
+
         // If the user logged out, empty the tableView and perform segue to User Login
         if (!self.userLoggedIn()) {
             profileList = NSArray();
             tableView.reloadData()
             self.performSegueWithIdentifier("toUserLogin", sender: self);
         }
-        
-        // Since view appears, if the user is logged in for the first time, segue to Onboarding
         var fromNew = defaults.boolForKey(Constants.TempKeys.fromNew);
+        // Since view appears, if the user is logged in for the first time, segue to Onboarding
         if (fromNew) {
             self.performSegueWithIdentifier("toOnboardingPage", sender: nil);
         }
-        
         // If the user successfully completes onboarding, found the user's current location, save it, and call findUsersInRange
-        if defaults.objectForKey(Constants.UserKeys.nameKey) != nil {
+        else if defaults.objectForKey(Constants.UserKeys.nameKey) != nil {
+            locationManager.startUpdatingLocation();
+            
             var query = PFQuery(className:"Profile");
             var currentID = PFUser.currentUser()!.objectId;
             query.whereKey("ID", equalTo:currentID!);

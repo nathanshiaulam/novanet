@@ -13,12 +13,12 @@ import Parse
 class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate,UINavigationControllerDelegate {
 
     @IBOutlet weak var availableLabel: UILabel!
-    @IBOutlet weak var aboutLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var interestsLabel: UILabel!
-    @IBOutlet weak var goalsLabel: UILabel!
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var availableSwitch: UISwitch!
+    @IBOutlet weak var experienceLabel: UILabel!
+    @IBOutlet weak var lookingForLabel: UILabel!
     
     let picker = UIImagePickerController();
     var popover:UIPopoverController? = nil;
@@ -85,21 +85,21 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
         if let interests = defaults.stringForKey(Constants.UserKeys.interestsKey) {
             interestsLabel.text = "Interests: " + interests;
         }
-        if let background = defaults.stringForKey(Constants.UserKeys.backgroundKey) {
-            aboutLabel.text = "Background: " + background;
+        if let experience = defaults.stringForKey(Constants.UserKeys.experienceKey) {
+            experienceLabel.text = "Profession: " + experience;
         }
-        if let goals = defaults.stringForKey(Constants.UserKeys.backgroundKey) {
-            goalsLabel.text = "Goals: " + goals;
+        if let lookingFor = defaults.stringForKey(Constants.UserKeys.lookingForKey) {
+            lookingForLabel.text = "Looking For: " + lookingFor;
         }
         
-        aboutLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
-        aboutLabel.sizeToFit();
+        experienceLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+        experienceLabel.sizeToFit();
         nameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
         nameLabel.sizeToFit();
         interestsLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
         interestsLabel.sizeToFit();
-        goalsLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
-        goalsLabel.sizeToFit();
+        lookingForLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+        lookingForLabel.sizeToFit();
         
         self.title = "Profile";
         self.profileImage.image = readImage();

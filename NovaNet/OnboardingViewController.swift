@@ -16,13 +16,13 @@ class OnboardingViewController: UIViewController {
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
     
     @IBOutlet weak var nameField: UITextField!
-    @IBOutlet weak var goalsField: UITextField!
+    @IBOutlet weak var lookingForField: UITextField!
+    @IBOutlet weak var experienceField: UITextField!
     @IBOutlet weak var interestsField: UITextField!
-    @IBOutlet weak var backgroundField: UITextField!
     
     // Prepares local datastore for profile information and saves profile;
     @IBAction func continueButtonPressed(sender: UIButton) {
-         if (count(nameField.text) > 0 && count(backgroundField.text) > 0 && count(goalsField.text) > 0 && count(interestsField.text) > 0) {
+         if (count(nameField.text) > 0 && count(experienceField.text) > 0 && count(lookingForField.text) > 0 && count(interestsField.text) > 0) {
             
             // Capitalize first letter of string
             nameField.text.replaceRange(nameField.text.startIndex...nameField.text.startIndex, with: String(nameField.text[nameField.text.startIndex]).capitalizedString)
@@ -44,8 +44,8 @@ class OnboardingViewController: UIViewController {
         newProfile["ID"] = PFUser.currentUser()!.objectId;
         newProfile["Name"] = nameField.text;
         newProfile["Interests"] = interestsField.text;
-        newProfile["Background"] = backgroundField.text;
-        newProfile["Goals"] = goalsField.text;
+        newProfile["Experience"] = experienceField.text;
+        newProfile["Looking"] = lookingForField.text;
         newProfile["Distance"] = 5;
         newProfile["Available"] = true;
         newProfile["Online"] = true;
@@ -55,9 +55,9 @@ class OnboardingViewController: UIViewController {
     // Sets up the user's local datastore for profile information. Online is already set at create
     func prepareDataStore() {
         defaults.setObject(nameField.text, forKey: Constants.UserKeys.nameKey);
-        defaults.setObject(backgroundField.text, forKey: Constants.UserKeys.backgroundKey);
+        defaults.setObject(experienceField.text, forKey: Constants.UserKeys.experienceKey);
         defaults.setObject(interestsField.text, forKey: Constants.UserKeys.interestsKey);
-        defaults.setObject(goalsField.text, forKey: Constants.UserKeys.goalsKey);
+        defaults.setObject(lookingForField.text, forKey: Constants.UserKeys.lookingForKey);
         defaults.setBool(true, forKey: Constants.UserKeys.availableKey);
     }
     
@@ -87,15 +87,15 @@ class OnboardingViewController: UIViewController {
     func textFieldShouldReturn(textField: UITextField)-> Bool {
         var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         if (textField == nameField) {
-            backgroundField.becomeFirstResponder();
+            experienceField.becomeFirstResponder();
         }
-        else if (textField == backgroundField) {
+        else if (textField == experienceField) {
             textField.resignFirstResponder()
             interestsField.becomeFirstResponder();
         }
         else if (textField == interestsField) {
             textField.resignFirstResponder()
-            goalsField.becomeFirstResponder();
+            lookingForField.becomeFirstResponder();
         }
         else {
             textField.resignFirstResponder();
@@ -141,12 +141,12 @@ class OnboardingViewController: UIViewController {
         interestsField.layer.addSublayer(borderInterests)
         interestsField.layer.masksToBounds = true
         
-        goalsField.layer.addSublayer(borderGoals)
-        goalsField.layer.masksToBounds = true
+        lookingForField.layer.addSublayer(borderGoals)
+        lookingForField.layer.masksToBounds = true
         
         
-        backgroundField.layer.addSublayer(border)
-        backgroundField.layer.masksToBounds = true
+        experienceField.layer.addSublayer(border)
+        experienceField.layer.masksToBounds = true
     }
     
     override func viewDidLoad() {
@@ -166,17 +166,17 @@ class OnboardingViewController: UIViewController {
         interestsField.attributedPlaceholder = interestsFieldPlaceholder;
         interestsField.textColor = UIColor.whiteColor();
         
-        backgroundField.borderStyle = UITextBorderStyle.None;
-        backgroundField.backgroundColor = UIColor.clearColor();
-        var backgroundFieldPlaceholder = NSAttributedString(string: "background", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
-        backgroundField.attributedPlaceholder = backgroundFieldPlaceholder;
-        backgroundField.textColor = UIColor.whiteColor();
+        experienceField.borderStyle = UITextBorderStyle.None;
+        experienceField.backgroundColor = UIColor.clearColor();
+        var backgroundFieldPlaceholder = NSAttributedString(string: "profession", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        experienceField.attributedPlaceholder = backgroundFieldPlaceholder;
+        experienceField.textColor = UIColor.whiteColor();
         
-        goalsField.borderStyle = UITextBorderStyle.None;
-        goalsField.backgroundColor = UIColor.clearColor();
-        var goalsFieldPlaceholder = NSAttributedString(string: "what are your main goals", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
-        goalsField.attributedPlaceholder = goalsFieldPlaceholder;
-        goalsField.textColor = UIColor.whiteColor();
+        lookingForField.borderStyle = UITextBorderStyle.None;
+        lookingForField.backgroundColor = UIColor.clearColor();
+        var goalsFieldPlaceholder = NSAttributedString(string: "looking for...", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        lookingForField.attributedPlaceholder = goalsFieldPlaceholder;
+        lookingForField.textColor = UIColor.whiteColor();
         
         
     }

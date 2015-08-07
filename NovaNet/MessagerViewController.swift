@@ -5,6 +5,12 @@
 //  Created by Nathan Lam on 7/23/15.
 //  Copyright (c) 2015 Nova. All rights reserved.
 //
+//  Need to add "Read By" functionality for where the user loads in data
+//  of the message that was recently loaded from the server.
+//  
+//  Also need to add in functionality for the Home View Controller where 
+//  it queries all conversations and compares the counters so that it always 
+//  returns what's needed
 import UIKit
 import Parse
 import Bolts
@@ -95,6 +101,7 @@ class MessagerViewController: JSQMessagesViewController {
     func sendMessage(text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
         var newMessage = JSQMessage(senderId: senderId, displayName: senderDisplayName, text: text);
         
+        // Format message payload for push notification
         var dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         var DateInFormat = dateFormatter.stringFromDate(date);
@@ -106,9 +113,22 @@ class MessagerViewController: JSQMessagesViewController {
             "id": PFUser.currentUser()?.objectId,
             "date": DateInFormat,
             "name": name,
+            "badge": "Increment",
         ]
         
+        // If there are no messages and the conversation has just started, create a new conversation
+        if messages.count == 0 {
+            createConversation(text);
+        } else { // Otherwise, there already exists a conversation between the two. Query for the conversation and
+            modifyConversation(text);
+        }
         
+        // Create push notification and push message
+        sendPush(text, senderId: senderId, date: date, data: data, newMessage: newMessage);
+    }
+    
+    // Creates and sends push notification while saving message to backend 
+    func sendPush(text: String!, senderId: String!, date: NSDate!, data: [NSObject:AnyObject]!, newMessage: JSQMessage) {
         let push = PFPush();
         var innerQuery : PFQuery = PFUser.query()!
         innerQuery.whereKey("objectId", equalTo: defaults.objectForKey(Constants.SelectedUserKeys.selectedIdKey)!)
@@ -139,6 +159,45 @@ class MessagerViewController: JSQMessagesViewController {
                 }
             }
         }
+
+    }
+    
+    // Creates a conversation if first message sent
+    func createConversation(text: String!) {
+        var chat = [text];
+        
+        var ownID = PFUser.currentUser()?.objectId;
+        var otherID = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey);
+        
+        var conversationParticipantSelf = PFObject(className: "ConversationParticipant");
+        conversationParticipantSelf["readMessageCount"] = 1;
+        conversationParticipantSelf["user"] = PFUser.currentUser()?.objectId;
+        conversationParticipantSelf.saveInBackgroundWithBlock {
+            (success, error) -> Void in
+            if (error == nil) {
+                println("hi");
+                var conversationParticipantOther = PFObject(className: "ConversationParticipant");
+                conversationParticipantOther["readMessageCount"] = 0;
+                conversationParticipantOther["user"] = self.defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey);
+                conversationParticipantOther.saveInBackgroundWithBlock {
+                    (success, error) -> Void in
+                    if (error == nil) {
+                        println("hi2");
+                        var conversation = PFObject(className: "Conversation");
+                        conversation["Messages"] = chat;
+                        conversation["Participants"] = [conversationParticipantSelf.objectId, conversationParticipantOther.objectId] as? AnyObject;
+                        conversation["MessageCount"] = count(chat);
+                        conversation.saveInBackground();
+                    }
+                }
+                
+            }
+        }
+    }
+    
+    // Modifies conversation by adding in message and incrementing counters properly
+    func modifyConversation(text: String!) {
+        
     }
     
     /*-------------------------------- JSQMessager DELEGATE METHODS ------------------------------------*/
@@ -188,6 +247,7 @@ class MessagerViewController: JSQMessagesViewController {
         
         self.userName = PFUser.currentUser()!.objectId!;
         self.selectedUsername = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey)!;
+        
         
         let image = UIImage(named: "fika");
         

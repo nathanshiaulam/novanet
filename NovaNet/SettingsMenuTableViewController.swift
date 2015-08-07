@@ -202,7 +202,7 @@ class SettingsMenuTableViewController: UITableViewController {
         lookingForField.borderStyle = UITextBorderStyle.None;
         lookingForField.backgroundColor = UIColor.clearColor();
         var goalsPlaceholder = NSAttributedString(string: "Looking For...", attributes:[NSForegroundColorAttributeName : UIColor.grayColor()]);
-        lookingForField.attributedPlaceholder = interestsPlaceholder;
+        lookingForField.attributedPlaceholder = goalsPlaceholder;
         lookingForField.textColor = UIColor.whiteColor();
         
         // If profile is in existence, sets value for each field

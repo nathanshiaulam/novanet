@@ -99,7 +99,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
    
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        PFPush.handlePush(userInfo)
+//        PFPush.handlePush(userInfo)
         let storyboard = UIStoryboard(name: "Main", bundle: nil);
         let appDelegate  = UIApplication.sharedApplication().delegate as! AppDelegate
         let navigation = appDelegate.window!.rootViewController as! UINavigationController
@@ -111,13 +111,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 var id: AnyObject? = notificationPayload["id"];
                 var text: AnyObject? = notificationPayload["alert"];
                 defaults.setObject(notificationPayload, forKey: Constants.TempKeys.notificationPayloadKey);
-                println(notificationPayload);
                 defaults.setObject(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
                 defaults.setObject(id, forKey: Constants.SelectedUserKeys.selectedIdKey)
                 NSNotificationCenter.defaultCenter().postNotificationName("loadData", object: nil);
-                if (navigation.topViewController.restorationIdentifier != "MessageVC") {
-                    navigation.pushViewController(rootVC, animated: true);
-                }
+//                if (navigation.topViewController.restorationIdentifier != "MessageVC") {
+//                    navigation.pushViewController(rootVC, animated: true);
+//                }
             }
         }
         PFAnalytics.trackAppOpenedWithRemoteNotificationPayload(userInfo)

@@ -322,7 +322,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vR9-E7-dW4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-185" y="1401"/>
+            <point key="canvasLocation" x="-102" y="1364"/>
         </scene>
         <!--Messager View Controller-->
         <scene sceneID="aKS-f9-Tex">

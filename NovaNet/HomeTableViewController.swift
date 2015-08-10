@@ -101,6 +101,12 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
         profileImage.clipsToBounds = true;
     }
+    
+    // Find all conversations and mark the ones where the messages read do not align with number of messages
+    func pingCell(cell: HomeTableViewCell) {
+        
+        
+    }
 
     /*-------------------------------- LOCATION MANAGER METHODS ------------------------------------*/
     
@@ -228,6 +234,7 @@ class HomeTableViewController: UITableViewController, CLLocationManagerDelegate 
     override func viewDidLoad() {
         
         super.viewDidLoad();
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "pingCell", name: "pingCell", object: nil);
 
         navigationController?.navigationBar.barTintColor = UIColorFromHex(0x555555, alpha: 1.0);
 

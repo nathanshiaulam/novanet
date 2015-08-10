@@ -7,9 +7,9 @@
 //
 //  Need to add "Read By" functionality for where the user loads in data
 //  of the message that was recently loaded from the server.
-//  
-//  Also need to add in functionality for the Home View Controller where 
-//  it queries all conversations and compares the counters so that it always 
+//
+//  Also need to add in functionality for the Home View Controller where
+//  it queries all conversations and compares the counters so that it always
 //  returns what's needed
 import UIKit
 import Parse
@@ -70,9 +70,10 @@ class MessagerViewController: JSQMessagesViewController {
         self.senderDisplayName = defaults.stringForKey(Constants.UserKeys.nameKey);
         self.senderId = self.userName;
         
+        // Generates queries based off of both users to load messages
         var query1 = PFQuery(className: "Message");
         query1.whereKey("Sender", equalTo: senderId);
-        query1.whereKey("Recipient", equalTo:selectedUsername);
+        query1.whereKey("Recipient", equalTo: selectedUsername);
         
         var query2 = PFQuery(className: "Message");
         query2.whereKey("Sender", equalTo: selectedUsername);
@@ -85,14 +86,20 @@ class MessagerViewController: JSQMessagesViewController {
             if (error != nil || messages == nil) {
                 println(error);
             } else if let messages = messages as? [PFObject]{
-                for message in messages {
+                for message in messages { // Adds in all messages
                     var text = message["Text"] as! String;
                     var sender = message["Sender"] as! String;
                     var date = message["Date"] as! NSDate;
                     var fullmessage = JSQMessage(senderId: sender, senderDisplayName: sender, date: date, text: text);
                     self.messages += [fullmessage];
                 }
-                self.collectionView.reloadData();
+                self.collectionView.reloadData(); // Reloads all messages in page
+                
+                // Update own counters if the conversation has begun so the number of messages
+                // read matches the number of messages in client
+                if (messages.count > 0) {
+                    self.updateConversation(nil);
+                }
             }
         }
     }
@@ -113,21 +120,14 @@ class MessagerViewController: JSQMessagesViewController {
             "id": PFUser.currentUser()?.objectId,
             "date": DateInFormat,
             "name": name,
-            "badge": "Increment",
+//            "badge": "Increment",
         ]
         
-        // If there are no messages and the conversation has just started, create a new conversation
-        if messages.count == 0 {
-            createConversation(text);
-        } else { // Otherwise, there already exists a conversation between the two. Query for the conversation and
-            modifyConversation(text);
-        }
-        
-        // Create push notification and push message
+        // Create push notification and push message and updates conversation counters
         sendPush(text, senderId: senderId, date: date, data: data, newMessage: newMessage);
     }
     
-    // Creates and sends push notification while saving message to backend 
+    // Creates and sends push notification while saving message to backend
     func sendPush(text: String!, senderId: String!, date: NSDate!, data: [NSObject:AnyObject]!, newMessage: JSQMessage) {
         let push = PFPush();
         var innerQuery : PFQuery = PFUser.query()!
@@ -141,6 +141,7 @@ class MessagerViewController: JSQMessagesViewController {
             if (succeeded) {
                 // Saves message to load for conversation
                 var message = PFObject(className: "Message");
+                println(senderId);
                 message["Sender"] = senderId;
                 message["Date"] = date;
                 message["Text"] = text;
@@ -148,6 +149,16 @@ class MessagerViewController: JSQMessagesViewController {
                 message.saveInBackgroundWithBlock {
                     (succeded, error) -> Void in
                     if error == nil {
+                        // If there are no messages and the conversation has just started, create a new conversation
+                        if self.messages.count == 0 {
+                            self.createConversation(date);
+                        }
+                        // Otherwise, there already exists a conversation between the two. Query for the conversation and update counters
+                        else {
+                            self.updateConversation(date);
+                        }
+                        
+                        // Add in message and reload new data/send message
                         self.messages += [newMessage];
                         self.collectionView.reloadData();
                         self.finishSendingMessage();
@@ -159,49 +170,100 @@ class MessagerViewController: JSQMessagesViewController {
                 }
             }
         }
-
+        
     }
     
     // Creates a conversation if first message sent
-    func createConversation(text: String!) {
-        var chat = [text];
-        
+    func createConversation(date: NSDate!) {
         var ownID = PFUser.currentUser()?.objectId;
         var otherID = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey);
         
         var conversationParticipantSelf = PFObject(className: "ConversationParticipant");
-        conversationParticipantSelf["readMessageCount"] = 1;
-        conversationParticipantSelf["user"] = PFUser.currentUser()?.objectId;
+        conversationParticipantSelf["ReadMessageCount"] = 1;
+        conversationParticipantSelf["User"] = ownID;
+        conversationParticipantSelf["OtherUser"] = otherID;
         conversationParticipantSelf.saveInBackgroundWithBlock {
             (success, error) -> Void in
             if (error == nil) {
-                println("hi");
                 var conversationParticipantOther = PFObject(className: "ConversationParticipant");
-                conversationParticipantOther["readMessageCount"] = 0;
-                conversationParticipantOther["user"] = self.defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey);
+                conversationParticipantOther["ReadMessageCount"] = 0;
+                conversationParticipantOther["User"] = otherID;
+                conversationParticipantOther["OtherUser"] = ownID;
                 conversationParticipantOther.saveInBackgroundWithBlock {
                     (success, error) -> Void in
                     if (error == nil) {
-                        println("hi2");
                         var conversation = PFObject(className: "Conversation");
-                        conversation["Messages"] = chat;
-                        conversation["Participants"] = [conversationParticipantSelf.objectId, conversationParticipantOther.objectId] as? AnyObject;
-                        conversation["MessageCount"] = count(chat);
-                        conversation.saveInBackground();
+                        var participants = [ownID, otherID];
+                        participants = participants.sorted {$0!.localizedCaseInsensitiveCompare($1!) == NSComparisonResult.OrderedAscending}
+                        conversation["FirstParticipant"] = participants[0];
+                        conversation["SecondParticipant"] = participants[1];
+                        conversation["MessageCount"] = 1;
+                        if (date != nil) {
+                            conversation["MostRecent"] = date;
+                        }
+                        conversation.saveInBackgroundWithBlock {
+                            (success, error)  -> Void in
+                            if (error == nil) {
+                                conversationParticipantSelf["ConversationID"] = conversation.objectId;
+                                conversationParticipantOther["ConversationID"] = conversation.objectId;
+                                conversationParticipantOther.saveInBackground();
+                                conversationParticipantSelf.saveInBackground();
+                            }
+                        }
                     }
                 }
-                
             }
         }
     }
     
     // Modifies conversation by adding in message and incrementing counters properly
-    func modifyConversation(text: String!) {
+    func updateConversation(date: NSDate!) {
         
+        var ownID = PFUser.currentUser()?.objectId;
+        var otherID = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey);
+        
+        var participants = [ownID, otherID];
+        participants = participants.sorted {$0!.localizedCaseInsensitiveCompare($1!) == NSComparisonResult.OrderedAscending}
+        
+        var query = PFQuery(className: "Conversation");
+        query.whereKey("FirstParticipant", equalTo: participants[0]!);
+        query.whereKey("SecondParticipant", equalTo: participants[1]!);
+        
+        query.getFirstObjectInBackgroundWithBlock {
+            (conversation: PFObject?, error: NSError?) -> Void in
+            if (error != nil || conversation == nil) {
+                println(error);
+            } else if let conversation = conversation {
+                println("hi");
+                var conversationID = conversation.objectId;
+
+                conversation["MessageCount"] = self.messages.count;
+                if (date != nil) {
+                    conversation["MostRecent"] = date;
+                }
+                conversation.saveInBackgroundWithBlock {
+                    (success, error) -> Void in
+                    if (error == nil) {
+                        var query = PFQuery(className: "ConversationParticipant");
+                        query.whereKey("User", equalTo: ownID!);
+                        query.whereKey("ConversationID", equalTo: conversationID!)
+                        query.getFirstObjectInBackgroundWithBlock {
+                            (convPart: PFObject?, error: NSError?) -> Void in
+                            if (error != nil || convPart == nil) {
+                                println(error);
+                            } else if let convPart = convPart {
+                                convPart["ReadMessageCount"] = self.messages.count;
+                            }
+                            convPart?.saveInBackground();
+                        }
+                    }
+                }
+            }
+        }
     }
     
     /*-------------------------------- JSQMessager DELEGATE METHODS ------------------------------------*/
-
+    
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         self.view.endEditing(true);
     }
@@ -223,7 +285,7 @@ class MessagerViewController: JSQMessagesViewController {
     override func collectionView(collectionView: JSQMessagesCollectionView!, avatarImageDataForItemAtIndexPath indexPath: NSIndexPath!) -> JSQMessageAvatarImageDataSource! {
         return nil
     }
-
+    
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.messages.count;
     }
@@ -245,10 +307,7 @@ class MessagerViewController: JSQMessagesViewController {
         navigationController?.navigationBar.barTintColor = UIColorFromHex(0x555555, alpha: 1.0);
         self.title = defaults.stringForKey(Constants.SelectedUserKeys.selectedNameKey);
         
-        self.userName = PFUser.currentUser()!.objectId!;
-        self.selectedUsername = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey)!;
-        
-        
+        println(self.messages.count);
         let image = UIImage(named: "fika");
         
         inputToolbar.contentView.leftBarButtonItem.setImage(image, forState: .Normal)
@@ -256,8 +315,9 @@ class MessagerViewController: JSQMessagesViewController {
         
         // User IDs are used as sender/recipient tags
         self.senderDisplayName = defaults.stringForKey(Constants.UserKeys.nameKey);
-        self.senderId = self.userName;
         
+        self.senderId = PFUser.currentUser()!.objectId;
+        self.selectedUsername = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey)!;
         // Generates queries based off of both users to load messages
         var query1 = PFQuery(className: "Message");
         query1.whereKey("Sender", equalTo: senderId);
@@ -283,9 +343,16 @@ class MessagerViewController: JSQMessagesViewController {
                     self.messages += [fullmessage];
                 }
                 self.collectionView.reloadData();
+                
+                // Update own counters if the conversation has begun so the number of messages
+                // read matches the number of messages in client
+                if (messages.count > 0) {
+                    self.updateConversation(nil);
+                }
             }
         }
     }
+
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true);
@@ -296,7 +363,7 @@ class MessagerViewController: JSQMessagesViewController {
     }
     
     
-
     
-
+    
+    
 }

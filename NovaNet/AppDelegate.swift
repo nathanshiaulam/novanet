@@ -61,6 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     defaults.setObject(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
                     defaults.setObject(id, forKey: Constants.SelectedUserKeys.selectedIdKey)
                     NSNotificationCenter.defaultCenter().postNotificationName("loadData", object: nil);
+                    NSNotificationCenter.defaultCenter().postNotificationName("pingCell", object: nil);
                     navigation.pushViewController(rootVC, animated: true);
                 }
             }
@@ -114,6 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 defaults.setObject(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
                 defaults.setObject(id, forKey: Constants.SelectedUserKeys.selectedIdKey)
                 NSNotificationCenter.defaultCenter().postNotificationName("loadData", object: nil);
+                NSNotificationCenter.defaultCenter().postNotificationName("pingCell", object: nil);
 //                if (navigation.topViewController.restorationIdentifier != "MessageVC") {
 //                    navigation.pushViewController(rootVC, animated: true);
 //                }

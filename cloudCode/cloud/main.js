@@ -36,3 +36,63 @@ Parse.Cloud.define("findUsers", function(request, response) {
     }
   });
 });
+
+Parse.Cloud.define("findConversations", function(request, response) {
+  var id = Parse.User.current().id;
+
+  // Query for all conversations participant objects where you are the user 
+  // to find Conversation ID's and counters
+  var conversationParticipantQuery = new Parse.Query("ConversationParticipant");
+  conversationParticipantQuery.equalTo("User", id);
+  conversationParticipantQuery.limit(1000);
+
+  conversationParticipantQuery.find({
+    success: function(participants) {
+
+      // Uses the conversationID of each conversation to create list of sorted conversations
+      var conversationIDList = [];
+      for (var i = 0; i < participants.length; i++) {
+        conversationIDList.push(participants[i].get("ConversationID"));
+      }
+
+      var conversationQuery = new Parse.Query("Conversation");
+      conversationQuery.containedIn("objectId", conversationIDList);
+      conversationQuery.ascending("MostRecent");
+      conversationQuery.find({
+        success: function(conversations) {
+          response.success(conversations);
+        }, 
+        error: function(error2) {
+          alert("Error: " + error2.code + " " + error2.message);
+        }
+      });
+    },
+    error: function(error) {
+      alert("Error: " + error.code + " " + error.message);
+    }
+  });
+});
+
+Parse.Cloud.define("findConversationParticipants", function(request, response) {
+  var id = Parse.User.current().id;
+
+  // Query for all conversations participant objects where you are the user 
+  // to find Conversation ID's and counters
+  var conversationParticipantQuery = new Parse.Query("ConversationParticipant");
+  conversationParticipantQuery.equalTo("User", id);
+  conversationParticipantQuery.limit(1000);
+  conversationParticipantQuery.ascending("MostRecent");
+
+  conversationParticipantQuery.find({
+    success: function(participants) {
+      response.success(participants);
+    },
+    error: function(error) {
+      alert("Error: " + error.code + " " + error.message);
+    }
+  });
+});
+
+Parse.Cloud.define("saveDataMongo", function(request, response) {
+
+});

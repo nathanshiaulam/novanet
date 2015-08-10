@@ -253,6 +253,9 @@ class MessagerViewController: JSQMessagesViewController {
                                 println(error);
                             } else if let convPart = convPart {
                                 convPart["ReadMessageCount"] = self.messages.count;
+                                if (date != nil) {
+                                    convPart["MostRecent"] = date;
+                                }
                             }
                             convPart?.saveInBackground();
                         }

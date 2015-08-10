@@ -22,6 +22,7 @@ struct Constants {
         static let longitudeKey = "longitudeKey";
         static let latitudeKey = "latitudeKey";
         static let profilesInRangeKey = "profilesInRangeKey";
+        static let conversationsInRangeKey = "conversationsInRange";
         static let lookingForKey = "lookingForKey";
         static let availableKey = "availableKey";
     }

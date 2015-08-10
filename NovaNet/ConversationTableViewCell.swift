@@ -6,8 +6,16 @@
 //  Copyright (c) 2015 Nova. All rights reserved.
 //
 
-import Cocoa
+import UIKit
+import Parse
+import Bolts
+import CoreLocation
 
 class ConversationTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var lastMessageLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var profileImage: UIImageView!
+    
+    var hasUnreadMessage:Bool = false;
 }

@@ -16,6 +16,7 @@ class ConversationTableViewCell: UITableViewCell {
     @IBOutlet weak var lastMessageLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var profileImage: UIImageView!
+    @IBOutlet weak var unreadMessageDot: UIImageView!
     
     var hasUnreadMessage:Bool = false;
 }

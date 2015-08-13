@@ -10,6 +10,8 @@ import UIKit
 import Parse
 import Bolts
 import CoreLocation
+import AudioToolbox
+
 
 class HomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate  {
     // Sets up CLLocationManager and Local Data Store
@@ -26,7 +28,42 @@ class HomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
 
     @IBOutlet weak var segmentControl: UISegmentedControl!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var availableSwitch: UISwitch!
     
+    @IBAction func availableChanged(sender: UISwitch) {
+        if (availableSwitch.on) {
+            defaults.setBool(true, forKey: Constants.UserKeys.availableKey)
+        } else {
+            defaults.setBool(false, forKey:Constants.UserKeys.availableKey);
+        }
+        var query = PFQuery(className:"Profile");
+        var currentID = PFUser.currentUser()!.objectId;
+        query.whereKey("ID", equalTo:currentID!);
+        
+        query.getFirstObjectInBackgroundWithBlock {
+            (profile: PFObject?, error: NSError?) -> Void in
+            if error != nil || profile == nil {
+                println(error);
+            } else if let profile = profile {
+                if self.availableSwitch.on {
+                    profile["Available"] = true;
+                } else {
+                    profile["Available"] = false;
+                }
+                profile.saveInBackgroundWithBlock {
+                    (success, error) -> Void in
+                    if (success) {
+                        self.loadAndRefreshData()
+                    }
+                    else {
+                        println(error);
+                    }
+                };
+                
+            }
+        }
+        super.viewWillDisappear(true);
+    }
     @IBAction func segmentControlChanged(sender: UISegmentedControl) {
         loadAndRefreshData();
     }
@@ -35,8 +72,9 @@ class HomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
     override func viewDidLoad() {
         
         super.viewDidLoad();
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "pingCell", name: "pingCell", object: nil);
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "loadAndRefreshData", name: "loadAndRefreshData", object: nil);
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "phoneVibrate", name: "phoneVibrate", object: nil);
+
         navigationController?.navigationBar.barTintColor = UIColorFromHex(0x555555, alpha: 1.0);
 
         // Go to login page if no user logged in
@@ -89,6 +127,13 @@ class HomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
         }
         super.viewDidAppear(true);
     }
+    // Saves whether or not the user is available
+    override func viewWillDisappear(animated: Bool) {
+
+    }
+    
+
+    
     /*-------------------------------- LOCATION MANAGER METHODS ------------------------------------*/
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
@@ -189,6 +234,8 @@ class HomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
         profileImage.clipsToBounds = true;
     }
     
+    
+    // formats labels for each cell
     func formatLabels(cell: HomeTableViewCell) {
         
         // If run out of room, go to next line so it doesn't go off page
@@ -201,6 +248,43 @@ class HomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
         cell.lookingForLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
         cell.lookingForLabel.sizeToFit();
     }
+    
+    // Vibrates the phone when receives message 
+    func phoneVibrate() {
+        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+    }
+    
+    
+    func loadAndRefreshData() {
+        var query = PFQuery(className:"Profile");
+        var currentID = PFUser.currentUser()!.objectId;
+        query.whereKey("ID", equalTo:currentID!);
+        
+        // Gets current geopoint of the user and saves it
+        var latitude = self.defaults.doubleForKey(Constants.UserKeys.latitudeKey);
+        var longitude = self.defaults.doubleForKey(Constants.UserKeys.longitudeKey);
+        var point:PFGeoPoint = PFGeoPoint(latitude: latitude, longitude: longitude);
+        
+        query.getFirstObjectInBackgroundWithBlock {
+            (profile: PFObject?, error: NSError?) -> Void in
+            if error != nil || profile == nil {
+                println(error);
+            } else if let profile = profile {
+                profile["Location"] = point;
+                profile.saveInBackgroundWithBlock {
+                    (success, error) -> Void in
+                    if (success) {
+                        self.findConversationParticipants();
+                        self.findConversations();
+                        self.findUsersInRange();
+                    } else {
+                        println(error);
+                    }
+                }
+            }
+        }
+    }
+
     
     func findConversations() {
         // Finds all conversations initiated in background sorted by date of most recent message
@@ -243,6 +327,9 @@ class HomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
             (result: AnyObject?, error:NSError?) -> Void in
             if error == nil {
                 self.profileList = result as! NSArray;
+                if !self.availableSwitch.on {
+                    self.profileList = NSArray();
+                }
                 self.tableView.reloadData();
                 self.refreshControl.endRefreshing();
             } else {
@@ -251,40 +338,8 @@ class HomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
         }
     }
 
-    func pingCell() {
-        
-    }
-    
-    func loadAndRefreshData() {
-        var query = PFQuery(className:"Profile");
-        var currentID = PFUser.currentUser()!.objectId;
-        query.whereKey("ID", equalTo:currentID!);
-        
-        // Gets current geopoint of the user and saves it
-        var latitude = self.defaults.doubleForKey(Constants.UserKeys.latitudeKey);
-        var longitude = self.defaults.doubleForKey(Constants.UserKeys.longitudeKey);
-        var point:PFGeoPoint = PFGeoPoint(latitude: latitude, longitude: longitude);
-        
-        query.getFirstObjectInBackgroundWithBlock {
-            (profile: PFObject?, error: NSError?) -> Void in
-            if error != nil || profile == nil {
-                println(error);
-            } else if let profile = profile {
-                profile["Location"] = point;
-                profile.saveInBackgroundWithBlock {
-                    (success, error) -> Void in
-                    if (success) {
-                        self.findConversationParticipants();
-                        self.findConversations();
-                        self.findUsersInRange();
-                    } else {
-                        println(error);
-                    }
-                }
-            }
-        }
-    }
 
+   
     
     
     /*-------------------------------- TABLE VIEW METHODS ------------------------------------*/
@@ -303,10 +358,13 @@ class HomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let profileCellIdentifier:String = "ProfileCell";
         let chatCellIdentifier:String = "ChatCell";
+        var names:NSMutableArray = [];
         
         if segmentControl.selectedSegmentIndex == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier(profileCellIdentifier, forIndexPath: indexPath) as! HomeTableViewCell
-            
+            if !availableSwitch.on {
+                cell.selectionStyle = UITableViewCellSelectionStyle.None;
+            }
             formatLabels(cell);
             
             // Loads all of the data for each cell generated
@@ -341,22 +399,42 @@ class HomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
             }
             return cell;
         } else {
-            
             let cell = tableView.dequeueReusableCellWithIdentifier(chatCellIdentifier, forIndexPath: indexPath) as! ConversationTableViewCell
             
-            
-            if (conversationList.count > 0) {
+            println(indexPath.row);
+            if (conversationList.count > 0 && indexPath.row < conversationList.count) {
+                println("hi");
                 var conversationParticipant: AnyObject = conversationParticipantList[indexPath.row];
                 var conversation: AnyObject = conversationList[indexPath.row];
-                var profile: AnyObject = profileList[indexPath.row];
+                var profile:AnyObject = profileList[indexPath.row];
+                for (var i = 0; i < profileList.count; i++) {
+                    var temp:AnyObject = profileList[i];
+                    var id:String = temp["ID"] as! String;
+                    var otherID:String = conversationParticipant["OtherUser"] as! String;
+                    if (id == otherID) {
+                        profile = profileList[i];
+                    }
+                }
 
                 var readConversationCount:Int = conversationParticipant["ReadMessageCount"] as! Int;
                 var conversationCount:Int = conversation["MessageCount"] as! Int;
+                var recentMessage="";
+                if var message:String = conversation["RecentMessage"] as? String {
+                    recentMessage = message;
+                }
                 
                 cell.nameLabel.text = profile["Name"] as? String;
+                println(cell.nameLabel.text);
                 if readConversationCount < conversationCount {
                     cell.hasUnreadMessage = true;
+                    cell.unreadMessageDot.hidden = false;
+                    print("unread: ");
+                    println(cell.hasUnreadMessage);
+                } else {
+                    cell.unreadMessageDot.hidden = true;
                 }
+                cell.lastMessageLabel.text = recentMessage;
+                cell.lastMessageLabel.lineBreakMode = NSLineBreakMode.ByTruncatingTail
                 var image = PFFile();
                 if let userImageFile = profile["Image"] as? PFFile {
                     image = userImageFile;
@@ -374,9 +452,21 @@ class HomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
                 }
                 // Formats image into circle
                 formatImage(cell.profileImage);
+                cell.profileImage.hidden = false;
+                cell.lastMessageLabel.hidden = false;
+                cell.nameLabel.hidden = false;
+                cell.lastMessageLabel.hidden = true;
+            } else {
+                cell.profileImage.hidden = true;
+                cell.lastMessageLabel.hidden = true;
+                cell.nameLabel.hidden = true;
+                cell.unreadMessageDot.hidden = true;
+                print("it goes here on: " );
+                println(indexPath.row)
+                cell.selectionStyle = UITableViewCellSelectionStyle.None;
             }
-            
             return cell;
+            
         }
     }
     
@@ -384,9 +474,32 @@ class HomeVC: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLo
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let profileCellIdentifier:String = "ProfileCell";
         let chatCellIdentifier:String = "ChatCell";
+        if !availableSwitch.on && segmentControl.selectedSegmentIndex == 0 {
+            return;
+        }
 
+        if (segmentControl.selectedSegmentIndex == 1) {
+            if (conversationList.count < indexPath.row + 1) {
+                return;
+            }
+        }
+        
         if (profileList.count > 0) {
             var profile: AnyObject = profileList[indexPath.row];
+
+            if conversationParticipantList.count > 0 && segmentControl.selectedSegmentIndex == 1{
+                var conversationParticipant: AnyObject = conversationParticipantList[indexPath.row];
+                for (var i = 0; i < profileList.count; i++) {
+                    var temp:AnyObject = profileList[i];
+                    var id:String = temp["ID"] as! String;
+                    var otherID:String = conversationParticipant["OtherUser"] as! String;
+                    if (id == otherID) {
+                        profile = profileList[i];
+                    }
+                }
+            } else {
+                profile = profileList[indexPath.row];
+            }
             
             // Sets values for selected user
             defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey);

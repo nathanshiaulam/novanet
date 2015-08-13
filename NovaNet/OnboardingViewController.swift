@@ -154,6 +154,7 @@ class OnboardingViewController: UIViewController {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "backToHomeView", name: "backToHomeView", object: nil);
         
+        self.title = "2 of 4";
         nameField.borderStyle = UITextBorderStyle.None;
         nameField.backgroundColor = UIColor.clearColor();
         var nameFieldPlaceholder = NSAttributedString(string: "name", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);

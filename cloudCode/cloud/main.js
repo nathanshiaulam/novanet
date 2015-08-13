@@ -57,7 +57,7 @@ Parse.Cloud.define("findConversations", function(request, response) {
 
       var conversationQuery = new Parse.Query("Conversation");
       conversationQuery.containedIn("objectId", conversationIDList);
-      conversationQuery.ascending("MostRecent");
+      conversationQuery.descending("MostRecent");
       conversationQuery.find({
         success: function(conversations) {
           response.success(conversations);
@@ -81,7 +81,7 @@ Parse.Cloud.define("findConversationParticipants", function(request, response) {
   var conversationParticipantQuery = new Parse.Query("ConversationParticipant");
   conversationParticipantQuery.equalTo("User", id);
   conversationParticipantQuery.limit(1000);
-  conversationParticipantQuery.ascending("MostRecent");
+  conversationParticipantQuery.descending("MostRecent");
 
   conversationParticipantQuery.find({
     success: function(participants) {

@@ -150,6 +150,7 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
     override func viewDidLoad() {
         super.viewDidLoad();
         
+        self.title = "3 of 4";
         // Initializes gesture recognizer
         var tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tappedImage");
         tapGestureRecognizer.delegate = self;

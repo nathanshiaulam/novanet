@@ -42,7 +42,7 @@ class SignUpViewController: UIViewController {
     // Prepares username, distance, and fromNew in datastore and puts the user online
     func prepareDataStore() {
         self.defaults.setObject(self.usernameField.text, forKey: Constants.UserKeys.usernameKey);
-        self.defaults.setObject(5, forKey: Constants.UserKeys.distanceKey);
+        self.defaults.setObject(25, forKey: Constants.UserKeys.distanceKey);
         self.defaults.setObject(true, forKey: Constants.TempKeys.fromNew);
     }
     

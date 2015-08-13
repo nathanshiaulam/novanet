@@ -91,6 +91,7 @@ class MessagerViewController: JSQMessagesViewController {
                     var sender = message["Sender"] as! String;
                     var date = message["Date"] as! NSDate;
                     var fullmessage = JSQMessage(senderId: sender, senderDisplayName: sender, date: date, text: text);
+
                     self.messages += [fullmessage];
                 }
                 self.collectionView.reloadData(); // Reloads all messages in page
@@ -98,7 +99,7 @@ class MessagerViewController: JSQMessagesViewController {
                 // Update own counters if the conversation has begun so the number of messages
                 // read matches the number of messages in client
                 if (messages.count > 0) {
-                    self.updateConversation(nil);
+                    self.updateConversation(nil, text: nil);
                 }
             }
         }
@@ -151,11 +152,12 @@ class MessagerViewController: JSQMessagesViewController {
                     if error == nil {
                         // If there are no messages and the conversation has just started, create a new conversation
                         if self.messages.count == 0 {
-                            self.createConversation(date);
+                            self.createConversation(date, text: text);
                         }
                         // Otherwise, there already exists a conversation between the two. Query for the conversation and update counters
                         else {
-                            self.updateConversation(date);
+                            println("should work");
+                            self.updateConversation(date, text: text);
                         }
                         
                         // Add in message and reload new data/send message
@@ -174,7 +176,7 @@ class MessagerViewController: JSQMessagesViewController {
     }
     
     // Creates a conversation if first message sent
-    func createConversation(date: NSDate!) {
+    func createConversation(date: NSDate!, text: String!) {
         var ownID = PFUser.currentUser()?.objectId;
         var otherID = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey);
         
@@ -200,6 +202,7 @@ class MessagerViewController: JSQMessagesViewController {
                         conversation["MessageCount"] = 1;
                         if (date != nil) {
                             conversation["MostRecent"] = date;
+                            conversation["RecentMessage"] = text;
                         }
                         conversation.saveInBackgroundWithBlock {
                             (success, error)  -> Void in
@@ -217,7 +220,7 @@ class MessagerViewController: JSQMessagesViewController {
     }
     
     // Modifies conversation by adding in message and incrementing counters properly
-    func updateConversation(date: NSDate!) {
+    func updateConversation(date: NSDate!, text: String!) {
         
         var ownID = PFUser.currentUser()?.objectId;
         var otherID = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey);
@@ -236,10 +239,12 @@ class MessagerViewController: JSQMessagesViewController {
             } else if let conversation = conversation {
                 println("hi");
                 var conversationID = conversation.objectId;
-
+                print("after send should be more: ");
+                println(self.messages.count);
                 conversation["MessageCount"] = self.messages.count;
                 if (date != nil) {
                     conversation["MostRecent"] = date;
+                    conversation["RecentMessage"] = text;
                 }
                 conversation.saveInBackgroundWithBlock {
                     (success, error) -> Void in
@@ -255,6 +260,7 @@ class MessagerViewController: JSQMessagesViewController {
                                 convPart["ReadMessageCount"] = self.messages.count;
                                 if (date != nil) {
                                     convPart["MostRecent"] = date;
+                                    println(date);
                                 }
                             }
                             convPart?.saveInBackground();
@@ -343,6 +349,8 @@ class MessagerViewController: JSQMessagesViewController {
                     var sender = message["Sender"] as! String;
                     var date = message["Date"] as! NSDate;
                     var fullmessage = JSQMessage(senderId: sender, senderDisplayName: sender, date: date, text: text);
+                    print("prior to send: ");
+                    println(self.messages.count);
                     self.messages += [fullmessage];
                 }
                 self.collectionView.reloadData();
@@ -350,7 +358,7 @@ class MessagerViewController: JSQMessagesViewController {
                 // Update own counters if the conversation has begun so the number of messages
                 // read matches the number of messages in client
                 if (messages.count > 0) {
-                    self.updateConversation(nil);
+                    self.updateConversation(nil, text: nil);
                 }
             }
         }

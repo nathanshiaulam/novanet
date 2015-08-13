@@ -12,11 +12,9 @@ import Parse
 
 class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate,UINavigationControllerDelegate {
 
-    @IBOutlet weak var availableLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var interestsLabel: UILabel!
     @IBOutlet weak var profileImage: UIImageView!
-    @IBOutlet weak var availableSwitch: UISwitch!
     @IBOutlet weak var experienceLabel: UILabel!
     @IBOutlet weak var lookingForLabel: UILabel!
     
@@ -72,12 +70,6 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
     func setValues() {
         let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
         
-        var available = defaults.boolForKey(Constants.UserKeys.availableKey);
-        if (available) {
-            self.availableSwitch.on = true;
-        } else {
-            self.availableSwitch.on = false;
-        }
         
         if let name = defaults.stringForKey(Constants.UserKeys.nameKey) {
             nameLabel.text = name;
@@ -238,29 +230,7 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
         super.viewDidAppear(true);
     }
     
-    // Saves whether or not hte user is available
-    override func viewWillDisappear(animated: Bool) {
-        if (availableSwitch.on) {
-            defaults.setBool(true, forKey: Constants.UserKeys.availableKey)
-        } else {
-            defaults.setBool(false, forKey:Constants.UserKeys.availableKey);
-        }
-        var query = PFQuery(className:"Profile");
-        var currentID = PFUser.currentUser()!.objectId;
-        query.whereKey("ID", equalTo:currentID!);
-        
-        query.getFirstObjectInBackgroundWithBlock {
-            (profile: PFObject?, error: NSError?) -> Void in
-            if error != nil || profile == nil {
-                println(error);
-            } else if let profile = profile {
-                profile["Available"] = self.defaults.boolForKey(Constants.UserKeys.availableKey);
-                profile.saveInBackground();
-            }
-        }
-        super.viewWillDisappear(true);
-    }
-    
+       
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

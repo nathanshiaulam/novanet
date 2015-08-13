@@ -16,21 +16,21 @@
                     <color key="textColor" red="0.995049505" green="0.99009900989999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ipsum" translatesAutoresizingMaskIntoConstraints="NO" id="Qjy-AQ-maG">
-                    <rect key="frame" x="140" y="140" width="200" height="200"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ipsum" translatesAutoresizingMaskIntoConstraints="NO" id="g88-fu-rjk">
+                    <rect key="frame" x="215" y="200" width="50" height="80"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="200" id="3UA-TH-JBF"/>
-                        <constraint firstAttribute="width" constant="200" id="cv3-mY-cd9"/>
+                        <constraint firstAttribute="width" constant="50" id="RWk-Ul-gan"/>
+                        <constraint firstAttribute="height" constant="80" id="bEe-ZA-Zn0"/>
                     </constraints>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" red="0.25098039215686274" green="0.25098039215686274" blue="0.25098039215686274" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstAttribute="centerX" secondItem="g88-fu-rjk" secondAttribute="centerX" id="EKM-Uq-LOX"/>
                 <constraint firstAttribute="bottom" secondItem="8ie-xW-0ye" secondAttribute="bottom" constant="20" id="Kzo-t9-V3l"/>
                 <constraint firstItem="8ie-xW-0ye" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="MfP-vx-nX0"/>
                 <constraint firstAttribute="centerX" secondItem="8ie-xW-0ye" secondAttribute="centerX" id="ZEH-qu-HZ9"/>
-                <constraint firstAttribute="centerY" secondItem="Qjy-AQ-maG" secondAttribute="centerY" id="gma-74-dIt"/>
-                <constraint firstAttribute="centerX" secondItem="Qjy-AQ-maG" secondAttribute="centerX" id="pw0-qZ-4VY"/>
+                <constraint firstAttribute="centerY" secondItem="g88-fu-rjk" secondAttribute="centerY" id="dfM-tc-9wp"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -38,6 +38,6 @@
         </view>
     </objects>
     <resources>
-        <image name="ipsum" width="350" height="350"/>
+        <image name="ipsum" width="331" height="524"/>
     </resources>
 </document>

@@ -12,7 +12,7 @@ import Parse
 import Bolts
 
 
-class OnboardingViewController: UIViewController {
+class OnboardingViewController: UIViewController, UITextViewDelegate {
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
     
     @IBOutlet weak var nameField: UITextField!
@@ -41,6 +41,61 @@ class OnboardingViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
             self.presentViewController(alert, animated: true, completion: nil);
         }
+    }
+    /*-------------------------------- TextViewDel Methods ------------------------------------*/
+
+    func textViewDidBeginEditing(textView: UITextView) {
+        if textView.textColor == UIColorFromHex(0xA6AAA9, alpha: 1.0) {
+            textView.text = nil
+            textView.textColor = UIColor.blackColor()
+        }
+    }
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        if textView.text.isEmpty {
+            println("truth");
+            textView.text = "A sentence or two illustrating what you're about. Who are you in a nutshell?";
+            textView.textColor = UIColorFromHex(0xA6AAA9, alpha: 1.0)
+        }
+    }
+    
+    /*-------------------------------- TextFieldDel Methods ------------------------------------*/
+
+    // Allows users to hit enter and move to the next text field
+    func textFieldShouldReturn(textField: UITextField)-> Bool {
+        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+        
+        if (textField == nameField) {
+            aboutField.becomeFirstResponder();
+        }
+        else if (textField == experienceField) {
+            textField.resignFirstResponder()
+            firstInterestField.becomeFirstResponder();
+        }
+        else if (textField == firstInterestField) {
+            textField.resignFirstResponder()
+            secondInterestField.becomeFirstResponder();
+        }
+        else if (textField == secondInterestField) {
+            textField.resignFirstResponder()
+            thirdInterestField.becomeFirstResponder();
+        }
+        else {
+            textField.resignFirstResponder();
+        }
+        return false;
+    }
+    
+    // Sets the character limit of each text field
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        
+        if (range.length + range.location > count(textField.text) )
+        {
+            return false;
+        }
+        
+        let newLength = count(textField.text) + count(string) - range.length
+        return newLength <= 35
     }
     
     /*-------------------------------- HELPER METHODS ------------------------------------*/
@@ -92,46 +147,6 @@ class OnboardingViewController: UIViewController {
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         self.view.endEditing(true);
     }
-    
-    // Sets the character limit of each text field
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        
-        if (range.length + range.location > count(textField.text) )
-        {
-            return false;
-        }
-        
-        let newLength = count(textField.text) + count(string) - range.length
-        return newLength <= 35
-    }
-    
-    // Allows users to hit enter and move to the next text field
-    func textFieldShouldReturn(textField: UITextField)-> Bool {
-        var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
-        if (textField == nameField) {
-            aboutField.becomeFirstResponder();
-        }
-        else if (textField == aboutField) {
-            textField.resignFirstResponder()
-            experienceField.becomeFirstResponder();
-        }
-        else if (textField == experienceField) {
-            textField.resignFirstResponder()
-            firstInterestField.becomeFirstResponder();
-        }
-        else if (textField == firstInterestField) {
-            textField.resignFirstResponder()
-            secondInterestField.becomeFirstResponder();
-        }
-        else if (textField == secondInterestField) {
-            textField.resignFirstResponder()
-            thirdInterestField.becomeFirstResponder();
-        }
-        else {
-            textField.resignFirstResponder();
-        }
-        return false;
-    }
 
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
     
@@ -140,35 +155,45 @@ class OnboardingViewController: UIViewController {
         
         self.title = "2 of 4";
         nameField.backgroundColor = UIColor.clearColor();
-        var nameFieldPlaceholder = NSAttributedString(string: "name", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        var nameFieldPlaceholder = NSAttributedString(string: "What's your name?", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         nameField.attributedPlaceholder = nameFieldPlaceholder;
-        nameField.textColor = UIColor.whiteColor();
+        nameField.textColor = UIColor.blackColor();
+        nameField.borderStyle = UITextBorderStyle.None;
+        
+        aboutField.backgroundColor = UIColor.clearColor();
+        aboutField.text = "A sentence or two illustrating what you're about. Who are you in a nutshell?";
+        aboutField.textColor = UIColorFromHex(0xA6AAA9, alpha: 1.0);
         
         firstInterestField.backgroundColor = UIColor.clearColor();
-        var firstInterestsFieldPlaceholder = NSAttributedString(string: "interests (please list three)", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
+        var firstInterestsFieldPlaceholder = NSAttributedString(string: "Interest 1", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         firstInterestField.attributedPlaceholder = firstInterestsFieldPlaceholder;
-        firstInterestField.textColor = UIColor.whiteColor();
+        firstInterestField.textColor = UIColor.blackColor();
+        firstInterestField.borderStyle = UITextBorderStyle.None
         
         secondInterestField.backgroundColor = UIColor.clearColor();
-        var secondInterestFieldPlaceholder = NSAttributedString(string: "interests (please list three)", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        var secondInterestFieldPlaceholder = NSAttributedString(string: "Interest 2", attributes: [NSForegroundColorAttributeName :UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         secondInterestField.attributedPlaceholder = secondInterestFieldPlaceholder;
-        secondInterestField.textColor = UIColor.whiteColor();
+        secondInterestField.textColor = UIColor.blackColor();
+        secondInterestField.borderStyle = UITextBorderStyle.None
         
         thirdInterestField.backgroundColor = UIColor.clearColor();
-        var thirdInterestFieldPlaceholder = NSAttributedString(string: "interests (please list three)", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        var thirdInterestFieldPlaceholder = NSAttributedString(string: "Interest 3", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         thirdInterestField.attributedPlaceholder = thirdInterestFieldPlaceholder;
-        thirdInterestField.textColor = UIColor.whiteColor();
-        
+        thirdInterestField.textColor = UIColor.blackColor();
+        thirdInterestField.borderStyle = UITextBorderStyle.None
+
         experienceField.backgroundColor = UIColor.clearColor();
-        var backgroundFieldPlaceholder = NSAttributedString(string: "profession", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        var backgroundFieldPlaceholder = NSAttributedString(string: "e.g. Systems Engineer", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         experienceField.attributedPlaceholder = backgroundFieldPlaceholder;
-        experienceField.textColor = UIColor.whiteColor();
-        
+        experienceField.textColor = UIColor.blackColor();
+        experienceField.borderStyle = UITextBorderStyle.None
+
         lookingForField.backgroundColor = UIColor.clearColor();
-        var goalsFieldPlaceholder = NSAttributedString(string: "What are you looking for?", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        var goalsFieldPlaceholder = NSAttributedString(string: "What are you looking for?", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         lookingForField.attributedPlaceholder = goalsFieldPlaceholder;
-        lookingForField.textColor = UIColor.whiteColor();
-        
+        lookingForField.textColor = UIColor.blackColor();
+        lookingForField.borderStyle = UITextBorderStyle.None
+
         
     }
 }

@@ -39,8 +39,6 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
                 profile.saveInBackground();
             }
         }
-        NSNotificationCenter.defaultCenter().postNotificationName("backToHomeView", object: nil);
-        self.dismissViewControllerAnimated(true, completion: nil);
     }
     
     // Prepares local data store and image picker

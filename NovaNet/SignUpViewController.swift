@@ -121,58 +121,48 @@ class SignUpViewController: UIViewController {
         
         passwordField.secureTextEntry = true;
         
-        usernameField.borderStyle = UITextBorderStyle.None;
-        usernameField.backgroundColor = UIColor.clearColor();
-        var usernameFieldPlaceholder = NSAttributedString(string: "username", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        var userFrameRect = usernameField.frame;
+        var passwordFrameRect = passwordField.frame;
+        var emailFrameRect = emailField.frame;
+
+        userFrameRect.size.height = 200;
+        passwordFrameRect.size.height = 200;
+        emailFrameRect.size.height = 200;
+        
+        
+        usernameField.frame = userFrameRect;
+        passwordField.frame = passwordFrameRect;
+        emailField.frame = emailFrameRect;
+        
+        usernameField.layer.cornerRadius = 15;
+        passwordField.layer.cornerRadius = 15;
+        emailField.layer.cornerRadius = 15;
+        
+//        usernameField.leftViewMode = UITextFieldViewMode.Always;
+//        usernameField.leftView = UIImageView(image: UIImage(named: "fika"));
+//        
+//        passwordField.leftViewMode = UITextFieldViewMode.Always;
+//        passwordField.leftView =  UIImageView(image: UIImage(named: "fika"));
+//        
+//        emailField.leftViewMode = UITextFieldViewMode.Always;
+//        emailField.leftView =  UIImageView(image: UIImage(named: "fika"));
+//
+//        
+        var usernameFieldPlaceholder = NSAttributedString(string: "Username", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
         usernameField.attributedPlaceholder = usernameFieldPlaceholder;
         usernameField.textColor = UIColor.whiteColor();
         
-        passwordField.borderStyle = UITextBorderStyle.None;
-        passwordField.backgroundColor = UIColor.clearColor();
-        var passwordFieldPlaceholder = NSAttributedString(string: "password", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        var passwordFieldPlaceholder = NSAttributedString(string: "Password", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
         passwordField.attributedPlaceholder = passwordFieldPlaceholder;
         passwordField.textColor = UIColor.whiteColor();
         
-        emailField.borderStyle = UITextBorderStyle.None;
-        emailField.backgroundColor = UIColor.clearColor();
-        var emailFieldPlaceholder = NSAttributedString(string: "email", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        var emailFieldPlaceholder = NSAttributedString(string: "Email", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
         emailField.attributedPlaceholder = emailFieldPlaceholder;
         emailField.textColor = UIColor.whiteColor();
     }
     
     
-    override func viewDidLayoutSubviews() {
-        let borderName = CALayer();
-        let widthName = CGFloat(2.0);
-        borderName.borderColor = UIColor.darkGrayColor().CGColor;
-        borderName.frame = CGRect(x: 0, y: usernameField.frame.size.height - widthName, width:  usernameField.frame.size.width, height: usernameField.frame.size.height);
-        
-        borderName.borderWidth = widthName;
-        
-        let borderPass = CALayer();
-        let widthPass = CGFloat(2.0);
-        borderPass.borderColor = UIColor.darkGrayColor().CGColor;
-        borderPass.frame = CGRect(x: 0, y: usernameField.frame.size.height - widthPass, width:  usernameField.frame.size.width, height: usernameField.frame.size.height);
-        
-        borderPass.borderWidth = widthPass;
-        
-        let borderEmail = CALayer();
-        let widthEmail = CGFloat(2.0);
-        borderEmail.borderColor = UIColor.darkGrayColor().CGColor;
-        borderEmail.frame = CGRect(x: 0, y: usernameField.frame.size.height - widthEmail, width:  usernameField.frame.size.width, height: usernameField.frame.size.height);
-        
-        borderEmail.borderWidth = widthEmail;
-        
-        usernameField.layer.addSublayer(borderName)
-        usernameField.layer.masksToBounds = true
-        
-        passwordField.layer.addSublayer(borderPass);
-        passwordField.layer.masksToBounds = true
-        
-        emailField.layer.addSublayer(borderEmail);
-        emailField.layer.masksToBounds = true
 
-    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

@@ -12,7 +12,7 @@ import Parse
 import Bolts
 
 
-class LogInViewController: UIViewController {
+class LogInViewController: UIViewController, UITextFieldDelegate {
 
     
     @IBOutlet weak var usernameField: UITextField!
@@ -144,51 +144,66 @@ class LogInViewController: UIViewController {
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
     
     // Style all of the textfields to remove borders/add gray underline
-    override func viewDidLayoutSubviews() {
-        let borderName = CALayer();
-        let widthName = CGFloat(2.0);
-        borderName.borderColor = UIColor.darkGrayColor().CGColor;
-        borderName.frame = CGRect(x: 0, y: usernameField.frame.size.height - widthName, width:  usernameField.frame.size.width, height: usernameField.frame.size.height);
-        
-        borderName.borderWidth = widthName;
-        
-        let borderPass = CALayer();
-        let widthPass = CGFloat(2.0);
-        borderPass.borderColor = UIColor.darkGrayColor().CGColor;
-        borderPass.frame = CGRect(x: 0, y: usernameField.frame.size.height - widthPass, width:  usernameField.frame.size.width, height: usernameField.frame.size.height);
-        
-        borderPass.borderWidth = widthPass;
-        
-        usernameField.layer.addSublayer(borderName)
-        usernameField.layer.masksToBounds = true
-        
-        passwordField.layer.addSublayer(borderPass);
-        passwordField.layer.masksToBounds = true
-        
-    }
-    
+//    override func viewDidLayoutSubviews() {
+//        let borderName = CALayer();
+//        let widthName = CGFloat(2.0);
+//        borderName.borderColor = UIColor.darkGrayColor().CGColor;
+//        borderName.frame = CGRect(x: 0, y: usernameField.frame.size.height - widthName, width:  usernameField.frame.size.width, height: usernameField.frame.size.height);
+//        
+//        borderName.borderWidth = widthName;
+//        
+//        let borderPass = CALayer();
+//        let widthPass = CGFloat(2.0);
+//        borderPass.borderColor = UIColor.darkGrayColor().CGColor;
+//        borderPass.frame = CGRect(x: 0, y: usernameField.frame.size.height - widthPass, width:  usernameField.frame.size.width, height: usernameField.frame.size.height);
+//        
+//        borderPass.borderWidth = widthPass;
+//        
+//        usernameField.layer.addSublayer(borderName)
+//        usernameField.layer.masksToBounds = true
+//        
+//        passwordField.layer.addSublayer(borderPass);
+//        passwordField.layer.masksToBounds = true
+//        
+//    }
+//    
     // Load in all of the textfield attributes
     override func viewDidLoad() {
         super.viewDidLoad()
-        var usernamePlaceholder = NSAttributedString(string: "Username", attributes: [NSForegroundColorAttributeName : UIColor.grayColor()]);
-        var passwordPlaceholder = NSAttributedString(string: "Password", attributes: [NSForegroundColorAttributeName : UIColor.grayColor()]);
+        var usernamePlaceholder = NSAttributedString(string: "   Username", attributes: [NSForegroundColorAttributeName : UIColor.grayColor()]);
+        var passwordPlaceholder = NSAttributedString(string: "   Password", attributes: [NSForegroundColorAttributeName : UIColor.grayColor()]);
         
         usernameField.attributedPlaceholder = usernamePlaceholder;
         passwordField.attributedPlaceholder = passwordPlaceholder;
         
-        usernameField.layer.cornerRadius = 0;
-        passwordField.layer.cornerRadius = 0;
+        var userFrameRect = usernameField.frame;
+        var passwordFrameRect = passwordField.frame;
+        userFrameRect.size.height = 250;
+        passwordFrameRect.size.height = 250;
+        usernameField.frame = userFrameRect;
+        passwordField.frame = passwordFrameRect;
+        
+//        usernameField.leftViewMode = UITextFieldViewMode.Always;
+//        var userImageView = UIImageView(image: UIImage(named: "fika"));
+//        userImageView.frame = CGRect(x: 50, y: 0, width: 20, height: 20)
+//        userImageView.bounds.origin.x += 10.0
+//        usernameField.leftView = userImageView
+//        
+//        passwordField.leftViewMode = UITextFieldViewMode.Always;
+//        var passImageView = UIImageView(image: UIImage(named: "fika"));
+//        passImageView.frame = CGRect(x: 50, y: 0, width: 20, height: 20)
+//        passImageView.bounds.origin.x += 10.0
+//        passwordField.leftView = passImageView
+        
+        usernameField.layer.cornerRadius = 15;
+        passwordField.layer.cornerRadius = 15;
         passwordField.secureTextEntry = true;
         
-        usernameField.borderStyle = UITextBorderStyle.None;
-        usernameField.backgroundColor = UIColor.clearColor();
-        var usernameFieldPlaceholder = NSAttributedString(string: "username", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        var usernameFieldPlaceholder = NSAttributedString(string: "Username", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
         usernameField.attributedPlaceholder = usernameFieldPlaceholder;
         usernameField.textColor = UIColor.whiteColor();
         
-        passwordField.borderStyle = UITextBorderStyle.None;
-        passwordField.backgroundColor = UIColor.clearColor();
-        var passwordFieldPlaceholder = NSAttributedString(string: "password", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        var passwordFieldPlaceholder = NSAttributedString(string: "Password", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
         passwordField.attributedPlaceholder = passwordFieldPlaceholder;
         passwordField.textColor = UIColor.whiteColor();
     }
@@ -201,7 +216,7 @@ class LogInViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     /*
     // MARK: - Navigation
 

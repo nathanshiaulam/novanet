@@ -39,6 +39,7 @@
 		16A0E7411B55096F00DDAE95 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7401B55096F00DDAE95 /* LogInViewController.swift */; };
 		16A0E7EC1B78CA1700DE06A9 /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7EB1B78CA1700DE06A9 /* ConversationTableViewCell.swift */; };
 		16A0E7F01B7CC39800DE06A9 /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7EF1B7CC39800DE06A9 /* IntroductionViewController.swift */; };
+		16A0E7F61B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7F51B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift */; };
 		16B04F711B78ACA400D01DCB /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B04F701B78ACA400D01DCB /* HomeVC.swift */; };
 		16DB20131B6526C3008A9E54 /* UIDeviceList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DB20121B6526C3008A9E54 /* UIDeviceList.swift */; };
 		7DFB60EA63A8AD92B037922E /* libPods-NovaNet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 398448FD417B1B90923C50B5 /* libPods-NovaNet.a */; };
@@ -93,6 +94,7 @@
 		16A0E7401B55096F00DDAE95 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		16A0E7EB1B78CA1700DE06A9 /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
 		16A0E7EF1B7CC39800DE06A9 /* IntroductionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IntroductionViewController.swift; path = ../IntroductionViewController.swift; sourceTree = "<group>"; };
+		16A0E7F51B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinishOnboardingViewController.swift; sourceTree = "<group>"; };
 		16B04F701B78ACA400D01DCB /* HomeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		16DB20121B6526C3008A9E54 /* UIDeviceList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDeviceList.swift; sourceTree = "<group>"; };
 		398448FD417B1B90923C50B5 /* libPods-NovaNet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NovaNet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -164,9 +166,10 @@
 				1616B18E1B55560300DBF11A /* Constants.swift */,
 				16A0E7401B55096F00DDAE95 /* LogInViewController.swift */,
 				1616B1881B55367800DBF11A /* SignUpViewController.swift */,
+				16A0E7EF1B7CC39800DE06A9 /* IntroductionViewController.swift */,
 				160D1F331B5FCBE000B3E4DB /* OnboardingViewController.swift */,
 				160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */,
-				16A0E7EF1B7CC39800DE06A9 /* IntroductionViewController.swift */,
+				16A0E7F51B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift */,
 				1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */,
 				1616B1901B555FC800DBF11A /* SettingsMenuTableViewController.swift */,
 				16B04F701B78ACA400D01DCB /* HomeVC.swift */,
@@ -381,6 +384,7 @@
 			files = (
 				16B04F711B78ACA400D01DCB /* HomeVC.swift in Sources */,
 				16A0E7F01B7CC39800DE06A9 /* IntroductionViewController.swift in Sources */,
+				16A0E7F61B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift in Sources */,
 				160D1F3D1B61080C00B3E4DB /* MessagerViewController.swift in Sources */,
 				16DB20131B6526C3008A9E54 /* UIDeviceList.swift in Sources */,
 				16A0E7001B54FC7400DDAE95 /* AppDelegate.swift in Sources */,

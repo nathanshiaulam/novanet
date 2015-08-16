@@ -63,6 +63,8 @@ class SignUpViewController: UIViewController {
         newUser.password = password;
         newUser.username = username;
         
+        defaults.setObject(email, forKey: Constants.UserKeys.emailKey);
+        
         newUser.signUpInBackgroundWithBlock {
             (succeeded, error) -> Void in
             if (error == nil) {

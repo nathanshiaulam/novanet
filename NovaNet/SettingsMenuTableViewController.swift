@@ -82,7 +82,7 @@ class SettingsMenuTableViewController: UITableViewController {
                     profile["Interests"] = self.interestsField.text;
                     profile["Experience"] = self.experienceField.text;
                     profile["Looking"] = self.lookingForField.text;
-                    profile["Distance"] = distance;
+                    profile["Distance"] = distance
                     profile.saveInBackground();
                 }
             }

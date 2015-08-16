@@ -12,11 +12,9 @@ import Bolts
 import CoreLocation
 
 class ConversationTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var lastMessageLabel: UILabel!
-    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var unreadMessageMark: UIImageView!
     @IBOutlet weak var profileImage: UIImageView!
-    @IBOutlet weak var unreadMessageDot: UIImageView!
-    
+    @IBOutlet weak var recentMessageLabel: UILabel!
+    @IBOutlet weak var nameLabel: UILabel!
     var hasUnreadMessage:Bool = false;
 }

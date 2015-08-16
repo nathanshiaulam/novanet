@@ -11,11 +11,19 @@ import Bolts
 import Parse
 
 class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate,UINavigationControllerDelegate {
-
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var interestsLabel: UILabel!
+    
     @IBOutlet weak var profileImage: UIImageView!
+    
+    @IBOutlet weak var nameLabel: UILabel!
+    
+    @IBOutlet weak var aboutLabel: UILabel!
+    
     @IBOutlet weak var experienceLabel: UILabel!
+
+    @IBOutlet weak var firstInterestLabel: UILabel!
+    @IBOutlet weak var secondInterestLabel: UILabel!
+    @IBOutlet weak var thirdInterestLabel: UILabel!
+    
     @IBOutlet weak var lookingForLabel: UILabel!
     
     let picker = UIImagePickerController();
@@ -58,38 +66,46 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
         profileImage.clipsToBounds = true;
     }
-    func UIColorFromHex(rgbValue:UInt32, alpha:Double)->UIColor {
-        let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0
-        let green = CGFloat((rgbValue & 0xFF00) >> 8)/256.0
-        let blue = CGFloat(rgbValue & 0xFF)/256.0
-        
-        return UIColor(red:red, green:green, blue:blue, alpha:CGFloat(alpha))
-    }
+
     
     // Sets all values of the user profile fields
     func setValues() {
-        let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
-        
         
         if let name = defaults.stringForKey(Constants.UserKeys.nameKey) {
             nameLabel.text = name;
         }
-        if let interests = defaults.stringForKey(Constants.UserKeys.interestsKey) {
-            interestsLabel.text = "Interests: " + interests;
+        if let about = defaults.stringForKey(Constants.UserKeys.aboutKey) {
+            aboutLabel.text = about;
+        }
+        if let interests = defaults.arrayForKey(Constants.UserKeys.interestsKey) {
+            var interestsArr = interests;
+            firstInterestLabel.text = interestsArr[0] as? String;
+            secondInterestLabel.text = interestsArr[1] as? String;
+            thirdInterestLabel.text = interestsArr[2] as? String;
+            
         }
         if let experience = defaults.stringForKey(Constants.UserKeys.experienceKey) {
-            experienceLabel.text = "Profession: " + experience;
+            experienceLabel.text = experience;
         }
         if let lookingFor = defaults.stringForKey(Constants.UserKeys.lookingForKey) {
-            lookingForLabel.text = "Looking For: " + lookingFor;
+            lookingForLabel.text = lookingFor;
         }
         
         experienceLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
         experienceLabel.sizeToFit();
+        
         nameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
         nameLabel.sizeToFit();
-        interestsLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
-        interestsLabel.sizeToFit();
+        
+        firstInterestLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+        firstInterestLabel.sizeToFit();
+        
+        secondInterestLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+        secondInterestLabel.sizeToFit();
+
+        thirdInterestLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+        thirdInterestLabel.sizeToFit();
+
         lookingForLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
         lookingForLabel.sizeToFit();
         
@@ -210,10 +226,6 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBar.barTintColor = UIColorFromHex(0x555555, alpha: 1.0);
-        let titleDict: NSDictionary = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-        self.navigationController?.navigationBar.titleTextAttributes = titleDict as [NSObject : AnyObject];
-
         // Allows user to upload photo
         var tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tappedImage");
         tapGestureRecognizer.delegate = self;

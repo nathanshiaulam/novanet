@@ -18,6 +18,9 @@ import CoreLocation
 
 class MessagerViewController: JSQMessagesViewController {
     
+    @IBAction func backButtonPressed(sender: UIBarButtonItem) {
+        self.dismissViewControllerAnimated(true, completion: nil);
+    }
     var userName = "";
     var selectedUsername = "";
     var messages = [JSQMessage]();
@@ -63,7 +66,6 @@ class MessagerViewController: JSQMessagesViewController {
         }
         self.userName = PFUser.currentUser()!.objectId!;
         
-        automaticallyScrollsToMostRecentMessage = true;
         inputToolbar.contentView.leftBarButtonItem = nil;
         
         // User IDs are used as sender/recipient tags
@@ -86,7 +88,15 @@ class MessagerViewController: JSQMessagesViewController {
             if (error != nil || messages == nil) {
                 println(error);
             } else if let messages = messages as? [PFObject]{
+                var recentDate:NSDate = NSDate();
+                var recentText:String = String();
+                var x = 0;
                 for message in messages { // Adds in all messages
+                    if x == 0 {
+                        recentDate = message["Date"] as! NSDate;
+                        recentText = message["Text"] as! String;
+                        x = x + 1;
+                    }
                     var text = message["Text"] as! String;
                     var sender = message["Sender"] as! String;
                     var date = message["Date"] as! NSDate;
@@ -99,7 +109,7 @@ class MessagerViewController: JSQMessagesViewController {
                 // Update own counters if the conversation has begun so the number of messages
                 // read matches the number of messages in client
                 if (messages.count > 0) {
-                    self.updateConversation(nil, text: nil);
+                    self.updateConversation(recentDate, text: recentText);
                 }
             }
         }
@@ -312,11 +322,12 @@ class MessagerViewController: JSQMessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad();
+        
+        println("hello");
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "loadData", name: "loadData", object: nil);
-        navigationController?.navigationBar.barTintColor = UIColorFromHex(0x555555, alpha: 1.0);
         self.title = defaults.stringForKey(Constants.SelectedUserKeys.selectedNameKey);
         
-        println(self.messages.count);
         let image = UIImage(named: "fika");
         
         inputToolbar.contentView.leftBarButtonItem.setImage(image, forState: .Normal)
@@ -344,7 +355,15 @@ class MessagerViewController: JSQMessagesViewController {
             if (error != nil || messages == nil) {
                 println(error);
             } else if let messages = messages as? [PFObject]{
-                for message in messages {
+                var recentDate:NSDate = NSDate();
+                var recentText:String = String();
+                var x = 0;
+                for message in messages { // Adds in all messages
+                    if x == 0 {
+                        recentDate = message["Date"] as! NSDate;
+                        recentText = message["Text"] as! String;
+                        x = x + 1;
+                    }
                     var text = message["Text"] as! String;
                     var sender = message["Sender"] as! String;
                     var date = message["Date"] as! NSDate;
@@ -358,7 +377,7 @@ class MessagerViewController: JSQMessagesViewController {
                 // Update own counters if the conversation has begun so the number of messages
                 // read matches the number of messages in client
                 if (messages.count > 0) {
-                    self.updateConversation(nil, text: nil);
+                    self.updateConversation(recentDate, text: recentText);
                 }
             }
         }

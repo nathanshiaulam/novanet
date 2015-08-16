@@ -37,6 +37,90 @@ Parse.Cloud.define("findUsers", function(request, response) {
   });
 });
 
+/*-----------Send email-----------------------------------*/
+ 
+Parse.Cloud.define("sendMail", function(request, response) {
+   var Mandrill = require('mandrill');
+   Mandrill.initialize('BLwCVUqy9NAaemxo77OHMw');
+ 
+   var prefquery = new Parse.Query("User");
+   var email = Parse.User.current().getEmail();
+   prefquery.equalTo("email", email);
+
+   prefquery.find({
+      success: function(results) {
+        Mandrill.sendEmail({
+        message: {
+          text: request.params.text,
+          subject: "NovaNet Feedback",
+          from_email: "nlam@princeton.com",
+          from_name: "NovaNet App",
+          to: 
+            [
+              {
+              email: "nathan.lam@nova.com",
+                name: "NovaNet User"
+              }
+            ]
+        },
+        async: true
+        },
+        {
+         success: function(httpResponse) {
+         console.log(httpResponse);
+         response.success("Email sent!");
+         },
+         error: function(httpResponse) {
+         console.error(httpResponse);
+         response.error("Uh oh, something went wrong");
+         }
+        });
+      },
+      error: function(error) {
+         alert("Error: " + error.code + " " + error.message);
+      }
+  });
+});
+ 
+
+
+Parse.Cloud.define("findDistances", function(request, response) {
+  var currlat = request.params.lat;
+  var currlong = request.params.lon;
+  var bound = request.params.dist;
+
+  var profileQuery = new Parse.Query("Profile");
+  profileQuery.limit(1000);
+  profileQuery.ascending("Name");
+  var distanceList = [];
+
+  var currLoc = new Parse.GeoPoint(currlat, currlong);
+  profileQuery.find({
+    success: function(results) {
+      // returns a list of all current users  
+      for (var i = 0; i < results.length; i++) {
+        var object = results[i];
+        var currentID = Parse.User.current().id;
+        var available = object.get("Available");
+        var online = object.get("Online");
+        var geopoint = object.get("Location"); // PFGeoPoint of other user's most recent location
+        if (geopoint != null) {
+
+          var dist = currLoc.kilometersTo(geopoint).toFixed(2);
+          if (dist <= bound && currentID != object.get("ID") && available && online){
+            distanceList.push(dist);
+          }
+        }
+      }
+      response.success(distanceList);
+
+    },
+    error: function(error) {
+         alert("Error: " + error.code + " " + error.message);
+    }
+  });
+});
+
 Parse.Cloud.define("findConversations", function(request, response) {
   var id = Parse.User.current().id;
 

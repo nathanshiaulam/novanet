@@ -95,7 +95,7 @@ class OnboardingViewController: UIViewController, UITextViewDelegate {
         }
         
         let newLength = count(textField.text) + count(string) - range.length
-        return newLength <= 35
+        return newLength <= 50
     }
     
     /*-------------------------------- HELPER METHODS ------------------------------------*/
@@ -119,10 +119,11 @@ class OnboardingViewController: UIViewController, UITextViewDelegate {
         interestsArr.append(thirdInterestField.text);
         newProfile["ID"] = PFUser.currentUser()!.objectId;
         newProfile["Name"] = nameField.text;
-        newProfile["Interests"] = interestsArr;
+        newProfile["About"] = aboutField.text;
+        newProfile["InterestsList"] = interestsArr;
         newProfile["Experience"] = experienceField.text;
         newProfile["Looking"] = lookingForField.text;
-        newProfile["Distance"] = 5;
+        newProfile["Distance"] = 25;
         newProfile["Available"] = true;
         newProfile["Online"] = true;
         newProfile.saveInBackground();
@@ -152,7 +153,6 @@ class OnboardingViewController: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad();
-        
         self.title = "2 of 4";
         nameField.backgroundColor = UIColor.clearColor();
         var nameFieldPlaceholder = NSAttributedString(string: "What's your name?", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
@@ -161,7 +161,7 @@ class OnboardingViewController: UIViewController, UITextViewDelegate {
         nameField.borderStyle = UITextBorderStyle.None;
         
         aboutField.backgroundColor = UIColor.clearColor();
-        aboutField.text = "A sentence or two illustrating what you're about. Who are you in a nutshell?";
+        aboutField.text = Constants.ConstantStrings.aboutText;
         aboutField.textColor = UIColorFromHex(0xA6AAA9, alpha: 1.0);
         
         firstInterestField.backgroundColor = UIColor.clearColor();

@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let storyboard = UIStoryboard(name: "Main", bundle: nil);
             let appDelegate  = UIApplication.sharedApplication().delegate as! AppDelegate
             let navigation = appDelegate.window!.rootViewController as! UINavigationController
-            let rootVC = storyboard.instantiateViewControllerWithIdentifier("MessageVC") as! MessagerViewController
+            let rootVC = storyboard.instantiateViewControllerWithIdentifier("MessageVCFromMessage") as! MessagerViewController
             if (PFUser.currentUser() != nil) {
                 if let notificationPayload = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
                     var name: AnyObject? = notificationPayload["name"];
@@ -104,7 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let storyboard = UIStoryboard(name: "Main", bundle: nil);
         let appDelegate  = UIApplication.sharedApplication().delegate as! AppDelegate
         let navigation = appDelegate.window!.rootViewController as! UINavigationController
-        let rootVC = storyboard.instantiateViewControllerWithIdentifier("MessageVC") as! MessagerViewController
+        let rootVC = storyboard.instantiateViewControllerWithIdentifier("MessageVCFromMessage") as! MessagerViewController
         if (PFUser.currentUser() != nil) {
             if let notificationPayload = userInfo as? NSDictionary {
                 var name: AnyObject? = notificationPayload["name"];

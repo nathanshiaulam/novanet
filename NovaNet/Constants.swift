@@ -25,6 +25,7 @@ struct Constants {
         static let conversationsInRangeKey = "conversationsInRange";
         static let lookingForKey = "lookingForKey";
         static let availableKey = "availableKey";
+        static let emailKey = "emailKey";
     }
     struct TempKeys {
         static let fromNew = "fromNew";
@@ -32,8 +33,9 @@ struct Constants {
     }
     struct ConstantStrings {
         static let fikaText = "Hey! I thought your profile was pretty interesting and I'd love to meet for a chat sometime! When are you free?";
+        static let aboutText = "A sentence or two illustrating what you're about. Who are you in a nutshell?";
         static let loadText = "Please wait while we find other Novas nearby...";
-
+        static let feedbackText = "Write your feedback or support request here. Try to be specific so we can address the issue as precisely as possible!";
     }
     struct SelectedUserKeys {
         static let selectedUsernameKey = "selectedUsernameKey";
@@ -44,6 +46,8 @@ struct Constants {
         static let selectedExperienceKey = "selectedExperienceKey";
         static let selectedLookingForKey = "selectedLookingForKey";
         static let selectedProfileImageKey = "selectedprofileImageKey";
+        static let selectedDistanceKey = "selectedDistanceKey";
+        static let selectedAvailableKey = "selectedAvaiableKey";
         
     }
     func UIColorFromHex(rgbValue:UInt32, alpha:Double)->UIColor {

@@ -12,12 +12,11 @@ import Bolts
 import CoreLocation
 
 class HomeTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var experienceLabel: UILabel!
-    @IBOutlet weak var interestsLabel: UILabel!
-    @IBOutlet weak var nameLabel: UILabel!
+    
     @IBOutlet weak var profileImage: UIImageView!
-    @IBOutlet weak var lookingForLabel: UILabel!
+    @IBOutlet weak var name: UILabel!
+    @IBOutlet weak var experience: UILabel!
+    @IBOutlet weak var dist: UILabel!
     var selectedUserId:String = "";
 
     //    var fikkaPressed = false;

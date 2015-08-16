@@ -15,7 +15,6 @@
 		1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B1881B55367800DBF11A /* SignUpViewController.swift */; };
 		1616B18B1B554D0E00DBF11A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */; };
 		1616B18F1B55560300DBF11A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B18E1B55560300DBF11A /* Constants.swift */; };
-		1616B1911B555FC800DBF11A /* SettingsMenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B1901B555FC800DBF11A /* SettingsMenuTableViewController.swift */; };
 		16A0E7001B54FC7400DDAE95 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */; };
 		16A0E7051B54FC7400DDAE95 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16A0E7031B54FC7400DDAE95 /* Main.storyboard */; };
 		16A0E7071B54FC7400DDAE95 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16A0E7061B54FC7400DDAE95 /* Images.xcassets */; };
@@ -40,7 +39,13 @@
 		16A0E7EC1B78CA1700DE06A9 /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7EB1B78CA1700DE06A9 /* ConversationTableViewCell.swift */; };
 		16A0E7F01B7CC39800DE06A9 /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7EF1B7CC39800DE06A9 /* IntroductionViewController.swift */; };
 		16A0E7F61B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7F51B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift */; };
-		16B04F711B78ACA400D01DCB /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B04F701B78ACA400D01DCB /* HomeVC.swift */; };
+		16A0E8281B7E302300DE06A9 /* SettingsMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E8271B7E302300DE06A9 /* SettingsMenuViewController.swift */; };
+		16A0E82A1B7E47D400DE06A9 /* SystemSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E8291B7E47D400DE06A9 /* SystemSettingsTableViewController.swift */; };
+		16A0E82E1B7E4DCD00DE06A9 /* FinderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E82D1B7E4DCD00DE06A9 /* FinderViewController.swift */; };
+		16C1C8C51B7F494A00C6166C /* HomeTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C1C8C41B7F494A00C6166C /* HomeTabBarController.swift */; };
+		16C1C8C71B7F50D100C6166C /* SelectedProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C1C8C61B7F50D000C6166C /* SelectedProfileViewController.swift */; };
+		16C1C8C91B7F5F5000C6166C /* ConversationListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C1C8C81B7F5F5000C6166C /* ConversationListTableViewController.swift */; };
+		16DB14061B8024EE0048E1AC /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DB14051B8024EE0048E1AC /* FeedbackViewController.swift */; };
 		16DB20131B6526C3008A9E54 /* UIDeviceList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DB20121B6526C3008A9E54 /* UIDeviceList.swift */; };
 		7DFB60EA63A8AD92B037922E /* libPods-NovaNet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 398448FD417B1B90923C50B5 /* libPods-NovaNet.a */; };
 /* End PBXBuildFile section */
@@ -66,7 +71,6 @@
 		1616B1881B55367800DBF11A /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		1616B18E1B55560300DBF11A /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		1616B1901B555FC800DBF11A /* SettingsMenuTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsMenuTableViewController.swift; sourceTree = "<group>"; };
 		16A0E6FA1B54FC7300DDAE95 /* NovaNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NovaNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		16A0E6FE1B54FC7400DDAE95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -95,7 +99,13 @@
 		16A0E7EB1B78CA1700DE06A9 /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
 		16A0E7EF1B7CC39800DE06A9 /* IntroductionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IntroductionViewController.swift; path = ../IntroductionViewController.swift; sourceTree = "<group>"; };
 		16A0E7F51B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinishOnboardingViewController.swift; sourceTree = "<group>"; };
-		16B04F701B78ACA400D01DCB /* HomeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
+		16A0E8271B7E302300DE06A9 /* SettingsMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsMenuViewController.swift; sourceTree = "<group>"; };
+		16A0E8291B7E47D400DE06A9 /* SystemSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemSettingsTableViewController.swift; sourceTree = "<group>"; };
+		16A0E82D1B7E4DCD00DE06A9 /* FinderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinderViewController.swift; sourceTree = "<group>"; };
+		16C1C8C41B7F494A00C6166C /* HomeTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTabBarController.swift; sourceTree = "<group>"; };
+		16C1C8C61B7F50D000C6166C /* SelectedProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectedProfileViewController.swift; sourceTree = "<group>"; };
+		16C1C8C81B7F5F5000C6166C /* ConversationListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationListTableViewController.swift; sourceTree = "<group>"; };
+		16DB14051B8024EE0048E1AC /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		16DB20121B6526C3008A9E54 /* UIDeviceList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDeviceList.swift; sourceTree = "<group>"; };
 		398448FD417B1B90923C50B5 /* libPods-NovaNet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NovaNet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDDFF8B4ADAFD4E4E80870A3 /* Pods-NovaNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NovaNet.release.xcconfig"; path = "Pods/Target Support Files/Pods-NovaNet/Pods-NovaNet.release.xcconfig"; sourceTree = "<group>"; };
@@ -170,11 +180,16 @@
 				160D1F331B5FCBE000B3E4DB /* OnboardingViewController.swift */,
 				160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */,
 				16A0E7F51B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift */,
-				1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */,
-				1616B1901B555FC800DBF11A /* SettingsMenuTableViewController.swift */,
-				16B04F701B78ACA400D01DCB /* HomeVC.swift */,
+				16C1C8C41B7F494A00C6166C /* HomeTabBarController.swift */,
+				16A0E82D1B7E4DCD00DE06A9 /* FinderViewController.swift */,
+				16C1C8C81B7F5F5000C6166C /* ConversationListTableViewController.swift */,
+				16C1C8C61B7F50D000C6166C /* SelectedProfileViewController.swift */,
+				16DB14051B8024EE0048E1AC /* FeedbackViewController.swift */,
 				160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */,
 				16A0E7EB1B78CA1700DE06A9 /* ConversationTableViewCell.swift */,
+				16A0E8291B7E47D400DE06A9 /* SystemSettingsTableViewController.swift */,
+				1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */,
+				16A0E8271B7E302300DE06A9 /* SettingsMenuViewController.swift */,
 				160D1F3C1B61080C00B3E4DB /* MessagerViewController.swift */,
 				16A0E7061B54FC7400DDAE95 /* Images.xcassets */,
 				16A0E7081B54FC7400DDAE95 /* LaunchScreen.xib */,
@@ -382,9 +397,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16B04F711B78ACA400D01DCB /* HomeVC.swift in Sources */,
 				16A0E7F01B7CC39800DE06A9 /* IntroductionViewController.swift in Sources */,
 				16A0E7F61B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift in Sources */,
+				16C1C8C91B7F5F5000C6166C /* ConversationListTableViewController.swift in Sources */,
 				160D1F3D1B61080C00B3E4DB /* MessagerViewController.swift in Sources */,
 				16DB20131B6526C3008A9E54 /* UIDeviceList.swift in Sources */,
 				16A0E7001B54FC7400DDAE95 /* AppDelegate.swift in Sources */,
@@ -392,10 +407,15 @@
 				1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */,
 				1616B18F1B55560300DBF11A /* Constants.swift in Sources */,
 				160D1F281B5E903B00B3E4DB /* HomeTableViewCell.swift in Sources */,
+				16DB14061B8024EE0048E1AC /* FeedbackViewController.swift in Sources */,
+				16A0E82E1B7E4DCD00DE06A9 /* FinderViewController.swift in Sources */,
 				160D1F2E1B5F85A200B3E4DB /* UploadPictureViewController.swift in Sources */,
-				1616B1911B555FC800DBF11A /* SettingsMenuTableViewController.swift in Sources */,
+				16A0E82A1B7E47D400DE06A9 /* SystemSettingsTableViewController.swift in Sources */,
+				16A0E8281B7E302300DE06A9 /* SettingsMenuViewController.swift in Sources */,
 				160D1F2A1B5EFA3A00B3E4DB /* UserProfileViewController.swift in Sources */,
+				16C1C8C51B7F494A00C6166C /* HomeTabBarController.swift in Sources */,
 				160D1F341B5FCBE000B3E4DB /* OnboardingViewController.swift in Sources */,
+				16C1C8C71B7F50D100C6166C /* SelectedProfileViewController.swift in Sources */,
 				16A0E7411B55096F00DDAE95 /* LogInViewController.swift in Sources */,
 				16A0E7EC1B78CA1700DE06A9 /* ConversationTableViewCell.swift in Sources */,
 			);

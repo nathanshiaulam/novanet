@@ -15,11 +15,21 @@ class FeedbackViewController: UIViewController {
     @IBOutlet weak var feedbackTextField: UITextView!
     @IBAction func sendFeedbackButton(sender: UIButton) {
         var text = feedbackTextField.text;
-        PFCloud.callFunctionInBackground("sendMail", withParameters:["text":text]) {
-            (result: AnyObject?, error: NSError?) -> Void in
-            if error == nil {
-                println(result);
+        if count(text) > 0 && text != Constants.ConstantStrings.feedbackText {
+            PFCloud.callFunctionInBackground("sendMail", withParameters:["text":text]) {
+                (result: AnyObject?, error: NSError?) -> Void in
+                if error == nil {
+                    var alert = UIAlertController(title: "Thanks so much- we've received your feedback.", message: Constants.ConstantStrings.feedbackAlertText, preferredStyle: UIAlertControllerStyle.Alert);
+                    alert.addAction(UIAlertAction(title: "GOT IT", style: UIAlertActionStyle.Default, handler: nil));
+                    self.presentViewController(alert, animated: true, completion: nil);
+                    println(result);
+                }
             }
+        } else {
+            var alert = UIAlertController(title: "Empty Form", message: Constants.ConstantStrings.feedbackEmptyText, preferredStyle: UIAlertControllerStyle.Alert);
+            alert.addAction(UIAlertAction(title: "GOT IT", style: UIAlertActionStyle.Default, handler: nil));
+            self.presentViewController(alert, animated: true, completion: nil);
+            
         }
     }
     

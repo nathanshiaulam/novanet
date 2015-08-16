@@ -330,6 +330,7 @@ class MessagerViewController: JSQMessagesViewController {
         
         let image = UIImage(named: "fika");
         
+        inputToolbar.contentView.leftBarButtonItem = nil;
         inputToolbar.contentView.leftBarButtonItem.setImage(image, forState: .Normal)
         automaticallyScrollsToMostRecentMessage = true;
         

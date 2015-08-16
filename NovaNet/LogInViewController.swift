@@ -95,7 +95,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     // Sets up local datastore
     func prepareDataStore(profile: PFObject) {
         defaults.setObject(profile["Name"], forKey: Constants.UserKeys.nameKey);
-        defaults.setObject(profile["Email"], forKey: Constants.UserKeys.emailKey);
+        defaults.setObject(PFUser.currentUser()?.email, forKey: Constants.UserKeys.emailKey);
         defaults.setObject(profile["InterestsList"], forKey: Constants.UserKeys.interestsKey);
         defaults.setObject(profile["About"], forKey: Constants.UserKeys.aboutKey);
         defaults.setObject(profile["Experience"], forKey: Constants.UserKeys.experienceKey);

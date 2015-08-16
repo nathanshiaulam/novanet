@@ -28,7 +28,16 @@ class HomeTabBarController: UITabBarController {
     }
     override func viewDidLoad() {
         super.viewDidLoad();
-        
-        self.title = "HAHAHA";
+        if (!self.userLoggedIn()) {
+            self.performSegueWithIdentifier("toUserLogin", sender: self);
+        }
+    }
+    // Checks if user is logged in
+    func userLoggedIn() -> Bool{
+        var currentUser = PFUser.currentUser();
+        if ((currentUser) != nil) {
+            return true;
+        }
+        return false;
     }
 }

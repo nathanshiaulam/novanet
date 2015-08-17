@@ -15,6 +15,7 @@ import Bolts
 class OnboardingViewController: UIViewController, UITextViewDelegate {
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
     
+    @IBOutlet var scrollView: UIScrollView!
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var lookingForField: UITextField!
     @IBOutlet weak var experienceField: UITextField!
@@ -24,6 +25,8 @@ class OnboardingViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var thirdInterestField: UITextField!
 
     @IBOutlet weak var aboutField: UITextView!
+    
+    var activeField:UITextField = UITextField();
     
    
     // Prepares local datastore for profile information and saves profile;
@@ -42,6 +45,25 @@ class OnboardingViewController: UIViewController, UITextViewDelegate {
             self.presentViewController(alert, animated: true, completion: nil);
         }
     }
+    
+    /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
+    
+    override func viewDidLoad() {
+        super.viewDidLoad();
+        self.title = "2 of 4";
+        
+        self.automaticallyAdjustsScrollViewInsets = false;
+        
+        //Looks for single or multiple taps to remove keyboard
+        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+        view.addGestureRecognizer(tap)
+        
+        prepareTextFields();
+        registerForKeyBoardNotifications()
+        
+        
+    }
+    
     /*-------------------------------- TextViewDel Methods ------------------------------------*/
 
     func textViewDidBeginEditing(textView: UITextView) {
@@ -53,11 +75,17 @@ class OnboardingViewController: UIViewController, UITextViewDelegate {
     
     func textViewDidEndEditing(textView: UITextView) {
         if textView.text.isEmpty {
-            println("truth");
             textView.text = "A sentence or two illustrating what you're about. Who are you in a nutshell?";
             textView.textColor = UIColorFromHex(0xA6AAA9, alpha: 1.0)
         }
     }
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        var maxtext = 80
+        //If the text is larger than the maxtext, the return is false
+        return count(textView.text) + (count(text) - range.length) <= maxtext
+        
+    }
+
     
     /*-------------------------------- TextFieldDel Methods ------------------------------------*/
 
@@ -86,6 +114,11 @@ class OnboardingViewController: UIViewController, UITextViewDelegate {
         return false;
     }
     
+    // checks active field
+    func textFieldDidBeginEditing(textField: UITextField) {
+        activeField = textField;
+    }
+    
     // Sets the character limit of each text field
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
@@ -95,8 +128,13 @@ class OnboardingViewController: UIViewController, UITextViewDelegate {
         }
         
         let newLength = count(textField.text) + count(string) - range.length
-        return newLength <= 50
+        if (textField == nameField) {
+            return newLength <= 25
+        } else {
+            return newLength <= 25
+        }
     }
+
     
     /*-------------------------------- HELPER METHODS ------------------------------------*/
     
@@ -148,52 +186,93 @@ class OnboardingViewController: UIViewController, UITextViewDelegate {
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         self.view.endEditing(true);
     }
-
-    /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
     
-    override func viewDidLoad() {
-        super.viewDidLoad();
-        self.title = "2 of 4";
+    // Ensures that you can scroll when keyboard up
+    func registerForKeyBoardNotifications() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyBoardWasShown:", name: UIKeyboardDidShowNotification, object: nil);
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil);
+        
+    }
+    func keyBoardWasShown(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+            let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
+            self.scrollView.contentInset = contentInsets;
+            self.scrollView.scrollIndicatorInsets = contentInsets;
+            
+            var aRect = self.view.frame;
+            aRect.size.height -= keyboardSize.height;
+            if (!CGRectContainsPoint(aRect, activeField.frame.origin)) {
+                var scrollPoint = CGPointMake(0.0, activeField.frame.origin.y-keyboardSize.height);
+                self.scrollView.setContentOffset(scrollPoint, animated: true);
+            }
+        }
+    }
+    func keyboardWillBeHidden(aNotification: NSNotification) {
+        var contentInsets = UIEdgeInsetsZero;
+        self.scrollView.contentInset = contentInsets;
+        self.scrollView.scrollIndicatorInsets = contentInsets;
+    }
+    
+    
+    //Calls this function when the tap is recognized.
+    func DismissKeyboard(){
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
+    }
+    
+    func prepareTextFields() {
         nameField.backgroundColor = UIColor.clearColor();
         var nameFieldPlaceholder = NSAttributedString(string: "What's your name?", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         nameField.attributedPlaceholder = nameFieldPlaceholder;
         nameField.textColor = UIColor.blackColor();
         nameField.borderStyle = UITextBorderStyle.None;
+        nameField.font = UIFont(name: "Avenir", size: 16);
         
         aboutField.backgroundColor = UIColor.clearColor();
         aboutField.text = Constants.ConstantStrings.aboutText;
         aboutField.textColor = UIColorFromHex(0xA6AAA9, alpha: 1.0);
+        aboutField.font = UIFont(name: "Avenir", size: 16);
+        
         
         firstInterestField.backgroundColor = UIColor.clearColor();
         var firstInterestsFieldPlaceholder = NSAttributedString(string: "Interest 1", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         firstInterestField.attributedPlaceholder = firstInterestsFieldPlaceholder;
         firstInterestField.textColor = UIColor.blackColor();
         firstInterestField.borderStyle = UITextBorderStyle.None
+        firstInterestField.font = UIFont(name: "Avenir", size: 16);
+        
         
         secondInterestField.backgroundColor = UIColor.clearColor();
         var secondInterestFieldPlaceholder = NSAttributedString(string: "Interest 2", attributes: [NSForegroundColorAttributeName :UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         secondInterestField.attributedPlaceholder = secondInterestFieldPlaceholder;
         secondInterestField.textColor = UIColor.blackColor();
         secondInterestField.borderStyle = UITextBorderStyle.None
+        secondInterestField.font = UIFont(name: "Avenir", size: 16);
+        
         
         thirdInterestField.backgroundColor = UIColor.clearColor();
         var thirdInterestFieldPlaceholder = NSAttributedString(string: "Interest 3", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         thirdInterestField.attributedPlaceholder = thirdInterestFieldPlaceholder;
         thirdInterestField.textColor = UIColor.blackColor();
         thirdInterestField.borderStyle = UITextBorderStyle.None
-
+        thirdInterestField.font = UIFont(name: "Avenir", size: 16);
+        
+        
         experienceField.backgroundColor = UIColor.clearColor();
         var backgroundFieldPlaceholder = NSAttributedString(string: "e.g. Systems Engineer", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         experienceField.attributedPlaceholder = backgroundFieldPlaceholder;
         experienceField.textColor = UIColor.blackColor();
         experienceField.borderStyle = UITextBorderStyle.None
-
+        experienceField.font = UIFont(name: "Avenir", size: 16);
+        
+        
         lookingForField.backgroundColor = UIColor.clearColor();
         var goalsFieldPlaceholder = NSAttributedString(string: "What are you looking for?", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         lookingForField.attributedPlaceholder = goalsFieldPlaceholder;
         lookingForField.textColor = UIColor.blackColor();
         lookingForField.borderStyle = UITextBorderStyle.None
-
-        
+        lookingForField.font = UIFont(name: "Avenir", size: 16);
     }
+
+
 }

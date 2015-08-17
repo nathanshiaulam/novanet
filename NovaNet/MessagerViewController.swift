@@ -331,13 +331,14 @@ class MessagerViewController: JSQMessagesViewController {
         let image = UIImage(named: "fika");
         
         inputToolbar.contentView.leftBarButtonItem = nil;
-        inputToolbar.contentView.leftBarButtonItem.setImage(image, forState: .Normal)
+//        inputToolbar.contentView.leftBarButtonItem.setImage(image, forState: .Normal)
         automaticallyScrollsToMostRecentMessage = true;
         
         // User IDs are used as sender/recipient tags
         self.senderDisplayName = defaults.stringForKey(Constants.UserKeys.nameKey);
         
         self.senderId = PFUser.currentUser()!.objectId;
+        println(defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey)!);
         self.selectedUsername = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey)!;
         // Generates queries based off of both users to load messages
         var query1 = PFQuery(className: "Message");

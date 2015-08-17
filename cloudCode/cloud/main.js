@@ -58,8 +58,8 @@ Parse.Cloud.define("sendMail", function(request, response) {
           to: 
             [
               {
-              email: "tara.ramdonee@nova.com",
-                name: Parse.User.current().username;
+                email: "tara.ramdonee@nova.com",
+                name: Parse.User.current().username,
               }
             ]
         },

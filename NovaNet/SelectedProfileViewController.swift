@@ -12,7 +12,7 @@ import Bolts
 
 class SelectedProfileViewController: UIViewController {
 
-    @IBOutlet weak var profileImage: UIImageView!
+    @IBOutlet weak var profileImage: UIImageView! = UIImageView();
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var aboutLabel: UILabel!
@@ -30,8 +30,9 @@ class SelectedProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad();
+        println("Result: " );
+        println(profileImage.image);
         setValues();
-        self.presentingViewController?.navigationController?.navigationBar.hidden = true;
     }
     
     /*-------------------------------- HELPER METHODS ------------------------------------*/
@@ -107,9 +108,9 @@ class SelectedProfileViewController: UIViewController {
         lookingForLabel.sizeToFit();
         
         self.title = nameLabel.text;
-        self.profileImage.image = readOtherImage();
+//        self.profileImage.image = readOtherImage();
         formatImage(self.profileImage);
     }
-    
+   
 
 }

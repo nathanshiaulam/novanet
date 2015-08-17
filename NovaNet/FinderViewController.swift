@@ -18,8 +18,10 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet var tableView: UITableView!
     
     // Creates array of Profiles to pass data
+    var nextImage:UIImageView = UIImageView();
     var profileList:NSArray = NSArray();
     var distList:NSArray = NSArray();
+    var imageList:NSMutableArray = NSMutableArray(); // Since loading the images takes too long, we store the images in an array during the callback
 
     // Sets up CLLocationManager and Local Data Store
     let locationManager = CLLocationManager()
@@ -35,13 +37,24 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "loadAndRefreshData", name: "loadAndRefreshData", object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "phoneVibrate", name: "phoneVibrate", object: nil);
         self.title = "Finder";
+        
+        // Sets up the row height of Table View Cells
+        self.tableView.rowHeight = 75.0
+        
         // Go to login page if no user logged in
         if (!self.userLoggedIn()) {
             self.performSegueWithIdentifier("toUserLogin", sender: self);
+        }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        // If the user logged out, empty the tableView and perform segue to User Login
+        if (!self.userLoggedIn()) {
+            profileList = NSArray();
+            tableView.reloadData()
+            self.performSegueWithIdentifier("toUserLogin", sender: self);
+            return;
         } else {
-            // Sets up the row height of Table View Cells
-            self.tableView.rowHeight = 75.0
-            
             // Sets up core location manager
             locationManager.distanceFilter = 100.0;
             locationManager.activityType = CLActivityType.AutomotiveNavigation;
@@ -56,31 +69,19 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
             refreshControl.addTarget(self, action: Selector("findUsersInRange"), forControlEvents: UIControlEvents.ValueChanged)
             
             tableView.addSubview(self.refreshControl);
-        }
-
-        
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        // If the user logged out, empty the tableView and perform segue to User Login
-        if (!self.userLoggedIn()) {
-            profileList = NSArray();
-            tableView.reloadData()
-            self.performSegueWithIdentifier("toUserLogin", sender: self);
-            return;
-        }
-        
-        // Notes whether or not user was just created
-        var fromNew = defaults.boolForKey(Constants.TempKeys.fromNew);
-        
-        // Since view appears, if the user is logged in for the first time, segue to Onboarding
-        if (fromNew) {
-            self.performSegueWithIdentifier("toOnboardingPage", sender: nil);
-        }
-        // If the user successfully completes onboarding, found the user's current location, save it, and call findUsersInRange
-        else if defaults.objectForKey(Constants.UserKeys.nameKey) != nil {
-            locationManager.startUpdatingLocation();
-            loadAndRefreshData()
+            
+            // Notes whether or not user was just created
+            var fromNew = defaults.boolForKey(Constants.TempKeys.fromNew);
+            
+            // Since view appears, if the user is logged in for the first time, segue to Onboarding
+            if (fromNew) {
+                self.performSegueWithIdentifier("toOnboardingPage", sender: nil);
+            }
+            // If the user successfully completes onboarding, found the user's current location, save it, and call findUsersInRange
+            else {
+                locationManager.startUpdatingLocation();
+                loadAndRefreshData()
+            }
         }
         super.viewDidAppear(true);
         
@@ -106,11 +107,14 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
         if (profileList.count > 0) {
             var profile: AnyObject = profileList[indexPath.row];
             var dist: AnyObject = distList[indexPath.row];
+//            var image: AnyObject = imageList[indexPath.row];
+            
             cell.name.text = profile["Name"] as? String;
             cell.experience.text = profile["Experience"] as? String;
             cell.selectedUserId = (profile["ID"] as? String)!;
             cell.dist.text = String(stringInterpolationSegment: dist) + "km";
             cell.experience.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+            
             cell.experience.sizeToFit();
             var image = PFFile();
             if let userImageFile = profile["Image"] as? PFFile {
@@ -118,7 +122,10 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
                 image.getDataInBackgroundWithBlock {
                     (imageData, error) -> Void in
                     if (error == nil) {
+                        print("First Image: ");
+                        println(UIImage(data: imageData!));
                         cell.profileImage.image = UIImage(data:imageData!);
+                        self.imageList.addObject(UIImageView(image: UIImage(data:imageData!)));
                     }
                     else {
                         println(error);
@@ -126,6 +133,10 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
                 }
             } else {
                 cell.profileImage.image = UIImage(named: "selectImage")!;
+                println("Unwanted Image: " );
+                println(UIImage(named:"selectImage"));
+                self.imageList.addObject(UIImageView(image: cell.profileImage.image));
+
             }
             // Formats image into circle
             formatImage(cell.profileImage);
@@ -138,14 +149,28 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
         if (profileList.count > 0) {
             var profile: AnyObject = profileList[indexPath.row];
             var dist: AnyObject = distList[indexPath.row];
+            var image: UIImageView = (imageList[indexPath.row] as? UIImageView)!;
             
+            self.nextImage = image;
+            println("Second Image: ");
+            println(image.image);
             // Sets values for selected user
             prepareDataStore(profile as! PFObject);
             defaults.setObject(dist, forKey: Constants.SelectedUserKeys.selectedDistanceKey);
             let cell = tableView.dequeueReusableCellWithIdentifier(profileCellIdentifier, forIndexPath: indexPath) as! HomeTableViewCell
+            self.performSegueWithIdentifier("toProfileView", sender: self)
         }
 
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        if segue.identifier == "toProfileView" {
+            let destinationVC = segue.destinationViewController.childViewControllers.first as! SelectedProfileViewController
+            destinationVC.profileImage = self.nextImage;
+            destinationVC.profileImage.image = self.nextImage.image;
+        }
+    }
+
 
     
     /*-------------------------------- LOCATION MANAGER METHODS ------------------------------------*/
@@ -228,6 +253,7 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
             (result: AnyObject?, error:NSError?) -> Void in
             if error == nil {
                 self.profileList = result as! NSArray;
+                
                 self.findDistList(longitude, latitude: latitude, distance: distance);
             } else {
                 println(error);
@@ -249,6 +275,8 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
         }
 
     }
+    
+    // Loads the users and distances into the tableview list
     func loadAndRefreshData() {
         var query = PFQuery(className:"Profile");
         var currentID = PFUser.currentUser()!.objectId;
@@ -286,21 +314,7 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
         defaults.setObject(profile["Experience"], forKey: Constants.SelectedUserKeys.selectedExperienceKey);
         defaults.setObject(profile["Looking"], forKey: Constants.SelectedUserKeys.selectedLookingForKey);
         defaults.setObject(profile["Available"], forKey: Constants.SelectedUserKeys.selectedAvailableKey);
-        var image = PFFile();
-        if let userImageFile = profile["Image"] as? PFFile {
-            image = userImageFile;
-            image.getDataInBackgroundWithBlock {
-                (imageData, error) -> Void in
-                if (error == nil) {
-                    self.saveOtherImage(UIImage(data:imageData!)!);
-                }
-                else {
-                    println(error);
-                }
-            }
-        } else {
-            self.saveOtherImage(UIImage(named: "selectImage")!);
-        }
+        defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey);
 
     }
     
@@ -312,6 +326,8 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
         
         return fullPath
     }
+    
+    // Saves the image of the profile of the user you tapped on
     func saveOtherImage(image: UIImage) {
         let imageData = UIImageJPEGRepresentation(image, 1)
         let relativePath = "image_\(NSDate.timeIntervalSinceReferenceDate()).jpg"
@@ -355,6 +371,6 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
     func phoneVibrate() {
         AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
     }
-
-
 }
+
+

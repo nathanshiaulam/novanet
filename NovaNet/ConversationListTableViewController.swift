@@ -4,7 +4,7 @@
 //
 //  Created by Nathan Lam on 8/15/15.
 //  Copyright (c) 2015 Nova. All rights reserved.
-//
+//  Include that when you logout, it clears the list here as well
 
 import UIKit
 import Parse
@@ -37,11 +37,23 @@ class ConversationListTableViewController: UITableViewController {
         // Sets up refresh control on pull down so that it calls findUsersInRange
         refreshControl.addTarget(self, action: Selector("loadConversations"), forControlEvents:UIControlEvents.ValueChanged);
         self.refreshControl = refreshControl;
-        
-        if defaults.objectForKey(Constants.UserKeys.nameKey) != nil {
-            loadConversations()
-        }
 
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        if (!self.userLoggedIn()) {
+            conversationList = NSArray();
+            conversationParticipantList = NSArray();
+            otherProfileList = NSArray();
+            tableView.reloadData()
+            self.performSegueWithIdentifier("toUserLogin", sender: self);
+            return;
+        }
+        else {
+            loadConversations();
+        }
+        
+        super.viewDidAppear(true);
     }
     
     /*-------------------------------- TABLE VIEW METHODS ------------------------------------*/
@@ -122,6 +134,15 @@ class ConversationListTableViewController: UITableViewController {
     
     /*-------------------------------- HELPER METHODS ------------------------------------*/
 
+    // Checks if user is logged in
+    func userLoggedIn() -> Bool{
+        var currentUser = PFUser.currentUser();
+        if ((currentUser) != nil) {
+            return true;
+        }
+        return false;
+    }
+    
     // Converts string into NSDate with format
     func dateFromString(date: String, format: String) -> NSDate {
         let formatter = NSDateFormatter()
@@ -152,6 +173,7 @@ class ConversationListTableViewController: UITableViewController {
         defaults.setObject(profile["Experience"], forKey: Constants.SelectedUserKeys.selectedExperienceKey);
         defaults.setObject(profile["Looking"], forKey: Constants.SelectedUserKeys.selectedLookingForKey);
         defaults.setObject(profile["Available"], forKey: Constants.SelectedUserKeys.selectedAvailableKey);
+        defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey);
         var image = PFFile();
         if let userImageFile = profile["Image"] as? PFFile {
             image = userImageFile;

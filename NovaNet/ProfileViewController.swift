@@ -30,7 +30,51 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
     var popover:UIPopoverController? = nil;
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
 
+    /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Go to login page if no user logged in
+        if (!self.userLoggedIn()) {
+            self.performSegueWithIdentifier("toUserLogin", sender: self);
+            return;
+        }
+        // Allows user to upload photo
+        var tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tappedImage");
+        tapGestureRecognizer.delegate = self;
+        self.profileImage.addGestureRecognizer(tapGestureRecognizer);
+        self.profileImage.userInteractionEnabled = true;
+        
+        picker.delegate = self;
+        
+        setValues();
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        setValues();
+        super.viewDidAppear(true);
+    }
+    
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
+
+    
     /*-------------------------------- HELPER METHODS ------------------------------------*/
+    
+    // Checks if user is logged in
+    func userLoggedIn() -> Bool{
+        var currentUser = PFUser.currentUser();
+        if ((currentUser) != nil) {
+            return true;
+        }
+        return false;
+    }
     
     // Methods to read and write images from local data store/Parse
     func readImage() -> UIImage {
@@ -221,35 +265,7 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
     }
 
     
-    /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Allows user to upload photo
-        var tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tappedImage");
-        tapGestureRecognizer.delegate = self;
-        self.profileImage.addGestureRecognizer(tapGestureRecognizer);
-        self.profileImage.userInteractionEnabled = true;
-        
-        picker.delegate = self;
-
-        setValues();
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        setValues();
-        super.viewDidAppear(true);
-    }
-    
-       
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-    /*
+        /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation

@@ -10,9 +10,10 @@ import UIKit
 import Parse
 import Bolts
 
-class SettingsMenuViewController: UIViewController, UIGestureRecognizerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate,UINavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate {
+class SettingsMenuViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate,UINavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate {
     @IBOutlet weak var profileImage: UIImageView!
 
+    @IBOutlet var scrollView: UIScrollView!
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var aboutField: UITextView!
     @IBOutlet weak var experienceField: UITextField!
@@ -23,6 +24,7 @@ class SettingsMenuViewController: UIViewController, UIGestureRecognizerDelegate,
 
     @IBOutlet weak var lookingForField: UITextField!
     
+    var activeField:UITextField = UITextField();
     let picker = UIImagePickerController();
     var popover:UIPopoverController? = nil;
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
@@ -37,9 +39,13 @@ class SettingsMenuViewController: UIViewController, UIGestureRecognizerDelegate,
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        registerForKeyBoardNotifications()
         self.automaticallyAdjustsScrollViewInsets = false;
-
+        
+        //Looks for single or multiple taps to remove keyboard
+        var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+        view.addGestureRecognizer(tap)
+        
         // Allows user to upload photo
         var tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tappedImage");
         tapGestureRecognizer.delegate = self;
@@ -67,7 +73,7 @@ class SettingsMenuViewController: UIViewController, UIGestureRecognizerDelegate,
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        var maxtext = 65
+        var maxtext = 80
         //If the text is larger than the maxtext, the return is false
         return count(textView.text) + (count(text) - range.length) <= maxtext
         
@@ -75,6 +81,13 @@ class SettingsMenuViewController: UIViewController, UIGestureRecognizerDelegate,
     
     /*-------------------------------- TextFieldDel Methods ------------------------------------*/
     
+    
+    // checks active field
+    func textFieldDidBeginEditing(textField: UITextField) {
+        activeField = textField;
+    }
+    func textFieldDidEndEditing(textField: UITextField) {
+    }
     // Allows users to hit enter and move to the next text field
     func textFieldShouldReturn(textField: UITextField)-> Bool {
         var defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
@@ -109,9 +122,14 @@ class SettingsMenuViewController: UIViewController, UIGestureRecognizerDelegate,
         }
         
         let newLength = count(textField.text) + count(string) - range.length
-        return newLength <= 50
+        if (textField == nameField) {
+            return newLength <= 25
+        } else {
+            return newLength <= 25
+        }
     }
     
+
     /*-------------------------------- Image Picker Delegate Methods ------------------------------------*/
     
     
@@ -273,39 +291,45 @@ class SettingsMenuViewController: UIViewController, UIGestureRecognizerDelegate,
         nameField.attributedPlaceholder = nameFieldPlaceholder;
         nameField.textColor = UIColor.blackColor();
         nameField.borderStyle = UITextBorderStyle.None;
-        
+        nameField.font = UIFont(name: "Avenir", size: 16);
         
         aboutField.backgroundColor = UIColor.clearColor();
+        aboutField.font = UIFont(name: "Avenir", size: 16);
         
         firstInterestField.backgroundColor = UIColor.clearColor();
         var firstInterestsFieldPlaceholder = NSAttributedString(string: "Interest 1", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         firstInterestField.attributedPlaceholder = firstInterestsFieldPlaceholder;
         firstInterestField.textColor = UIColor.blackColor();
         firstInterestField.borderStyle = UITextBorderStyle.None
-        
+        firstInterestField.font = UIFont(name: "Avenir", size: 16);
+
         secondInterestField.backgroundColor = UIColor.clearColor();
         var secondInterestFieldPlaceholder = NSAttributedString(string: "Interest 2", attributes: [NSForegroundColorAttributeName :UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         secondInterestField.attributedPlaceholder = secondInterestFieldPlaceholder;
         secondInterestField.textColor = UIColor.blackColor();
         secondInterestField.borderStyle = UITextBorderStyle.None
+        secondInterestField.font = UIFont(name: "Avenir", size: 16);
         
         thirdInterestField.backgroundColor = UIColor.clearColor();
         var thirdInterestFieldPlaceholder = NSAttributedString(string: "Interest 3", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         thirdInterestField.attributedPlaceholder = thirdInterestFieldPlaceholder;
         thirdInterestField.textColor = UIColor.blackColor();
         thirdInterestField.borderStyle = UITextBorderStyle.None
+        thirdInterestField.font = UIFont(name: "Avenir", size: 16);
 
         experienceField.backgroundColor = UIColor.clearColor();
         var backgroundFieldPlaceholder = NSAttributedString(string: "e.g. Systems Engineer", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         experienceField.attributedPlaceholder = backgroundFieldPlaceholder;
         experienceField.textColor = UIColor.blackColor();
         experienceField.borderStyle = UITextBorderStyle.None
-
+        experienceField.font = UIFont(name: "Avenir", size: 16);
+        
         lookingForField.backgroundColor = UIColor.clearColor();
         var goalsFieldPlaceholder = NSAttributedString(string: "What are you looking for?", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         lookingForField.attributedPlaceholder = goalsFieldPlaceholder;
         lookingForField.textColor = UIColor.blackColor();
         lookingForField.borderStyle = UITextBorderStyle.None
+        lookingForField.font = UIFont(name: "Avenir", size: 16);
 
         // Set texts if exists
         if var name = defaults.stringForKey(Constants.UserKeys.nameKey) {
@@ -326,7 +350,7 @@ class SettingsMenuViewController: UIViewController, UIGestureRecognizerDelegate,
             var interestArr = interests;
             firstInterestField.text = interestArr[0] as? String;
             secondInterestField.text = interestArr[1] as? String;
-            thirdInterestField.text = interestArr[1] as? String;
+            thirdInterestField.text = interestArr[2] as? String;
         }
         if var experience = defaults.stringForKey(Constants.UserKeys.experienceKey) {
             experienceField.text = experience;
@@ -334,6 +358,41 @@ class SettingsMenuViewController: UIViewController, UIGestureRecognizerDelegate,
         if var looking = defaults.stringForKey(Constants.UserKeys.lookingForKey) {
             lookingForField.text = looking;
         }
+        self.profileImage.image = readImage();
+        formatImage(self.profileImage);
+    }
+    
+    // Ensures that you can scroll when keyboard up
+    func registerForKeyBoardNotifications() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyBoardWasShown:", name: UIKeyboardDidShowNotification, object: nil);
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil);
+
+    }
+    func keyBoardWasShown(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+            let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
+            self.scrollView.contentInset = contentInsets;
+            self.scrollView.scrollIndicatorInsets = contentInsets;
+            
+            var aRect = self.view.frame;
+            aRect.size.height -= keyboardSize.height;
+            if (!CGRectContainsPoint(aRect, activeField.frame.origin)) {
+                var scrollPoint = CGPointMake(0.0, activeField.frame.origin.y-keyboardSize.height);
+                self.scrollView.setContentOffset(scrollPoint, animated: true);
+            }
+        }
+    }
+    func keyboardWillBeHidden(aNotification: NSNotification) {
+        var contentInsets = UIEdgeInsetsZero;
+        self.scrollView.contentInset = contentInsets;
+        self.scrollView.scrollIndicatorInsets = contentInsets;
+    }
+    
+    
+    //Calls this function when the tap is recognized.
+    func DismissKeyboard(){
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     
     // Saves all necessary fields of the profile

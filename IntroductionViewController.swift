@@ -12,6 +12,7 @@ import Parse
 
 class IntroductionViewController: UIViewController {
     
+    @IBOutlet weak var welcomeLabel: UILabel!
     // Takes user back to homeview after coming from uploadProfilePictureVC
     func backToHomeView() {
         self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil);
@@ -19,6 +20,7 @@ class IntroductionViewController: UIViewController {
     
     override func viewDidLoad() {
         self.title = "1 of 4";
+        self.welcomeLabel.text = "Welcome, " + PFUser.currentUser()!.username!;
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "backToHomeView", name: "backToHomeView", object: nil);
         
     }

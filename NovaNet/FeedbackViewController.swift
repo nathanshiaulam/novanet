@@ -42,6 +42,12 @@ class FeedbackViewController: UIViewController {
         feedbackTextField.backgroundColor = UIColor.clearColor();
         feedbackTextField.text = Constants.ConstantStrings.feedbackText;
         feedbackTextField.textColor = UIColorFromHex(0xA6AAA9, alpha: 1.0);
+        feedbackTextField.font = UIFont(name: "Avenir", size: 15.0);
+        
+        // Go to login page if no user logged in
+        if (!self.userLoggedIn()) {
+            self.performSegueWithIdentifier("toUserLogin", sender: self);
+        }
     }
     
     /*-------------------------------- TextViewDel Methods ------------------------------------*/
@@ -61,6 +67,15 @@ class FeedbackViewController: UIViewController {
     }
     
     /*-------------------------------- HELPER METHODS ------------------------------------*/
+    
+    // Checks if user is logged in
+    func userLoggedIn() -> Bool{
+        var currentUser = PFUser.currentUser();
+        if ((currentUser) != nil) {
+            return true;
+        }
+        return false;
+    }
     
     // Converts to RGB from Hex
     func UIColorFromHex(rgbValue:UInt32, alpha:Double)->UIColor {

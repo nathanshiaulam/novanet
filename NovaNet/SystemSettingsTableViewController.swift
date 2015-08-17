@@ -74,23 +74,25 @@ class SystemSettingsTableViewController: UITableViewController {
     }
     
     override func viewWillDisappear(animated: Bool) {
-        var query:PFQuery = PFQuery(className: "Profile");
-        query.whereKey("ID", equalTo: PFUser.currentUser()!.objectId!);
-        
-        query.getFirstObjectInBackgroundWithBlock {
-            (profile: PFObject?, error: NSError?) -> Void in
-            if (error != nil || profile == nil) {
-                println(error);
-            } else if let profile = profile {
-                if self.availableSwich.on == true {
-                    self.defaults.setObject(true, forKey: Constants.UserKeys.availableKey);
-                    profile["Available"] = true
-                } else {
-                    self.defaults.setObject(false, forKey: Constants.UserKeys.availableKey);
-                    profile["Available"] = false;
+        if (self.userLoggedIn()) {
+            var query:PFQuery = PFQuery(className: "Profile");
+            query.whereKey("ID", equalTo: PFUser.currentUser()!.objectId!);
+            
+            query.getFirstObjectInBackgroundWithBlock {
+                (profile: PFObject?, error: NSError?) -> Void in
+                if (error != nil || profile == nil) {
+                    println(error);
+                } else if let profile = profile {
+                    if self.availableSwich.on == true {
+                        self.defaults.setObject(true, forKey: Constants.UserKeys.availableKey);
+                        profile["Available"] = true
+                    } else {
+                        self.defaults.setObject(false, forKey: Constants.UserKeys.availableKey);
+                        profile["Available"] = false;
+                    }
+                    PFUser.currentUser()!.email = self.emailField.text;
+                    profile.saveInBackground();
                 }
-                profile["Email"] = self.emailField.text;
-                profile.saveInBackground();
             }
         }
         super.viewWillDisappear(true);
@@ -99,6 +101,14 @@ class SystemSettingsTableViewController: UITableViewController {
     
     /*-------------------------------- HELPER METHODS ------------------------------------*/
     
+    // Checks if user is logged in
+    func userLoggedIn() -> Bool{
+        var currentUser = PFUser.currentUser();
+        if ((currentUser) != nil) {
+            return true;
+        }
+        return false;
+    }
     // Converts to RGB from Hex
     func UIColorFromHex(rgbValue:UInt32, alpha:Double)->UIColor {
         let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0

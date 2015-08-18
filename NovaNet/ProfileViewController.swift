@@ -26,20 +26,35 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
     
     @IBOutlet weak var lookingForLabel: UILabel!
     
+    @IBOutlet weak var seekingHeaderLabel: UILabel!
+    @IBOutlet weak var professionHeaderLabel: UILabel!
+    @IBOutlet weak var interestsHeaderLabel: UILabel!
+    @IBOutlet weak var editLabel: UIButton!
     let picker = UIImagePickerController();
     var popover:UIPopoverController? = nil;
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
-
+    
+    /*-------------------------------- CONSTRAINTS ------------------------------------*/
+    
+    // Creates dictionary of subviews for constraint adjustment
+    
+    // Profile Image Constraints
+    @IBOutlet weak var profileImageTopDist: NSLayoutConstraint!
+    @IBOutlet weak var profileImageHeight: NSLayoutConstraint!
+    @IBOutlet weak var profileImageWidth: NSLayoutConstraint!
+    @IBOutlet weak var profileImageNameDist: NSLayoutConstraint!
+    
+    // Gray Separator Constraints
+    @IBOutlet weak var graySeparatorHeight: NSLayoutConstraint!
+    @IBOutlet weak var graySeparatorWidth: NSLayoutConstraint!
+    
+    @IBOutlet weak var nameBottomToAbout: NSLayoutConstraint!
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Go to login page if no user logged in
-        if (!self.userLoggedIn()) {
-            self.performSegueWithIdentifier("toUserLogin", sender: self);
-            return;
-        }
+        
         // Allows user to upload photo
         var tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tappedImage");
         tapGestureRecognizer.delegate = self;
@@ -51,7 +66,18 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
         setValues();
     }
     
+    override func viewWillLayoutSubviews() {
+        formatImage(self.profileImage);
+        manageiOSModelType()
+    }
+    
     override func viewDidAppear(animated: Bool) {
+        
+        // Go to login page if no user logged in
+        if (!self.userLoggedIn()) {
+            self.tabBarController?.selectedIndex = 0;
+            return;
+        }
         setValues();
         super.viewDidAppear(true);
     }
@@ -61,6 +87,9 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
+
     
     
 
@@ -75,6 +104,72 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
         }
         return false;
     }
+    
+    // Edits font sizes and image constraints to fit in each mode
+    func manageiOSModelType() {
+        let modelName = UIDevice.currentDevice().modelName;
+    
+        switch modelName {
+            case "iPhone 4s":
+                
+                self.profileImageTopDist.constant = 10;
+                self.profileImageHeight.constant = 130;
+                self.profileImageWidth.constant = 130;
+                self.nameBottomToAbout.constant = self.nameBottomToAbout.constant - 5;
+                self.profileImageNameDist.constant = self.profileImageNameDist.constant/self.profileImageNameDist.multiplier - 5;
+                
+                // Set font size of each label
+                self.nameLabel.font = self.nameLabel.font.fontWithSize(20.0);
+                self.editLabel.titleLabel!.font = self.editLabel.titleLabel!.font.fontWithSize(10.0);
+                self.aboutLabel.font = self.aboutLabel.font.fontWithSize(13.0);
+                self.experienceLabel.font = self.experienceLabel.font.fontWithSize(13.0);
+                self.firstInterestLabel.font = self.firstInterestLabel.font.fontWithSize(13.0);
+                self.secondInterestLabel.font = self.secondInterestLabel.font.fontWithSize(13.0);
+                self.thirdInterestLabel.font = self.thirdInterestLabel.font.fontWithSize(13.0);
+                self.lookingForLabel.font = self.lookingForLabel.font.fontWithSize(13.0);
+                self.professionHeaderLabel.font = self.professionHeaderLabel.font.fontWithSize(13.0);
+                self.interestsHeaderLabel.font = self.interestsHeaderLabel.font.fontWithSize(13.0);
+                self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(13.0);
+                
+                return;
+
+            case "iPhone 5":
+                
+                self.profileImageTopDist.constant = 20;
+                self.profileImageHeight.constant = 150;
+                self.profileImageWidth.constant = 150;
+                
+                // Set font size of each label
+                self.nameLabel.font = self.nameLabel.font.fontWithSize(23.0);
+                self.editLabel.titleLabel!.font = self.editLabel.titleLabel!.font.fontWithSize(13.0);
+                self.aboutLabel.font = self.aboutLabel.font.fontWithSize(16.0);
+                self.experienceLabel.font = self.experienceLabel.font.fontWithSize(16.0);
+                self.firstInterestLabel.font = self.firstInterestLabel.font.fontWithSize(16.0);
+                self.secondInterestLabel.font = self.secondInterestLabel.font.fontWithSize(16.0);
+                self.thirdInterestLabel.font = self.thirdInterestLabel.font.fontWithSize(16.0);
+                self.lookingForLabel.font = self.lookingForLabel.font.fontWithSize(16.0);
+                self.professionHeaderLabel.font = self.professionHeaderLabel.font.fontWithSize(16.0);
+                self.interestsHeaderLabel.font = self.interestsHeaderLabel.font.fontWithSize(16.0);
+                self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(16.0);
+
+                return;
+            case "iPhone 6":
+                self.profileImageTopDist.constant = 20;
+                self.profileImageHeight.constant = 200;
+                self.profileImageWidth.constant = 200;
+                return; // Do nothing because designed on iPhone 6 viewport
+            case "iPhone 6 Plus":
+                
+                self.profileImageTopDist.constant = 40;
+                self.profileImageHeight.constant = 225;
+                self.profileImageWidth.constant = 225;
+
+                return;
+            default:
+                return; // Do nothing
+        }
+    }
+
     
     // Methods to read and write images from local data store/Parse
     func readImage() -> UIImage {
@@ -105,11 +200,14 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
         return fullPath
     }
     
-    // Methods to format image and convert RGB to hex
+    
     func formatImage(var profileImage: UIImageView) {
+        let croppedImage: UIImage = ImageUtil.cropToSquare(image: profileImage.image!)
+        profileImage.image = croppedImage
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
         profileImage.clipsToBounds = true;
     }
+
 
     
     // Sets all values of the user profile fields
@@ -155,7 +253,6 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
         
         self.title = "Profile";
         self.profileImage.image = readImage();
-        formatImage(self.profileImage);
     }
     
     func tappedImage() {

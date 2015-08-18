@@ -12,6 +12,10 @@ import Bolts
 
 class SignUpViewController: UIViewController {
 
+    
+    var bot:CGFloat!;
+
+    
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var usernameField: UITextField!
@@ -27,8 +31,23 @@ class SignUpViewController: UIViewController {
 
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         self.view.endEditing(true);
-        
     }
+    
+    /*-------------------------------- CONSTRAINTS ------------------------------------*/
+    
+    @IBOutlet weak var signInHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var textFieldY: NSLayoutConstraint!
+    @IBOutlet weak var distFromSignInToBottom: NSLayoutConstraint!
+    @IBOutlet weak var distFromLogoToText: NSLayoutConstraint!
+    @IBOutlet weak var logoWidth: NSLayoutConstraint!
+    @IBOutlet weak var logoHeight: NSLayoutConstraint!
+    @IBOutlet weak var textFieldHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var splashHorizontal: NSLayoutConstraint!
+    @IBOutlet weak var splashBottom: NSLayoutConstraint!
+    @IBOutlet weak var splashOtherHorizontal: NSLayoutConstraint!
+    @IBOutlet weak var splashTop: NSLayoutConstraint!
   
     /*-------------------------------- HELPER METHODS ------------------------------------*/
    
@@ -38,6 +57,36 @@ class SignUpViewController: UIViewController {
         installation["user"] = PFUser.currentUser()
         installation.saveInBackground()
     }
+    
+    func manageiOSModelType() {
+        let modelName = UIDevice.currentDevice().modelName;
+
+        switch modelName {
+        case "iPhone 4s":
+            signInHeight.constant = 50
+            textFieldHeight.constant = 40
+            distFromSignInToBottom.constant = bot - 10;
+            textFieldY.constant = -30
+
+            return;
+        case "iPhone 5":
+            signInHeight.constant = 50
+            textFieldHeight.constant = 50
+            distFromSignInToBottom.constant = bot;
+            return;
+        case "iPhone 6":
+            
+            return; // Do nothing because designed on iPhone 6 viewport
+        case "iPhone 6 Plus":
+            splashHorizontal.constant = -20;
+            splashOtherHorizontal.constant = -20;
+            splashTop.constant = 0;
+            return;
+        default:
+            return; // Do nothing
+        }
+    }
+
     
     // Prepares username, distance, and fromNew in datastore and puts the user online
     func prepareDataStore() {
@@ -120,10 +169,9 @@ class SignUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.navigationBar.barTintColor = UIColorFromHex(0x555555, alpha: 1.0);
-        
         passwordField.secureTextEntry = true;
-        
+        bot = distFromSignInToBottom.constant - 20;
+
         var userFrameRect = usernameField.frame;
         var passwordFrameRect = passwordField.frame;
         var emailFrameRect = emailField.frame;
@@ -164,6 +212,9 @@ class SignUpViewController: UIViewController {
         emailField.textColor = UIColor.whiteColor();
     }
     
+    override func viewDidLayoutSubviews() {
+        manageiOSModelType();
+    }
     
 
     override func didReceiveMemoryWarning() {

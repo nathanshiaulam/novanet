@@ -12,23 +12,42 @@ import Parse
 import Bolts
 
 
-class OnboardingViewController: UIViewController, UITextViewDelegate {
+class OnboardingViewController: UIViewController, UITextViewDelegate, UIScrollViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+    
+    var distFromTop:CGFloat!;
+    var bot:CGFloat!;
     
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var lookingForField: UITextField!
     @IBOutlet weak var experienceField: UITextField!
     
+    @IBOutlet weak var overallHeaderLabel: UILabel!
     @IBOutlet weak var firstInterestField: UITextField!
     @IBOutlet weak var secondInterestField: UITextField!
     @IBOutlet weak var thirdInterestField: UITextField!
 
     @IBOutlet weak var aboutField: UITextView!
     
+    @IBOutlet weak var continueDistFromBot: NSLayoutConstraint!
+    @IBOutlet weak var continueHeight: NSLayoutConstraint!
     var activeField:UITextField = UITextField();
     
-   
+    @IBOutlet weak var seekingHeaderLabel: UILabel!
+    @IBOutlet weak var interestsHeaderLabel: UILabel!
+    @IBOutlet weak var professionHeaderLabel: UILabel!
+    @IBOutlet weak var aboutHeaderLabel: UILabel!
+    @IBOutlet weak var nameHeaderLabel: UILabel!
+    /*-------------------------------- CONSTRAINTS ------------------------------------*/
+    
+    
+    @IBOutlet weak var distFromNameToTop: NSLayoutConstraint!
+    @IBOutlet weak var distanceFromAboutToTextView: NSLayoutConstraint!
+    @IBOutlet weak var distanceFromAboutToName: NSLayoutConstraint!
+    @IBOutlet weak var textViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var textViewWidth: NSLayoutConstraint!
+    
     // Prepares local datastore for profile information and saves profile;
     @IBAction func continueButtonPressed(sender: UIButton) {
          if (count(nameField.text) > 0 && count(experienceField.text) > 0 && count(lookingForField.text) > 0 && count(firstInterestField.text) > 0 && count(secondInterestField.text) > 0 &&
@@ -53,21 +72,25 @@ class OnboardingViewController: UIViewController, UITextViewDelegate {
         self.title = "2 of 4";
         
         self.automaticallyAdjustsScrollViewInsets = false;
-        
+        distFromTop = self.distFromNameToTop.constant - 15;
+        bot = self.continueDistFromBot.constant - 35;
         //Looks for single or multiple taps to remove keyboard
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
-        
-        prepareTextFields();
         registerForKeyBoardNotifications()
-        
-        
+        prepareTextFields();
+    }
+    
+    override func viewDidLayoutSubviews() {
+        manageiOSModelType();
+
     }
     
     /*-------------------------------- TextViewDel Methods ------------------------------------*/
 
     func textViewDidBeginEditing(textView: UITextView) {
         if textView.textColor == UIColorFromHex(0xA6AAA9, alpha: 1.0) {
+            println("true");
             textView.text = nil
             textView.textColor = UIColor.blackColor()
         }
@@ -118,7 +141,8 @@ class OnboardingViewController: UIViewController, UITextViewDelegate {
     func textFieldDidBeginEditing(textField: UITextField) {
         activeField = textField;
     }
-    
+    func textFieldDidEndEditing(textField: UITextField) {
+    }
     // Sets the character limit of each text field
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
@@ -147,6 +171,79 @@ class OnboardingViewController: UIViewController, UITextViewDelegate {
         return UIColor(red:red, green:green, blue:blue, alpha:CGFloat(alpha))
     }
     
+    func manageiOSModelType() {
+        let modelName = UIDevice.currentDevice().modelName;
+
+        switch modelName {
+        case "iPhone 4s":
+            self.textViewHeight.constant = 90
+            self.continueHeight.constant = 45
+            self.distFromNameToTop.constant = distFromTop
+            self.continueDistFromBot.constant = bot
+            // Header Labels
+            self.professionHeaderLabel.font = self.professionHeaderLabel.font.fontWithSize(16.0);
+            self.interestsHeaderLabel.font = self.interestsHeaderLabel.font.fontWithSize(16.0);
+            self.aboutHeaderLabel.font = self.aboutHeaderLabel.font.fontWithSize(16.0);
+            self.nameHeaderLabel.font = self.nameHeaderLabel.font.fontWithSize(16.0);
+            self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(16.0);
+            self.overallHeaderLabel.font = self.overallHeaderLabel.font.fontWithSize(18.0)
+            
+            // Text Fields
+            nameField.font = UIFont(name: "Avenir", size: 15);
+            aboutField.font = UIFont(name: "Avenir", size: 15);
+            firstInterestField.font = UIFont(name: "Avenir", size: 15);
+            secondInterestField.font = UIFont(name: "Avenir", size: 15);
+            thirdInterestField.font = UIFont(name: "Avenir", size: 15);
+            experienceField.font = UIFont(name: "Avenir", size: 15);
+            lookingForField.font = UIFont(name: "Avenir", size: 15);
+            return;
+        case "iPhone 5":
+            self.textViewHeight.constant = 120
+            
+            // Header Labels
+            self.professionHeaderLabel.font = self.professionHeaderLabel.font.fontWithSize(16.0);
+            self.interestsHeaderLabel.font = self.interestsHeaderLabel.font.fontWithSize(16.0);
+            self.aboutHeaderLabel.font = self.aboutHeaderLabel.font.fontWithSize(16.0);
+            self.nameHeaderLabel.font = self.nameHeaderLabel.font.fontWithSize(16.0);
+            self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(16.0);
+            self.overallHeaderLabel.font = self.overallHeaderLabel.font.fontWithSize(18.0)
+            self.continueDistFromBot.constant = bot
+            
+            // Text Fields
+            nameField.font = UIFont(name: "Avenir", size: 15);
+            aboutField.font = UIFont(name: "Avenir", size: 15);
+            firstInterestField.font = UIFont(name: "Avenir", size: 15);
+            secondInterestField.font = UIFont(name: "Avenir", size: 15);
+            thirdInterestField.font = UIFont(name: "Avenir", size: 15);
+            experienceField.font = UIFont(name: "Avenir", size: 15);
+            lookingForField.font = UIFont(name: "Avenir", size: 15);
+            return;
+        case "iPhone 6":
+            
+            return; // Do nothing because designed on iPhone 6 viewport
+        case "iPhone 6 Plus":
+            self.textViewHeight.constant = 150
+            
+            self.professionHeaderLabel.font = self.professionHeaderLabel.font.fontWithSize(22.0);
+            self.interestsHeaderLabel.font = self.interestsHeaderLabel.font.fontWithSize(22.0);
+            self.aboutHeaderLabel.font = self.aboutHeaderLabel.font.fontWithSize(22.0);
+            self.nameHeaderLabel.font = self.nameHeaderLabel.font.fontWithSize(22.0);
+            self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(22.0);
+            self.overallHeaderLabel.font = self.overallHeaderLabel.font.fontWithSize(22.0);
+            
+            nameField.font = UIFont(name: "Avenir", size: 17);
+            aboutField.font = UIFont(name: "Avenir", size: 17);
+            firstInterestField.font = UIFont(name: "Avenir", size: 17);
+            secondInterestField.font = UIFont(name: "Avenir", size: 17);
+            thirdInterestField.font = UIFont(name: "Avenir", size: 17);
+            experienceField.font = UIFont(name: "Avenir", size: 17);
+            lookingForField.font = UIFont(name: "Avenir", size: 17);
+            return;
+        default:
+            return; // Do nothing
+        }
+    }
+
     
     // Saves all necessary fields of the profile
     func saveProfile() {
@@ -189,11 +286,13 @@ class OnboardingViewController: UIViewController, UITextViewDelegate {
     
     // Ensures that you can scroll when keyboard up
     func registerForKeyBoardNotifications() {
+        println("thisHappened");
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyBoardWasShown:", name: UIKeyboardDidShowNotification, object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillBeHidden:", name: UIKeyboardWillHideNotification, object: nil);
         
     }
     func keyBoardWasShown(notification: NSNotification) {
+        println("happened");
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
             let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
             self.scrollView.contentInset = contentInsets;

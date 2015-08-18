@@ -11,9 +11,21 @@ import Parse
 import Bolts
 
 class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate {
+    
+    var bot:CGFloat!;
+    
     @IBOutlet weak var uploadedImage: UIImageView!
     @IBOutlet weak var takePhotoTableView: UITableView!
 
+    @IBOutlet weak var welcomeLabel: UILabel!
+    @IBOutlet weak var continueDistFromBot: NSLayoutConstraint!
+    
+    @IBOutlet weak var imageY: NSLayoutConstraint!
+    @IBOutlet weak var buttonHeight: NSLayoutConstraint!
+    @IBOutlet weak var imageHeight: NSLayoutConstraint!
+    @IBOutlet weak var imageWidth: NSLayoutConstraint!
+    @IBOutlet weak var subWelcomeLabel: UILabel!
+    
     // Finish button clicked, store all information and dismiss VC
     @IBAction func finishedOnboarding(sender: UIButton) {
         // Indicate that the user has finished onboarding and can have access to app
@@ -25,6 +37,7 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
         query.whereKey("ID", equalTo:currentID!);
         
         // Saves image to local datastore and preps image to store into Parse
+        formatImage(uploadedImage);
         saveImage(uploadedImage.image!);
         let pickedImage:UIImage = self.uploadedImage.image!;
         let imageData = UIImageJPEGRepresentation(pickedImage, 0.5);
@@ -48,7 +61,45 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
     
     /*-------------------------------- HELPER METHODS ------------------------------------*/
 
+    func manageiOSModelType() {
+        let modelName = UIDevice.currentDevice().modelName;
+        
+        switch modelName {
+        case "iPhone 4s":
+            welcomeLabel.font = welcomeLabel.font.fontWithSize(17.0);
+            imageY.constant = -35;
+            subWelcomeLabel.font = subWelcomeLabel.font.fontWithSize(14.0);
+            imageHeight.constant = 160;
+            imageWidth.constant = 160;
+            buttonHeight.constant = 45;
+            self.continueDistFromBot.constant = bot;
+            return;
+        case "iPhone 5":
+            welcomeLabel.font = welcomeLabel.font.fontWithSize(18.0);
+            subWelcomeLabel.font = subWelcomeLabel.font.fontWithSize(14.0);
+            imageHeight.constant = 190
+            imageWidth.constant = 190
+            imageY.constant = -20
+            
+            return;
+        case "iPhone 6":
+            
+            return; // Do nothing because designed on iPhone 6 viewport
+        case "iPhone 6 Plus":
+            welcomeLabel.font = welcomeLabel.font.fontWithSize(24.0);
+            subWelcomeLabel.font = subWelcomeLabel.font.fontWithSize(18.0);
+            imageHeight.constant = 250
+            imageWidth.constant = 250
+            return;
+        default:
+            return; // Do nothing
+        }
+    }
+
+    
     func formatImage(var profileImage: UIImageView) {
+        let croppedImage: UIImage = ImageUtil.cropToSquare(image: profileImage.image!)
+        profileImage.image = croppedImage
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
         profileImage.clipsToBounds = true;
     }
@@ -147,17 +198,21 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad();
-        
+        bot = self.continueDistFromBot.constant - 10;
         self.title = "3 of 4";
         // Initializes gesture recognizer
         var tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tappedImage");
         tapGestureRecognizer.delegate = self;
         self.uploadedImage.addGestureRecognizer(tapGestureRecognizer);
         self.uploadedImage.userInteractionEnabled = true;
-        formatImage(uploadedImage);
         
         // Initializes the delegate of the picker to the view controller
         picker.delegate = self
         
+    }
+    override func viewDidLayoutSubviews() {
+        formatImage(uploadedImage);
+        manageiOSModelType();
+
     }
 }

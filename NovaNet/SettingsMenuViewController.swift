@@ -29,33 +29,55 @@ class SettingsMenuViewController: UIViewController, UIScrollViewDelegate, UIGest
     var popover:UIPopoverController? = nil;
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
     
+    @IBOutlet weak var seekingHeaderLabel: UILabel!
+    @IBOutlet weak var interestsHeaderLabel: UILabel!
+    @IBOutlet weak var professionHeaderLabel: UILabel!
+    @IBOutlet weak var aboutHeaderLabel: UILabel!
+    @IBOutlet weak var nameHeaderLabel: UILabel!
+    @IBOutlet weak var photoHeaderLabel: UILabel!
+    /*-------------------------------- CONSTRAINTS ------------------------------------*/
+    
+    
+    @IBOutlet weak var distanceFromAboutToTextView: NSLayoutConstraint!
+    @IBOutlet weak var distanceFromAboutToName: NSLayoutConstraint!
+    @IBOutlet weak var distanceFromPhotoToImage: NSLayoutConstraint!
+    @IBOutlet weak var photoHeaderFromTop: NSLayoutConstraint!
+    @IBOutlet weak var profileImageHeight: NSLayoutConstraint!
+    @IBOutlet weak var textViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var profileImageWidth: NSLayoutConstraint!
     
     @IBAction func saveInfo(sender: UIBarButtonItem) {
         saveProfile();
     }
     
-    
+
+
     
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
     override func viewDidLoad() {
         super.viewDidLoad()
-        registerForKeyBoardNotifications()
         self.automaticallyAdjustsScrollViewInsets = false;
         
         //Looks for single or multiple taps to remove keyboard
         var tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
-        
+        registerForKeyBoardNotifications()
+
         // Allows user to upload photo
         var tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tappedImage");
         tapGestureRecognizer.delegate = self;
         self.profileImage.addGestureRecognizer(tapGestureRecognizer);
         self.profileImage.userInteractionEnabled = true;
-        
-        prepareTextFields();
+
         picker.delegate = self;
     }
     
+    override func viewDidLayoutSubviews() {
+        prepareTextFields();
+        formatImage(self.profileImage);
+        manageiOSModelType();
+        
+    }
     /*-------------------------------- TextViewDel Methods ------------------------------------*/
     
     func textViewDidBeginEditing(textView: UITextView) {
@@ -86,6 +108,7 @@ class SettingsMenuViewController: UIViewController, UIScrollViewDelegate, UIGest
     func textFieldDidBeginEditing(textField: UITextField) {
         activeField = textField;
     }
+    
     func textFieldDidEndEditing(textField: UITextField) {
     }
     // Allows users to hit enter and move to the next text field
@@ -240,6 +263,85 @@ class SettingsMenuViewController: UIViewController, UIScrollViewDelegate, UIGest
     
     /*-------------------------------- HELPER METHODS ------------------------------------*/
     
+    
+    func manageiOSModelType() {
+        let modelName = UIDevice.currentDevice().modelName;
+                switch modelName {
+        case "iPhone 4s":
+            self.photoHeaderFromTop.constant = self.photoHeaderFromTop.constant - 10;
+            self.textViewHeight.constant = -120
+            self.profileImageHeight.constant = 100;
+            self.profileImageWidth.constant = 100;
+            
+            // Header Labels
+            self.photoHeaderLabel.font = self.photoHeaderLabel.font.fontWithSize(14.0)
+            self.professionHeaderLabel.font = self.professionHeaderLabel.font.fontWithSize(14.0);
+            self.interestsHeaderLabel.font = self.interestsHeaderLabel.font.fontWithSize(14.0);
+            self.aboutHeaderLabel.font = self.aboutHeaderLabel.font.fontWithSize(14.0);
+            self.nameHeaderLabel.font = self.nameHeaderLabel.font.fontWithSize(14.0);
+            self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(14.0);
+            
+            // Text Fields
+            nameField.font = UIFont(name: "Avenir", size: 13);
+            aboutField.font = UIFont(name: "Avenir", size: 13);
+            firstInterestField.font = UIFont(name: "Avenir", size: 13);
+            secondInterestField.font = UIFont(name: "Avenir", size: 13);
+            thirdInterestField.font = UIFont(name: "Avenir", size: 13);
+            experienceField.font = UIFont(name: "Avenir", size: 13);
+            lookingForField.font = UIFont(name: "Avenir", size: 13);
+
+            return;
+            
+        case "iPhone 5":
+            self.photoHeaderFromTop.constant = 0;
+            self.textViewHeight.constant = -140
+            self.profileImageHeight.constant = 140;
+            self.profileImageWidth.constant = 140;
+            
+            // Header Labels
+            self.photoHeaderLabel.font = self.photoHeaderLabel.font.fontWithSize(15.0)
+            self.professionHeaderLabel.font = self.professionHeaderLabel.font.fontWithSize(15.0);
+            self.interestsHeaderLabel.font = self.interestsHeaderLabel.font.fontWithSize(15.0);
+            self.aboutHeaderLabel.font = self.aboutHeaderLabel.font.fontWithSize(15.0);
+            self.nameHeaderLabel.font = self.nameHeaderLabel.font.fontWithSize(15.0);
+            self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(15.0);
+            
+            // Text Fields
+            nameField.font = UIFont(name: "Avenir", size: 14);
+            aboutField.font = UIFont(name: "Avenir", size: 14);
+            firstInterestField.font = UIFont(name: "Avenir", size: 14);
+            secondInterestField.font = UIFont(name: "Avenir", size: 14);
+            thirdInterestField.font = UIFont(name: "Avenir", size: 14);
+            experienceField.font = UIFont(name: "Avenir", size: 14);
+            lookingForField.font = UIFont(name: "Avenir", size: 14);            return;
+        case "iPhone 6":
+
+            return; // Do nothing because designed on iPhone 6 viewport
+        case "iPhone 6 Plus":
+            self.photoHeaderFromTop.constant = 40;
+            self.profileImageHeight.constant = 175;
+            self.profileImageWidth.constant = 175;
+            self.photoHeaderLabel.font = self.photoHeaderLabel.font.fontWithSize(19.0)
+            self.professionHeaderLabel.font = self.professionHeaderLabel.font.fontWithSize(19.0);
+            self.interestsHeaderLabel.font = self.interestsHeaderLabel.font.fontWithSize(19.0);
+            self.aboutHeaderLabel.font = self.aboutHeaderLabel.font.fontWithSize(19.0);
+            self.nameHeaderLabel.font = self.nameHeaderLabel.font.fontWithSize(19.0);
+            self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(19.0);
+            nameField.font = UIFont(name: "Avenir", size: 19);
+            aboutField.font = UIFont(name: "Avenir", size: 19);
+            firstInterestField.font = UIFont(name: "Avenir", size: 19);
+            secondInterestField.font = UIFont(name: "Avenir", size: 19);
+            thirdInterestField.font = UIFont(name: "Avenir", size: 19);
+            experienceField.font = UIFont(name: "Avenir", size: 19);
+            lookingForField.font = UIFont(name: "Avenir", size: 19);
+
+            
+            return;
+        default:
+            return; // Do nothing
+        }
+    }
+
     // Converts to RGB from Hex
     func UIColorFromHex(rgbValue:UInt32, alpha:Double)->UIColor {
         let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0
@@ -280,9 +382,12 @@ class SettingsMenuViewController: UIViewController, UIScrollViewDelegate, UIGest
     
     // Methods to format image and convert RGB to hex
     func formatImage(var profileImage: UIImageView) {
+        let croppedImage: UIImage = ImageUtil.cropToSquare(image: profileImage.image!)
+        profileImage.image = croppedImage
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
         profileImage.clipsToBounds = true;
     }
+
     
     // Prepares all text fields
     func prepareTextFields() {
@@ -359,7 +464,6 @@ class SettingsMenuViewController: UIViewController, UIScrollViewDelegate, UIGest
             lookingForField.text = looking;
         }
         self.profileImage.image = readImage();
-        formatImage(self.profileImage);
     }
     
     // Ensures that you can scroll when keyboard up
@@ -387,6 +491,7 @@ class SettingsMenuViewController: UIViewController, UIScrollViewDelegate, UIGest
         self.scrollView.contentInset = contentInsets;
         self.scrollView.scrollIndicatorInsets = contentInsets;
     }
+
     
     
     //Calls this function when the tap is recognized.

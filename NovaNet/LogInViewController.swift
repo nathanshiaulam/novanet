@@ -14,6 +14,8 @@ import Bolts
 
 class LogInViewController: UIViewController, UITextFieldDelegate {
 
+    var bot:CGFloat!;
+
     
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -24,6 +26,22 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     
     // Set up local data store
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+    
+    /*-------------------------------- CONSTRAINTS ------------------------------------*/
+    
+    @IBOutlet weak var signInHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var distFromSignInToBottom: NSLayoutConstraint!
+    @IBOutlet weak var distFromLogoToText: NSLayoutConstraint!
+    @IBOutlet weak var logoWidth: NSLayoutConstraint!
+    @IBOutlet weak var logoHeight: NSLayoutConstraint!
+    @IBOutlet weak var textFieldHeight: NSLayoutConstraint!
+    
+    @IBOutlet weak var splashHorizontal: NSLayoutConstraint!
+    @IBOutlet weak var splashBottom: NSLayoutConstraint!
+    @IBOutlet weak var splashOtherHorizontal: NSLayoutConstraint!
+    @IBOutlet weak var splashTop: NSLayoutConstraint!
+
 
     /*-------------------------------- HELPER METHODS ------------------------------------*/
     
@@ -89,6 +107,33 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
                 self.presentViewController(alert, animated: true, completion: nil);
             }
+        }
+    }
+    
+    func manageiOSModelType() {
+        let modelName = UIDevice.currentDevice().modelName;
+        
+        switch modelName {
+        case "iPhone 4s":
+            signInHeight.constant = 50
+            textFieldHeight.constant = 40
+            distFromSignInToBottom.constant = bot - 10;
+            return;
+        case "iPhone 5":
+            signInHeight.constant = 50
+            textFieldHeight.constant = 50
+            distFromSignInToBottom.constant = bot;
+            return;
+        case "iPhone 6":
+            
+            return; // Do nothing because designed on iPhone 6 viewport
+        case "iPhone 6 Plus":
+            splashHorizontal.constant = -20;
+            splashOtherHorizontal.constant = -20;
+            splashTop.constant = 0;
+            return;
+        default:
+            return; // Do nothing
         }
     }
 
@@ -172,6 +217,7 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     // Load in all of the textfield attributes
     override func viewDidLoad() {
         super.viewDidLoad()
+        bot = distFromSignInToBottom.constant - 20;
         var usernamePlaceholder = NSAttributedString(string: "   Username", attributes: [NSForegroundColorAttributeName : UIColor.grayColor()]);
         var passwordPlaceholder = NSAttributedString(string: "   Password", attributes: [NSForegroundColorAttributeName : UIColor.grayColor()]);
         
@@ -213,7 +259,10 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
         super.viewDidAppear(true);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "dismissToHomePage", name: "dismissToHomePage", object: nil);
     }
-
+    
+    override func viewDidLayoutSubviews() {
+        manageiOSModelType();
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

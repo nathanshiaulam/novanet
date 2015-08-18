@@ -32,7 +32,7 @@ class ConversationListTableViewController: UITableViewController {
         var refreshControl = UIRefreshControl()
 
         // Sets up the row height of Table View Cells
-        self.tableView.rowHeight = 75.0
+        manageiOSModelType();
         
         // Sets up refresh control on pull down so that it calls findUsersInRange
         refreshControl.addTarget(self, action: Selector("loadConversations"), forControlEvents:UIControlEvents.ValueChanged);
@@ -46,7 +46,10 @@ class ConversationListTableViewController: UITableViewController {
             conversationParticipantList = NSArray();
             otherProfileList = NSArray();
             tableView.reloadData()
-            self.performSegueWithIdentifier("toUserLogin", sender: self);
+            
+            // Go to login page if no user logged in
+            self.tabBarController?.selectedIndex = 0;
+            super.viewDidAppear(true);
             return;
         }
         else {
@@ -72,6 +75,8 @@ class ConversationListTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let chatCellIdentifier:String = "ChatCell";
         let cell = tableView.dequeueReusableCellWithIdentifier(chatCellIdentifier, forIndexPath: indexPath) as! ConversationTableViewCell
+        manageiOSModelTypeCellLabels(cell);
+
         if (conversationList.count > 0) {
             var conversationParticipant: AnyObject = conversationParticipantList[indexPath.row];
             var conversation: AnyObject = conversationList[indexPath.row];
@@ -123,7 +128,30 @@ class ConversationListTableViewController: UITableViewController {
             }
         return cell;
     }
-    
+    func manageiOSModelTypeCellLabels(cell: ConversationTableViewCell) {
+        let modelName = UIDevice.currentDevice().modelName;
+        
+        switch modelName {
+        case "iPhone 4s":
+            cell.nameLabel.font = cell.nameLabel.font.fontWithSize(16.0);
+            cell.recentMessageLabel.font = cell.recentMessageLabel.font.fontWithSize(12.0)
+            return;
+        case "iPhone 5":
+            cell.nameLabel.font = cell.nameLabel.font.fontWithSize(19.0);
+            cell.recentMessageLabel.font = cell.recentMessageLabel.font.fontWithSize(13.0)
+            return;
+        case "iPhone 6":
+            return; // Do nothing because designed on iPhone 6 viewport
+        case "iPhone 6 Plus":
+            cell.nameLabel.font = cell.nameLabel.font.fontWithSize(22.0);
+            cell.recentMessageLabel.font = cell.recentMessageLabel.font.fontWithSize(13.0)
+            return;
+        default:
+            return; // Do nothing
+        }
+        
+    }
+
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let chatCellIdentifier:String = "ChatCell";
         var profile: AnyObject = otherProfileList[indexPath.row];
@@ -141,6 +169,28 @@ class ConversationListTableViewController: UITableViewController {
             return true;
         }
         return false;
+    }
+    
+    
+    func manageiOSModelType() {
+        let modelName = UIDevice.currentDevice().modelName;
+        
+        switch modelName {
+        case "iPhone 4s":
+            self.tableView.rowHeight = 65.0;
+            return;
+        case "iPhone 5":
+            self.tableView.rowHeight = 70.0;
+            return;
+        case "iPhone 6":
+            self.tableView.rowHeight = 75.0;
+            return; // Do nothing because designed on iPhone 6 viewport
+        case "iPhone 6 Plus":
+            self.tableView.rowHeight = 75.0;
+            return;
+        default:
+            return; // Do nothing
+        }
     }
     
     // Converts string into NSDate with format

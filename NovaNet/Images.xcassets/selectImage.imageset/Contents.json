@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "tapToSelect.png"
+      "filename" : "tap to select.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "tapToSelect-1.png"
+      "filename" : "tap to select@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "tapToSelect-2.png"
+      "filename" : "tap to select@3x.png"
     }
   ],
   "info" : {

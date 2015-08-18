@@ -12,7 +12,7 @@ import Bolts
 
 class SelectedProfileViewController: UIViewController {
 
-    @IBOutlet weak var profileImage: UIImageView! = UIImageView();
+    @IBOutlet weak var profileImage: UIImageView!;
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var aboutLabel: UILabel!
@@ -25,39 +25,45 @@ class SelectedProfileViewController: UIViewController {
     @IBOutlet weak var lookingForLabel: UILabel!
 
     @IBOutlet weak var distLabel: UILabel!
+    @IBOutlet weak var distHeader: UILabel!
     
+    @IBOutlet weak var seekingHeaderLabel: UILabel!
+    @IBOutlet weak var interestsHeaderLabel: UILabel!
+    @IBOutlet weak var professionHeaderLabel: UILabel!
+    /*-------------------------------- CONSTRAINTS ------------------------------------*/
+    @IBOutlet weak var profileImageHeight: NSLayoutConstraint!
+    @IBOutlet weak var profileImageWidth: NSLayoutConstraint!
+    
+    @IBOutlet weak var graySeparatorWidth: NSLayoutConstraint!
+    @IBOutlet weak var graySeparatorHeight: NSLayoutConstraint!
+    @IBOutlet weak var chatButtonHeight: NSLayoutConstraint!
+    @IBOutlet weak var chatButtonWidth: NSLayoutConstraint!
+    @IBOutlet weak var nameBottomToAbout: NSLayoutConstraint!
+    @IBOutlet weak var profileImageNameDist: NSLayoutConstraint!
+    @IBOutlet weak var profileImageTopDist: NSLayoutConstraint!
+    var image:UIImage? = nil
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
 
     override func viewDidLoad() {
         super.viewDidLoad();
-        println("Result: " );
-        println(profileImage.image);
+        if (self.image != nil) {
+            profileImage.image = image;
+        } else {
+            profileImage.image = UIImage(named: "selectImage");
+        }
+        
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        formatImage(self.profileImage);
+        manageiOSModelType();
         setValues();
+        
     }
     
     /*-------------------------------- HELPER METHODS ------------------------------------*/
-    
-    // Methods to read and write images from local data store/Parse
-    func readOtherImage() -> UIImage {
-        let possibleOldImagePath = NSUserDefaults.standardUserDefaults().objectForKey(Constants.SelectedUserKeys.selectedProfileImageKey) as! String?
-        var oldImage = UIImage();
-        if let oldImagePath = possibleOldImagePath {
-            let oldFullPath = self.documentsPathForFileName(oldImagePath)
-            let oldImageData = NSData(contentsOfFile: oldFullPath)
-            oldImage = UIImage(data: oldImageData!)!
-        } else {
-            oldImage = UIImage(named: "selectImage")!;
-        }
-        return oldImage;
-    }
 
-    func documentsPathForFileName(name: String) -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true);
-        let path = paths[0] as! String;
-        let fullPath = path.stringByAppendingPathComponent(name)
-        
-        return fullPath
-    }
     // Methods to format image and convert RGB to hex
     func formatImage(var profileImage: UIImageView) {
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
@@ -108,9 +114,77 @@ class SelectedProfileViewController: UIViewController {
         lookingForLabel.sizeToFit();
         
         self.title = nameLabel.text;
-//        self.profileImage.image = readOtherImage();
-        formatImage(self.profileImage);
     }
+    
+    // Edits font sizes and image constraints to fit in each mode
+    func manageiOSModelType() {
+        let modelName = UIDevice.currentDevice().modelName;
+        
+        
+        switch modelName {
+        case "iPhone 4s":
+            
+            self.profileImageTopDist.constant = self.profileImageTopDist.constant - 17;
+            self.profileImageHeight.constant = 120;
+            self.profileImageWidth.constant = 120;
+            self.nameBottomToAbout.constant = self.nameBottomToAbout.constant - 5;
+            self.profileImageNameDist.constant = self.profileImageNameDist.constant/self.profileImageNameDist.multiplier - 5;
+            self.graySeparatorHeight.constant = 8;
+            self.graySeparatorWidth.constant = 80;
+            
+            // Set font size of each label
+            self.nameLabel.font = self.nameLabel.font.fontWithSize(17.0);
+            self.aboutLabel.font = self.aboutLabel.font.fontWithSize(13.0);
+            self.experienceLabel.font = self.experienceLabel.font.fontWithSize(13.0);
+            self.firstInterestLabel.font = self.firstInterestLabel.font.fontWithSize(13.0);
+            self.secondInterestLabel.font = self.secondInterestLabel.font.fontWithSize(13.0);
+            self.thirdInterestLabel.font = self.thirdInterestLabel.font.fontWithSize(13.0);
+            self.lookingForLabel.font = self.lookingForLabel.font.fontWithSize(13.0);
+            self.professionHeaderLabel.font = self.professionHeaderLabel.font.fontWithSize(13.0);
+            self.interestsHeaderLabel.font = self.interestsHeaderLabel.font.fontWithSize(13.0);
+            self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(13.0);
+            self.distLabel.font = self.distLabel.font.fontWithSize(13.0);
+            self.distHeader.font = self.distHeader.font.fontWithSize(13.0);            return;
+            
+        case "iPhone 5":
+            
+            self.profileImageTopDist.constant = self.profileImageTopDist.constant - 10;
+            self.profileImageNameDist.constant = self.profileImageNameDist.constant - 3
+            self.profileImageHeight.constant = 150;
+            self.profileImageWidth.constant = 150;
+            self.nameBottomToAbout.constant = self.nameBottomToAbout.constant - 3;
+            
+            // Set font size of each label
+            self.nameLabel.font = self.nameLabel.font.fontWithSize(20.0);
+            self.aboutLabel.font = self.aboutLabel.font.fontWithSize(15.0);
+            self.experienceLabel.font = self.experienceLabel.font.fontWithSize(15.0);
+            self.firstInterestLabel.font = self.firstInterestLabel.font.fontWithSize(15.0);
+            self.secondInterestLabel.font = self.secondInterestLabel.font.fontWithSize(15.0);
+            self.thirdInterestLabel.font = self.thirdInterestLabel.font.fontWithSize(15.0);
+            self.lookingForLabel.font = self.lookingForLabel.font.fontWithSize(15.0);
+            self.professionHeaderLabel.font = self.professionHeaderLabel.font.fontWithSize(15.0);
+            self.interestsHeaderLabel.font = self.interestsHeaderLabel.font.fontWithSize(15.0);
+            self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(15.0);
+            self.distLabel.font = self.distLabel.font.fontWithSize(15.0);
+            self.distHeader.font = self.distHeader.font.fontWithSize(15.0);
+            return;
+        case "iPhone 6":
+            self.profileImageTopDist.constant = 10;
+            self.profileImageHeight.constant = 200;
+            self.profileImageWidth.constant = 200;
+            return; // Do nothing because designed on iPhone 6 viewport
+        case "iPhone 6 Plus":
+            
+            self.profileImageTopDist.constant = 30;
+            self.profileImageHeight.constant = 225;
+            self.profileImageWidth.constant = 225;
+            
+            return;
+        default:
+            return; // Do nothing
+        }
+    }
+
    
 
 }

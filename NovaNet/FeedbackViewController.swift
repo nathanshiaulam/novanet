@@ -44,10 +44,18 @@ class FeedbackViewController: UIViewController {
         feedbackTextField.textColor = UIColorFromHex(0xA6AAA9, alpha: 1.0);
         feedbackTextField.font = UIFont(name: "Avenir", size: 15.0);
         
+        
+    }
+    
+    override func viewDidAppear(animated: Bool) {
         // Go to login page if no user logged in
         if (!self.userLoggedIn()) {
-            self.performSegueWithIdentifier("toUserLogin", sender: self);
+            // Go to login page if no user logged in
+            self.tabBarController?.selectedIndex = 0;
+            super.viewDidAppear(true);
+            return;
         }
+        super.viewDidAppear(true);
     }
     
     /*-------------------------------- TextViewDel Methods ------------------------------------*/

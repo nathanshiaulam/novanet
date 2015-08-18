@@ -18,11 +18,10 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet var tableView: UITableView!
     
     // Creates array of Profiles to pass data
-    var nextImage:UIImageView = UIImageView();
+    var nextImage:UIImage? = UIImage();
     var profileList:NSArray = NSArray();
     var distList:NSArray = NSArray();
-    var imageList:NSMutableArray = NSMutableArray(); // Since loading the images takes too long, we store the images in an array during the callback
-
+    var imageList = [UIImage?]();
     // Sets up CLLocationManager and Local Data Store
     let locationManager = CLLocationManager()
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
@@ -39,7 +38,7 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
         self.title = "Finder";
         
         // Sets up the row height of Table View Cells
-        self.tableView.rowHeight = 75.0
+        manageiOSModelType();
         
         // Go to login page if no user logged in
         if (!self.userLoggedIn()) {
@@ -91,6 +90,7 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
     
     // Return the number of rows in the section.
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return profileList.count;
     }
     
@@ -102,8 +102,9 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("ProfileCell", forIndexPath: indexPath) as! HomeTableViewCell
+        manageiOSModelTypeCellLabels(cell);
         formatLabels(cell);
-        
+        imageList = [UIImage?](count: profileList.count, repeatedValue: nil);
         if (profileList.count > 0) {
             var profile: AnyObject = profileList[indexPath.row];
             var dist: AnyObject = distList[indexPath.row];
@@ -122,10 +123,8 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
                 image.getDataInBackgroundWithBlock {
                     (imageData, error) -> Void in
                     if (error == nil) {
-                        print("First Image: ");
-                        println(UIImage(data: imageData!));
                         cell.profileImage.image = UIImage(data:imageData!);
-                        self.imageList.addObject(UIImageView(image: UIImage(data:imageData!)));
+                        self.imageList[indexPath.row] = UIImage(data:imageData!);
                     }
                     else {
                         println(error);
@@ -133,9 +132,7 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
                 }
             } else {
                 cell.profileImage.image = UIImage(named: "selectImage")!;
-                println("Unwanted Image: " );
-                println(UIImage(named:"selectImage"));
-                self.imageList.addObject(UIImageView(image: cell.profileImage.image));
+                self.imageList[indexPath.row] = nil;
 
             }
             // Formats image into circle
@@ -143,17 +140,46 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
         }
         return cell;
     }
-    
+    func manageiOSModelTypeCellLabels(cell: HomeTableViewCell) {
+        let modelName = UIDevice.currentDevice().modelName;
+        
+        switch modelName {
+        case "iPhone 4s":
+            cell.name.font = cell.name.font.fontWithSize(16.0);
+            cell.experience.font = cell.experience.font.fontWithSize(12.0)
+            cell.dist.font = cell.dist.font.fontWithSize(12.0)
+
+            return;
+        case "iPhone 5":
+            cell.name.font = cell.name.font.fontWithSize(19.0);
+            cell.experience.font = cell.experience.font.fontWithSize(13.0)
+            cell.dist.font = cell.dist.font.fontWithSize(13.0)
+
+            return;
+        case "iPhone 6":
+            return; // Do nothing because designed on iPhone 6 viewport
+        case "iPhone 6 Plus":
+            cell.name.font = cell.name.font.fontWithSize(22.0);
+            cell.experience.font = cell.experience.font.fontWithSize(13.0)
+            cell.dist.font = cell.dist.font.fontWithSize(13.0)
+            return;
+        default:
+            return; // Do nothing
+        }
+        
+    }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let profileCellIdentifier:String = "ProfileCell";
         if (profileList.count > 0) {
             var profile: AnyObject = profileList[indexPath.row];
             var dist: AnyObject = distList[indexPath.row];
-            var image: UIImageView = (imageList[indexPath.row] as? UIImageView)!;
+            var image: UIImage! = imageList[indexPath.row] as UIImage!;
             
-            self.nextImage = image;
-            println("Second Image: ");
-            println(image.image);
+            if ((image) != nil) {
+                self.nextImage = image;
+            } else {
+                self.nextImage = nil;
+            }
             // Sets values for selected user
             prepareDataStore(profile as! PFObject);
             defaults.setObject(dist, forKey: Constants.SelectedUserKeys.selectedDistanceKey);
@@ -166,8 +192,7 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "toProfileView" {
             let destinationVC = segue.destinationViewController.childViewControllers.first as! SelectedProfileViewController
-            destinationVC.profileImage = self.nextImage;
-            destinationVC.profileImage.image = self.nextImage.image;
+            destinationVC.image = self.nextImage;
         }
     }
 
@@ -225,6 +250,30 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
         }
         return false;
     }
+    
+    func manageiOSModelType() {
+        let modelName = UIDevice.currentDevice().modelName;
+        self.tableView.rowHeight = 75.0;
+
+        switch modelName {
+        case "iPhone 4s":
+            self.tableView.rowHeight = 65.0;
+            return;
+        case "iPhone 5":
+            self.tableView.rowHeight = 70.0;
+            return;
+        case "iPhone 6":
+            self.tableView.rowHeight = 75.0;
+            return; // Do nothing because designed on iPhone 6 viewport
+        case "iPhone 6 Plus":
+            self.tableView.rowHeight = 80.0;
+            return;
+        default:
+            return; // Do nothing
+        }
+    }
+  
+
     
     // Converts RGB value to Hex Value with alpha value
     func UIColorFromHex(rgbValue:UInt32, alpha:Double)->UIColor {

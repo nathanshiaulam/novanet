@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "messages.png"
+      "filename" : "Messenger Icon.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "messages-1.png"
+      "filename" : "Messenger Icon@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "messages-2.png"
+      "filename" : "Messenger Icon@3x.png"
     }
   ],
   "info" : {

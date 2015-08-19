@@ -91,7 +91,6 @@ class ConversationListTableViewController: UITableViewController {
             }
             cell.nameLabel.text = profile["Name"] as? String;
             if readConversationCount < conversationCount {
-                cell.hasUnreadMessage = true;
                 cell.unreadMessageMark.hidden = false;
             } else {
                 cell.unreadMessageMark.hidden = true;
@@ -129,25 +128,21 @@ class ConversationListTableViewController: UITableViewController {
         return cell;
     }
     func manageiOSModelTypeCellLabels(cell: ConversationTableViewCell) {
-        let modelName = UIDevice.currentDevice().modelName;
         
-        switch modelName {
-        case "iPhone 4s":
+        if (Constants.ScreenDimensions.screenHeight == 480) {
             cell.nameLabel.font = cell.nameLabel.font.fontWithSize(16.0);
             cell.recentMessageLabel.font = cell.recentMessageLabel.font.fontWithSize(12.0)
             return;
-        case "iPhone 5":
+        } else if (Constants.ScreenDimensions.screenHeight == 568) {
             cell.nameLabel.font = cell.nameLabel.font.fontWithSize(19.0);
             cell.recentMessageLabel.font = cell.recentMessageLabel.font.fontWithSize(13.0)
             return;
-        case "iPhone 6":
+        } else if (Constants.ScreenDimensions.screenHeight == 667) {
             return; // Do nothing because designed on iPhone 6 viewport
-        case "iPhone 6 Plus":
+        } else if (Constants.ScreenDimensions.screenHeight == 736){
             cell.nameLabel.font = cell.nameLabel.font.fontWithSize(22.0);
             cell.recentMessageLabel.font = cell.recentMessageLabel.font.fontWithSize(13.0)
             return;
-        default:
-            return; // Do nothing
         }
         
     }
@@ -173,23 +168,19 @@ class ConversationListTableViewController: UITableViewController {
     
     
     func manageiOSModelType() {
-        let modelName = UIDevice.currentDevice().modelName;
         
-        switch modelName {
-        case "iPhone 4s":
+        if (Constants.ScreenDimensions.screenHeight == 480) {
             self.tableView.rowHeight = 65.0;
             return;
-        case "iPhone 5":
+        } else if (Constants.ScreenDimensions.screenHeight == 568) {
             self.tableView.rowHeight = 70.0;
             return;
-        case "iPhone 6":
+        } else if (Constants.ScreenDimensions.screenHeight == 667) {
             self.tableView.rowHeight = 75.0;
             return; // Do nothing because designed on iPhone 6 viewport
-        case "iPhone 6 Plus":
+        } else if (Constants.ScreenDimensions.screenHeight == 736) {
             self.tableView.rowHeight = 75.0;
             return;
-        default:
-            return; // Do nothing
         }
     }
     
@@ -273,6 +264,7 @@ class ConversationListTableViewController: UITableViewController {
         }
         var query = PFQuery(className: "Profile");
         query.whereKey("ID", containedIn: otherIDs as [AnyObject]);
+        query.orderByDescending("MostRecent");
         
         query.findObjectsInBackgroundWithBlock {
             (objects: [AnyObject]?, error: NSError?) -> Void in

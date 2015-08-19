@@ -28,7 +28,7 @@ class SettingsMenuViewController: UIViewController, UIScrollViewDelegate, UIGest
     let picker = UIImagePickerController();
     var popover:UIPopoverController? = nil;
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
-    
+    var top:CGFloat!;
     @IBOutlet weak var seekingHeaderLabel: UILabel!
     @IBOutlet weak var interestsHeaderLabel: UILabel!
     @IBOutlet weak var professionHeaderLabel: UILabel!
@@ -68,12 +68,15 @@ class SettingsMenuViewController: UIViewController, UIScrollViewDelegate, UIGest
         tapGestureRecognizer.delegate = self;
         self.profileImage.addGestureRecognizer(tapGestureRecognizer);
         self.profileImage.userInteractionEnabled = true;
-
+        
+        top = self.photoHeaderFromTop.constant - 15;
+        
         picker.delegate = self;
+        prepareTextFields();
+
     }
     
     override func viewDidLayoutSubviews() {
-        prepareTextFields();
         formatImage(self.profileImage);
         manageiOSModelType();
         
@@ -265,10 +268,8 @@ class SettingsMenuViewController: UIViewController, UIScrollViewDelegate, UIGest
     
     
     func manageiOSModelType() {
-        let modelName = UIDevice.currentDevice().modelName;
-                switch modelName {
-        case "iPhone 4s":
-            self.photoHeaderFromTop.constant = self.photoHeaderFromTop.constant - 10;
+        if (Constants.ScreenDimensions.screenHeight == 480) {
+            self.photoHeaderFromTop.constant = top;
             self.textViewHeight.constant = -120
             self.profileImageHeight.constant = 100;
             self.profileImageWidth.constant = 100;
@@ -291,8 +292,7 @@ class SettingsMenuViewController: UIViewController, UIScrollViewDelegate, UIGest
             lookingForField.font = UIFont(name: "Avenir", size: 13);
 
             return;
-            
-        case "iPhone 5":
+        } else if (Constants.ScreenDimensions.screenHeight == 568) {
             self.photoHeaderFromTop.constant = 0;
             self.textViewHeight.constant = -140
             self.profileImageHeight.constant = 140;
@@ -313,11 +313,11 @@ class SettingsMenuViewController: UIViewController, UIScrollViewDelegate, UIGest
             secondInterestField.font = UIFont(name: "Avenir", size: 14);
             thirdInterestField.font = UIFont(name: "Avenir", size: 14);
             experienceField.font = UIFont(name: "Avenir", size: 14);
-            lookingForField.font = UIFont(name: "Avenir", size: 14);            return;
-        case "iPhone 6":
-
+            lookingForField.font = UIFont(name: "Avenir", size: 14);
+            return;
+        } else if (Constants.ScreenDimensions.screenHeight == 667) {
             return; // Do nothing because designed on iPhone 6 viewport
-        case "iPhone 6 Plus":
+        } else if (Constants.ScreenDimensions.screenHeight == 736) {
             self.photoHeaderFromTop.constant = 40;
             self.profileImageHeight.constant = 175;
             self.profileImageWidth.constant = 175;
@@ -337,8 +337,6 @@ class SettingsMenuViewController: UIViewController, UIScrollViewDelegate, UIGest
 
             
             return;
-        default:
-            return; // Do nothing
         }
     }
 

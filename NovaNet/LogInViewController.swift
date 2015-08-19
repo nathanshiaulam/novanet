@@ -111,29 +111,23 @@ class LogInViewController: UIViewController, UITextFieldDelegate {
     }
     
     func manageiOSModelType() {
-        let modelName = UIDevice.currentDevice().modelName;
-        
-        switch modelName {
-        case "iPhone 4s":
+        if (Constants.ScreenDimensions.screenHeight == 480) {
             signInHeight.constant = 50
             textFieldHeight.constant = 40
             distFromSignInToBottom.constant = bot - 10;
             return;
-        case "iPhone 5":
+        } else if (Constants.ScreenDimensions.screenHeight == 568) {
             signInHeight.constant = 50
             textFieldHeight.constant = 50
             distFromSignInToBottom.constant = bot;
             return;
-        case "iPhone 6":
-            
+        } else if (Constants.ScreenDimensions.screenHeight == 667) {
             return; // Do nothing because designed on iPhone 6 viewport
-        case "iPhone 6 Plus":
+        } else if (Constants.ScreenDimensions.screenHeight == 736) {
             splashHorizontal.constant = -20;
             splashOtherHorizontal.constant = -20;
             splashTop.constant = 0;
             return;
-        default:
-            return; // Do nothing
         }
     }
 

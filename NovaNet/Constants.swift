@@ -52,6 +52,10 @@ struct Constants {
         static let selectedAvailableKey = "selectedAvaiableKey";
         
     }
+    struct ScreenDimensions {
+        static let screenHeight = UIScreen.mainScreen().bounds.size.height;
+        static let screenWidth = UIScreen.mainScreen().bounds.size.width;
+    }
     func UIColorFromHex(rgbValue:UInt32, alpha:Double)->UIColor {
         let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0
         let green = CGFloat((rgbValue & 0xFF00) >> 8)/256.0

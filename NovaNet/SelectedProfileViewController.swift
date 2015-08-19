@@ -43,7 +43,11 @@ class SelectedProfileViewController: UIViewController {
     @IBOutlet weak var profileImageTopDist: NSLayoutConstraint!
     var image:UIImage? = nil
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
-
+    var bot:CGFloat!;
+    var otherBot:CGFloat!;
+    var thirdBot:CGFloat!;
+    var fourthBot:CGFloat!;
+    var fifthBot:CGFloat!;
     override func viewDidLoad() {
         super.viewDidLoad();
         if (self.image != nil) {
@@ -51,14 +55,18 @@ class SelectedProfileViewController: UIViewController {
         } else {
             profileImage.image = UIImage(named: "selectImage");
         }
-        
-        
+        bot = self.nameBottomToAbout.constant - 5
+        otherBot = self.profileImageNameDist.constant/self.profileImageNameDist.multiplier - 5;
+        thirdBot = self.profileImageTopDist.constant - 10;
+        fourthBot = self.profileImageNameDist.constant - 3;
+        setValues();
+        fifthBot = self.nameBottomToAbout.constant - 3;
+
     }
     
     override func viewDidLayoutSubviews() {
         formatImage(self.profileImage);
         manageiOSModelType();
-        setValues();
         
     }
     
@@ -118,17 +126,13 @@ class SelectedProfileViewController: UIViewController {
     
     // Edits font sizes and image constraints to fit in each mode
     func manageiOSModelType() {
-        let modelName = UIDevice.currentDevice().modelName;
-        
-        
-        switch modelName {
-        case "iPhone 4s":
+        if (Constants.ScreenDimensions.screenHeight == 480) {
             
             self.profileImageTopDist.constant = self.profileImageTopDist.constant - 17;
             self.profileImageHeight.constant = 120;
             self.profileImageWidth.constant = 120;
-            self.nameBottomToAbout.constant = self.nameBottomToAbout.constant - 5;
-            self.profileImageNameDist.constant = self.profileImageNameDist.constant/self.profileImageNameDist.multiplier - 5;
+            self.nameBottomToAbout.constant = bot;
+            self.profileImageNameDist.constant = otherBot;
             self.graySeparatorHeight.constant = 8;
             self.graySeparatorWidth.constant = 80;
             
@@ -144,15 +148,15 @@ class SelectedProfileViewController: UIViewController {
             self.interestsHeaderLabel.font = self.interestsHeaderLabel.font.fontWithSize(13.0);
             self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(13.0);
             self.distLabel.font = self.distLabel.font.fontWithSize(13.0);
-            self.distHeader.font = self.distHeader.font.fontWithSize(13.0);            return;
+            self.distHeader.font = self.distHeader.font.fontWithSize(13.0);
+            return;
+        } else if (Constants.ScreenDimensions.screenHeight == 568) {
             
-        case "iPhone 5":
-            
-            self.profileImageTopDist.constant = self.profileImageTopDist.constant - 10;
-            self.profileImageNameDist.constant = self.profileImageNameDist.constant - 3
+            self.profileImageTopDist.constant = thirdBot;
+            self.profileImageNameDist.constant = fourthBot;
             self.profileImageHeight.constant = 150;
             self.profileImageWidth.constant = 150;
-            self.nameBottomToAbout.constant = self.nameBottomToAbout.constant - 3;
+            self.nameBottomToAbout.constant = fifthBot;
             
             // Set font size of each label
             self.nameLabel.font = self.nameLabel.font.fontWithSize(20.0);
@@ -168,21 +172,20 @@ class SelectedProfileViewController: UIViewController {
             self.distLabel.font = self.distLabel.font.fontWithSize(15.0);
             self.distHeader.font = self.distHeader.font.fontWithSize(15.0);
             return;
-        case "iPhone 6":
+        } else if (Constants.ScreenDimensions.screenHeight == 667) {
             self.profileImageTopDist.constant = 10;
             self.profileImageHeight.constant = 200;
             self.profileImageWidth.constant = 200;
             return; // Do nothing because designed on iPhone 6 viewport
-        case "iPhone 6 Plus":
+        } else if (Constants.ScreenDimensions.screenHeight == 736) {
             
             self.profileImageTopDist.constant = 30;
             self.profileImageHeight.constant = 225;
             self.profileImageWidth.constant = 225;
             
             return;
-        default:
-            return; // Do nothing
         }
+
     }
 
    

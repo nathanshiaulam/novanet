@@ -172,10 +172,7 @@ class OnboardingViewController: UIViewController, UITextViewDelegate, UIScrollVi
     }
     
     func manageiOSModelType() {
-        let modelName = UIDevice.currentDevice().modelName;
-
-        switch modelName {
-        case "iPhone 4s":
+        if (Constants.ScreenDimensions.screenHeight == 480) {
             self.textViewHeight.constant = 90
             self.continueHeight.constant = 45
             self.distFromNameToTop.constant = distFromTop
@@ -197,7 +194,7 @@ class OnboardingViewController: UIViewController, UITextViewDelegate, UIScrollVi
             experienceField.font = UIFont(name: "Avenir", size: 15);
             lookingForField.font = UIFont(name: "Avenir", size: 15);
             return;
-        case "iPhone 5":
+        } else if (Constants.ScreenDimensions.screenHeight == 568) {
             self.textViewHeight.constant = 120
             
             // Header Labels
@@ -218,10 +215,11 @@ class OnboardingViewController: UIViewController, UITextViewDelegate, UIScrollVi
             experienceField.font = UIFont(name: "Avenir", size: 15);
             lookingForField.font = UIFont(name: "Avenir", size: 15);
             return;
-        case "iPhone 6":
+        } else if (Constants.ScreenDimensions.screenHeight == 667) {
             
             return; // Do nothing because designed on iPhone 6 viewport
-        case "iPhone 6 Plus":
+        } else if (Constants.ScreenDimensions.screenHeight == 736) {
+            
             self.textViewHeight.constant = 150
             
             self.professionHeaderLabel.font = self.professionHeaderLabel.font.fontWithSize(22.0);
@@ -239,8 +237,6 @@ class OnboardingViewController: UIViewController, UITextViewDelegate, UIScrollVi
             experienceField.font = UIFont(name: "Avenir", size: 17);
             lookingForField.font = UIFont(name: "Avenir", size: 17);
             return;
-        default:
-            return; // Do nothing
         }
     }
 

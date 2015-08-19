@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "Coffee Cup.png"
+      "filename" : "coffee.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "Coffee Cup@2x.png"
+      "filename" : "coffee-1.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "Coffee Cup@3x.png"
+      "filename" : "coffee-2.png"
     }
   ],
   "info" : {

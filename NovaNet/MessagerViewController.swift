@@ -190,6 +190,9 @@ class MessagerViewController: JSQMessagesViewController {
         var ownID = PFUser.currentUser()?.objectId;
         var otherID = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey);
         
+        var participants = [ownID, otherID];
+        participants = participants.sorted {$0!.localizedCaseInsensitiveCompare($1!) == NSComparisonResult.OrderedAscending}
+        
         var conversationParticipantSelf = PFObject(className: "ConversationParticipant");
         conversationParticipantSelf["ReadMessageCount"] = 1;
         conversationParticipantSelf["User"] = ownID;
@@ -221,6 +224,36 @@ class MessagerViewController: JSQMessagesViewController {
                                 conversationParticipantOther["ConversationID"] = conversation.objectId;
                                 conversationParticipantOther.saveInBackground();
                                 conversationParticipantSelf.saveInBackground();
+                                
+                                var querytwo = PFQuery(className: "Profile");
+                                querytwo.whereKey("ID", equalTo: ownID!);
+                                
+                                querytwo.getFirstObjectInBackgroundWithBlock {
+                                    (profile: AnyObject?, error: NSError?) -> Void in
+                                    if error == nil {
+                                        var prof1:PFObject = profile as! PFObject;
+                                        
+                                        prof1["MostRecent"] = date;
+                                        prof1.saveInBackgroundWithBlock {
+                                            (success, error) -> Void in
+                                            if (error == nil) {
+                                                var querythree = PFQuery(className: "Profile");
+                                                querythree.whereKey("ID", equalTo: otherID!);
+                                                
+                                                querythree.getFirstObjectInBackgroundWithBlock {
+                                                    (profile: AnyObject?, error: NSError?) -> Void in
+                                                    if error == nil {
+                                                        var prof2:PFObject = profile as! PFObject;
+                                                        
+                                                        prof2["MostRecent"] = date;
+                                                        prof2.saveInBackground();
+                                                    }
+                                                }
+                                            }
+                                        };
+                                    }
+                                }
+
                             }
                         }
                     }
@@ -270,10 +303,41 @@ class MessagerViewController: JSQMessagesViewController {
                                 convPart["ReadMessageCount"] = self.messages.count;
                                 if (date != nil) {
                                     convPart["MostRecent"] = date;
-                                    println(date);
+                                }
+                                convPart.saveInBackgroundWithBlock {
+                                    (success, error) -> Void in
+                                        if error == nil {
+                                            var querytwo = PFQuery(className: "Profile");
+                                            querytwo.whereKey("ID", equalTo: ownID!);
+                                            
+                                            querytwo.getFirstObjectInBackgroundWithBlock {
+                                                (profile: AnyObject?, error: NSError?) -> Void in
+                                                if error == nil {
+                                                    var prof1:PFObject = profile as! PFObject;
+                                                    
+                                                    prof1["MostRecent"] = date;
+                                                    prof1.saveInBackgroundWithBlock {
+                                                        (success, error) -> Void in
+                                                        if error == nil {
+                                                            var querythree = PFQuery(className: "Profile");
+                                                            querythree.whereKey("ID", equalTo: otherID!);
+                                                            
+                                                            querythree.getFirstObjectInBackgroundWithBlock {
+                                                                (profile: AnyObject?, error: NSError?) -> Void in
+                                                                if error == nil {
+                                                                    var prof2:PFObject = profile as! PFObject;
+                                                                    
+                                                                    prof2["MostRecent"] = date;
+                                                                    prof2.saveInBackground()
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                    }
                                 }
                             }
-                            convPart?.saveInBackground();
                         }
                     }
                 }

@@ -141,30 +141,25 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
         return cell;
     }
     func manageiOSModelTypeCellLabels(cell: HomeTableViewCell) {
-        let modelName = UIDevice.currentDevice().modelName;
-        
-        switch modelName {
-        case "iPhone 4s":
+        if (Constants.ScreenDimensions.screenHeight == 480) {
             cell.name.font = cell.name.font.fontWithSize(16.0);
             cell.experience.font = cell.experience.font.fontWithSize(12.0)
             cell.dist.font = cell.dist.font.fontWithSize(12.0)
 
             return;
-        case "iPhone 5":
+        } else if (Constants.ScreenDimensions.screenHeight == 568) {
             cell.name.font = cell.name.font.fontWithSize(19.0);
             cell.experience.font = cell.experience.font.fontWithSize(13.0)
             cell.dist.font = cell.dist.font.fontWithSize(13.0)
 
             return;
-        case "iPhone 6":
+        } else if (Constants.ScreenDimensions.screenHeight == 667) {
             return; // Do nothing because designed on iPhone 6 viewport
-        case "iPhone 6 Plus":
+        } else if (Constants.ScreenDimensions.screenHeight == 736) {
             cell.name.font = cell.name.font.fontWithSize(22.0);
             cell.experience.font = cell.experience.font.fontWithSize(13.0)
             cell.dist.font = cell.dist.font.fontWithSize(13.0)
             return;
-        default:
-            return; // Do nothing
         }
         
     }
@@ -252,24 +247,18 @@ class FinderViewController:  UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func manageiOSModelType() {
-        let modelName = UIDevice.currentDevice().modelName;
-        self.tableView.rowHeight = 75.0;
-
-        switch modelName {
-        case "iPhone 4s":
+        if (Constants.ScreenDimensions.screenHeight == 480) {
             self.tableView.rowHeight = 65.0;
             return;
-        case "iPhone 5":
+        } else if (Constants.ScreenDimensions.screenHeight == 568) {
             self.tableView.rowHeight = 70.0;
             return;
-        case "iPhone 6":
+        } else if (Constants.ScreenDimensions.screenHeight == 667) {
             self.tableView.rowHeight = 75.0;
             return; // Do nothing because designed on iPhone 6 viewport
-        case "iPhone 6 Plus":
+        } else if (Constants.ScreenDimensions.screenHeight == 736) {
             self.tableView.rowHeight = 80.0;
             return;
-        default:
-            return; // Do nothing
         }
     }
   

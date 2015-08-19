@@ -43,36 +43,32 @@ class IntroductionViewController: UIViewController {
     
     
     func manageiOSModelType() {
-        let modelName = UIDevice.currentDevice().modelName;
-      
-        switch modelName {
-            case "iPhone 4s":
-                welcomeLabel.font = welcomeLabel.font.fontWithSize(17.0);
-                imageY.constant = -35;
-                subWelcomeLabel.font = subWelcomeLabel.font.fontWithSize(14.0);
-                imageHeight.constant = 160;
-                imageWidth.constant = 160;
-                buttonHeight.constant = 45;
-                self.continueDistFromBot.constant = bot;
-                return;
-            case "iPhone 5":
-                welcomeLabel.font = welcomeLabel.font.fontWithSize(18.0);
-                subWelcomeLabel.font = subWelcomeLabel.font.fontWithSize(14.0);
-                imageHeight.constant = 190
-                imageWidth.constant = 190
-                imageY.constant = -20
-                return;
-            case "iPhone 6":
-                
-                return; // Do nothing because designed on iPhone 6 viewport
-            case "iPhone 6 Plus":
-                welcomeLabel.font = welcomeLabel.font.fontWithSize(24.0);
-                subWelcomeLabel.font = subWelcomeLabel.font.fontWithSize(18.0);
-                imageHeight.constant = 250
-                imageWidth.constant = 250
-                return;
-            default:
-                return; // Do nothing
+        if (Constants.ScreenDimensions.screenHeight == 480) {
+            welcomeLabel.font = welcomeLabel.font.fontWithSize(17.0);
+            imageY.constant = -35;
+            subWelcomeLabel.font = subWelcomeLabel.font.fontWithSize(14.0);
+            imageHeight.constant = 160;
+            imageWidth.constant = 160;
+            buttonHeight.constant = 45;
+            self.continueDistFromBot.constant = bot;
+            return;
+        } else if (Constants.ScreenDimensions.screenHeight == 568) {
+            
+            welcomeLabel.font = welcomeLabel.font.fontWithSize(18.0);
+            subWelcomeLabel.font = subWelcomeLabel.font.fontWithSize(14.0);
+            imageHeight.constant = 190
+            imageWidth.constant = 190
+            imageY.constant = -20
+            return;
+        } else if (Constants.ScreenDimensions.screenHeight == 667) {
+            
+            return; // Do nothing because designed on iPhone 6 viewport
+        } else if (Constants.ScreenDimensions.screenHeight == 736) {
+            welcomeLabel.font = welcomeLabel.font.fontWithSize(24.0);
+            subWelcomeLabel.font = subWelcomeLabel.font.fontWithSize(18.0);
+            imageHeight.constant = 250
+            imageWidth.constant = 250
+            return;
         }
     }
 

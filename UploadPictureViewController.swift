@@ -62,10 +62,7 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
     /*-------------------------------- HELPER METHODS ------------------------------------*/
 
     func manageiOSModelType() {
-        let modelName = UIDevice.currentDevice().modelName;
-        
-        switch modelName {
-        case "iPhone 4s":
+        if (Constants.ScreenDimensions.screenHeight == 480) {
             welcomeLabel.font = welcomeLabel.font.fontWithSize(17.0);
             imageY.constant = -35;
             subWelcomeLabel.font = subWelcomeLabel.font.fontWithSize(14.0);
@@ -74,7 +71,7 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
             buttonHeight.constant = 45;
             self.continueDistFromBot.constant = bot;
             return;
-        case "iPhone 5":
+        } else if (Constants.ScreenDimensions.screenHeight == 568) {
             welcomeLabel.font = welcomeLabel.font.fontWithSize(18.0);
             subWelcomeLabel.font = subWelcomeLabel.font.fontWithSize(14.0);
             imageHeight.constant = 190
@@ -82,17 +79,15 @@ class UploadPictureViewController: UIViewController, UIGestureRecognizerDelegate
             imageY.constant = -20
             
             return;
-        case "iPhone 6":
+        } else if (Constants.ScreenDimensions.screenHeight == 667) {
             
             return; // Do nothing because designed on iPhone 6 viewport
-        case "iPhone 6 Plus":
+        } else if (Constants.ScreenDimensions.screenHeight == 736) {
             welcomeLabel.font = welcomeLabel.font.fontWithSize(24.0);
             subWelcomeLabel.font = subWelcomeLabel.font.fontWithSize(18.0);
             imageHeight.constant = 250
             imageWidth.constant = 250
             return;
-        default:
-            return; // Do nothing
         }
     }
 

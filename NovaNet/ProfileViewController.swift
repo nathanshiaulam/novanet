@@ -37,6 +37,8 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
     /*-------------------------------- CONSTRAINTS ------------------------------------*/
     
     // Creates dictionary of subviews for constraint adjustment
+    var bot:CGFloat!;
+    var otherBot:CGFloat!;
     
     // Profile Image Constraints
     @IBOutlet weak var profileImageTopDist: NSLayoutConstraint!
@@ -62,7 +64,8 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
         self.profileImage.userInteractionEnabled = true;
         
         picker.delegate = self;
-        
+        bot = self.nameBottomToAbout.constant - 3;
+        otherBot = self.profileImageNameDist.constant/self.profileImageNameDist.multiplier - 5;
         setValues();
     }
     
@@ -107,16 +110,15 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
     
     // Edits font sizes and image constraints to fit in each mode
     func manageiOSModelType() {
-        let modelName = UIDevice.currentDevice().modelName;
-    
-        switch modelName {
-            case "iPhone 4s":
+        
+
+        if (Constants.ScreenDimensions.screenHeight == 480) {
                 
                 self.profileImageTopDist.constant = 10;
                 self.profileImageHeight.constant = 130;
                 self.profileImageWidth.constant = 130;
-                self.nameBottomToAbout.constant = self.nameBottomToAbout.constant - 5;
-                self.profileImageNameDist.constant = self.profileImageNameDist.constant/self.profileImageNameDist.multiplier - 5;
+                self.nameBottomToAbout.constant = bot;
+                self.profileImageNameDist.constant = otherBot;
                 
                 // Set font size of each label
                 self.nameLabel.font = self.nameLabel.font.fontWithSize(20.0);
@@ -132,9 +134,7 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
                 self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(13.0);
                 
                 return;
-
-            case "iPhone 5":
-                
+        } else if (Constants.ScreenDimensions.screenHeight == 568) {
                 self.profileImageTopDist.constant = 20;
                 self.profileImageHeight.constant = 150;
                 self.profileImageWidth.constant = 150;
@@ -153,20 +153,17 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
                 self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(16.0);
 
                 return;
-            case "iPhone 6":
+        } else if (Constants.ScreenDimensions.screenHeight == 667) {
                 self.profileImageTopDist.constant = 20;
                 self.profileImageHeight.constant = 200;
                 self.profileImageWidth.constant = 200;
                 return; // Do nothing because designed on iPhone 6 viewport
-            case "iPhone 6 Plus":
-                
+        } else if (Constants.ScreenDimensions.screenHeight == 736) {
                 self.profileImageTopDist.constant = 40;
                 self.profileImageHeight.constant = 225;
                 self.profileImageWidth.constant = 225;
 
                 return;
-            default:
-                return; // Do nothing
         }
     }
 

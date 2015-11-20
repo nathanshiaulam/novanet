@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "map.png"
+      "filename" : "Finder Icon.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "map-1.png"
+      "filename" : "Finder Icon@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "map-2.png"
+      "filename" : "Finder Icon@3x.png"
     }
   ],
   "info" : {

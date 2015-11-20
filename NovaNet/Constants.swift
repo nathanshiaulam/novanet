@@ -26,13 +26,14 @@ struct Constants {
         static let lookingForKey = "lookingForKey";
         static let availableKey = "availableKey";
         static let emailKey = "emailKey";
+        static let greetingKey = "greetingKey";
     }
     struct TempKeys {
         static let fromNew = "fromNew";
         static let notificationPayloadKey = "notificationPayloadKey";
     }
     struct ConstantStrings {
-        static let fikaText = "Hey! I thought your profile was pretty interesting and I'd love to meet for a chat sometime! When are you free?";
+        static let greetingMessage = "I thought your background was really interesting and I'd love to meet up sometime soon. What's a good time for you this week?";
         static let aboutText = "A sentence or two illustrating what you're about. Who are you in a nutshell?";
         static let loadText = "Please wait while we find other Novas nearby...";
         static let feedbackText = "Write your feedback or support request here. Try to be specific so we can address the issue as precisely as possible!";
@@ -56,11 +57,5 @@ struct Constants {
         static let screenHeight = UIScreen.mainScreen().bounds.size.height;
         static let screenWidth = UIScreen.mainScreen().bounds.size.width;
     }
-    func UIColorFromHex(rgbValue:UInt32, alpha:Double)->UIColor {
-        let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0
-        let green = CGFloat((rgbValue & 0xFF00) >> 8)/256.0
-        let blue = CGFloat(rgbValue & 0xFF)/256.0
-        
-        return UIColor(red:red, green:green, blue:blue, alpha:CGFloat(alpha))
-    }
+
 }

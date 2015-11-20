@@ -22,6 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             clientKey: "NqfIkHWioqiH93TsSijAvcoMNzWDgyx8Z9hoLJL2")
         
         PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
+        
+        
+        let pageControl = UIPageControl.appearance()
+        pageControl.pageIndicatorTintColor = UIColor.lightGrayColor()
+        pageControl.currentPageIndicatorTintColor = UIColor.blackColor()
+        pageControl.backgroundColor = UIColor.whiteColor()
 
         // Register for Push Notitications
         if application.applicationState != UIApplicationState.Background {
@@ -39,29 +45,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         if application.respondsToSelector("registerUserNotificationSettings:") {
-            let userNotificationTypes = UIUserNotificationType.Alert | UIUserNotificationType.Badge | UIUserNotificationType.Sound
-            let settings = UIUserNotificationSettings(forTypes: userNotificationTypes, categories: nil)
-            application.registerUserNotificationSettings(settings)
+            let settings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
+            UIApplication.sharedApplication().registerUserNotificationSettings(settings)
             application.registerForRemoteNotifications()
         } else {
-            let types = UIUserNotificationType.Badge | UIUserNotificationType.Alert | UIUserNotificationType.Sound
             application.registerForRemoteNotifications();
         }
         if (launchOptions != nil) {
             let storyboard = UIStoryboard(name: "Main", bundle: nil);
             let appDelegate  = UIApplication.sharedApplication().delegate as! AppDelegate
             let navigation = appDelegate.window!.rootViewController as! UINavigationController
-            let rootVC = storyboard.instantiateViewControllerWithIdentifier("MessageVCFromMessage") as! MessagerViewController
+            let rootVC = storyboard.instantiateViewControllerWithIdentifier("MessageListVC") as! ConversationListTableViewController
             if (PFUser.currentUser() != nil) {
                 if let notificationPayload = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
-                    var name: AnyObject? = notificationPayload["name"];
-                    var date: AnyObject? = notificationPayload["date"];
-                    var id: AnyObject? = notificationPayload["id"];
+                    let name: AnyObject? = notificationPayload["name"];
+//                    var date: AnyObject? = notificationPayload["date"];
+                    let id: AnyObject? = notificationPayload["id"];
                     defaults.setObject(notificationPayload, forKey: Constants.TempKeys.notificationPayloadKey);
                     defaults.setObject(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
                     defaults.setObject(id, forKey: Constants.SelectedUserKeys.selectedIdKey)
                     NSNotificationCenter.defaultCenter().postNotificationName("phoneVibrate", object: nil);
-                    NSNotificationCenter.defaultCenter().postNotificationName("loadAndRefreshData", object: nil);
+                    NSNotificationCenter.defaultCenter().postNotificationName("loadConversations", object: nil);
+                    NSNotificationCenter.defaultCenter().postNotificationName("loadData", object: nil);
+                    NSNotificationCenter.defaultCenter().postNotificationName("goToMessageVC", object: nil);
                     navigation.pushViewController(rootVC, animated: true);
                 }
             }
@@ -78,7 +84,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func application(application: UIApplication, didRegisterUserNotificationSettings settings: UIUserNotificationSettings) {
         if (settings.types != UIUserNotificationType.None) {
-            println("Did register user");
+            print("Did register user");
             application.registerForRemoteNotifications();
         }
     }
@@ -93,29 +99,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
         if error.code == 3010 {
-            println("Push notifications are not supported in the iOS Simulator.")
+            print("Push notifications are not supported in the iOS Simulator.")
         } else {
-            println("application:didFailToRegisterForRemoteNotificationsWithError: %@", error)
+            print("application:didFailToRegisterForRemoteNotificationsWithError: %@", error)
         }
     }
    
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
 //        PFPush.handlePush(userInfo)
-        let storyboard = UIStoryboard(name: "Main", bundle: nil);
-        let appDelegate  = UIApplication.sharedApplication().delegate as! AppDelegate
-        let navigation = appDelegate.window!.rootViewController as! UINavigationController
-        let rootVC = storyboard.instantiateViewControllerWithIdentifier("MessageVCFromMessage") as! MessagerViewController
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil);
+//        let appDelegate  = UIApplication.sharedApplication().delegate as! AppDelegate
+//        let navigation = appDelegate.window!.rootViewController as! UINavigationController
+//        let rootVC = storyboard.instantiateViewControllerWithIdentifier("MessageListVC") as! MessagerViewController
         if (PFUser.currentUser() != nil) {
             if let notificationPayload = userInfo as? NSDictionary {
-                var name: AnyObject? = notificationPayload["name"];
-                var date: AnyObject? = notificationPayload["date"];
-                var id: AnyObject? = notificationPayload["id"];
-                var text: AnyObject? = notificationPayload["alert"];
+                let name: AnyObject? = notificationPayload["name"];
+//                var date: AnyObject? = notificationPayload["date"];
+                let id: AnyObject? = notificationPayload["id"];
+//                var text: AnyObject? = notificationPayload["alert"];
                 defaults.setObject(notificationPayload, forKey: Constants.TempKeys.notificationPayloadKey);
                 defaults.setObject(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
                 defaults.setObject(id, forKey: Constants.SelectedUserKeys.selectedIdKey)
                 NSNotificationCenter.defaultCenter().postNotificationName("phoneVibrate", object: nil);
-                NSNotificationCenter.defaultCenter().postNotificationName("loadAndRefreshData", object: nil);
+                NSNotificationCenter.defaultCenter().postNotificationName("loadConversations", object: nil);
+                NSNotificationCenter.defaultCenter().postNotificationName("loadData", object: nil);
 //                if (navigation.topViewController.restorationIdentifier != "MessageVC") {
 //                    navigation.pushViewController(rootVC, animated: true);
 //                }

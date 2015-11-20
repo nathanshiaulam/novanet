@@ -12,7 +12,7 @@ import Bolts
 import CoreLocation
 import AudioToolbox
 
-class ConversationListTableViewController: UITableViewController {
+class ConversationListTableViewController: TableViewController {
     // Sets up Local Data Store
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
     
@@ -20,7 +20,8 @@ class ConversationListTableViewController: UITableViewController {
     var conversationList:NSArray = NSArray();
     var conversationParticipantList:NSArray = NSArray();
     var otherProfileList:NSArray = NSArray();
-    
+    var imageList = [UIImage?]();
+    var nextImage:UIImage? = UIImage();
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
 
     override func viewDidLoad() {
@@ -28,8 +29,11 @@ class ConversationListTableViewController: UITableViewController {
         super.viewDidLoad();
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "loadConversations", name: "loadConversations", object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "phoneVibrate", name: "phoneVibrate", object: nil);
-        
-        var refreshControl = UIRefreshControl()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateMostRecent", name: "updateMostRecent", object: nil);
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "goToMessageVC", name: "goToMessageVC", object: nil);
+
+        let refreshControl = UIRefreshControl()
+        self.tabBarController?.navigationItem.title = "Messages";
 
         // Sets up the row height of Table View Cells
         manageiOSModelType();
@@ -46,7 +50,8 @@ class ConversationListTableViewController: UITableViewController {
             conversationParticipantList = NSArray();
             otherProfileList = NSArray();
             tableView.reloadData()
-            
+            self.tabBarController?.navigationItem.title = "Messages";
+
             // Go to login page if no user logged in
             self.tabBarController?.selectedIndex = 0;
             super.viewDidAppear(true);
@@ -58,6 +63,16 @@ class ConversationListTableViewController: UITableViewController {
         
         super.viewDidAppear(true);
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        if segue.identifier == "toMessageVC" {
+            let destinationVC = segue.destinationViewController.childViewControllers.first as! MessagerViewController
+            print("SecondImage: ");
+            print(self.nextImage);
+            destinationVC.nextImage = self.nextImage;
+        }
+    }
+    
     
     /*-------------------------------- TABLE VIEW METHODS ------------------------------------*/
     
@@ -76,17 +91,18 @@ class ConversationListTableViewController: UITableViewController {
         let chatCellIdentifier:String = "ChatCell";
         let cell = tableView.dequeueReusableCellWithIdentifier(chatCellIdentifier, forIndexPath: indexPath) as! ConversationTableViewCell
         manageiOSModelTypeCellLabels(cell);
-
+        imageList = [UIImage?](count: otherProfileList.count, repeatedValue: nil);
         if (conversationList.count > 0) {
-            var conversationParticipant: AnyObject = conversationParticipantList[indexPath.row];
-            var conversation: AnyObject = conversationList[indexPath.row];
-            var profile:AnyObject = otherProfileList[indexPath.row];
+
+            let conversationParticipant: AnyObject = conversationParticipantList[indexPath.row];
+            let conversation: AnyObject = conversationList[indexPath.row];
+            let profile:AnyObject = otherProfileList[indexPath.row];
 
             // Stores variables to mark unread messages and most recent message
-            var readConversationCount:Int = conversationParticipant["ReadMessageCount"] as! Int;
-            var conversationCount:Int = conversation["MessageCount"] as! Int;
+            let readConversationCount:Int = conversationParticipant["ReadMessageCount"] as! Int;
+            let conversationCount:Int = conversation["MessageCount"] as! Int;
             var recentMessage="";
-            if var message:String = conversation["RecentMessage"] as? String {
+            if let message:String = conversation["RecentMessage"] as? String {
                 recentMessage = message;
             }
             cell.nameLabel.text = profile["Name"] as? String;
@@ -102,17 +118,22 @@ class ConversationListTableViewController: UITableViewController {
             var image = PFFile();
             if let userImageFile = profile["Image"] as? PFFile {
                 image = userImageFile;
+                print("yes");
                 image.getDataInBackgroundWithBlock {
                     (imageData, error) -> Void in
                     if (error == nil) {
+                        print("hello");
+                        print(UIImage(data:imageData!));
                         cell.profileImage.image = UIImage(data:imageData!);
+                        self.imageList[indexPath.row] = UIImage(data:imageData!);
                     }
                     else {
-                        println(error);
+                        print(error);
                     }
                 }
             } else {
                 cell.profileImage.image = UIImage(named: "selectImage")!;
+                self.imageList[indexPath.row] = UIImage(named: "selectImage")!;
             }
             formatImage(cell.profileImage);
             cell.profileImage.hidden = false;
@@ -123,7 +144,6 @@ class ConversationListTableViewController: UITableViewController {
                 cell.recentMessageLabel.hidden = true;
                 cell.nameLabel.hidden = true;
                 cell.unreadMessageMark.hidden = true;
-                cell.selectionStyle = UITableViewCellSelectionStyle.None;
             }
         return cell;
     }
@@ -139,7 +159,7 @@ class ConversationListTableViewController: UITableViewController {
             return;
         } else if (Constants.ScreenDimensions.screenHeight == 667) {
             return; // Do nothing because designed on iPhone 6 viewport
-        } else if (Constants.ScreenDimensions.screenHeight == 736){
+        } else if (Constants.ScreenDimensions.screenHeight == 736) {
             cell.nameLabel.font = cell.nameLabel.font.fontWithSize(22.0);
             cell.recentMessageLabel.font = cell.recentMessageLabel.font.fontWithSize(13.0)
             return;
@@ -148,18 +168,26 @@ class ConversationListTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let chatCellIdentifier:String = "ChatCell";
-        var profile: AnyObject = otherProfileList[indexPath.row];
-
+        let profile: PFObject = otherProfileList[indexPath.row] as! PFObject;
+        let image: UIImage! = imageList[indexPath.row] as UIImage!;
+        if ((image) != nil) {
+            self.nextImage = image;
+        } else {
+            self.nextImage = UIImage(named: "selectImage")!;
+        }
+        
         // Sets values for selected user
-        prepareDataStore(profile as! PFObject);
+        prepareDataStore(profile);
+        self.performSegueWithIdentifier("toMessageVC", sender: self);
     }
+    
+    
     
     /*-------------------------------- HELPER METHODS ------------------------------------*/
 
     // Checks if user is logged in
     func userLoggedIn() -> Bool{
-        var currentUser = PFUser.currentUser();
+        let currentUser = PFUser.currentUser();
         if ((currentUser) != nil) {
             return true;
         }
@@ -196,7 +224,7 @@ class ConversationListTableViewController: UITableViewController {
     }
     
     // Formats image into circle if the image is a square *should probably crop to square first*
-    func formatImage(var profileImage: UIImageView) {
+    func formatImage( profileImage: UIImageView) {
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
         profileImage.clipsToBounds = true;
     }
@@ -215,37 +243,27 @@ class ConversationListTableViewController: UITableViewController {
         defaults.setObject(profile["Looking"], forKey: Constants.SelectedUserKeys.selectedLookingForKey);
         defaults.setObject(profile["Available"], forKey: Constants.SelectedUserKeys.selectedAvailableKey);
         defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey);
-        var image = PFFile();
-        if let userImageFile = profile["Image"] as? PFFile {
-            image = userImageFile;
-            image.getDataInBackgroundWithBlock {
-                (imageData, error) -> Void in
-                if (error == nil) {
-                    self.saveOtherImage(UIImage(data:imageData!)!);
-                }
-                else {
-                    println(error);
-                }
-            }
-        } else {
-            self.saveOtherImage(UIImage(named: "selectImage")!);
-        }
         
+        
+    }
+    
+    func goToMessageVC() {
+        self.performSegueWithIdentifier("toMessageVC", sender: self);
     }
     
     // Helper methods to save images into local datastore from Parse
     func documentsPathForFileName(name: String) -> String {
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true);
-        let path = paths[0] as! String;
-        let fullPath = path.stringByAppendingPathComponent(name)
+        let path = paths[0];
+        let fullPath = NSURL(fileURLWithPath: path).URLByAppendingPathComponent(name)
         
-        return fullPath
+        return String(fullPath);
     }
     func saveOtherImage(image: UIImage) {
         let imageData = UIImageJPEGRepresentation(image, 1)
         let relativePath = "image_\(NSDate.timeIntervalSinceReferenceDate()).jpg"
         let path = self.documentsPathForFileName(relativePath)
-        imageData.writeToFile(path, atomically: true)
+        imageData!.writeToFile(path, atomically: true)
         NSUserDefaults.standardUserDefaults().setObject(relativePath, forKey: Constants.SelectedUserKeys.selectedProfileImageKey)
         NSUserDefaults.standardUserDefaults().synchronize()
     }
@@ -257,12 +275,12 @@ class ConversationListTableViewController: UITableViewController {
     
     // Finds the list of IDs of the other conversation participants in the area
     func findOtherProfiles() {
-        var otherIDs:NSMutableArray = NSMutableArray();
+        let otherIDs:NSMutableArray = NSMutableArray();
         for (var i = 0; i < conversationParticipantList.count; i++){
-            var participant = conversationParticipantList[i] as! PFObject;
+            let participant = conversationParticipantList[i] as! PFObject;
             otherIDs.addObject(participant["OtherUser"]!);
         }
-        var query = PFQuery(className: "Profile");
+        let query = PFQuery(className: "Profile");
         query.whereKey("ID", containedIn: otherIDs as [AnyObject]);
         query.orderByDescending("MostRecent");
         
@@ -273,7 +291,7 @@ class ConversationListTableViewController: UITableViewController {
                 self.tableView.reloadData();
                 self.refreshControl?.endRefreshing();
             } else {
-                println(error);
+                print(error);
             }
         }
     }
@@ -286,7 +304,7 @@ class ConversationListTableViewController: UITableViewController {
                 self.conversationList = result as! NSArray;
                 self.findOtherProfiles();
             } else {
-                println(error);
+                print(error);
             }
         };
     }
@@ -300,7 +318,7 @@ class ConversationListTableViewController: UITableViewController {
                 self.conversationParticipantList = result as! NSArray;
                 self.findConversations()
             } else {
-                println(error);
+                print(error);
             }
         };
     }

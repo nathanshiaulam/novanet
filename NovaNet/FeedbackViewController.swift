@@ -10,23 +10,26 @@ import UIKit
 import Parse
 import Bolts
 
-class FeedbackViewController: UIViewController {
+class FeedbackViewController: ViewController {
     
     @IBOutlet weak var feedbackTextField: UITextView!
+    
+    var leftBarButtonItem : UIBarButtonItem!
+
     @IBAction func sendFeedbackButton(sender: UIButton) {
-        var text = feedbackTextField.text;
-        if count(text) > 0 && text != Constants.ConstantStrings.feedbackText {
+        let text = feedbackTextField.text;
+        if text.characters.count > 0 && text != Constants.ConstantStrings.feedbackText {
             PFCloud.callFunctionInBackground("sendMail", withParameters:["text":text]) {
                 (result: AnyObject?, error: NSError?) -> Void in
                 if error == nil {
-                    var alert = UIAlertController(title: "Thanks so much- we've received your feedback.", message: Constants.ConstantStrings.feedbackAlertText, preferredStyle: UIAlertControllerStyle.Alert);
+                    let alert = UIAlertController(title: "Thanks so much- we've received your feedback.", message: Constants.ConstantStrings.feedbackAlertText, preferredStyle: UIAlertControllerStyle.Alert);
                     alert.addAction(UIAlertAction(title: "GOT IT", style: UIAlertActionStyle.Default, handler: nil));
                     self.presentViewController(alert, animated: true, completion: nil);
-                    println(result);
+                    print(result);
                 }
             }
         } else {
-            var alert = UIAlertController(title: "Empty Form", message: Constants.ConstantStrings.feedbackEmptyText, preferredStyle: UIAlertControllerStyle.Alert);
+            let alert = UIAlertController(title: "Empty Form", message: Constants.ConstantStrings.feedbackEmptyText, preferredStyle: UIAlertControllerStyle.Alert);
             alert.addAction(UIAlertAction(title: "GOT IT", style: UIAlertActionStyle.Default, handler: nil));
             self.presentViewController(alert, animated: true, completion: nil);
             
@@ -38,6 +41,9 @@ class FeedbackViewController: UIViewController {
     
     override func viewDidLoad() {
         self.automaticallyAdjustsScrollViewInsets = false;
+        self.tabBarController?.navigationItem.title = "Feedback";
+        self.leftBarButtonItem = UIBarButtonItem(title: "Done", style:         UIBarButtonItemStyle.Plain, target: self, action: "removeKeyboard")
+        
 
         feedbackTextField.backgroundColor = UIColor.clearColor();
         feedbackTextField.text = Constants.ConstantStrings.feedbackText;
@@ -49,10 +55,13 @@ class FeedbackViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         // Go to login page if no user logged in
+        self.tabBarController?.navigationItem.title = "Feedback";
+
         if (!self.userLoggedIn()) {
             // Go to login page if no user logged in
             self.tabBarController?.selectedIndex = 0;
             super.viewDidAppear(true);
+
             return;
         }
         super.viewDidAppear(true);
@@ -65,20 +74,31 @@ class FeedbackViewController: UIViewController {
             textView.text = nil
             textView.textColor = UIColor.blackColor()
         }
+        if self.tabBarController?.navigationItem.leftBarButtonItem == nil {
+            self.tabBarController?.navigationItem.leftBarButtonItem = self.leftBarButtonItem;
+        }
     }
     
     func textViewDidEndEditing(textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = Constants.ConstantStrings.feedbackText;
             textView.textColor = UIColorFromHex(0xA6AAA9, alpha: 1.0)
+            
         }
+        if self.tabBarController?.navigationItem.leftBarButtonItem == self.leftBarButtonItem {
+            self.tabBarController?.navigationItem.leftBarButtonItem = nil
+        }
+    }
+    
+    func removeKeyboard() {
+        feedbackTextField.resignFirstResponder();
     }
     
     /*-------------------------------- HELPER METHODS ------------------------------------*/
     
     // Checks if user is logged in
     func userLoggedIn() -> Bool{
-        var currentUser = PFUser.currentUser();
+        let currentUser = PFUser.currentUser();
         if ((currentUser) != nil) {
             return true;
         }
@@ -95,7 +115,7 @@ class FeedbackViewController: UIViewController {
     }
     
     // Removes keyboard when tap out of screen
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.view.endEditing(true);
     }
 

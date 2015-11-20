@@ -7,22 +7,32 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		160B9C0D1BCF7F1100316AF3 /* SettingsMenuTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160B9C0C1BCF7F1100316AF3 /* SettingsMenuTableVC.swift */; settings = {ASSET_TAGS = (); }; };
 		160D1F281B5E903B00B3E4DB /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */; };
 		160D1F2A1B5EFA3A00B3E4DB /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */; };
 		160D1F2E1B5F85A200B3E4DB /* UploadPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */; };
-		160D1F341B5FCBE000B3E4DB /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F331B5FCBE000B3E4DB /* OnboardingViewController.swift */; };
 		160D1F3D1B61080C00B3E4DB /* MessagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F3C1B61080C00B3E4DB /* MessagerViewController.swift */; };
 		1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B1881B55367800DBF11A /* SignUpViewController.swift */; };
 		1616B18B1B554D0E00DBF11A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */; };
 		1616B18F1B55560300DBF11A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B18E1B55560300DBF11A /* Constants.swift */; };
+		16629EB11BDDD7C4003C4F05 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB01BDDD7C4003C4F05 /* ViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		16629EB31BDDD7F2003C4F05 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB21BDDD7F2003C4F05 /* TableViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		16629EB71BDDDAEA003C4F05 /* NSDateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */; settings = {ASSET_TAGS = (); }; };
 		167114C11B8299F90024DC3E /* ImageUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167114C01B8299F90024DC3E /* ImageUtil.swift */; };
+		1685FB301BE988E300E05CDE /* EventsFinderTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1685FB2F1BE988E300E05CDE /* EventsFinderTableVC.swift */; settings = {ASSET_TAGS = (); }; };
+		1685FB341BE98ADD00E05CDE /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1685FB331BE98ADD00E05CDE /* EventCell.swift */; settings = {ASSET_TAGS = (); }; };
+		1685FB361BEB5D5E00E05CDE /* EventAttendanceButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1685FB351BEB5D5E00E05CDE /* EventAttendanceButton.swift */; settings = {ASSET_TAGS = (); }; };
+		169441141BDC29BC0049122C /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169441131BDC29BC0049122C /* NetworkManager.swift */; settings = {ASSET_TAGS = (); }; };
+		169CEB9B1B8C998800CCF078 /* AboutContentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169CEB9A1B8C998800CCF078 /* AboutContentVC.swift */; };
+		169CEB9D1B8C9DC800CCF078 /* AboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169CEB9C1B8C9DC800CCF078 /* AboutVC.swift */; };
+		169FD2381B9C03F300A535D3 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169FD2371B9C03F300A535D3 /* ForgotPasswordViewController.swift */; };
+		169FD23A1B9CF86400A535D3 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169FD2391B9CF86400A535D3 /* Bolts.framework */; };
+		169FD23C1B9CF86E00A535D3 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169FD23B1B9CF86E00A535D3 /* Parse.framework */; };
 		16A0E7001B54FC7400DDAE95 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */; };
 		16A0E7051B54FC7400DDAE95 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16A0E7031B54FC7400DDAE95 /* Main.storyboard */; };
 		16A0E7071B54FC7400DDAE95 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16A0E7061B54FC7400DDAE95 /* Images.xcassets */; };
 		16A0E70A1B54FC7400DDAE95 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 16A0E7081B54FC7400DDAE95 /* LaunchScreen.xib */; };
 		16A0E7161B54FC7400DDAE95 /* NovaNetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7151B54FC7400DDAE95 /* NovaNetTests.swift */; };
-		16A0E7211B55069600DDAE95 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0E71F1B55069600DDAE95 /* Bolts.framework */; };
-		16A0E7221B55069600DDAE95 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0E7201B55069600DDAE95 /* Parse.framework */; };
 		16A0E7251B55075D00DDAE95 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0E7241B55075D00DDAE95 /* AudioToolbox.framework */; };
 		16A0E7271B55077100DDAE95 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0E7261B55077100DDAE95 /* CFNetwork.framework */; };
 		16A0E7291B55077800DDAE95 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0E7281B55077800DDAE95 /* CoreGraphics.framework */; };
@@ -40,14 +50,16 @@
 		16A0E7EC1B78CA1700DE06A9 /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7EB1B78CA1700DE06A9 /* ConversationTableViewCell.swift */; };
 		16A0E7F01B7CC39800DE06A9 /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7EF1B7CC39800DE06A9 /* IntroductionViewController.swift */; };
 		16A0E7F61B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7F51B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift */; };
-		16A0E8281B7E302300DE06A9 /* SettingsMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E8271B7E302300DE06A9 /* SettingsMenuViewController.swift */; };
 		16A0E82A1B7E47D400DE06A9 /* SystemSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E8291B7E47D400DE06A9 /* SystemSettingsTableViewController.swift */; };
 		16A0E82E1B7E4DCD00DE06A9 /* FinderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E82D1B7E4DCD00DE06A9 /* FinderViewController.swift */; };
+		16A111371BEBD224002CB7A1 /* EventDescriptionTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A111361BEBD224002CB7A1 /* EventDescriptionTableVC.swift */; settings = {ASSET_TAGS = (); }; };
+		16A111391BEBD3C1002CB7A1 /* EventCreateTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A111381BEBD3C1002CB7A1 /* EventCreateTableVC.swift */; settings = {ASSET_TAGS = (); }; };
 		16C1C8C51B7F494A00C6166C /* HomeTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C1C8C41B7F494A00C6166C /* HomeTabBarController.swift */; };
 		16C1C8C71B7F50D100C6166C /* SelectedProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C1C8C61B7F50D000C6166C /* SelectedProfileViewController.swift */; };
 		16C1C8C91B7F5F5000C6166C /* ConversationListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C1C8C81B7F5F5000C6166C /* ConversationListTableViewController.swift */; };
+		16D333611BCADE1600C1B405 /* OnboardingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D333601BCADE1600C1B405 /* OnboardingTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		16D333631BCB063200C1B405 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D333621BCB063200C1B405 /* Utilities.swift */; settings = {ASSET_TAGS = (); }; };
 		16DB14061B8024EE0048E1AC /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DB14051B8024EE0048E1AC /* FeedbackViewController.swift */; };
-		16DB20131B6526C3008A9E54 /* UIDeviceList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DB20121B6526C3008A9E54 /* UIDeviceList.swift */; };
 		7DFB60EA63A8AD92B037922E /* libPods-NovaNet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 398448FD417B1B90923C50B5 /* libPods-NovaNet.a */; };
 /* End PBXBuildFile section */
 
@@ -63,16 +75,28 @@
 
 /* Begin PBXFileReference section */
 		05B5DD1A09E458030958BC47 /* Pods-NovaNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NovaNet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NovaNet/Pods-NovaNet.debug.xcconfig"; sourceTree = "<group>"; };
+		160B9C0C1BCF7F1100316AF3 /* SettingsMenuTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsMenuTableVC.swift; sourceTree = "<group>"; };
 		160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
 		160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UploadPictureViewController.swift; path = ../UploadPictureViewController.swift; sourceTree = "<group>"; };
-		160D1F331B5FCBE000B3E4DB /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		160D1F351B60F49F00B3E4DB /* NovaNet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NovaNet-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		160D1F3C1B61080C00B3E4DB /* MessagerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagerViewController.swift; sourceTree = "<group>"; };
 		1616B1881B55367800DBF11A /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		1616B18E1B55560300DBF11A /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		16629EB01BDDD7C4003C4F05 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../ViewController.swift; sourceTree = "<group>"; };
+		16629EB21BDDD7F2003C4F05 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSDateExtensions.swift; path = ../NSDateExtensions.swift; sourceTree = "<group>"; };
 		167114C01B8299F90024DC3E /* ImageUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageUtil.swift; sourceTree = "<group>"; };
+		1685FB2F1BE988E300E05CDE /* EventsFinderTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsFinderTableVC.swift; sourceTree = "<group>"; };
+		1685FB331BE98ADD00E05CDE /* EventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
+		1685FB351BEB5D5E00E05CDE /* EventAttendanceButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventAttendanceButton.swift; sourceTree = "<group>"; };
+		169441131BDC29BC0049122C /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		169CEB9A1B8C998800CCF078 /* AboutContentVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutContentVC.swift; sourceTree = "<group>"; };
+		169CEB9C1B8C9DC800CCF078 /* AboutVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutVC.swift; sourceTree = "<group>"; };
+		169FD2371B9C03F300A535D3 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
+		169FD2391B9CF86400A535D3 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
+		169FD23B1B9CF86E00A535D3 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		16A0E6FA1B54FC7300DDAE95 /* NovaNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NovaNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		16A0E6FE1B54FC7400DDAE95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -82,8 +106,6 @@
 		16A0E70F1B54FC7400DDAE95 /* NovaNetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NovaNetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		16A0E7141B54FC7400DDAE95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16A0E7151B54FC7400DDAE95 /* NovaNetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NovaNetTests.swift; sourceTree = "<group>"; };
-		16A0E71F1B55069600DDAE95 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = "../../../Downloads/parse-library-1.7.5/Bolts.framework"; sourceTree = "<group>"; };
-		16A0E7201B55069600DDAE95 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = "../../../Downloads/parse-library-1.7.5/Parse.framework"; sourceTree = "<group>"; };
 		16A0E7241B55075D00DDAE95 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		16A0E7261B55077100DDAE95 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		16A0E7281B55077800DDAE95 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -101,14 +123,16 @@
 		16A0E7EB1B78CA1700DE06A9 /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
 		16A0E7EF1B7CC39800DE06A9 /* IntroductionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IntroductionViewController.swift; path = ../IntroductionViewController.swift; sourceTree = "<group>"; };
 		16A0E7F51B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinishOnboardingViewController.swift; sourceTree = "<group>"; };
-		16A0E8271B7E302300DE06A9 /* SettingsMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsMenuViewController.swift; sourceTree = "<group>"; };
 		16A0E8291B7E47D400DE06A9 /* SystemSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemSettingsTableViewController.swift; sourceTree = "<group>"; };
 		16A0E82D1B7E4DCD00DE06A9 /* FinderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinderViewController.swift; sourceTree = "<group>"; };
+		16A111361BEBD224002CB7A1 /* EventDescriptionTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDescriptionTableVC.swift; sourceTree = "<group>"; };
+		16A111381BEBD3C1002CB7A1 /* EventCreateTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCreateTableVC.swift; sourceTree = "<group>"; };
 		16C1C8C41B7F494A00C6166C /* HomeTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTabBarController.swift; sourceTree = "<group>"; };
 		16C1C8C61B7F50D000C6166C /* SelectedProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectedProfileViewController.swift; sourceTree = "<group>"; };
 		16C1C8C81B7F5F5000C6166C /* ConversationListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationListTableViewController.swift; sourceTree = "<group>"; };
+		16D333601BCADE1600C1B405 /* OnboardingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingTableViewController.swift; sourceTree = "<group>"; };
+		16D333621BCB063200C1B405 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		16DB14051B8024EE0048E1AC /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
-		16DB20121B6526C3008A9E54 /* UIDeviceList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDeviceList.swift; sourceTree = "<group>"; };
 		398448FD417B1B90923C50B5 /* libPods-NovaNet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NovaNet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDDFF8B4ADAFD4E4E80870A3 /* Pods-NovaNet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NovaNet.release.xcconfig"; path = "Pods/Target Support Files/Pods-NovaNet/Pods-NovaNet.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -124,15 +148,15 @@
 				16A0E7371B5507A400DDAE95 /* libz.dylib in Frameworks */,
 				16A0E7351B55079D00DDAE95 /* SystemConfiguration.framework in Frameworks */,
 				16A0E7331B55079600DDAE95 /* StoreKit.framework in Frameworks */,
+				169FD23C1B9CF86E00A535D3 /* Parse.framework in Frameworks */,
 				16A0E7311B55079100DDAE95 /* Security.framework in Frameworks */,
 				16A0E72F1B55078B00DDAE95 /* QuartzCore.framework in Frameworks */,
 				16A0E72D1B55078600DDAE95 /* MobileCoreServices.framework in Frameworks */,
 				16A0E72B1B55077F00DDAE95 /* CoreLocation.framework in Frameworks */,
 				16A0E7291B55077800DDAE95 /* CoreGraphics.framework in Frameworks */,
 				16A0E7271B55077100DDAE95 /* CFNetwork.framework in Frameworks */,
+				169FD23A1B9CF86400A535D3 /* Bolts.framework in Frameworks */,
 				16A0E7251B55075D00DDAE95 /* AudioToolbox.framework in Frameworks */,
-				16A0E7221B55069600DDAE95 /* Parse.framework in Frameworks */,
-				16A0E7211B55069600DDAE95 /* Bolts.framework in Frameworks */,
 				7DFB60EA63A8AD92B037922E /* libPods-NovaNet.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -147,6 +171,91 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		160B9C051BCF763400316AF3 /* OnboardingProcess */ = {
+			isa = PBXGroup;
+			children = (
+				16A0E7EF1B7CC39800DE06A9 /* IntroductionViewController.swift */,
+				16D333601BCADE1600C1B405 /* OnboardingTableViewController.swift */,
+				160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */,
+				16A0E7F51B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift */,
+			);
+			name = OnboardingProcess;
+			sourceTree = "<group>";
+		};
+		160B9C061BCF764800316AF3 /* Intro */ = {
+			isa = PBXGroup;
+			children = (
+				169CEB9C1B8C9DC800CCF078 /* AboutVC.swift */,
+				169CEB9A1B8C998800CCF078 /* AboutContentVC.swift */,
+				16A0E7401B55096F00DDAE95 /* LogInViewController.swift */,
+				1616B1881B55367800DBF11A /* SignUpViewController.swift */,
+				169FD2371B9C03F300A535D3 /* ForgotPasswordViewController.swift */,
+			);
+			name = Intro;
+			sourceTree = "<group>";
+		};
+		160B9C071BCF768600316AF3 /* HomeView */ = {
+			isa = PBXGroup;
+			children = (
+				16C1C8C41B7F494A00C6166C /* HomeTabBarController.swift */,
+				16A0E8291B7E47D400DE06A9 /* SystemSettingsTableViewController.swift */,
+			);
+			name = HomeView;
+			sourceTree = "<group>";
+		};
+		160B9C081BCF769800316AF3 /* MainTabs */ = {
+			isa = PBXGroup;
+			children = (
+				1685FB321BE988F600E05CDE /* Events */,
+				160B9C0A1BCF774000316AF3 /* Finder */,
+				160B9C0B1BCF775200316AF3 /* Profile */,
+				16DB14051B8024EE0048E1AC /* FeedbackViewController.swift */,
+				160B9C091BCF76B000316AF3 /* Messages */,
+			);
+			name = MainTabs;
+			sourceTree = "<group>";
+		};
+		160B9C091BCF76B000316AF3 /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				16A0E7EB1B78CA1700DE06A9 /* ConversationTableViewCell.swift */,
+				160D1F3C1B61080C00B3E4DB /* MessagerViewController.swift */,
+				16C1C8C81B7F5F5000C6166C /* ConversationListTableViewController.swift */,
+			);
+			name = Messages;
+			sourceTree = "<group>";
+		};
+		160B9C0A1BCF774000316AF3 /* Finder */ = {
+			isa = PBXGroup;
+			children = (
+				16A0E82D1B7E4DCD00DE06A9 /* FinderViewController.swift */,
+				16C1C8C61B7F50D000C6166C /* SelectedProfileViewController.swift */,
+				160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */,
+			);
+			name = Finder;
+			sourceTree = "<group>";
+		};
+		160B9C0B1BCF775200316AF3 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				160B9C0C1BCF7F1100316AF3 /* SettingsMenuTableVC.swift */,
+				1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */,
+			);
+			name = Profile;
+			sourceTree = "<group>";
+		};
+		1685FB321BE988F600E05CDE /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				1685FB331BE98ADD00E05CDE /* EventCell.swift */,
+				16A111381BEBD3C1002CB7A1 /* EventCreateTableVC.swift */,
+				16A111361BEBD224002CB7A1 /* EventDescriptionTableVC.swift */,
+				1685FB351BEB5D5E00E05CDE /* EventAttendanceButton.swift */,
+				1685FB2F1BE988E300E05CDE /* EventsFinderTableVC.swift */,
+			);
+			name = Events;
+			sourceTree = "<group>";
+		};
 		16A0E6F11B54FC7300DDAE95 = {
 			isa = PBXGroup;
 			children = (
@@ -170,30 +279,21 @@
 		16A0E6FC1B54FC7300DDAE95 /* NovaNet */ = {
 			isa = PBXGroup;
 			children = (
+				16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */,
+				16629EB01BDDD7C4003C4F05 /* ViewController.swift */,
+				16629EB21BDDD7F2003C4F05 /* TableViewController.swift */,
 				160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */,
 				160D1F351B60F49F00B3E4DB /* NovaNet-Bridging-Header.h */,
 				16A0E7031B54FC7400DDAE95 /* Main.storyboard */,
 				16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */,
-				16DB20121B6526C3008A9E54 /* UIDeviceList.swift */,
-				1616B18E1B55560300DBF11A /* Constants.swift */,
-				16A0E7401B55096F00DDAE95 /* LogInViewController.swift */,
-				1616B1881B55367800DBF11A /* SignUpViewController.swift */,
-				16A0E7EF1B7CC39800DE06A9 /* IntroductionViewController.swift */,
-				160D1F331B5FCBE000B3E4DB /* OnboardingViewController.swift */,
-				160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */,
-				16A0E7F51B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift */,
-				16C1C8C41B7F494A00C6166C /* HomeTabBarController.swift */,
-				16A0E8291B7E47D400DE06A9 /* SystemSettingsTableViewController.swift */,
-				16A0E82D1B7E4DCD00DE06A9 /* FinderViewController.swift */,
-				16C1C8C81B7F5F5000C6166C /* ConversationListTableViewController.swift */,
-				1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */,
-				16DB14051B8024EE0048E1AC /* FeedbackViewController.swift */,
-				16A0E8271B7E302300DE06A9 /* SettingsMenuViewController.swift */,
-				16C1C8C61B7F50D000C6166C /* SelectedProfileViewController.swift */,
 				167114C01B8299F90024DC3E /* ImageUtil.swift */,
-				160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */,
-				16A0E7EB1B78CA1700DE06A9 /* ConversationTableViewCell.swift */,
-				160D1F3C1B61080C00B3E4DB /* MessagerViewController.swift */,
+				16D333621BCB063200C1B405 /* Utilities.swift */,
+				169441131BDC29BC0049122C /* NetworkManager.swift */,
+				1616B18E1B55560300DBF11A /* Constants.swift */,
+				160B9C061BCF764800316AF3 /* Intro */,
+				160B9C051BCF763400316AF3 /* OnboardingProcess */,
+				160B9C071BCF768600316AF3 /* HomeView */,
+				160B9C081BCF769800316AF3 /* MainTabs */,
 				16A0E7061B54FC7400DDAE95 /* Images.xcassets */,
 				16A0E7081B54FC7400DDAE95 /* LaunchScreen.xib */,
 				16A0E6FD1B54FC7400DDAE95 /* Supporting Files */,
@@ -242,8 +342,8 @@
 				16A0E7281B55077800DDAE95 /* CoreGraphics.framework */,
 				16A0E7261B55077100DDAE95 /* CFNetwork.framework */,
 				16A0E7241B55075D00DDAE95 /* AudioToolbox.framework */,
-				16A0E71F1B55069600DDAE95 /* Bolts.framework */,
-				16A0E7201B55069600DDAE95 /* Parse.framework */,
+				169FD2391B9CF86400A535D3 /* Bolts.framework */,
+				169FD23B1B9CF86E00A535D3 /* Parse.framework */,
 				398448FD417B1B90923C50B5 /* libPods-NovaNet.a */,
 			);
 			name = Frameworks;
@@ -305,7 +405,8 @@
 		16A0E6F21B54FC7300DDAE95 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Nova;
 				TargetAttributes = {
 					16A0E6F91B54FC7300DDAE95 = {
@@ -403,22 +504,34 @@
 				16A0E7F01B7CC39800DE06A9 /* IntroductionViewController.swift in Sources */,
 				16A0E7F61B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift in Sources */,
 				16C1C8C91B7F5F5000C6166C /* ConversationListTableViewController.swift in Sources */,
+				16A111371BEBD224002CB7A1 /* EventDescriptionTableVC.swift in Sources */,
 				160D1F3D1B61080C00B3E4DB /* MessagerViewController.swift in Sources */,
-				16DB20131B6526C3008A9E54 /* UIDeviceList.swift in Sources */,
+				16629EB71BDDDAEA003C4F05 /* NSDateExtensions.swift in Sources */,
+				16D333631BCB063200C1B405 /* Utilities.swift in Sources */,
 				16A0E7001B54FC7400DDAE95 /* AppDelegate.swift in Sources */,
+				16A111391BEBD3C1002CB7A1 /* EventCreateTableVC.swift in Sources */,
 				1616B18B1B554D0E00DBF11A /* ProfileViewController.swift in Sources */,
 				1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */,
 				1616B18F1B55560300DBF11A /* Constants.swift in Sources */,
 				160D1F281B5E903B00B3E4DB /* HomeTableViewCell.swift in Sources */,
+				1685FB361BEB5D5E00E05CDE /* EventAttendanceButton.swift in Sources */,
 				16DB14061B8024EE0048E1AC /* FeedbackViewController.swift in Sources */,
+				1685FB341BE98ADD00E05CDE /* EventCell.swift in Sources */,
+				1685FB301BE988E300E05CDE /* EventsFinderTableVC.swift in Sources */,
+				169FD2381B9C03F300A535D3 /* ForgotPasswordViewController.swift in Sources */,
+				169CEB9B1B8C998800CCF078 /* AboutContentVC.swift in Sources */,
 				16A0E82E1B7E4DCD00DE06A9 /* FinderViewController.swift in Sources */,
 				160D1F2E1B5F85A200B3E4DB /* UploadPictureViewController.swift in Sources */,
+				16629EB31BDDD7F2003C4F05 /* TableViewController.swift in Sources */,
 				16A0E82A1B7E47D400DE06A9 /* SystemSettingsTableViewController.swift in Sources */,
-				16A0E8281B7E302300DE06A9 /* SettingsMenuViewController.swift in Sources */,
+				169441141BDC29BC0049122C /* NetworkManager.swift in Sources */,
 				160D1F2A1B5EFA3A00B3E4DB /* UserProfileViewController.swift in Sources */,
 				16C1C8C51B7F494A00C6166C /* HomeTabBarController.swift in Sources */,
 				167114C11B8299F90024DC3E /* ImageUtil.swift in Sources */,
-				160D1F341B5FCBE000B3E4DB /* OnboardingViewController.swift in Sources */,
+				16D333611BCADE1600C1B405 /* OnboardingTableViewController.swift in Sources */,
+				16629EB11BDDD7C4003C4F05 /* ViewController.swift in Sources */,
+				160B9C0D1BCF7F1100316AF3 /* SettingsMenuTableVC.swift in Sources */,
+				169CEB9D1B8C9DC800CCF078 /* AboutVC.swift in Sources */,
 				16C1C8C71B7F50D100C6166C /* SelectedProfileViewController.swift in Sources */,
 				16A0E7411B55096F00DDAE95 /* LogInViewController.swift in Sources */,
 				16A0E7EC1B78CA1700DE06A9 /* ConversationTableViewCell.swift in Sources */,
@@ -483,7 +596,9 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -528,6 +643,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -552,17 +668,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/nathanlam/Downloads/parse-library-1.7.5",
+					"$(PROJECT_DIR)/NovaNet.xcodeproj",
 				);
 				INFOPLIST_FILE = NovaNet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nova.NovaNet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SDKROOT = iphoneos8.4;
+				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "NovaNet-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -575,17 +694,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/nathanlam/Downloads/parse-library-1.7.5",
+					"$(PROJECT_DIR)/NovaNet.xcodeproj",
 				);
 				INFOPLIST_FILE = NovaNet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nova.NovaNet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SDKROOT = iphoneos8.4;
+				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "NovaNet-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -605,8 +727,9 @@
 				);
 				INFOPLIST_FILE = NovaNetTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NovaNet.app/NovaNet";
+				TEST_HOST = "";
 			};
 			name = Debug;
 		};
@@ -620,8 +743,8 @@
 				);
 				INFOPLIST_FILE = NovaNetTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NovaNet.app/NovaNet";
 			};
 			name = Release;
 		};

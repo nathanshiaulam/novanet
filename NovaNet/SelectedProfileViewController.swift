@@ -10,7 +10,7 @@ import UIKit
 import Parse
 import Bolts
 
-class SelectedProfileViewController: UIViewController {
+class SelectedProfileViewController: ViewController {
 
     @IBOutlet weak var profileImage: UIImageView!;
     
@@ -30,6 +30,7 @@ class SelectedProfileViewController: UIViewController {
     @IBOutlet weak var seekingHeaderLabel: UILabel!
     @IBOutlet weak var interestsHeaderLabel: UILabel!
     @IBOutlet weak var professionHeaderLabel: UILabel!
+    
     /*-------------------------------- CONSTRAINTS ------------------------------------*/
     @IBOutlet weak var profileImageHeight: NSLayoutConstraint!
     @IBOutlet weak var profileImageWidth: NSLayoutConstraint!
@@ -37,7 +38,6 @@ class SelectedProfileViewController: UIViewController {
     @IBOutlet weak var graySeparatorWidth: NSLayoutConstraint!
     @IBOutlet weak var graySeparatorHeight: NSLayoutConstraint!
     @IBOutlet weak var chatButtonHeight: NSLayoutConstraint!
-    @IBOutlet weak var chatButtonWidth: NSLayoutConstraint!
     @IBOutlet weak var nameBottomToAbout: NSLayoutConstraint!
     @IBOutlet weak var profileImageNameDist: NSLayoutConstraint!
     @IBOutlet weak var profileImageTopDist: NSLayoutConstraint!
@@ -48,6 +48,17 @@ class SelectedProfileViewController: UIViewController {
     var thirdBot:CGFloat!;
     var fourthBot:CGFloat!;
     var fifthBot:CGFloat!;
+    var fromMessage:Bool! = false;
+    
+    
+    @IBAction func backPressed(sender: UIBarButtonItem) {
+        if (fromMessage == true) {
+            self.navigationController?.popViewControllerAnimated(true);
+        } else {
+            self.dismissViewControllerAnimated(true, completion: nil);
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad();
         if (self.image != nil) {
@@ -55,6 +66,9 @@ class SelectedProfileViewController: UIViewController {
         } else {
             profileImage.image = UIImage(named: "selectImage");
         }
+        print(image);
+        self.view.backgroundColor = UIColor.whiteColor();
+
         bot = self.nameBottomToAbout.constant - 5
         otherBot = self.profileImageNameDist.constant/self.profileImageNameDist.multiplier - 5;
         thirdBot = self.profileImageTopDist.constant - 10;
@@ -73,7 +87,7 @@ class SelectedProfileViewController: UIViewController {
     /*-------------------------------- HELPER METHODS ------------------------------------*/
 
     // Methods to format image and convert RGB to hex
-    func formatImage(var profileImage: UIImageView) {
+    func formatImage( profileImage: UIImageView) {
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
         profileImage.clipsToBounds = true;
     }
@@ -128,14 +142,22 @@ class SelectedProfileViewController: UIViewController {
     func manageiOSModelType() {
         if (Constants.ScreenDimensions.screenHeight == 480) {
             
-            self.profileImageTopDist.constant = self.profileImageTopDist.constant - 17;
-            self.profileImageHeight.constant = 120;
-            self.profileImageWidth.constant = 120;
+            if (fromMessage != true) {
+                self.profileImageTopDist.constant = self.profileImageTopDist.constant - 17;
+                self.profileImageHeight.constant = 120;
+                self.profileImageWidth.constant = 120;
+            } else {
+                self.profileImageHeight.constant = 125;
+                self.profileImageWidth.constant = 125;
+            }
             self.nameBottomToAbout.constant = bot;
             self.profileImageNameDist.constant = otherBot;
             self.graySeparatorHeight.constant = 8;
             self.graySeparatorWidth.constant = 80;
-            
+            if (chatButtonHeight != nil) {
+                self.chatButtonHeight.constant = 40;
+            }
+
             // Set font size of each label
             self.nameLabel.font = self.nameLabel.font.fontWithSize(17.0);
             self.aboutLabel.font = self.aboutLabel.font.fontWithSize(13.0);
@@ -157,7 +179,10 @@ class SelectedProfileViewController: UIViewController {
             self.profileImageHeight.constant = 150;
             self.profileImageWidth.constant = 150;
             self.nameBottomToAbout.constant = fifthBot;
-            
+            if (chatButtonHeight != nil) {
+                self.chatButtonHeight.constant = 50;
+            }
+
             // Set font size of each label
             self.nameLabel.font = self.nameLabel.font.fontWithSize(20.0);
             self.aboutLabel.font = self.aboutLabel.font.fontWithSize(15.0);
@@ -173,15 +198,20 @@ class SelectedProfileViewController: UIViewController {
             self.distHeader.font = self.distHeader.font.fontWithSize(15.0);
             return;
         } else if (Constants.ScreenDimensions.screenHeight == 667) {
-            self.profileImageTopDist.constant = 10;
-            self.profileImageHeight.constant = 200;
-            self.profileImageWidth.constant = 200;
+            if (chatButtonHeight != nil) {
+                self.chatButtonHeight.constant = 60;
+            }
+            self.profileImageTopDist.constant = 18;
+            self.profileImageHeight.constant = 175;
+            self.profileImageWidth.constant = 175;
             return; // Do nothing because designed on iPhone 6 viewport
         } else if (Constants.ScreenDimensions.screenHeight == 736) {
-            
-            self.profileImageTopDist.constant = 30;
-            self.profileImageHeight.constant = 225;
-            self.profileImageWidth.constant = 225;
+            if (chatButtonHeight != nil) {
+                self.chatButtonHeight.constant = 60;
+            }
+            self.profileImageTopDist.constant = 20;
+            self.profileImageHeight.constant = 200;
+            self.profileImageWidth.constant = 200;
             
             return;
         }

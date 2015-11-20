@@ -10,7 +10,7 @@ import UIKit
 import Parse
 import Bolts
 
-class FinishOnboardingViewController: UIViewController {
+class FinishOnboardingViewController: ViewController {
     
     var bot:CGFloat!;
     

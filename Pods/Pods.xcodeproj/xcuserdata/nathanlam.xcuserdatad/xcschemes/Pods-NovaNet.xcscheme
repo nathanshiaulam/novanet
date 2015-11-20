@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E8AA59CD0D27A0A273BC42F7"
+               BlueprintIdentifier = "7EEBFBED03C60ABB2DFA25D6"
                BuildableName = "libPods-NovaNet.a"
                BlueprintName = "Pods-NovaNet"
                ReferencedContainer = "container:Pods.xcodeproj">

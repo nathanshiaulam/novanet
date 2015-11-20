@@ -13,28 +13,17 @@ import Bolts
 
 class HomeTabBarController: UITabBarController {
     
+ 
+    @IBOutlet var doneButton: UIBarButtonItem!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        let tabItems = self.tabBar.items as! [UITabBarItem]
-        let tabItem0 = tabItems[0] as UITabBarItem
-        let tabItem1 = tabItems[1] as UITabBarItem
-        let tabItem2 = tabItems[2] as UITabBarItem
-        let tabItem3 = tabItems[3] as UITabBarItem
-        self.title = "Finder"
-        self.title = "Messages"
-        
-    }
     override func viewDidLoad() {
         super.viewDidLoad();
-        if (!self.userLoggedIn()) {
-            self.performSegueWithIdentifier("toUserLogin", sender: self);
-        }
+        doneButton = nil;
+        self.navigationItem.leftBarButtonItem = nil;
     }
     // Checks if user is logged in
     func userLoggedIn() -> Bool{
-        var currentUser = PFUser.currentUser();
+        let currentUser = PFUser.currentUser();
         if ((currentUser) != nil) {
             return true;
         }

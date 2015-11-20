@@ -10,7 +10,7 @@ import UIKit
 import Bolts
 import Parse
 
-class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate,UINavigationControllerDelegate {
+class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate,UINavigationControllerDelegate {
     
     @IBOutlet weak var profileImage: UIImageView!
     
@@ -56,21 +56,22 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        self.view.backgroundColor = UIColor.whiteColor();
         // Allows user to upload photo
-        var tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tappedImage");
+        let tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tappedImage");
         tapGestureRecognizer.delegate = self;
         self.profileImage.addGestureRecognizer(tapGestureRecognizer);
         self.profileImage.userInteractionEnabled = true;
-        
+        self.tabBarController?.navigationItem.title = "Profile";
+
         picker.delegate = self;
-        bot = self.nameBottomToAbout.constant - 3;
+        bot = self.nameBottomToAbout.constant - 5;
         otherBot = self.profileImageNameDist.constant/self.profileImageNameDist.multiplier - 5;
         setValues();
     }
     
     override func viewWillLayoutSubviews() {
-        formatImage(self.profileImage);
+        Utilities().formatImage(self.profileImage);
         manageiOSModelType()
     }
     
@@ -81,6 +82,8 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
             self.tabBarController?.selectedIndex = 0;
             return;
         }
+        self.tabBarController?.navigationItem.title = "Profile";
+
         setValues();
         super.viewDidAppear(true);
     }
@@ -101,7 +104,7 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
     
     // Checks if user is logged in
     func userLoggedIn() -> Bool{
-        var currentUser = PFUser.currentUser();
+        let currentUser = PFUser.currentUser();
         if ((currentUser) != nil) {
             return true;
         }
@@ -154,12 +157,12 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
 
                 return;
         } else if (Constants.ScreenDimensions.screenHeight == 667) {
-                self.profileImageTopDist.constant = 20;
+                self.profileImageTopDist.constant = 10;
                 self.profileImageHeight.constant = 200;
                 self.profileImageWidth.constant = 200;
                 return; // Do nothing because designed on iPhone 6 viewport
         } else if (Constants.ScreenDimensions.screenHeight == 736) {
-                self.profileImageTopDist.constant = 40;
+                self.profileImageTopDist.constant = 30;
                 self.profileImageHeight.constant = 225;
                 self.profileImageWidth.constant = 225;
 
@@ -168,44 +171,6 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
     }
 
     
-    // Methods to read and write images from local data store/Parse
-    func readImage() -> UIImage {
-        let possibleOldImagePath = NSUserDefaults.standardUserDefaults().objectForKey(Constants.UserKeys.profileImageKey) as! String?
-        var oldImage = UIImage();
-        if let oldImagePath = possibleOldImagePath {
-            let oldFullPath = self.documentsPathForFileName(oldImagePath)
-            let oldImageData = NSData(contentsOfFile: oldFullPath)
-            oldImage = UIImage(data: oldImageData!)!
-        } else {
-            oldImage = UIImage(named: "selectImage")!;
-        }
-        return oldImage;
-    }
-    func saveImage(image: UIImage) {
-        let imageData = UIImageJPEGRepresentation(image, 0.5)
-        let relativePath = "image_\(NSDate.timeIntervalSinceReferenceDate()).jpg"
-        let path = self.documentsPathForFileName(relativePath)
-        imageData.writeToFile(path, atomically: true)
-        NSUserDefaults.standardUserDefaults().setObject(relativePath, forKey: Constants.UserKeys.profileImageKey)
-        NSUserDefaults.standardUserDefaults().synchronize()
-    }
-    func documentsPathForFileName(name: String) -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true);
-        let path = paths[0] as! String;
-        let fullPath = path.stringByAppendingPathComponent(name)
-        
-        return fullPath
-    }
-    
-    
-    func formatImage(var profileImage: UIImageView) {
-        let croppedImage: UIImage = ImageUtil.cropToSquare(image: profileImage.image!)
-        profileImage.image = croppedImage
-        profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
-        profileImage.clipsToBounds = true;
-    }
-
-
     
     // Sets all values of the user profile fields
     func setValues() {
@@ -249,23 +214,23 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
         lookingForLabel.sizeToFit();
         
         self.title = "Profile";
-        self.profileImage.image = readImage();
+        self.profileImage.image = Utilities().readImage();
     }
     
     func tappedImage() {
-        var alert:UIAlertController = UIAlertController(title: "Choose an Image", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet);
+        let alert:UIAlertController = UIAlertController(title: "Choose an Image", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet);
         
-        var galleryAction = UIAlertAction(title: "Upload a Photo", style: UIAlertActionStyle.Default)
+        let galleryAction = UIAlertAction(title: "Upload a Photo", style: UIAlertActionStyle.Default)
             {
                 UIAlertAction in
                 self.openGallery()
         }
-        var cameraAction = UIAlertAction(title: "Take a Photo", style: UIAlertActionStyle.Default)
+        let cameraAction = UIAlertAction(title: "Take a Photo", style: UIAlertActionStyle.Default)
             {
                 UIAlertAction in
                 self.openCamera()
         }
-        var cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel)
             {
                 UIAlertAction in
         }
@@ -305,56 +270,25 @@ class ProfileViewController: UIViewController, UIGestureRecognizerDelegate, UIPo
     /*-------------------------------- Image Picker Delegate Methods ------------------------------------*/
 
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         picker.dismissViewControllerAnimated(true, completion: nil);
         profileImage.image = info[UIImagePickerControllerOriginalImage] as? UIImage;
-        var query = PFQuery(className:"Profile");
-        var currentID = PFUser.currentUser()!.objectId;
-        query.whereKey("ID", equalTo:currentID!);
         
-        saveImage(profileImage.image!);
-        let pickedImage:UIImage = self.profileImage.image!;
-        let imageData = UIImageJPEGRepresentation(pickedImage, 0.5);
-        let imageFile:PFFile = PFFile(data: imageData)
+        Utilities().saveImage(profileImage.image!);
         
-        query.getFirstObjectInBackgroundWithBlock {
-            (profile: PFObject?, error: NSError?) -> Void in
-            if error != nil || profile == nil {
-                println(error);
-            } else if let profile = profile {
-                profile["Image"] = imageFile;
-                profile.saveInBackground();
-            }
-        }
-
     }
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         picker.dismissViewControllerAnimated(true, completion: nil);
-        println("Picker cancel.");
+        print("Picker cancel.");
     }
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
 
         profileImage.image = image
         self.dismissViewControllerAnimated(true, completion: { () -> Void in})
         
-        var query = PFQuery(className:"Profile");
-        var currentID = PFUser.currentUser()!.objectId;
-        query.whereKey("ID", equalTo:currentID!);
-        
-        saveImage(profileImage.image!);
-        let pickedImage:UIImage = self.profileImage.image!;
-        let imageData = UIImageJPEGRepresentation(pickedImage, 0.5);
-        let imageFile:PFFile = PFFile(data: imageData)
-        
-        query.getFirstObjectInBackgroundWithBlock {
-            (profile: PFObject?, error: NSError?) -> Void in
-            if error != nil || profile == nil {
-                println(error);
-            } else if let profile = profile {
-                profile["Image"] = imageFile;
-                profile.saveInBackground();
-            }
-        }
+         
+        Utilities().saveImage(profileImage.image!);
+
         
     }
 

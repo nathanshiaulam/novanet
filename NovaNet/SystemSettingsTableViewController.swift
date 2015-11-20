@@ -10,18 +10,17 @@ import UIKit
 import Parse
 import Bolts
 
-class SystemSettingsTableViewController: UITableViewController {
+class SystemSettingsTableViewController: TableViewController {
     
     @IBAction func backButtonPressed(sender: UIBarButtonItem) {
-        if (isValidEmail(emailField.text)) {
+        if (isValidEmail(emailField.text!)) {
             self.dismissViewControllerAnimated(true, completion: nil);
         } else {
-            var alert = UIAlertController(title: "Invalid Email", message: "Please enter a valid e-mail.", preferredStyle: UIAlertControllerStyle.Alert);
+            let alert = UIAlertController(title: "Invalid Email", message: "Please enter a valid e-mail.", preferredStyle: UIAlertControllerStyle.Alert);
             alert.addAction(UIAlertAction(title: "GOT IT", style: UIAlertActionStyle.Default, handler: nil));
             self.presentViewController(alert, animated: true, completion: nil);
         }
     }
-    @IBOutlet weak var availableSwich: UISwitch!
     @IBOutlet weak var emailField: UITextField!
     
     @IBOutlet weak var greetingTemplate: UITextView!
@@ -30,14 +29,14 @@ class SystemSettingsTableViewController: UITableViewController {
     
     // Logout user and reset datastore
     @IBAction func userLogOut(sender: UIButton) {
-        var query = PFQuery(className:"Profile");
-        var currentID = PFUser.currentUser()!.objectId;
+        let query = PFQuery(className:"Profile");
+        let currentID = PFUser.currentUser()!.objectId;
         query.whereKey("ID", equalTo:currentID!);
         
         query.getFirstObjectInBackgroundWithBlock {
             (profile: PFObject?, error: NSError?) -> Void in
             if error != nil || profile == nil {
-                println(error);
+                print(error);
             } else if let profile = profile {
                 // Notes that the user is online
                 profile["Online"] = false;
@@ -46,9 +45,9 @@ class SystemSettingsTableViewController: UITableViewController {
         }
         PFUser.logOut();
         
-        var dict = defaults.dictionaryRepresentation();
+        let dict = defaults.dictionaryRepresentation();
         for key in dict.keys {
-            defaults.removeObjectForKey(key.description);
+            defaults.removeObjectForKey(key.debugDescription);
         }
         defaults.synchronize();
         self.dismissViewControllerAnimated(true, completion: nil);
@@ -58,39 +57,33 @@ class SystemSettingsTableViewController: UITableViewController {
         super.viewDidLoad();
         
         emailField.backgroundColor = UIColor.clearColor();
-        var emailFieldPlaceholder = NSAttributedString(string: "E-Mail", attributes: [NSForegroundColorAttributeName : UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
+        let emailFieldPlaceholder = NSAttributedString(string: "E-Mail", attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         emailField.attributedPlaceholder = emailFieldPlaceholder;
         emailField.textColor = UIColor.blackColor();
         emailField.borderStyle = UITextBorderStyle.None;
         self.emailField.text = PFUser.currentUser()?.email;
-        
-        if let available: AnyObject = defaults.objectForKey(Constants.UserKeys.availableKey) {
-            if (available as! NSObject == true) {
-                availableSwich.on = true;
-            } else {
-                availableSwich.on = false;
-            }
+        tableView.allowsSelection = false;
+        if let template = defaults.stringForKey(Constants.UserKeys.greetingKey) {
+            greetingTemplate.text = template;
+        } else {
+            defaults.setObject(Constants.ConstantStrings.greetingMessage, forKey: Constants.UserKeys.greetingKey);
+            greetingTemplate.text = Constants.ConstantStrings.greetingMessage;
         }
     }
     
     override func viewWillDisappear(animated: Bool) {
         if (self.userLoggedIn()) {
-            var query:PFQuery = PFQuery(className: "Profile");
+            let query:PFQuery = PFQuery(className: "Profile");
             query.whereKey("ID", equalTo: PFUser.currentUser()!.objectId!);
             
             query.getFirstObjectInBackgroundWithBlock {
                 (profile: PFObject?, error: NSError?) -> Void in
                 if (error != nil || profile == nil) {
-                    println(error);
+                    print(error);
                 } else if let profile = profile {
-                    if self.availableSwich.on == true {
-                        self.defaults.setObject(true, forKey: Constants.UserKeys.availableKey);
-                        profile["Available"] = true
-                    } else {
-                        self.defaults.setObject(false, forKey: Constants.UserKeys.availableKey);
-                        profile["Available"] = false;
-                    }
                     PFUser.currentUser()!.email = self.emailField.text;
+                    profile["Greeting"] = self.greetingTemplate.text;
+                    self.defaults.setObject(self.greetingTemplate.text, forKey: Constants.UserKeys.greetingKey);
                     profile.saveInBackground();
                 }
             }
@@ -103,20 +96,14 @@ class SystemSettingsTableViewController: UITableViewController {
     
     // Checks if user is logged in
     func userLoggedIn() -> Bool{
-        var currentUser = PFUser.currentUser();
+        let currentUser = PFUser.currentUser();
         if ((currentUser) != nil) {
             return true;
         }
         return false;
     }
     // Converts to RGB from Hex
-    func UIColorFromHex(rgbValue:UInt32, alpha:Double)->UIColor {
-        let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0
-        let green = CGFloat((rgbValue & 0xFF00) >> 8)/256.0
-        let blue = CGFloat(rgbValue & 0xFF)/256.0
-        
-        return UIColor(red:red, green:green, blue:blue, alpha:CGFloat(alpha))
-    }
+
     func isValidEmail(testStr:String) -> Bool {
         // println("validate calendar: \(testStr)")
         let emailRegEx = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"

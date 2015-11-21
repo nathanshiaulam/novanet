@@ -1,0 +1,11 @@
+target 'NovaNet' do
+
+pod 'syncano-ios'
+pod 'JSQMessagesViewController'
+pod 'GoogleMaps'
+
+end
+
+target 'NovaNetTests' do
+
+end

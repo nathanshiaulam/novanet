@@ -25,6 +25,7 @@
 		169441141BDC29BC0049122C /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169441131BDC29BC0049122C /* NetworkManager.swift */; settings = {ASSET_TAGS = (); }; };
 		169CEB9B1B8C998800CCF078 /* AboutContentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169CEB9A1B8C998800CCF078 /* AboutContentVC.swift */; };
 		169CEB9D1B8C9DC800CCF078 /* AboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169CEB9C1B8C9DC800CCF078 /* AboutVC.swift */; };
+		169F4B6E1C011B3C000DD507 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169F4B6D1C011B3C000DD507 /* MapKit.framework */; };
 		169FD2381B9C03F300A535D3 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169FD2371B9C03F300A535D3 /* ForgotPasswordViewController.swift */; };
 		169FD23A1B9CF86400A535D3 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169FD2391B9CF86400A535D3 /* Bolts.framework */; };
 		169FD23C1B9CF86E00A535D3 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169FD23B1B9CF86E00A535D3 /* Parse.framework */; };
@@ -94,6 +95,7 @@
 		169441131BDC29BC0049122C /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		169CEB9A1B8C998800CCF078 /* AboutContentVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutContentVC.swift; sourceTree = "<group>"; };
 		169CEB9C1B8C9DC800CCF078 /* AboutVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutVC.swift; sourceTree = "<group>"; };
+		169F4B6D1C011B3C000DD507 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		169FD2371B9C03F300A535D3 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
 		169FD2391B9CF86400A535D3 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		169FD23B1B9CF86E00A535D3 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				169FD23C1B9CF86E00A535D3 /* Parse.framework in Frameworks */,
 				16A0E7311B55079100DDAE95 /* Security.framework in Frameworks */,
 				16A0E72F1B55078B00DDAE95 /* QuartzCore.framework in Frameworks */,
+				169F4B6E1C011B3C000DD507 /* MapKit.framework in Frameworks */,
 				16A0E72D1B55078600DDAE95 /* MobileCoreServices.framework in Frameworks */,
 				16A0E72B1B55077F00DDAE95 /* CoreLocation.framework in Frameworks */,
 				16A0E7291B55077800DDAE95 /* CoreGraphics.framework in Frameworks */,
@@ -329,6 +332,7 @@
 		16A0E7231B5506D700DDAE95 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				169F4B6D1C011B3C000DD507 /* MapKit.framework */,
 				16A0E73C1B5507BD00DDAE95 /* Social.framework */,
 				16A0E73A1B5507B700DDAE95 /* Accounts.framework */,
 				16A0E7381B5507AA00DDAE95 /* libsqlite3.dylib */,
@@ -414,6 +418,9 @@
 						DevelopmentTeam = 5663662M75;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Maps.iOS = {
 								enabled = 1;
 							};
 						};

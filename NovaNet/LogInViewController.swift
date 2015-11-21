@@ -126,14 +126,6 @@ class LogInViewController: ViewController, UITextFieldDelegate {
         self.view.endEditing(true);
     }
     
-    // Helper methods to save images into local datastore from Parse
-    func documentsPathForFileName(name: String) -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true);
-        let path = paths[0];
-        let fullPath = NSURL(fileURLWithPath: path).URLByAppendingPathComponent(name)
-//        let fullPath = path.stringByAppendingPathComponent(name)
-        return String(fullPath);
-    }
 
     // Dismisses to home
     func dismissToHomePage() {

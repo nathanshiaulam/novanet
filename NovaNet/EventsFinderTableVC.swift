@@ -13,6 +13,7 @@ import Parse
 class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate   {
     
     
+    @IBOutlet var tableView: UITableView!
     
  
     /*-------------------------------- TABLE VIEW METHODS ------------------------------------*/
@@ -34,7 +35,9 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         
         return cell;
     }
-        func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 
         
     }

@@ -19,9 +19,9 @@ class EventCell: UITableViewCell {
     @IBOutlet weak var eventOrganizer: UILabel!
     @IBOutlet weak var eventDistance: UILabel!
 
-    @IBOutlet weak var goingButton: UIButton!
-    @IBOutlet weak var maybeButton: UIButton!
-    @IBOutlet weak var notGoingButton: UIButton!
+    @IBOutlet weak var goingButton: EventAttendanceButton!
+    @IBOutlet weak var maybeButton: EventAttendanceButton!
+    @IBOutlet weak var notGoingButton: EventAttendanceButton!
     
     
 }

@@ -10,7 +10,7 @@ import UIKit
 import Parse
 import Bolts
 
-class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate,UINavigationControllerDelegate, UITextViewDelegate, UITextFieldDelegate  {
+class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate,UINavigationControllerDelegate, UITextViewDelegate  {
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
     @IBOutlet weak var profileImage: UIImageView!
 

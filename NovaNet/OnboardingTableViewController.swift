@@ -10,7 +10,7 @@ import UIKit
 import Bolts
 import Parse
 
-class OnboardingTableViewController: TableViewController, UITextViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
+class OnboardingTableViewController: TableViewController, UITextViewDelegate, UIGestureRecognizerDelegate {
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
     
     /* TEXTFIELDS */
@@ -81,7 +81,7 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     
     func textViewDidEndEditing(textView: UITextView) {
         if textView.text.isEmpty {
-            textView.text = "A sentence or two illustrating what you're about. Who are you in a nutshell?";
+            textView.text = Constants.ConstantStrings.placeHolderAbout;
             textView.textColor = Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)
         }
     }

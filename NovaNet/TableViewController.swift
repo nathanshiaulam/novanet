@@ -12,7 +12,7 @@ import Parse
 import Bolts
 
 
-class TableViewController: UITableViewController {
+class TableViewController: UITableViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +20,13 @@ class TableViewController: UITableViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "willEnterForeground:", name: UIApplicationDidBecomeActiveNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "willEnterForeground:", name: UIApplicationDidFinishLaunchingNotification, object: nil)
     }
+    
+
+    // Removes keyboard when tap outside
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        self.view.endEditing(true);
+    }
+    
     
     func willEnterForeground(notification: NSNotification!) {
         if (Utilities().userLoggedIn()) {

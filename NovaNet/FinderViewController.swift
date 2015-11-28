@@ -38,11 +38,9 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         if byDist == false {
             byDist = true;
             let currentFont = distanceButton.titleLabel!.font
-            print(distanceButton.titleLabel!.font);
             distanceButton.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: currentFont.pointSize)
             
             let otherCurrentFont = alphabeticalButton.titleLabel!.font
-            print(alphabeticalButton.titleLabel!.font);
             alphabeticalButton.titleLabel!.font = UIFont(name: "AvenirNext-Regular", size: otherCurrentFont.pointSize)
 
             loadAndRefreshData()
@@ -100,7 +98,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
             return;
         } else {
             // Sets up core location manager
-            locationManager.distanceFilter = 100.0;
+            locationManager.distanceFilter = 50.0;
             locationManager.activityType = CLActivityType.AutomotiveNavigation;
             locationManager.delegate = self;
             locationManager.desiredAccuracy = kCLLocationAccuracyBest;
@@ -406,25 +404,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
 
     }
     
-    // Helper methods to save images into local datastore from Parse
-    func documentsPathForFileName(name: String) -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true);
-        let path = paths[0] ;
-        let fullPath = NSURL(fileURLWithPath: path).URLByAppendingPathComponent(name)
-        
-        return String(fullPath);
-    }
-    
-    // Converts string into NSDate with format
-    func dateFromString(date: String, format: String) -> NSDate {
-        let formatter = NSDateFormatter()
-        let locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        
-        formatter.locale = locale
-        formatter.dateFormat = format
-        
-        return formatter.dateFromString(date)!
-    }
+
     
     // Formats image into circle if the image is a square *should probably crop to square first*
     func formatImage( profileImage: UIImageView) {

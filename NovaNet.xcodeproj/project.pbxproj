@@ -18,6 +18,8 @@
 		16629EB11BDDD7C4003C4F05 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB01BDDD7C4003C4F05 /* ViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		16629EB31BDDD7F2003C4F05 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB21BDDD7F2003C4F05 /* TableViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		16629EB71BDDDAEA003C4F05 /* NSDateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */; settings = {ASSET_TAGS = (); }; };
+		166985DF1C0126A300154035 /* EventsSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166985DE1C0126A300154035 /* EventsSearchResults.swift */; settings = {ASSET_TAGS = (); }; };
+		166985E11C012B2E00154035 /* EventsLocationFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166985E01C012B2E00154035 /* EventsLocationFinder.swift */; settings = {ASSET_TAGS = (); }; };
 		167114C11B8299F90024DC3E /* ImageUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167114C01B8299F90024DC3E /* ImageUtil.swift */; };
 		1685FB301BE988E300E05CDE /* EventsFinderTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1685FB2F1BE988E300E05CDE /* EventsFinderTableVC.swift */; settings = {ASSET_TAGS = (); }; };
 		1685FB341BE98ADD00E05CDE /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1685FB331BE98ADD00E05CDE /* EventCell.swift */; settings = {ASSET_TAGS = (); }; };
@@ -88,6 +90,8 @@
 		16629EB01BDDD7C4003C4F05 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../ViewController.swift; sourceTree = "<group>"; };
 		16629EB21BDDD7F2003C4F05 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSDateExtensions.swift; path = ../NSDateExtensions.swift; sourceTree = "<group>"; };
+		166985DE1C0126A300154035 /* EventsSearchResults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsSearchResults.swift; sourceTree = "<group>"; };
+		166985E01C012B2E00154035 /* EventsLocationFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsLocationFinder.swift; sourceTree = "<group>"; };
 		167114C01B8299F90024DC3E /* ImageUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageUtil.swift; sourceTree = "<group>"; };
 		1685FB2F1BE988E300E05CDE /* EventsFinderTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsFinderTableVC.swift; sourceTree = "<group>"; };
 		1685FB331BE98ADD00E05CDE /* EventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
@@ -254,6 +258,8 @@
 				16A111381BEBD3C1002CB7A1 /* EventCreateTableVC.swift */,
 				16A111361BEBD224002CB7A1 /* EventDescriptionTableVC.swift */,
 				1685FB351BEB5D5E00E05CDE /* EventAttendanceButton.swift */,
+				166985DE1C0126A300154035 /* EventsSearchResults.swift */,
+				166985E01C012B2E00154035 /* EventsLocationFinder.swift */,
 				1685FB2F1BE988E300E05CDE /* EventsFinderTableVC.swift */,
 			);
 			name = Events;
@@ -282,11 +288,11 @@
 		16A0E6FC1B54FC7300DDAE95 /* NovaNet */ = {
 			isa = PBXGroup;
 			children = (
+				160D1F351B60F49F00B3E4DB /* NovaNet-Bridging-Header.h */,
 				16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */,
 				16629EB01BDDD7C4003C4F05 /* ViewController.swift */,
 				16629EB21BDDD7F2003C4F05 /* TableViewController.swift */,
 				160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */,
-				160D1F351B60F49F00B3E4DB /* NovaNet-Bridging-Header.h */,
 				16A0E7031B54FC7400DDAE95 /* Main.storyboard */,
 				16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */,
 				167114C01B8299F90024DC3E /* ImageUtil.swift */,
@@ -515,9 +521,11 @@
 				160D1F3D1B61080C00B3E4DB /* MessagerViewController.swift in Sources */,
 				16629EB71BDDDAEA003C4F05 /* NSDateExtensions.swift in Sources */,
 				16D333631BCB063200C1B405 /* Utilities.swift in Sources */,
+				166985DF1C0126A300154035 /* EventsSearchResults.swift in Sources */,
 				16A0E7001B54FC7400DDAE95 /* AppDelegate.swift in Sources */,
 				16A111391BEBD3C1002CB7A1 /* EventCreateTableVC.swift in Sources */,
 				1616B18B1B554D0E00DBF11A /* ProfileViewController.swift in Sources */,
+				166985E11C012B2E00154035 /* EventsLocationFinder.swift in Sources */,
 				1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */,
 				1616B18F1B55560300DBF11A /* Constants.swift in Sources */,
 				160D1F281B5E903B00B3E4DB /* HomeTableViewCell.swift in Sources */,

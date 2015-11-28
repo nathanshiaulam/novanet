@@ -10,20 +10,66 @@
 import Foundation
 import Bolts
 import Parse
-
+import AddressBookUI
 
 class EventCreateTableVC: TableViewController, UITextViewDelegate {
+
+    
+    var marker:GMSMarker!;
+    var selectedDate:NSDate!;
+    
+    let defaults = NSUserDefaults.standardUserDefaults();
     
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var dateField: UITextField!
     @IBOutlet weak var descField: UITextView!
+    @IBOutlet weak var addressCell: UITableViewCell!
+    @IBOutlet weak var eventField: UITextField!
+    @IBOutlet weak var addressField: UITextField!
     
+    @IBAction func createEvent(sender: AnyObject) {
+        
+        if (titleField.text?.characters.count > 0 && dateField.text?.characters.count > 0 && descField.text.characters.count > 0 && addressField.text!.characters.count > 0 && descField.textColor != UIColor.lightGrayColor()) {
+            let point:PFGeoPoint = PFGeoPoint(latitude: marker.position.latitude, longitude: marker.position.longitude);
+            
+            let newEvent = PFObject(className: "Event");
+            newEvent["Title"] = titleField.text;
+            newEvent["Description"] = descField.text;
+            newEvent["Creator"] = PFUser.currentUser()?.objectId;
+            newEvent["CreatorName"] = defaults.objectForKey(Constants.UserKeys.nameKey);
+            newEvent["Date"] = selectedDate;
+            newEvent["Position"] = point;
+            newEvent["EventName"] = marker.title;
+            newEvent["Local"] = true;
+            newEvent["Going"] = [String]();
+            newEvent["Maybe"] = [String]();
+            newEvent["NotGoing"] = [String]();
+            newEvent.saveInBackground();
+            self.navigationController?.dismissViewControllerAnimated(true, completion: nil);
+        } else {
+            let alert = UIAlertController(title: "Submission Failure", message: "Please fill out all fields before creating an event.", preferredStyle: UIAlertControllerStyle.Alert);
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
+            self.presentViewController(alert, animated: true, completion: nil);
+            return;
+        }
+    }
     override func viewDidLoad() {
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: "endEditing:"));
         tableView.allowsSelection = false;
         
         descField.text = Constants.ConstantStrings.placeHolderDesc;
         descField.textColor = UIColor.lightGrayColor()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "saveNewLocation:", name: "saveNewLocation", object: nil)
+        if marker == nil {
+            addressCell.hidden = true;
+        }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        if marker == nil {
+            addressCell.hidden = true;
+        }
     }
     
     @IBAction func backPressed(sender: UIBarButtonItem) {
@@ -39,10 +85,33 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
             let currDate = dateFormatter.dateFromString(sender.text!);
             datePickerView.date = currDate!;
         }
-
         sender.inputView = datePickerView
         datePickerView.addTarget(self, action: Selector("handleDatePicker:"), forControlEvents: UIControlEvents.ValueChanged)
         handleDatePicker(datePickerView);
+        
+    }
+    
+    func saveNewLocation(notification: NSNotification?) {
+        marker = notification?.valueForKey("object") as? GMSMarker;
+        self.eventField.text = marker!.title;
+        let lat = marker.position.latitude;
+        let lon = marker.position.longitude;
+        
+        let location = CLLocation(latitude: lat, longitude: lon);
+        
+        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
+            (placemarks, error) -> Void in
+        
+            if (error != nil) {
+                print("Reverse geocoder failed with error" + error!.localizedDescription)
+                return
+            } else if let marks = placemarks {
+                let pm = marks[0] as CLPlacemark;
+                let address = ABCreateStringWithAddressDictionary(pm.addressDictionary!, true);
+                self.addressField.text = address;
+                self.addressCell.hidden = false;
+            }
+        })
         
     }
 
@@ -53,7 +122,7 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         dateFormatter.timeStyle = NSDateFormatterStyle.LongStyle;
         
         let dateString = dateFormatter.stringFromDate((sender.date))
-        
+        selectedDate = sender.date;
         dateField.text = dateString;
     }
     
@@ -61,7 +130,6 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.section == 3 && descField.textColor != UIColor.lightGrayColor(){
-            print("hi");
             return descField.frame.height + 20;
         } else {
             return self.tableView.rowHeight;
@@ -94,6 +162,28 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         self.tableView.beginUpdates()
         self.tableView.endUpdates()
     }
-
+    
+    func textViewShouldEndEditing(textView: UITextView) -> Bool {
+        textView.resignFirstResponder();
+        return true;
+    }
+    
+    // Moves to next field when hits enter
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder();
+        return true;
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        
+        // Create a new variable to store the instance of PlayerTableViewController
+        if (segue.identifier == "toMapView") {
+            let navVC = segue.destinationViewController as! UINavigationController;
+            let destinationVC = navVC.viewControllers.first as! EventsLocationFinder;
+            if let location = marker {
+                destinationVC.selectedLocation = location;
+            }
+        }
+    }
     
   }

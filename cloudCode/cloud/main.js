@@ -1,6 +1,149 @@
 // Takes in User's current PFGeopoint and distance bound 
 // as parameters and outputs a list of User Profiles that are
 // within the area. SORTS BY ALPHABET
+Parse.Cloud.define("findAllEvents", function(request, response) {
+  var currlat = request.params.lat;
+  var currlon = request.params.lon;
+  var bound = request.params.dist;
+  var local = request.params.local;
+
+  var eventQuery = new Parse.Query("Event");
+  eventQuery.limit(1000);
+  eventQuery.ascending("Date");
+  var eventList = [];
+
+  var currLoc = new Parse.GeoPoint(currlat, currlon);
+
+  eventQuery.find({
+    success: function(results) {
+      var currentDate = new Date();
+
+      for (var i = 0; i < results.length; i++) {
+        var event = results[i];
+        var eventDate = event.get("Date");
+        var eventLocation = event.get("Position");
+        var eventLocal = event.get("Local");
+        var timeDiff = eventDate.getTime() - currentDate.getTime();
+        if (timeDiff >= 0) { // Checks if the event has already passed
+          if (eventLocation != null) {
+            if (local) {
+              var dist = currLoc.kilometersTo(eventLocation);
+
+              if (dist <= bound) { // Checks if the distance is within the bound
+                eventList.push(event);
+              }
+            } else {
+              eventList.push(event);
+            }
+          }
+        }
+      }
+      response.success(eventList);
+    },
+    error: function(error) {
+      alert("Error" + error.code + " " + error.message);
+    }
+  })
+})
+
+Parse.Cloud.define("findSavedEvents", function(request, response) {
+  var currlat = request.params.lat;
+  var currlon = request.params.lon;
+  var bound = request.params.dist;
+  var local = request.params.local;
+
+  var eventQuery = new Parse.Query("Event");
+  eventQuery.limit(1000);
+  eventQuery.ascending("Date");
+  var eventList = [];
+
+  var currentID = Parse.User.current().id;
+
+  var currLoc = new Parse.GeoPoint(currlat, currlon);
+
+  eventQuery.find({
+    success: function(results) {
+      var currentDate = new Date();
+
+      for (var i = 0; i < results.length; i++) {
+        var event = results[i];
+        var eventGoing = event.get("Going");
+        var eventMaybe = event.get("Maybe");
+        var eventNotGoing = event.get("NotGoing");
+        console.log(eventGoing.indexOf(currentID));
+        if (eventGoing.indexOf(currentID) != -1 || eventMaybe.indexOf(currentID) != -1 || eventNotGoing.indexOf(currentID) != -1) {
+            eventList.push(event);
+        }
+      }
+      response.success(eventList);
+    },
+    error: function(error) {
+      alert("Error" + error.code + " " + error.message);
+    }
+  })
+})
+
+Parse.Cloud.define("findEventsDist", function(request, response) {
+  var currlat = request.params.lat;
+  var currlon = request.params.lon;
+  var bound = request.params.dist;
+  var local = request.params.local;
+  var all = request.params.all;
+
+  var currentID = Parse.User.current().id;
+
+  var eventQuery = new Parse.Query("Event");
+  eventQuery.ascending("Date");
+  eventQuery.limit(1000);
+  var distList = [];
+
+  var currLoc = new Parse.GeoPoint(currlat, currlon);
+
+  eventQuery.find({
+    success: function(results) {
+      var currentDate = new Date();
+
+      for (var i = 0; i < results.length; i++) {
+        var event = results[i];
+        var eventDate = event.get("Date");
+        var eventLocation = event.get("Position");
+        var eventLocal = event.get("Local");
+        var eventGoing = event.get("Going");
+        var eventMaybe = event.get("Maybe");
+        var eventNotGoing = event.get("NotGoing");
+        
+        var timeDiff = eventDate.getTime() - currentDate.getTime();
+        var dist = currLoc.kilometersTo(eventLocation);
+        // If on "All" tab, load in all events 
+        // and load distances as above.
+        if (all) { 
+          if (timeDiff >= 0) { // Checks if the event has already passed
+            if (eventLocation != null) {
+              if (local) {
+                if (dist <= bound) { // Checks if the distance is within the bound
+                  distList.push(dist);
+                }
+              } else {
+                distList.push(dist);
+              }
+            }
+          }
+        // If on "My Events" tab, load in all events in which you've marked
+        // as "Going", "Maybe", and "Not Going"
+        } else { 
+          if (eventGoing.indexOf(currentID) != -1 || eventMaybe.indexOf(currentID) != -1 || eventNotGoing.indexOf(currentID) != -1) {
+            distList.push(dist);
+          }
+        }
+      }
+      response.success(distList);
+    },
+    error: function(error) {
+      alert("Error" + error.code + " " + error.message);
+    }
+  })
+})
+
 Parse.Cloud.define("findUsers", function(request, response) {
   var currlat = request.params.lat;
   var currlong = request.params.lon;
@@ -158,6 +301,8 @@ function numberGenerator() {
 }
 
 
+
+
 Parse.Cloud.define("sendUserNumber", function(request, response) {
   var Mandrill = require('mandrill');
    Mandrill.initialize('o9teflgXREp5JoM83-VTbw');
@@ -202,6 +347,8 @@ Parse.Cloud.define("sendUserNumber", function(request, response) {
       }
   });
 });
+
+
 // Finds all the distances of the users that show up in range
 Parse.Cloud.define("findDistances", function(request, response) {
   var currlat = request.params.lat;
@@ -226,7 +373,6 @@ Parse.Cloud.define("findDistances", function(request, response) {
         if (geopoint != null) {
 
           var dist = Math.ceil(currLoc.kilometersTo(geopoint));
-          console.log("Dist: " + dist);
           if (dist <= bound && currentID != object.get("ID") && available && online){
             distanceList.push(dist);
           }
@@ -240,6 +386,7 @@ Parse.Cloud.define("findDistances", function(request, response) {
     }
   });
 });
+
 
 Parse.Cloud.define("findConversations", function(request, response) {
   var id = Parse.User.current().id;

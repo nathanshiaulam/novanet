@@ -21,6 +21,7 @@ PODS:
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
   - CocoaAsyncSocket (7.3.5)
+  - GoogleMaps (1.10.3)
   - JSQMessagesViewController (7.1.0):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
@@ -33,12 +34,14 @@ PODS:
     - Mantle (~> 1.4.1)
 
 DEPENDENCIES:
+  - GoogleMaps
   - JSQMessagesViewController
   - syncano-ios
 
 SPEC CHECKSUMS:
   AFNetworking: 05b9f6e3aa5ac45bc383b4bb108ef338080a26c7
   CocoaAsyncSocket: 94c582a5bef4bb0f51b6ebf3e1b561d9091a68ba
+  GoogleMaps: 945e4ac3b74bcca3ddada51df256eb7beddb474d
   JSQMessagesViewController: ca11f86fa68ca70835f05e169df9244147c1dc40
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   Mantle: 3219c0181d918508689af61c77891b12dbb28215

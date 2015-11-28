@@ -59,5 +59,6 @@ struct Constants {
         static let screenHeight = UIScreen.mainScreen().bounds.size.height;
         static let screenWidth = UIScreen.mainScreen().bounds.size.width;
     }
+    static let DISCOVERY_RADIUS = 35;
 
 }

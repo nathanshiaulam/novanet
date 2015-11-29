@@ -95,7 +95,7 @@
                                 <color key="textColor" red="0.32549019610000002" green="0.34509803919999998" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="769EBB38-5F58-4426-BB92-678574F450F6" translatesAutoresizingMaskIntoConstraints="NO" id="gw7-H5-l42">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="1FF88A8C-0D47-49EE-88AC-97D7F2A7C41F" translatesAutoresizingMaskIntoConstraints="NO" id="gw7-H5-l42">
                                 <rect key="frame" x="212" y="72" width="175" height="175"/>
                                 <animations/>
                                 <constraints>
@@ -3464,7 +3464,7 @@
                                             <color key="textColor" white="0.27000000000000002" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="highlightedColor" white="0.27000000000000002" alpha="1" colorSpace="calibratedWhite"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hDT-Kf-gt1" customClass="EventAttendanceButton" customModule="NovaNet" customModuleProvider="target">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hDT-Kf-gt1" customClass="EventAttendanceButton" customModule="NovaNet" customModuleProvider="target">
                                             <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                             <animations/>
                                             <constraints>
@@ -3488,12 +3488,13 @@
                                                 </mask>
                                             </variation>
                                             <variation key="widthClass=compact">
+                                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="10"/>
                                                 <mask key="constraints">
                                                     <include reference="e2F-dx-Tq9"/>
                                                 </mask>
                                             </variation>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lBP-re-o2i" customClass="EventAttendanceButton" customModule="NovaNet" customModuleProvider="target">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lBP-re-o2i" customClass="EventAttendanceButton" customModule="NovaNet" customModuleProvider="target">
                                             <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                             <animations/>
                                             <constraints>
@@ -3515,6 +3516,7 @@
                                                 </mask>
                                             </variation>
                                             <variation key="widthClass=compact">
+                                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="10"/>
                                                 <mask key="constraints">
                                                     <exclude reference="cmX-tY-Xcr"/>
                                                 </mask>
@@ -3527,7 +3529,7 @@
                                             <color key="textColor" red="0.32549019610000002" green="0.34509803919999998" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MIg-xF-TKS" customClass="EventAttendanceButton" customModule="NovaNet" customModuleProvider="target">
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MIg-xF-TKS" customClass="EventAttendanceButton" customModule="NovaNet" customModuleProvider="target">
                                             <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="10"/>
@@ -3540,13 +3542,16 @@
                                                     <integer key="value" value="10"/>
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
+                                            <variation key="widthClass=compact">
+                                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="10"/>
+                                            </variation>
                                         </button>
                                     </subviews>
                                     <animations/>
                                     <constraints>
                                         <constraint firstItem="yXh-Xk-itH" firstAttribute="leading" secondItem="htQ-fv-2Ye" secondAttribute="leading" id="1DQ-8r-6DT"/>
                                         <constraint firstItem="hDT-Kf-gt1" firstAttribute="leading" secondItem="MIg-xF-TKS" secondAttribute="trailing" constant="8" id="4s3-n1-3bu">
-                                            <variation key="widthClass=compact" constant="5"/>
+                                            <variation key="widthClass=compact" constant="0.0"/>
                                         </constraint>
                                         <constraint firstItem="CKK-nF-8m0" firstAttribute="leading" secondItem="htQ-fv-2Ye" secondAttribute="leading" id="6CZ-ib-MSH"/>
                                         <constraint firstItem="hDp-Os-XdY" firstAttribute="centerY" secondItem="htQ-fv-2Ye" secondAttribute="centerY" id="75J-Vo-8FM"/>
@@ -3620,7 +3625,7 @@
                                         <constraint firstItem="lnY-5i-1QF" firstAttribute="centerY" secondItem="0J6-hY-M4I" secondAttribute="centerY" id="wVK-Ks-Flj"/>
                                         <constraint firstItem="hDT-Kf-gt1" firstAttribute="width" secondItem="lBP-re-o2i" secondAttribute="width" id="zMz-3f-tJR"/>
                                         <constraint firstItem="lBP-re-o2i" firstAttribute="leading" secondItem="hDT-Kf-gt1" secondAttribute="trailing" constant="2" id="zOg-Lx-GXd">
-                                            <variation key="widthClass=compact" constant="5"/>
+                                            <variation key="widthClass=compact" constant="0.0"/>
                                         </constraint>
                                     </constraints>
                                     <variation key="default">
@@ -3744,7 +3749,6 @@
                                     <outlet property="goingButton" destination="MIg-xF-TKS" id="h9J-sg-wnK"/>
                                     <outlet property="maybeButton" destination="hDT-Kf-gt1" id="pem-KW-Mgb"/>
                                     <outlet property="notGoingButton" destination="lBP-re-o2i" id="hHV-M0-jQH"/>
-                                    <segue destination="Su3-e5-b4J" kind="show" id="UYV-Xt-UNr"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -3781,6 +3785,7 @@
                         <outlet property="memberEventButton" destination="kgD-jA-G0L" id="mAi-K6-gVz"/>
                         <outlet property="segmentControl" destination="lEr-aJ-4FF" id="hgo-6T-nsY"/>
                         <outlet property="tableView" destination="g9G-ca-y4c" id="5ks-Zm-qAD"/>
+                        <segue destination="Su3-e5-b4J" kind="show" identifier="toEventDescription" id="Suz-xE-SGh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CWc-U9-2xx" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4519,7 +4524,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="69"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ODM-vP-bKN" customClass="EventAttendanceButton" customModule="NovaNet" customModuleProvider="target">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ODM-vP-bKN" customClass="EventAttendanceButton" customModule="NovaNet" customModuleProvider="target">
                                                     <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                                     <animations/>
                                                     <constraints>
@@ -4546,17 +4551,16 @@
                                                             <exclude reference="gFn-Mi-hko"/>
                                                         </mask>
                                                     </variation>
-                                                    <variation key="widthClass=compact">
+                                                    <variation key="widthClass=compact" misplaced="YES">
+                                                        <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="14"/>
+                                                        <rect key="frame" x="165" y="33" width="70" height="30"/>
                                                         <mask key="constraints">
                                                             <include reference="Vf1-LT-9Yh"/>
                                                             <include reference="gFn-Mi-hko"/>
                                                         </mask>
                                                     </variation>
-                                                    <connections>
-                                                        <action selector="maybePressed:" destination="Su3-e5-b4J" eventType="touchUpInside" id="iPC-cF-1zd"/>
-                                                    </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hES-JM-dMC" customClass="EventAttendanceButton" customModule="NovaNet" customModuleProvider="target">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hES-JM-dMC" customClass="EventAttendanceButton" customModule="NovaNet" customModuleProvider="target">
                                                     <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="14"/>
@@ -4569,18 +4573,19 @@
                                                             <integer key="value" value="10"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
-                                                    <connections>
-                                                        <action selector="notGoingPressed:" destination="Su3-e5-b4J" eventType="touchUpInside" id="yUP-C1-YcR"/>
-                                                    </connections>
+                                                    <variation key="widthClass=compact" misplaced="YES">
+                                                        <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="14"/>
+                                                        <rect key="frame" x="240" y="32" width="70" height="32"/>
+                                                    </variation>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Organized by Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VI4-ah-ft7">
                                                     <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                                     <animations/>
-                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="12"/>
+                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="14"/>
                                                     <color key="textColor" white="0.27000000000000002" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RgV-ET-DMo" customClass="EventAttendanceButton" customModule="NovaNet" customModuleProvider="target">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RgV-ET-DMo" customClass="EventAttendanceButton" customModule="NovaNet" customModuleProvider="target">
                                                     <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="14"/>
@@ -4593,9 +4598,10 @@
                                                             <integer key="value" value="10"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
-                                                    <connections>
-                                                        <action selector="goingPressed:" destination="Su3-e5-b4J" eventType="touchUpInside" id="Ze1-qf-Rad"/>
-                                                    </connections>
+                                                    <variation key="widthClass=compact" misplaced="YES">
+                                                        <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="14"/>
+                                                        <rect key="frame" x="90" y="32" width="70" height="32"/>
+                                                    </variation>
                                                 </button>
                                             </subviews>
                                             <animations/>
@@ -4672,7 +4678,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="39"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oWk-fm-LFP">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oWk-fm-LFP">
                                                     <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
@@ -4683,6 +4689,12 @@
                                             <animations/>
                                             <constraints>
                                                 <constraint firstItem="oWk-fm-LFP" firstAttribute="centerX" secondItem="xnG-bt-GK0" secondAttribute="centerX" id="9N5-d6-H7B"/>
+                                                <constraint firstItem="oWk-fm-LFP" firstAttribute="leading" secondItem="xnG-bt-GK0" secondAttribute="leadingMargin" constant="174" id="ADD-dd-uC2">
+                                                    <variation key="widthClass=compact" constant="0.0"/>
+                                                </constraint>
+                                                <constraint firstAttribute="trailingMargin" secondItem="oWk-fm-LFP" secondAttribute="trailing" constant="174" id="Imf-PJ-8pX">
+                                                    <variation key="widthClass=compact" constant="0.0"/>
+                                                </constraint>
                                                 <constraint firstItem="oWk-fm-LFP" firstAttribute="centerY" secondItem="xnG-bt-GK0" secondAttribute="centerY" id="hZk-fQ-hw6"/>
                                             </constraints>
                                             <variation key="default">
@@ -4691,6 +4703,8 @@
                                                 </mask>
                                                 <mask key="constraints">
                                                     <exclude reference="9N5-d6-H7B"/>
+                                                    <exclude reference="ADD-dd-uC2"/>
+                                                    <exclude reference="Imf-PJ-8pX"/>
                                                     <exclude reference="hZk-fQ-hw6"/>
                                                 </mask>
                                             </variation>
@@ -4700,6 +4714,8 @@
                                                 </mask>
                                                 <mask key="constraints">
                                                     <include reference="9N5-d6-H7B"/>
+                                                    <include reference="ADD-dd-uC2"/>
+                                                    <include reference="Imf-PJ-8pX"/>
                                                     <include reference="hZk-fQ-hw6"/>
                                                 </mask>
                                             </variation>
@@ -4713,10 +4729,10 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="39"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3uv-6o-yS4">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3uv-6o-yS4">
                                                     <rect key="frame" x="-42" y="-21" width="42" height="21"/>
                                                     <animations/>
-                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="14"/>
+                                                    <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="16"/>
                                                     <color key="textColor" white="0.27000000000000002" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -4724,6 +4740,12 @@
                                             <animations/>
                                             <constraints>
                                                 <constraint firstItem="3uv-6o-yS4" firstAttribute="centerY" secondItem="Pdr-88-PlY" secondAttribute="centerY" id="F9n-J0-VOG"/>
+                                                <constraint firstItem="3uv-6o-yS4" firstAttribute="leading" secondItem="Pdr-88-PlY" secondAttribute="leadingMargin" constant="161" id="ZfF-aU-9b4">
+                                                    <variation key="widthClass=compact" constant="0.0"/>
+                                                </constraint>
+                                                <constraint firstAttribute="trailingMargin" secondItem="3uv-6o-yS4" secondAttribute="trailing" constant="161" id="fDC-e0-Xm1">
+                                                    <variation key="widthClass=compact" constant="0.0"/>
+                                                </constraint>
                                                 <constraint firstItem="3uv-6o-yS4" firstAttribute="centerX" secondItem="Pdr-88-PlY" secondAttribute="centerX" id="fsc-5f-GYw"/>
                                             </constraints>
                                             <variation key="default">
@@ -4732,6 +4754,8 @@
                                                 </mask>
                                                 <mask key="constraints">
                                                     <exclude reference="F9n-J0-VOG"/>
+                                                    <exclude reference="ZfF-aU-9b4"/>
+                                                    <exclude reference="fDC-e0-Xm1"/>
                                                     <exclude reference="fsc-5f-GYw"/>
                                                 </mask>
                                             </variation>
@@ -4741,6 +4765,8 @@
                                                 </mask>
                                                 <mask key="constraints">
                                                     <include reference="F9n-J0-VOG"/>
+                                                    <include reference="ZfF-aU-9b4"/>
+                                                    <include reference="fDC-e0-Xm1"/>
                                                     <include reference="fsc-5f-GYw"/>
                                                 </mask>
                                             </variation>
@@ -4813,21 +4839,20 @@
                         </connections>
                     </tableView>
                     <connections>
-                        <outlet property="addressButton" destination="3uv-6o-yS4" id="dqg-xe-CAr"/>
+                        <outlet property="addressLabel" destination="3uv-6o-yS4" id="xcB-vh-kSh"/>
                         <outlet property="descField" destination="um6-kb-yIb" id="seh-pX-R49"/>
-                        <outlet property="maybePressed" destination="ODM-vP-bKN" id="bOl-kC-Eez"/>
-                        <outlet property="notGoingPressed" destination="hES-JM-dMC" id="Z3b-Rk-y4Z"/>
+                        <outlet property="organizerLabel" destination="VI4-ah-ft7" id="6Lf-j1-PuN"/>
                         <outlet property="timeLabel" destination="oWk-fm-LFP" id="5Z9-zA-DOk"/>
                         <outlet property="titleField" destination="xKS-dh-PCP" id="U9i-wz-CxF"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wTe-Lc-dVt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-5090" y="3364"/>
+            <point key="canvasLocation" x="-5079" y="3039"/>
         </scene>
     </scenes>
     <resources>
-        <image name="769EBB38-5F58-4426-BB92-678574F450F6" width="490" height="541">
+        <image name="1FF88A8C-0D47-49EE-88AC-97D7F2A7C41F" width="490" height="541">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOjtYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISgrLjQ3VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA

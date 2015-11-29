@@ -19,6 +19,8 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     var eventsList:NSArray!;
     var distList:NSArray!;
     var localEvents:Bool!;
+    var oldTitleView:UIView!;
+    var selectedEvent:PFObject!;
     
     @IBOutlet weak var eventHeaderView: UIView!
     @IBOutlet weak var segmentControl: UISegmentedControl!
@@ -70,9 +72,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     }
     
     override func viewDidLoad() {
-        self.tabBarController!.navigationItem.title = "Events";
-        self.tabBarController!.navigationItem.leftBarButtonItem = addEventButton;
-        self.tabBarController!.navigationItem.titleView = segmentControl;
+
         localEvents = true;
         
         eventsList = NSArray();
@@ -88,12 +88,20 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     }
     
     override func viewDidAppear(animated: Bool) {
-        
+        self.tabBarController!.navigationItem.title = "Events";
+        self.tabBarController!.navigationItem.leftBarButtonItem = addEventButton;
+        self.oldTitleView = self.tabBarController!.navigationItem.titleView
+        self.tabBarController!.navigationItem.titleView = segmentControl;
         refreshControl.addTarget(self, action: Selector("findAllEvents"), forControlEvents: UIControlEvents.ValueChanged)
         tableView.addSubview(self.refreshControl)
         
         findAllEvents();
         super.viewDidAppear(true);
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        self.tabBarController!.navigationItem.titleView = oldTitleView;
+        self.tabBarController!.navigationItem.leftBarButtonItem = nil;
     }
     
     
@@ -173,38 +181,135 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         let maybeButton:EventAttendanceButton = self.tableView.viewWithTag(sender.tag + 1) as! EventAttendanceButton
         let notGoingButton:EventAttendanceButton = self.tableView.viewWithTag(sender.tag + 2)  as! EventAttendanceButton
         
-        print(maybeButton);
-        print(notGoingButton);
         let event:PFObject! = eventsList[(sender.tag - 100) / 3] as! PFObject;
+        print(sender.selected);
+        
         if (sender.selected) {
             var arr:[String]! = event["Going"] as! [String];
             arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
             event["Going"] = arr;
             event.saveInBackground();
+            
+            sender.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
         } else  {
             if (maybeButton.selected) {
                 var arr:[String]! = event["Maybe"] as! [String];
                 arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
                 event["Maybe"] = arr;
                 event.saveInBackground();
+                maybeButton.highlighted = false;
                 maybeButton.selected = false;
+                maybeButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
             }
             if (notGoingButton.selected) {
                 var arr:[String]! = event["NotGoing"] as! [String];
                 arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
                 event["NotGoing"] = arr;
                 event.saveInBackground();
+                notGoingButton.highlighted = false;
                 notGoingButton.selected = false;
+                notGoingButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
             }
             var arr:[String]! = event["Going"] as! [String];
-            arr.append(PFUser.currentUser()!.objectId!);
+            if !arr.contains(PFUser.currentUser()!.objectId!) {
+                arr.append(PFUser.currentUser()!.objectId!);
+            }
             event["Going"] = arr;
             event.saveInBackground();
+            sender.backgroundColor = Utilities().UIColorFromHex(0xBFBFBF, alpha: 1.0);
+            
         }
+
         sender.selected = !sender.selected;
-        
     }
     
+    func maybePressed(sender: EventAttendanceButton) {
+        let goingButton:EventAttendanceButton = self.tableView.viewWithTag(sender.tag - 1) as! EventAttendanceButton
+        let notGoingButton:EventAttendanceButton = self.tableView.viewWithTag(sender.tag + 1)  as! EventAttendanceButton
+        
+        let event:PFObject! = eventsList[(sender.tag - 100 - 1) / 3] as! PFObject;
+        print(sender.selected);
+        
+        if (sender.selected) {
+            var arr:[String]! = event["Going"] as! [String];
+            arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+            event["Going"] = arr;
+            event.saveInBackground();
+            
+            sender.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
+        } else  {
+            if (goingButton.selected) {
+                var arr:[String]! = event["Going"] as! [String];
+                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                event["Going"] = arr;
+                event.saveInBackground();
+                goingButton.highlighted = false;
+                goingButton.selected = false;
+                goingButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
+            }
+            if (notGoingButton.selected) {
+                var arr:[String]! = event["NotGoing"] as! [String];
+                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                event["NotGoing"] = arr;
+                event.saveInBackground();
+                notGoingButton.highlighted = false;
+                notGoingButton.selected = false;
+                notGoingButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
+            }
+            var arr:[String]! = event["Maybe"] as! [String];
+            if !arr.contains(PFUser.currentUser()!.objectId!) {
+                arr.append(PFUser.currentUser()!.objectId!);
+            }
+            event["Maybe"] = arr;
+            event.saveInBackground();
+            sender.backgroundColor = Utilities().UIColorFromHex(0xBFBFBF, alpha: 1.0);
+            
+        }
+        sender.selected = !sender.selected;
+    }
+
+    func notGoingPressed(sender: EventAttendanceButton) {
+        let maybeButton:EventAttendanceButton = self.tableView.viewWithTag(sender.tag - 1) as! EventAttendanceButton
+        let goingButton:EventAttendanceButton = self.tableView.viewWithTag(sender.tag - 2)  as! EventAttendanceButton
+        
+        let event:PFObject! = eventsList[(sender.tag - 100 - 2) / 3] as! PFObject;
+        
+        if (sender.selected) {
+            var arr:[String]! = event["NotGoing"] as! [String];
+            arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+            event["NotGoing"] = arr;
+            event.saveInBackground();
+            
+            sender.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
+        } else  {
+            if (maybeButton.selected) {
+                var arr:[String]! = event["Maybe"] as! [String];
+                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                event["Maybe"] = arr;
+                event.saveInBackground();
+                maybeButton.highlighted = false;
+                maybeButton.selected = false;
+                maybeButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
+            }
+            if (goingButton.selected) {
+                var arr:[String]! = event["Going"] as! [String];
+                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                event["Going"] = arr;
+                event.saveInBackground();
+                goingButton.highlighted = false;
+                goingButton.selected = false;
+                goingButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
+            }
+            var arr:[String]! = event["NotGoing"] as! [String];
+            if !arr.contains(PFUser.currentUser()!.objectId!) {
+                arr.append(PFUser.currentUser()!.objectId!);
+            }
+            event["NotGoing"] = arr;
+            event.saveInBackground();
+            sender.backgroundColor = Utilities().UIColorFromHex(0xBFBFBF, alpha: 1.0);
+        }
+        sender.selected = !sender.selected;
+    }
     /*-------------------------------- TABLE VIEW METHODS ------------------------------------*/
     
     // Return the number of rows in the section.
@@ -242,7 +347,11 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        if (eventsList.count > 0) {
+            self.selectedEvent = eventsList[indexPath.row] as! PFObject;
+            
+            self.performSegueWithIdentifier("toEventDescription", sender: self);
+        }
         
     }
     
@@ -252,6 +361,33 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         let title:String = event["Title"] as! String;
         let creator:String = event["CreatorName"] as! String;
         let locationName:String = event["EventName"] as! String;
+        
+        let goingList:[String] = event["Going"] as! [String];
+        let maybeList:[String] = event["Maybe"] as! [String];
+        let notGoingList:[String] = event["NotGoing"] as! [String];
+        
+        
+        if goingList.contains(PFUser.currentUser()!.objectId!) {
+            cell.goingButton.selected = true;
+            cell.goingButton.highlighted = true;
+            cell.goingButton.backgroundColor = Utilities().UIColorFromHex(0xBFBFBF, alpha: 1.0);
+
+        }
+        
+        if maybeList.contains(PFUser.currentUser()!.objectId!) {
+            cell.maybeButton.selected = true;
+            cell.maybeButton.highlighted = true;
+            cell.maybeButton.backgroundColor = Utilities().UIColorFromHex(0xBFBFBF, alpha: 1.0);
+
+        }
+        
+        if notGoingList.contains(PFUser.currentUser()!.objectId!) {
+            cell.notGoingButton.selected = true;
+            cell.notGoingButton.highlighted = true;
+            cell.notGoingButton.backgroundColor = Utilities().UIColorFromHex(0xBFBFBF, alpha: 1.0);
+
+            print("hi!");
+        }
         
         let components = NSCalendar.currentCalendar().components([.Hour, .Minute, .Month, .Day, .Year], fromDate: date)
         
@@ -272,9 +408,14 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         cell.eventOrganizer.text = creator;
         cell.eventDistance.text = String(dist);
         
-        
-        
-        
+    }
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        if segue.identifier == "toEventDescription" {
+            let destinationVC = segue.destinationViewController as! EventDescriptionTableVC
+            destinationVC.selectedEvent = self.selectedEvent;
+        }
     }
     
     

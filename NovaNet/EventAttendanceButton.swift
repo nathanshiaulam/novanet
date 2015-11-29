@@ -16,9 +16,14 @@ class EventAttendanceButton: UIButton {
         let cornerRadius : CGFloat = 0.0
         
         self.setTitleColor(Utilities().UIColorFromHex(0x4e5665, alpha: 1.0), forState: UIControlState.Normal)
+        self.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Highlighted)
+
         self.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
         self.layer.borderWidth = 1.0;
         self.layer.borderColor = UIColor.grayColor().CGColor
         self.layer.cornerRadius = cornerRadius
+        
+        
+
     }
 }

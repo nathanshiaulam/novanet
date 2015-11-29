@@ -311,11 +311,6 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
 
         // Wipes away old profiles in data stored
         // Might be useless, may remove key in near future
-        let available:Bool = defaults.objectForKey(Constants.UserKeys.availableKey) as! Bool
-        if (!available) {
-            self.profileList = NSArray();
-            return;
-        }
         PFCloud.callFunctionInBackground("findUsers", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {
             (result: AnyObject?, error:NSError?) -> Void in
             if error == nil {

@@ -79,7 +79,7 @@ class EventsLocationFinder: ViewController, UISearchBarDelegate, LocateOnTheMap 
         
         let marker:GMSMarker = GMSMarker();
         marker.position = item.placemark.coordinate;
-        marker.appearAnimation = kGMSMarkerAnimationPop;
+//        marker.appearAnimation = kGMSMarkerAnimationPop;
         marker.map = self.googleMapsView;
         marker.title = item.name;
         
@@ -163,7 +163,7 @@ class EventsLocationFinder: ViewController, UISearchBarDelegate, LocateOnTheMap 
                     
                     let marker:GMSMarker = GMSMarker();
                     marker.position = item!.placemark.coordinate;
-                    marker.appearAnimation = kGMSMarkerAnimationPop;
+//                    marker.appearAnimation = kGMSMarkerAnimationPop;
                     marker.map = self.googleMapsView;
                     marker.title = item!.name;
                 }

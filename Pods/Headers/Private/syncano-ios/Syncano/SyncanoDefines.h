@@ -1,1 +1,0 @@
-../../../../syncano-ios/Syncano/Utilities/SyncanoDefines.h

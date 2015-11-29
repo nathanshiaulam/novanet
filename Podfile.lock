@@ -1,37 +1,37 @@
 PODS:
-  - AFNetworking (2.3.1):
-    - AFNetworking/NSURLConnection (= 2.3.1)
-    - AFNetworking/NSURLSession (= 2.3.1)
-    - AFNetworking/Reachability (= 2.3.1)
-    - AFNetworking/Security (= 2.3.1)
-    - AFNetworking/Serialization (= 2.3.1)
-    - AFNetworking/UIKit (= 2.3.1)
-  - AFNetworking/NSURLConnection (2.3.1):
+  - AFNetworking (2.6.3):
+    - AFNetworking/NSURLConnection (= 2.6.3)
+    - AFNetworking/NSURLSession (= 2.6.3)
+    - AFNetworking/Reachability (= 2.6.3)
+    - AFNetworking/Security (= 2.6.3)
+    - AFNetworking/Serialization (= 2.6.3)
+    - AFNetworking/UIKit (= 2.6.3)
+  - AFNetworking/NSURLConnection (2.6.3):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/NSURLSession (2.3.1):
+  - AFNetworking/NSURLSession (2.6.3):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (2.3.1)
-  - AFNetworking/Security (2.3.1)
-  - AFNetworking/Serialization (2.3.1)
-  - AFNetworking/UIKit (2.3.1):
+  - AFNetworking/Reachability (2.6.3)
+  - AFNetworking/Security (2.6.3)
+  - AFNetworking/Serialization (2.6.3)
+  - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - CocoaAsyncSocket (7.3.5)
   - GoogleMaps (1.10.3)
-  - JSQMessagesViewController (7.1.0):
+  - JSQMessagesViewController (7.2.0):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
-  - Mantle (1.4.1):
-    - Mantle/extobjc (= 1.4.1)
-  - Mantle/extobjc (1.4.1)
-  - syncano-ios (3.1.33):
-    - AFNetworking (~> 2.3.0)
-    - CocoaAsyncSocket (~> 7.3.0)
-    - Mantle (~> 1.4.1)
+  - Mantle (2.0.5):
+    - Mantle/extobjc (= 2.0.5)
+  - Mantle/extobjc (2.0.5)
+  - syncano-ios (4.0.0):
+    - AFNetworking (~> 2.5)
+    - Mantle (~> 2.0)
+    - UICKeyChainStore (~> 2.0)
+  - UICKeyChainStore (2.0.6)
 
 DEPENDENCIES:
   - GoogleMaps
@@ -39,12 +39,12 @@ DEPENDENCIES:
   - syncano-ios
 
 SPEC CHECKSUMS:
-  AFNetworking: 05b9f6e3aa5ac45bc383b4bb108ef338080a26c7
-  CocoaAsyncSocket: 94c582a5bef4bb0f51b6ebf3e1b561d9091a68ba
+  AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
   GoogleMaps: 945e4ac3b74bcca3ddada51df256eb7beddb474d
-  JSQMessagesViewController: ca11f86fa68ca70835f05e169df9244147c1dc40
+  JSQMessagesViewController: 73cab48aa92fc2d512f3b6724f3425cc47a19eb5
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
-  Mantle: 3219c0181d918508689af61c77891b12dbb28215
-  syncano-ios: e41233fea3dfd6a8435ead14b237c6f01c6d112f
+  Mantle: 1912395033f601de5adc8ee91e48f46e4c7051ad
+  syncano-ios: f52c99b6deba067cedbc943c0118c5f43b885a72
+  UICKeyChainStore: c5719c814e8bd69e74e4a0fc09daf8f4d6257a59
 
-COCOAPODS: 0.38.2
+COCOAPODS: 0.39.0

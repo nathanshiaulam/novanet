@@ -9,11 +9,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>CocoaAsyncSocket.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>JSQMessagesViewController.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -34,6 +29,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>UICKeyChainStore.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>syncano-ios.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -42,37 +42,37 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>017B47F95DD19370D4A2B72CE0C6D57A</key>
+		<key>2EFEDBB649146422B0A076290AB959DE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>09E575603302F2153E1D2B658F56857B</key>
+		<key>33D35C9F49AA2A9AA857CA66A16A1E67</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5E18EF8C4F974F3B5966B4085FAAFB30</key>
+		<key>410B25DF16EA5C5B3E2698F74F9625FB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8F8F35FAEAE2E20A1911EFFD93C89A82</key>
+		<key>426BC4549A625B5E1E4200D5261A98BF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9F1876D0E83787AC2475EDD341D27886</key>
+		<key>5F9D69D80399640269F450EBB7F9CE9E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A1A1F21AA18B4C79D19DB429112554ED</key>
+		<key>7C4BA3FCA845E372310F7855E57C18FA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C78048973452E3C2FDB3C1F169829950</key>
+		<key>D607CE439EBD256738A38E8D3933E56F</key>
 		<dict>
 			<key>primary</key>
 			<true/>

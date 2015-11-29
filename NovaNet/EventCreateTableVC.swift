@@ -11,6 +11,7 @@ import Foundation
 import Bolts
 import Parse
 import AddressBookUI
+import GoogleMaps
 
 class EventCreateTableVC: TableViewController, UITextViewDelegate {
 

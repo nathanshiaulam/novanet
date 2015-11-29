@@ -116,7 +116,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
                 print(error);
             } else if let result = result {
                 self.eventsList = result as! NSArray;
-                print(self.eventsList);
                 self.findDistList(lon, lat:lat, dist:dist, local:self.localEvents, all:true);
             }
         }
@@ -171,18 +170,39 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     
     
     func goingPressed(sender: EventAttendanceButton) {
-        let buttonRow = sender.tag;
-        let event:PFObject! = eventsList[sender.tag] as! PFObject;
+        let maybeButton:EventAttendanceButton = self.tableView.viewWithTag(sender.tag + 1) as! EventAttendanceButton
+        let notGoingButton:EventAttendanceButton = self.tableView.viewWithTag(sender.tag + 2)  as! EventAttendanceButton
+        
+        print(maybeButton);
+        print(notGoingButton);
+        let event:PFObject! = eventsList[(sender.tag - 100) / 3] as! PFObject;
         if (sender.selected) {
             var arr:[String]! = event["Going"] as! [String];
             arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
             event["Going"] = arr;
             event.saveInBackground();
-                
         } else  {
-            
+            if (maybeButton.selected) {
+                var arr:[String]! = event["Maybe"] as! [String];
+                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                event["Maybe"] = arr;
+                event.saveInBackground();
+                maybeButton.selected = false;
+            }
+            if (notGoingButton.selected) {
+                var arr:[String]! = event["NotGoing"] as! [String];
+                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                event["NotGoing"] = arr;
+                event.saveInBackground();
+                notGoingButton.selected = false;
+            }
+            var arr:[String]! = event["Going"] as! [String];
+            arr.append(PFUser.currentUser()!.objectId!);
+            event["Going"] = arr;
+            event.saveInBackground();
         }
         sender.selected = !sender.selected;
+        
     }
     
     /*-------------------------------- TABLE VIEW METHODS ------------------------------------*/
@@ -202,9 +222,9 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         let event = eventsList[indexPath.row] as! PFObject;
         var dist = distList[indexPath.row] as! Double;
         
-        cell.goingButton.tag = indexPath.row;
-        cell.maybeButton.tag = indexPath.row;
-        cell.notGoingButton.tag = indexPath.row;
+        cell.goingButton.tag = 100 + indexPath.row * 3
+        cell.maybeButton.tag = 100 + indexPath.row * 3 + 1
+        cell.notGoingButton.tag = 100 + indexPath.row * 3 + 2
         
         cell.goingButton.addTarget(self, action: "goingPressed:", forControlEvents: UIControlEvents.TouchUpInside);
         cell.maybeButton.addTarget(self, action: "maybePressed:", forControlEvents: UIControlEvents.TouchUpInside);

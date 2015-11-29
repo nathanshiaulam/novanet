@@ -66,8 +66,6 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "JSQMessagesViewController/JSQMessagesViewController/Views/JSQMessagesLoadEarlierHeaderView.xib"
   install_resource "JSQMessagesViewController/JSQMessagesViewController/Views/JSQMessagesToolbarContentView.xib"
   install_resource "JSQMessagesViewController/JSQMessagesViewController/Views/JSQMessagesTypingIndicatorFooterView.xib"
-  install_resource "syncano-ios/Resources/server.der"
-  install_resource "syncano-ios/syncano-ios.podspec.json"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "GoogleMaps/Frameworks/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle"
@@ -78,13 +76,11 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "JSQMessagesViewController/JSQMessagesViewController/Views/JSQMessagesLoadEarlierHeaderView.xib"
   install_resource "JSQMessagesViewController/JSQMessagesViewController/Views/JSQMessagesToolbarContentView.xib"
   install_resource "JSQMessagesViewController/JSQMessagesViewController/Views/JSQMessagesTypingIndicatorFooterView.xib"
-  install_resource "syncano-ios/Resources/server.der"
-  install_resource "syncano-ios/syncano-ios.podspec.json"
 fi
 
 mkdir -p "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
 rsync -avr --copy-links --no-relative --exclude '*/.svn/*' --files-from="$RESOURCES_TO_COPY" / "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
-if [[ "${ACTION}" == "install" ]]; then
+if [[ "${ACTION}" == "install" ]] && [[ "${SKIP_INSTALL}" == "NO" ]]; then
   mkdir -p "${INSTALL_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
   rsync -avr --copy-links --no-relative --exclude '*/.svn/*' --files-from="$RESOURCES_TO_COPY" / "${INSTALL_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
 fi

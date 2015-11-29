@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		160B9C0D1BCF7F1100316AF3 /* SettingsMenuTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160B9C0C1BCF7F1100316AF3 /* SettingsMenuTableVC.swift */; settings = {ASSET_TAGS = (); }; };
+		160B9C0D1BCF7F1100316AF3 /* SettingsMenuTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160B9C0C1BCF7F1100316AF3 /* SettingsMenuTableVC.swift */; };
 		160D1F281B5E903B00B3E4DB /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */; };
 		160D1F2A1B5EFA3A00B3E4DB /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */; };
 		160D1F2E1B5F85A200B3E4DB /* UploadPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */; };
@@ -15,16 +15,16 @@
 		1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B1881B55367800DBF11A /* SignUpViewController.swift */; };
 		1616B18B1B554D0E00DBF11A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */; };
 		1616B18F1B55560300DBF11A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B18E1B55560300DBF11A /* Constants.swift */; };
-		16629EB11BDDD7C4003C4F05 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB01BDDD7C4003C4F05 /* ViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		16629EB31BDDD7F2003C4F05 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB21BDDD7F2003C4F05 /* TableViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		16629EB71BDDDAEA003C4F05 /* NSDateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */; settings = {ASSET_TAGS = (); }; };
-		166985DF1C0126A300154035 /* EventsSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166985DE1C0126A300154035 /* EventsSearchResults.swift */; settings = {ASSET_TAGS = (); }; };
-		166985E11C012B2E00154035 /* EventsLocationFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166985E01C012B2E00154035 /* EventsLocationFinder.swift */; settings = {ASSET_TAGS = (); }; };
+		16629EB11BDDD7C4003C4F05 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB01BDDD7C4003C4F05 /* ViewController.swift */; };
+		16629EB31BDDD7F2003C4F05 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB21BDDD7F2003C4F05 /* TableViewController.swift */; };
+		16629EB71BDDDAEA003C4F05 /* NSDateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */; };
+		166985DF1C0126A300154035 /* EventsSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166985DE1C0126A300154035 /* EventsSearchResults.swift */; };
+		166985E11C012B2E00154035 /* EventsLocationFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166985E01C012B2E00154035 /* EventsLocationFinder.swift */; };
 		167114C11B8299F90024DC3E /* ImageUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167114C01B8299F90024DC3E /* ImageUtil.swift */; };
-		1685FB301BE988E300E05CDE /* EventsFinderTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1685FB2F1BE988E300E05CDE /* EventsFinderTableVC.swift */; settings = {ASSET_TAGS = (); }; };
-		1685FB341BE98ADD00E05CDE /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1685FB331BE98ADD00E05CDE /* EventCell.swift */; settings = {ASSET_TAGS = (); }; };
-		1685FB361BEB5D5E00E05CDE /* EventAttendanceButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1685FB351BEB5D5E00E05CDE /* EventAttendanceButton.swift */; settings = {ASSET_TAGS = (); }; };
-		169441141BDC29BC0049122C /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169441131BDC29BC0049122C /* NetworkManager.swift */; settings = {ASSET_TAGS = (); }; };
+		1685FB301BE988E300E05CDE /* EventsFinderTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1685FB2F1BE988E300E05CDE /* EventsFinderTableVC.swift */; };
+		1685FB341BE98ADD00E05CDE /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1685FB331BE98ADD00E05CDE /* EventCell.swift */; };
+		1685FB361BEB5D5E00E05CDE /* EventAttendanceButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1685FB351BEB5D5E00E05CDE /* EventAttendanceButton.swift */; };
+		169441141BDC29BC0049122C /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169441131BDC29BC0049122C /* NetworkManager.swift */; };
 		169CEB9B1B8C998800CCF078 /* AboutContentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169CEB9A1B8C998800CCF078 /* AboutContentVC.swift */; };
 		169CEB9D1B8C9DC800CCF078 /* AboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169CEB9C1B8C9DC800CCF078 /* AboutVC.swift */; };
 		169F4B6E1C011B3C000DD507 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169F4B6D1C011B3C000DD507 /* MapKit.framework */; };
@@ -55,13 +55,13 @@
 		16A0E7F61B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7F51B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift */; };
 		16A0E82A1B7E47D400DE06A9 /* SystemSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E8291B7E47D400DE06A9 /* SystemSettingsTableViewController.swift */; };
 		16A0E82E1B7E4DCD00DE06A9 /* FinderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E82D1B7E4DCD00DE06A9 /* FinderViewController.swift */; };
-		16A111371BEBD224002CB7A1 /* EventDescriptionTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A111361BEBD224002CB7A1 /* EventDescriptionTableVC.swift */; settings = {ASSET_TAGS = (); }; };
-		16A111391BEBD3C1002CB7A1 /* EventCreateTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A111381BEBD3C1002CB7A1 /* EventCreateTableVC.swift */; settings = {ASSET_TAGS = (); }; };
+		16A111371BEBD224002CB7A1 /* EventDescriptionTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A111361BEBD224002CB7A1 /* EventDescriptionTableVC.swift */; };
+		16A111391BEBD3C1002CB7A1 /* EventCreateTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A111381BEBD3C1002CB7A1 /* EventCreateTableVC.swift */; };
 		16C1C8C51B7F494A00C6166C /* HomeTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C1C8C41B7F494A00C6166C /* HomeTabBarController.swift */; };
 		16C1C8C71B7F50D100C6166C /* SelectedProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C1C8C61B7F50D000C6166C /* SelectedProfileViewController.swift */; };
 		16C1C8C91B7F5F5000C6166C /* ConversationListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C1C8C81B7F5F5000C6166C /* ConversationListTableViewController.swift */; };
-		16D333611BCADE1600C1B405 /* OnboardingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D333601BCADE1600C1B405 /* OnboardingTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		16D333631BCB063200C1B405 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D333621BCB063200C1B405 /* Utilities.swift */; settings = {ASSET_TAGS = (); }; };
+		16D333611BCADE1600C1B405 /* OnboardingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D333601BCADE1600C1B405 /* OnboardingTableViewController.swift */; };
+		16D333631BCB063200C1B405 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D333621BCB063200C1B405 /* Utilities.swift */; };
 		16DB14061B8024EE0048E1AC /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DB14051B8024EE0048E1AC /* FeedbackViewController.swift */; };
 		7DFB60EA63A8AD92B037922E /* libPods-NovaNet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 398448FD417B1B90923C50B5 /* libPods-NovaNet.a */; };
 /* End PBXBuildFile section */
@@ -381,6 +381,7 @@
 				16A0E6F71B54FC7300DDAE95 /* Frameworks */,
 				16A0E6F81B54FC7300DDAE95 /* Resources */,
 				11CA0EE6618F52DA41314DAA /* Copy Pods Resources */,
+				5B5933A09DF91EF0488ECBA4 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -490,6 +491,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NovaNet/Pods-NovaNet-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5B5933A09DF91EF0488ECBA4 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NovaNet/Pods-NovaNet-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E39CE6B412B63F5A779B8D66 /* Check Pods Manifest.lock */ = {

@@ -24,6 +24,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GMSServices.provideAPIKey("AIzaSyBweBvAkvyDFpocqomLn9vNdM0OILJqBsQ")
         PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
         
+        print("nope")
+        if (PFUser.currentUser() != nil) {
+            let query = PFQuery(className:"Profile");
+            let currentID = PFUser.currentUser()!.objectId;
+            query.whereKey("ID", equalTo:currentID!);
+            
+            query.getFirstObjectInBackgroundWithBlock {
+                (profile: PFObject?, error: NSError?) -> Void in
+                if error != nil || profile == nil {
+                    print(error);
+                } else if let profile = profile {
+                    
+                    // Sets up local datastore
+                    self.defaults.setObject(profile["Name"], forKey: Constants.UserKeys.nameKey)
+                    self.defaults.setObject(PFUser.currentUser()!.email, forKey: Constants.UserKeys.emailKey)
+                    self.defaults.setObject(profile["InterestsList"], forKey: Constants.UserKeys.interestsKey)
+                    self.defaults.setObject(profile["About"], forKey: Constants.UserKeys.aboutKey)
+                    self.defaults.setObject(profile["Experience"], forKey: Constants.UserKeys.experienceKey)
+                    self.defaults.setObject(profile["Looking"], forKey: Constants.UserKeys.lookingForKey)
+                    self.defaults.setObject(profile["Distance"], forKey: Constants.UserKeys.distanceKey)
+                    self.defaults.setObject(profile["Available"], forKey: Constants.UserKeys.availableKey)
+                    self.defaults.setObject(profile["New"], forKey: Constants.TempKeys.fromNew)
+                    self.defaults.setObject(profile["Greeting"], forKey: Constants.UserKeys.greetingKey)
+                    
+                    
+                    // Stores image in local data store and refreshes image from Parse
+                    let userImageFile = profile["Image"] as! PFFile;
+                    userImageFile.getDataInBackgroundWithBlock {
+                        (imageData, error) -> Void in
+                        if (error == nil) {
+                            let image = UIImage(data:imageData!);
+                            Utilities().saveImage(image!);
+                        }
+                        else {
+                            let placeHolder = UIImage(named: "selectImage");
+                            Utilities().saveImage(placeHolder!);
+                            print(error);
+                        }
+                    }
+                    
+                }
+            }
+        }
         
         let pageControl = UIPageControl.appearance()
         pageControl.pageIndicatorTintColor = UIColor.lightGrayColor()

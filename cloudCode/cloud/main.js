@@ -111,7 +111,8 @@ Parse.Cloud.define("findEventsDist", function(request, response) {
         var eventGoing = event.get("Going");
         var eventMaybe = event.get("Maybe");
         var eventNotGoing = event.get("NotGoing");
-        
+        var eventCreator = event.get("Creator");
+
         var timeDiff = eventDate.getTime() - currentDate.getTime();
         var dist = currLoc.kilometersTo(eventLocation);
         // If on "All" tab, load in all events 
@@ -131,7 +132,8 @@ Parse.Cloud.define("findEventsDist", function(request, response) {
         // If on "My Events" tab, load in all events in which you've marked
         // as "Going", "Maybe", and "Not Going"
         } else { 
-          if (eventGoing.indexOf(currentID) != -1 || eventMaybe.indexOf(currentID) != -1 || eventNotGoing.indexOf(currentID) != -1) {
+          if (eventGoing.indexOf(currentID) != -1 || eventMaybe.indexOf(currentID) != -1 || eventNotGoing.indexOf(currentID) != -1 || eventCreator == currentID) {
+            
             distList.push(dist);
           }
         }

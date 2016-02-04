@@ -15,12 +15,17 @@ import AddressBookUI
 class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
 
     @IBOutlet weak var organizerLabel: UILabel!
-    @IBOutlet weak var descField: UITextView!
     @IBOutlet weak var titleField: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
     var selectedEvent:PFObject!;
     
+    @IBOutlet weak var descField: UILabel!
+
+    @IBAction func goBack(sender: UIBarButtonItem) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+
     
     @IBAction func notGoingPressed(sender: AnyObject) {
     }
@@ -30,7 +35,8 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
     }
 
     override func viewDidLoad() {
-        prepareView();
+        tableView.allowsSelection = false;
+        prepareView()
     }
     
     
@@ -62,7 +68,7 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
                 }
             })
             
-            let creator = event["Creator"] as? String
+            let creator = event["CreatorName"] as? String
             
             
             let dateFormatter = NSDateFormatter()
@@ -79,23 +85,30 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
     /* TABLEVIEW DELEGATE METHODS*/
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 1 {
-            return descField.frame.height + 20;
-        } else {
-            return self.tableView.rowHeight;
+        if indexPath.section == 0 {
+            if indexPath.row == 0 {
+                return 65
+            }
+            if indexPath.row == 1 {
+                return 50
+            }
+            if indexPath.row == 2 {
+                return 70
+            }
+            if indexPath.row == 3 || indexPath.row == 4 {
+                return 40
+            }
+        } else if indexPath.section == 1 {
+            return descField.frame.height + 30;
         }
+        return self.tableView.rowHeight;
         
     }
+//    
+//    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+//        
+//        
+//    }
     
-    /* TEXTVIEW DELEGATE METHODS*/
-    
-    func textViewDidChange(textView: UITextView) {
-        let fixedWidth = textView.frame.size.width
-        textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
-        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
-        var newFrame = textView.frame
-        newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
-        textView.frame = newFrame;
-    }
     
 }

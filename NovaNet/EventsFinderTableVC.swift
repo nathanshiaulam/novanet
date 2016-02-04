@@ -139,8 +139,9 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             if error != nil {
                 print(error);
             } else if let result = result {
+                print(result)
                 self.eventsList = result as! NSArray;
-                self.findDistList(lon, lat:lat, dist:dist, local:self.localEvents, all:false);
+                self.findDistList(lon, lat:lat, dist:dist, local: self.localEvents, all:false);
             }
         }
         
@@ -152,24 +153,8 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             if error != nil {
                 print(error);
             } else if let result = result {
+                print(result)
                 self.distList = result as! NSArray;
-                //                if (all) {
-                //                    var byDistDict:Dictionary = Dictionary<PFObject, Double>();
-                //                    let byDistList:NSMutableArray = NSMutableArray();
-                //                    let sortedDistances:NSMutableArray = NSMutableArray();
-                //
-                //                    for (var i = 0; i < self.eventsList.count; i++) {
-                //                        byDistDict[self.eventsList[i] as! PFObject] = Double(self.distList[i].doubleValue);
-                //                    }
-                //
-                //                    for (k,v) in (Array(byDistDict).sort({$0.1 < $1.1})) {
-                //                        byDistList.addObject(k);
-                //                        sortedDistances.addObject(Double(round(100*v)/100));
-                //                    }
-                //                    self.eventsList = byDistList.copy() as! NSArray;
-                //                    self.distList = sortedDistances.copy() as! NSArray;
-                //                }
-                
                 self.tableView.reloadData();
                 self.refreshControl.endRefreshing();
             }
@@ -386,7 +371,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             cell.notGoingButton.highlighted = true;
             cell.notGoingButton.backgroundColor = Utilities().UIColorFromHex(0xBFBFBF, alpha: 1.0);
 
-            print("hi!");
         }
         
         let components = NSCalendar.currentCalendar().components([.Hour, .Minute, .Month, .Day, .Year], fromDate: date)
@@ -405,7 +389,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         cell.eventTime.text = time;
         cell.eventTitle.text = title;
         cell.eventLocation.text = locationName;
-        cell.eventOrganizer.text = creator;
+        cell.eventOrganizer.text = "Organized by " + creator;
         cell.eventDistance.text = String(dist);
         
     }
@@ -413,7 +397,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "toEventDescription" {
-            let destinationVC = segue.destinationViewController as! EventDescriptionTableVC
+            let destinationVC = segue.destinationViewController.childViewControllers[0] as! EventDescriptionTableVC
             destinationVC.selectedEvent = self.selectedEvent;
         }
     }

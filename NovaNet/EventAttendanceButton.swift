@@ -23,7 +23,5 @@ class EventAttendanceButton: UIButton {
         self.layer.borderColor = UIColor.grayColor().CGColor
         self.layer.cornerRadius = cornerRadius
         
-        
-
     }
 }

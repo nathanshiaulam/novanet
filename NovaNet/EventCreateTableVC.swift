@@ -33,18 +33,22 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         if (titleField.text?.characters.count > 0 && dateField.text?.characters.count > 0 && descField.text.characters.count > 0 && addressField.text!.characters.count > 0 && descField.textColor != UIColor.lightGrayColor()) {
             let point:PFGeoPoint = PFGeoPoint(latitude: marker.position.latitude, longitude: marker.position.longitude);
             
+            
             let newEvent = PFObject(className: "Event");
             newEvent["Title"] = titleField.text;
             newEvent["Description"] = descField.text;
             newEvent["Creator"] = PFUser.currentUser()?.objectId;
             newEvent["CreatorName"] = defaults.objectForKey(Constants.UserKeys.nameKey);
             newEvent["Date"] = selectedDate;
+            print("kldsaglkasd")
+            print(point)
             newEvent["Position"] = point;
             newEvent["EventName"] = marker.title;
             newEvent["Local"] = true;
-            newEvent["Going"] = [String]();
+            newEvent["Going"] = [(PFUser.currentUser()?.objectId)!] as [String]
             newEvent["Maybe"] = [String]();
             newEvent["NotGoing"] = [String]();
+            print(newEvent)
             newEvent.saveInBackground();
             self.navigationController?.dismissViewControllerAnimated(true, completion: nil);
         } else {

@@ -48,6 +48,7 @@ class NetworkManager: NSObject {
     func prepareDataStore(dataStoreFields: Dictionary<String, Any>) {
         for (key, item) in dataStoreFields {
             print(key);
+            print(item);
             defaults.setObject(item as? AnyObject, forKey: key);
         }
     }
@@ -79,6 +80,7 @@ class NetworkManager: NSObject {
         newUser.password = password;
         newUser.username = username;
         
+        
         let dataStoreFields:Dictionary<String, Any> = [
             Constants.UserKeys.usernameKey : username,
             Constants.UserKeys.emailKey : PFUser.currentUser()?.email,
@@ -86,7 +88,12 @@ class NetworkManager: NSObject {
             Constants.TempKeys.fromNew : true,
             Constants.UserKeys.greetingKey : Constants.ConstantStrings.greetingMessage
         ]
-        
+        defaults.setObject(username, forKey: Constants.UserKeys.usernameKey)
+        defaults.setObject(PFUser.currentUser()?.email, forKey: Constants.UserKeys.emailKey)
+        defaults.setObject(25, forKey: Constants.UserKeys.distanceKey)
+        defaults.setObject(true, forKey: Constants.TempKeys.fromNew)
+        defaults.setObject(Constants.ConstantStrings.greetingMessage, forKey: Constants.UserKeys.greetingKey)
+
         defaults.setObject(email, forKey: Constants.UserKeys.emailKey);
         
         newUser.signUpInBackgroundWithBlock {
@@ -152,21 +159,17 @@ class NetworkManager: NSObject {
                                 profile["Online"] = true;
                                 
                                 // Sets up local datastore
-                                let dataStoreFields:Dictionary<String, Any> = [
-                                    Constants.UserKeys.nameKey : profile["Name"],
-                                    Constants.UserKeys.emailKey : PFUser.currentUser()!.email,
-                                    Constants.UserKeys.interestsKey : profile["InterestsList"],
-                                    Constants.UserKeys.aboutKey : profile["About"],
-                                    Constants.UserKeys.experienceKey : profile["Experience"],
-                                    Constants.UserKeys.lookingForKey : profile["Looking"],
-                                    Constants.UserKeys.distanceKey : profile["Distance"],
-                                    Constants.UserKeys.availableKey : profile["Available"],
-                                    Constants.TempKeys.fromNew : profile["New"],
-                                    Constants.UserKeys.greetingKey : profile["Greeting"]
-                                ];
-                                
-                                self.prepareDataStore(dataStoreFields);
-                                
+                                self.defaults.setObject(profile["Name"], forKey: Constants.UserKeys.nameKey)
+                                self.defaults.setObject(PFUser.currentUser()!.email, forKey: Constants.UserKeys.emailKey)
+                                self.defaults.setObject(profile["InterestsList"], forKey: Constants.UserKeys.interestsKey)
+                                self.defaults.setObject(profile["About"], forKey: Constants.UserKeys.aboutKey)
+                                self.defaults.setObject(profile["Experience"], forKey: Constants.UserKeys.experienceKey)
+                                self.defaults.setObject(profile["Looking"], forKey: Constants.UserKeys.lookingForKey)
+                                self.defaults.setObject(profile["Distance"], forKey: Constants.UserKeys.distanceKey)
+                                self.defaults.setObject(profile["Available"], forKey: Constants.UserKeys.availableKey)
+                                self.defaults.setObject(profile["New"], forKey: Constants.TempKeys.fromNew)
+                                self.defaults.setObject(profile["Greeting"], forKey: Constants.UserKeys.greetingKey)
+
                                 // Sets installation so that push notifications get sent to this device
                                 let installation = PFInstallation.currentInstallation()
                                 installation["user"] = PFUser.currentUser()

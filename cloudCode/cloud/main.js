@@ -17,18 +17,19 @@ Parse.Cloud.define("findAllEvents", function(request, response) {
   eventQuery.find({
     success: function(results) {
       var currentDate = new Date();
-
+      console.log(results);
       for (var i = 0; i < results.length; i++) {
         var event = results[i];
         var eventDate = event.get("Date");
         var eventLocation = event.get("Position");
         var eventLocal = event.get("Local");
+        var eventName = event.get("Title");
         var timeDiff = eventDate.getTime() - currentDate.getTime();
+        console.log("Name: " + eventName + " TimeDiff: " + timeDiff);
         if (timeDiff >= 0) { // Checks if the event has already passed
           if (eventLocation != null) {
             if (local) {
               var dist = currLoc.kilometersTo(eventLocation);
-
               if (dist <= bound) { // Checks if the distance is within the bound
                 eventList.push(event);
               }

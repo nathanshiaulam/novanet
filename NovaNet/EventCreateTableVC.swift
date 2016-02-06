@@ -40,8 +40,6 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
             newEvent["Creator"] = PFUser.currentUser()?.objectId;
             newEvent["CreatorName"] = defaults.objectForKey(Constants.UserKeys.nameKey);
             newEvent["Date"] = selectedDate;
-            print("kldsaglkasd")
-            print(point)
             newEvent["Position"] = point;
             newEvent["EventName"] = marker.title;
             newEvent["Local"] = true;

@@ -35,14 +35,18 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             self.tableView.addSubview(eventHeaderView);
             self.tableView.frame =
                 CGRectMake(0, 0, self.tableView.frame.width, self.tableView.frame.height + 30)
-            
+            refreshControl.removeTarget(self, action: Selector("findSavedEvents"), forControlEvents: UIControlEvents.ValueChanged)
+            refreshControl.addTarget(self, action: Selector("findAllEvents"), forControlEvents: UIControlEvents.ValueChanged)
             findAllEvents();
             
         } else {
             eventHeaderView.removeFromSuperview()
             self.tableView.frame =
                 CGRectMake(0, 0 - eventHeaderView.frame.height, self.tableView.frame.width, self.tableView.frame.height + 30)
+            refreshControl.removeTarget(self, action: Selector("findAllEvents"), forControlEvents: UIControlEvents.ValueChanged)
+            refreshControl.addTarget(self, action: Selector("findSavedEvents"), forControlEvents: UIControlEvents.ValueChanged)
             findSavedEvents();
+            
         }
         
     }
@@ -82,7 +86,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         
         
         refreshControl = UIRefreshControl();
-        refreshControl.addTarget(self, action: Selector("findAllEvents"), forControlEvents: UIControlEvents.ValueChanged)
         
         segmentControl.selectedSegmentIndex = 0;
     }
@@ -92,10 +95,20 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         self.tabBarController!.navigationItem.leftBarButtonItem = addEventButton;
         self.oldTitleView = self.tabBarController!.navigationItem.titleView
         self.tabBarController!.navigationItem.titleView = segmentControl;
-        refreshControl.addTarget(self, action: Selector("findAllEvents"), forControlEvents: UIControlEvents.ValueChanged)
-        tableView.addSubview(self.refreshControl)
         
-        findAllEvents();
+        tableView.addSubview(self.refreshControl)
+        if segmentControl.selectedSegmentIndex == 0 {
+            findAllEvents();
+            refreshControl.removeTarget(self, action: Selector("findSavedEvents"), forControlEvents: UIControlEvents.ValueChanged)
+            refreshControl.addTarget(self, action: Selector("findAllEvents"), forControlEvents: UIControlEvents.ValueChanged)
+            
+        } else {
+            findSavedEvents();
+            self.tableView.frame =
+                CGRectMake(0, 0 - eventHeaderView.frame.height, self.tableView.frame.width, self.tableView.frame.height + 30)
+            refreshControl.removeTarget(self, action: Selector("findAllEvents"), forControlEvents: UIControlEvents.ValueChanged)
+            refreshControl.addTarget(self, action: Selector("findSavedEvents"), forControlEvents: UIControlEvents.ValueChanged)
+        }
         super.viewDidAppear(true);
     }
     
@@ -167,7 +180,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         let notGoingButton:EventAttendanceButton = self.tableView.viewWithTag(sender.tag + 2)  as! EventAttendanceButton
         
         let event:PFObject! = eventsList[(sender.tag - 100) / 3] as! PFObject;
-        print(sender.selected);
         
         if (sender.selected) {
             var arr:[String]! = event["Going"] as! [String];
@@ -213,12 +225,11 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         let notGoingButton:EventAttendanceButton = self.tableView.viewWithTag(sender.tag + 1)  as! EventAttendanceButton
         
         let event:PFObject! = eventsList[(sender.tag - 100 - 1) / 3] as! PFObject;
-        print(sender.selected);
-        
+
         if (sender.selected) {
-            var arr:[String]! = event["Going"] as! [String];
+            var arr:[String]! = event["Maybe"] as! [String];
             arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
-            event["Going"] = arr;
+            event["Maybe"] = arr;
             event.saveInBackground();
             
             sender.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
@@ -351,27 +362,36 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         let maybeList:[String] = event["Maybe"] as! [String];
         let notGoingList:[String] = event["NotGoing"] as! [String];
         
-        
         if goingList.contains(PFUser.currentUser()!.objectId!) {
             cell.goingButton.selected = true;
             cell.goingButton.highlighted = true;
             cell.goingButton.backgroundColor = Utilities().UIColorFromHex(0xBFBFBF, alpha: 1.0);
-
+        } else {
+            cell.goingButton.selected = false;
+            cell.goingButton.highlighted = false
+            cell.goingButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
         }
         
         if maybeList.contains(PFUser.currentUser()!.objectId!) {
             cell.maybeButton.selected = true;
             cell.maybeButton.highlighted = true;
             cell.maybeButton.backgroundColor = Utilities().UIColorFromHex(0xBFBFBF, alpha: 1.0);
-
+        } else {
+            cell.maybeButton.selected = false;
+            cell.maybeButton.highlighted = false
+            cell.maybeButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
         }
         
         if notGoingList.contains(PFUser.currentUser()!.objectId!) {
             cell.notGoingButton.selected = true;
             cell.notGoingButton.highlighted = true;
             cell.notGoingButton.backgroundColor = Utilities().UIColorFromHex(0xBFBFBF, alpha: 1.0);
-
+        } else {
+            cell.notGoingButton.selected = false;
+            cell.notGoingButton.highlighted = false
+            cell.notGoingButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
         }
+        
         
         let components = NSCalendar.currentCalendar().components([.Hour, .Minute, .Month, .Day, .Year], fromDate: date)
         

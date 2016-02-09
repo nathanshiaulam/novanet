@@ -25,15 +25,14 @@ Parse.Cloud.define("findAllEvents", function(request, response) {
         var eventLocal = event.get("Local");
         var eventName = event.get("Title");
         var timeDiff = eventDate.getTime() - currentDate.getTime();
-        console.log("Name: " + eventName + " TimeDiff: " + timeDiff);
         if (timeDiff >= 0) { // Checks if the event has already passed
           if (eventLocation != null) {
-            if (local) {
+            if (local && eventLocal) {
               var dist = currLoc.kilometersTo(eventLocation);
               if (dist <= bound) { // Checks if the distance is within the bound
                 eventList.push(event);
               }
-            } else {
+            } else if (!local && !eventLocal) {
               eventList.push(event);
             }
           }
@@ -68,12 +67,15 @@ Parse.Cloud.define("findSavedEvents", function(request, response) {
 
       for (var i = 0; i < results.length; i++) {
         var event = results[i];
+        var eventDate = event.get("Date");
         var eventGoing = event.get("Going");
         var eventMaybe = event.get("Maybe");
         var eventNotGoing = event.get("NotGoing");
-        console.log(eventGoing.indexOf(currentID));
-        if (eventGoing.indexOf(currentID) != -1 || eventMaybe.indexOf(currentID) != -1 || eventNotGoing.indexOf(currentID) != -1) {
-            eventList.push(event);
+        var timeDiff = eventDate.getTime() - currentDate.getTime();
+        if (timeDiff >= 0) {
+          if (eventGoing.indexOf(currentID) != -1 || eventMaybe.indexOf(currentID) != -1 || eventNotGoing.indexOf(currentID) != -1) {
+              eventList.push(event);
+          }
         }
       }
       response.success(eventList);

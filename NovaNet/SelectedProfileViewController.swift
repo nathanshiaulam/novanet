@@ -18,6 +18,7 @@ class SelectedProfileViewController: ViewController {
     @IBOutlet weak var aboutLabel: UILabel!
     @IBOutlet weak var experienceLabel: UILabel!
     
+    @IBOutlet weak var distanceArrow: UIImageView!
     @IBOutlet weak var firstInterestLabel: UILabel!
     @IBOutlet weak var secondInterestLabel: UILabel!
     @IBOutlet weak var thirdInterestLabel: UILabel!
@@ -115,6 +116,10 @@ class SelectedProfileViewController: ViewController {
         }
         if let dist: AnyObject = defaults.objectForKey(Constants.SelectedUserKeys.selectedDistanceKey) {
             distLabel.text = String(stringInterpolationSegment: dist) + "km";
+        } else {
+            distLabel.hidden = true
+            distHeader.hidden = true
+            distanceArrow.hidden = true
         }
         
         experienceLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
@@ -182,6 +187,7 @@ class SelectedProfileViewController: ViewController {
             if (chatButtonHeight != nil) {
                 self.chatButtonHeight.constant = 50;
             }
+            self.profileImageTopDist.constant = 18;
 
             // Set font size of each label
             self.nameLabel.font = self.nameLabel.font.fontWithSize(20.0);

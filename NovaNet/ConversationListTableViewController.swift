@@ -67,8 +67,6 @@ class ConversationListTableViewController: TableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "toMessageVC" {
             let destinationVC = segue.destinationViewController.childViewControllers.first as! MessagerViewController
-            print("SecondImage: ");
-            print(self.nextImage);
             destinationVC.nextImage = self.nextImage;
         }
     }
@@ -97,6 +95,7 @@ class ConversationListTableViewController: TableViewController {
             let conversationParticipant: AnyObject = conversationParticipantList[indexPath.row];
             let conversation: AnyObject = conversationList[indexPath.row];
             let profile:AnyObject = otherProfileList[indexPath.row];
+            
 
             // Stores variables to mark unread messages and most recent message
             let readConversationCount:Int = conversationParticipant["ReadMessageCount"] as! Int;
@@ -118,12 +117,9 @@ class ConversationListTableViewController: TableViewController {
             var image = PFFile();
             if let userImageFile = profile["Image"] as? PFFile {
                 image = userImageFile;
-                print("yes");
                 image.getDataInBackgroundWithBlock {
                     (imageData, error) -> Void in
                     if (error == nil) {
-                        print("hello");
-                        print(UIImage(data:imageData!));
                         cell.profileImage.image = UIImage(data:imageData!);
                         self.imageList[indexPath.row] = UIImage(data:imageData!);
                     }
@@ -287,11 +283,17 @@ class ConversationListTableViewController: TableViewController {
         query.findObjectsInBackgroundWithBlock {
             (objects: [AnyObject]?, error: NSError?) -> Void in
             if error == nil {
-                self.otherProfileList = objects!;
-                self.tableView.reloadData();
-                self.refreshControl?.endRefreshing();
+                self.otherProfileList = objects!
+                print("-----------")
+                for (var i = 0; i < self.otherProfileList.count; i++) {
+                    let prof = self.otherProfileList[i] as? PFObject
+                    print("Name: " + (prof!["Name"] as? String)!)
+                    print((prof!["MostRecent"] as? NSDate)!)
+                }
+                self.tableView.reloadData()
+                self.refreshControl?.endRefreshing()
             } else {
-                print(error);
+                print(error)
             }
         }
     }

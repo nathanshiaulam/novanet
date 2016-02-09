@@ -13,15 +13,15 @@ import Parse
 import AddressBookUI
 import GoogleMaps
 
-class EventCreateTableVC: TableViewController, UITextViewDelegate {
-
+class EventEditTableVC: TableViewController, UITextViewDelegate {
+    
     
     var marker:GMSMarker!;
     var selectedDate:NSDate!;
     
     let defaults = NSUserDefaults.standardUserDefaults();
     
-    
+    var selectedEvent:PFObject!;
     
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var dateField: UITextField!
@@ -30,26 +30,21 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
     @IBOutlet weak var eventField: UITextField!
     @IBOutlet weak var addressField: UITextField!
     
-    @IBAction func createEvent(sender: AnyObject) {
+    @IBAction func editEvent(sender: AnyObject) {
         
         if (titleField.text?.characters.count > 0 && dateField.text?.characters.count > 0 && descField.text.characters.count > 0 && addressField.text!.characters.count > 0 && descField.textColor != UIColor.lightGrayColor()) {
             let point:PFGeoPoint = PFGeoPoint(latitude: marker.position.latitude, longitude: marker.position.longitude);
             
-            
-            let newEvent = PFObject(className: "Event");
-            newEvent["Title"] = titleField.text;
-            newEvent["Description"] = descField.text;
-            newEvent["Creator"] = PFUser.currentUser()?.objectId;
-            newEvent["CreatorName"] = defaults.objectForKey(Constants.UserKeys.nameKey);
-            newEvent["Date"] = selectedDate;
-            newEvent["Position"] = point;
-            newEvent["EventName"] = marker.title;
-            newEvent["Local"] = true;
-            newEvent["Going"] = [(PFUser.currentUser()?.objectId)!] as [String]
-            newEvent["Maybe"] = [String]();
-            newEvent["NotGoing"] = [String]();
+            selectedEvent["Title"] = titleField.text;
+            selectedEvent["Description"] = descField.text;
+            selectedEvent["Creator"] = PFUser.currentUser()?.objectId;
+            selectedEvent["CreatorName"] = defaults.objectForKey(Constants.UserKeys.nameKey);
+            selectedEvent["Date"] = selectedDate;
+            selectedEvent["Position"] = point;
+            selectedEvent["EventName"] = marker.title;
+            selectedEvent["Local"] = true;
 
-            newEvent.saveInBackground();
+            selectedEvent.saveInBackground();
             self.navigationController?.dismissViewControllerAnimated(true, completion: nil);
         } else {
             let alert = UIAlertController(title: "Submission Failure", message: "Please fill out all fields before creating an event.", preferredStyle: UIAlertControllerStyle.Alert);
@@ -58,17 +53,13 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
             return;
         }
     }
+    
     override func viewDidLoad() {
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: "endEditing:"));
         tableView.allowsSelection = false;
         
-        descField.text = Constants.ConstantStrings.placeHolderDesc;
-        descField.textColor = UIColor.lightGrayColor()
-        
+        prepareView()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "saveNewLocation:", name: "saveNewLocation", object: nil)
-        if marker == nil {
-            addressCell.hidden = true;
-        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -86,7 +77,7 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         if (sender.text?.characters.count > 0) {
             let dateFormatter = NSDateFormatter()
             dateFormatter.dateStyle = NSDateFormatterStyle.LongStyle;
-            dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle;
+            dateFormatter.timeStyle = NSDateFormatterStyle.LongStyle;
             let currDate = dateFormatter.dateFromString(sender.text!);
             datePickerView.date = currDate!;
         }
@@ -106,7 +97,7 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
             (placemarks, error) -> Void in
-        
+            
             if (error != nil) {
                 print("Reverse geocoder failed with error" + error!.localizedDescription)
                 return
@@ -119,12 +110,48 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         })
         
     }
-
+    
+    func prepareView() {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateStyle = NSDateFormatterStyle.LongStyle;
+        dateFormatter.timeStyle = NSDateFormatterStyle.LongStyle;
+        selectedDate = selectedEvent["Date"] as? NSDate
+        let dateString = dateFormatter.stringFromDate(selectedDate!);
+        dateField.text = dateString;
+        
+        descField.text = selectedEvent["Description"] as? String
+        titleField.text = selectedEvent["Title"] as? String
+        
+        let point:PFGeoPoint = (selectedEvent["Position"] as? PFGeoPoint)!
+        let lat = point.latitude
+        let lon = point.longitude
+        marker = GMSMarker()
+        marker.title = selectedEvent["EventName"] as? String
+        marker.position.latitude = lat
+        marker.position.longitude = lon
+        eventField.text = selectedEvent["EventName"] as? String
+        let location = CLLocation(latitude: lat, longitude: lon)
+        
+        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
+            (placemarks, error) -> Void in
+            
+            if (error != nil) {
+                print("Reverse geocoder failed with error" + error!.localizedDescription)
+                return
+            } else if let marks = placemarks {
+                let pm = marks[0] as CLPlacemark;
+                let address = ABCreateStringWithAddressDictionary(pm.addressDictionary!, true);
+                self.addressField.text = address;
+                self.addressCell.hidden = false;
+            }
+        })
+    }
+    
     func handleDatePicker(sender: UIDatePicker) {
         
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateStyle = NSDateFormatterStyle.LongStyle;
-        dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle;
+        dateFormatter.timeStyle = NSDateFormatterStyle.LongStyle;
         
         let dateString = dateFormatter.stringFromDate((sender.date))
         selectedDate = sender.date;
@@ -179,21 +206,6 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         return true;
     }
     
-    // Sets the character limit of each text field
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        
-        if (range.length + range.location > textField.text?.characters.count )
-        {
-            return false;
-        }
-        
-        let newLength = (textField.text?.characters.count)! + string.characters.count - range.length
-        if (textField == titleField) {
-            return newLength <= 20;
-        }
-        return true;
-    }
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         
         // Create a new variable to store the instance of PlayerTableViewController
@@ -206,4 +218,4 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         }
     }
     
-  }
+}

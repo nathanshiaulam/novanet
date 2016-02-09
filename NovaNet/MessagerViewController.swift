@@ -267,8 +267,17 @@ class MessagerViewController: JSQMessagesViewController {
             if error == nil {
                 let prof1:PFObject = profile as! PFObject;
                 
-                prof1["MostRecent"] = date;
-                prof1.saveInBackground()
+                let profDate:NSDate! = prof1["MostRecent"] as? NSDate
+                if (profDate != nil) {
+                    if date.timeIntervalSinceDate(profDate) > 0 {
+                        prof1["MostRecent"] = date
+                        prof1.saveInBackground()
+                    }
+                } else {
+                    prof1["MostRecent"] = date
+                    prof1.saveInBackground()
+                }
+               
             }
         }
         
@@ -422,8 +431,6 @@ class MessagerViewController: JSQMessagesViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "toSelectedProfile" {
             let destinationVC = segue.destinationViewController as! SelectedProfileViewController
-            print("thirdImage: " );
-            print(nextImage);
             destinationVC.image = self.nextImage;
             destinationVC.fromMessage = true;
         }

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		160B9C0D1BCF7F1100316AF3 /* SettingsMenuTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160B9C0C1BCF7F1100316AF3 /* SettingsMenuTableVC.swift */; };
+		160BFEC71C675A07005D001A /* EventEditTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160BFEC61C675A07005D001A /* EventEditTableVC.swift */; };
+		160BFECB1C679EC1005D001A /* EventAttendanceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160BFECA1C679EC1005D001A /* EventAttendanceVC.swift */; };
 		160D1F281B5E903B00B3E4DB /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */; };
 		160D1F2A1B5EFA3A00B3E4DB /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */; };
 		160D1F2E1B5F85A200B3E4DB /* UploadPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */; };
@@ -79,6 +81,8 @@
 /* Begin PBXFileReference section */
 		05B5DD1A09E458030958BC47 /* Pods-NovaNet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NovaNet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NovaNet/Pods-NovaNet.debug.xcconfig"; sourceTree = "<group>"; };
 		160B9C0C1BCF7F1100316AF3 /* SettingsMenuTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsMenuTableVC.swift; sourceTree = "<group>"; };
+		160BFEC61C675A07005D001A /* EventEditTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventEditTableVC.swift; path = ../EventEditTableVC.swift; sourceTree = "<group>"; };
+		160BFECA1C679EC1005D001A /* EventAttendanceVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventAttendanceVC.swift; path = ../EventAttendanceVC.swift; sourceTree = "<group>"; };
 		160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
 		160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UploadPictureViewController.swift; path = ../UploadPictureViewController.swift; sourceTree = "<group>"; };
@@ -255,7 +259,9 @@
 			isa = PBXGroup;
 			children = (
 				1685FB331BE98ADD00E05CDE /* EventCell.swift */,
+				160BFECA1C679EC1005D001A /* EventAttendanceVC.swift */,
 				16A111381BEBD3C1002CB7A1 /* EventCreateTableVC.swift */,
+				160BFEC61C675A07005D001A /* EventEditTableVC.swift */,
 				16A111361BEBD224002CB7A1 /* EventDescriptionTableVC.swift */,
 				1685FB351BEB5D5E00E05CDE /* EventAttendanceButton.swift */,
 				166985DE1C0126A300154035 /* EventsSearchResults.swift */,
@@ -542,6 +548,7 @@
 				16A111391BEBD3C1002CB7A1 /* EventCreateTableVC.swift in Sources */,
 				1616B18B1B554D0E00DBF11A /* ProfileViewController.swift in Sources */,
 				166985E11C012B2E00154035 /* EventsLocationFinder.swift in Sources */,
+				160BFEC71C675A07005D001A /* EventEditTableVC.swift in Sources */,
 				1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */,
 				1616B18F1B55560300DBF11A /* Constants.swift in Sources */,
 				160D1F281B5E903B00B3E4DB /* HomeTableViewCell.swift in Sources */,
@@ -555,6 +562,7 @@
 				160D1F2E1B5F85A200B3E4DB /* UploadPictureViewController.swift in Sources */,
 				16629EB31BDDD7F2003C4F05 /* TableViewController.swift in Sources */,
 				16A0E82A1B7E47D400DE06A9 /* SystemSettingsTableViewController.swift in Sources */,
+				160BFECB1C679EC1005D001A /* EventAttendanceVC.swift in Sources */,
 				169441141BDC29BC0049122C /* NetworkManager.swift in Sources */,
 				160D1F2A1B5EFA3A00B3E4DB /* UserProfileViewController.swift in Sources */,
 				16C1C8C51B7F494A00C6166C /* HomeTabBarController.swift in Sources */,

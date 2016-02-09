@@ -58,6 +58,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             
             let otherCurrentFont = memberEventButton.titleLabel!.font
             memberEventButton.titleLabel!.font = UIFont(name: "AvenirNext-Regular", size: otherCurrentFont.pointSize)
+            findAllEvents();
             
         }
     }
@@ -70,6 +71,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             
             let otherCurrentFont = memberEventButton.titleLabel!.font
             memberEventButton.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: otherCurrentFont.pointSize)
+            findAllEvents();
             
             
         }

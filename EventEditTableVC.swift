@@ -30,6 +30,35 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
     @IBOutlet weak var eventField: UITextField!
     @IBOutlet weak var addressField: UITextField!
     
+    @IBAction func deleteEvent(sender: UIButton) {
+        let alert:UIAlertController = UIAlertController(title: "Are you sure?", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        
+        let deleteAction = UIAlertAction(title: "Delete Event", style: UIAlertActionStyle.Default) {
+            UIAlertAction in
+            self.deleteEvent()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style:UIAlertActionStyle.Cancel) {
+            UIAlertAction in
+        }
+        alert.addAction(deleteAction)
+        alert.addAction(cancelAction)
+        
+        self.presentViewController(alert, animated: true, completion: nil)
+        
+    }
+    
+    func deleteEvent() {
+        
+        selectedEvent.deleteInBackgroundWithBlock {
+            (succeeded: Bool, error: NSError?) -> Void in
+            if (succeeded) {
+                self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+                NSNotificationCenter.defaultCenter().postNotificationName("eventDeleted", object: nil);                
+            } else {
+                print(error)
+            }
+        }
+    }
     @IBAction func editEvent(sender: AnyObject) {
         
         if (titleField.text?.characters.count > 0 && dateField.text?.characters.count > 0 && descField.text.characters.count > 0 && addressField.text!.characters.count > 0 && descField.textColor != UIColor.lightGrayColor()) {

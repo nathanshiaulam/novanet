@@ -11,6 +11,7 @@ import Bolts
 import Parse
 import GoogleMaps
 import AddressBookUI
+import EventKit
 
 class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
 
@@ -68,6 +69,64 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
     @IBOutlet weak var interestedCount: UIButton!
     @IBOutlet weak var notGoingCount: UIButton!
 
+    @IBAction func goToCalendar(sender: UIButton) {
+        let alert:UIAlertController = UIAlertController(title: "Save Event", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+        
+        let calendarAction = UIAlertAction(title: "Add to Calendar", style: UIAlertActionStyle.Default) {
+            UIAlertAction in
+            self.insertEvent()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style:UIAlertActionStyle.Cancel) {
+            UIAlertAction in
+        }
+        alert.addAction(calendarAction)
+        alert.addAction(cancelAction)
+        
+        self.presentViewController(alert, animated: true, completion: nil)
+        
+    }
+    
+    func insertEvent() {
+        // 1
+        let eventStore : EKEventStore = EKEventStore()
+        
+        // 'EKEntityTypeReminder' or 'EKEntityTypeEvent'
+        
+        eventStore.requestAccessToEntityType(EKEntityType.Event, completion: {
+            (granted, error) in
+            
+            if (granted) && (error == nil) {
+                print("granted \(granted)")
+                print("error \(error)")
+                var venueName = self.selectedEvent["EventName"] as! String
+                var array:[String]!
+                do {
+                    //Create a reggae and replace "," with any following spaces with just a comma
+                    let regex = try NSRegularExpression(pattern: ", +", options: NSRegularExpressionOptions.CaseInsensitive)
+                    venueName = regex.stringByReplacingMatchesInString(venueName, options: NSMatchingOptions.WithoutAnchoringBounds, range: NSMakeRange(0, venueName.characters.count), withTemplate: ",")
+                    array = venueName.characters.split { $0 == ","}.map(String.init)
+                } catch {
+                    //Bad regex created
+                }
+                let eventName = array[0]
+                
+                let event:EKEvent = EKEvent(eventStore: eventStore)
+                let startDate = (self.selectedEvent["Date"] as? NSDate)!
+                let endDate = startDate.dateByAddingTimeInterval(60 * 60 * 2)
+                event.title = eventName
+                event.startDate = startDate
+                event.endDate = endDate
+                event.notes = (self.selectedEvent["Description"] as? String)!
+                event.calendar = eventStore.defaultCalendarForNewEvents
+                do {
+                    try eventStore.saveEvent(event, span: EKSpan.ThisEvent, commit: true)
+                } catch {
+                }
+                
+                print("Saved Event") 
+            } 
+        })
+    }
     @IBAction func goToAppleMaps(sender: UIButton) {
         let alert:UIAlertController = UIAlertController(title: "Find Location", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         
@@ -97,7 +156,6 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
             //Bad regex created
         }
         let eventName = array[0]
-        print(eventName)
         
         let lat1 = geoPoint?.latitude
         let lng1 = geoPoint?.longitude
@@ -255,8 +313,13 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
     override func viewDidLoad() {
         tableView.allowsSelection = false;
         descField.editable = false;
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "eventDeleted", name: "eventDeleted", object: nil)
         prepareView()
         super.viewDidLoad()
+    }
+    
+    func eventDeleted() {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     override func viewDidAppear(animated: Bool) {

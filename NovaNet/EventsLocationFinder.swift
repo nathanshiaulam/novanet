@@ -84,13 +84,13 @@ class EventsLocationFinder: ViewController, UISearchBarDelegate, LocateOnTheMap 
         marker.title = item.name;
         
         let lat = item.placemark.coordinate.latitude;
-        let lon = item.placemark.coordinate.longitude;
+        let lon = item.placemark.coordinate.longitude
         
         let camera = GMSCameraPosition.cameraWithLatitude(lat, longitude: lon, zoom: 15);
         
-        self.googleMapsView.camera = camera;
-        
+        self.googleMapsView.camera = camera
         marker.map = self.googleMapsView
+        self.googleMapsView.selectedMarker = marker
         
     }
     
@@ -106,6 +106,7 @@ class EventsLocationFinder: ViewController, UISearchBarDelegate, LocateOnTheMap 
             
             marker.title = title
             marker.map = self.googleMapsView
+            self.googleMapsView.selectedMarker = marker
         }
     }
     

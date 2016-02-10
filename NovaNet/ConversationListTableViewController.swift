@@ -50,7 +50,6 @@ class ConversationListTableViewController: TableViewController {
             conversationParticipantList = NSArray();
             otherProfileList = NSArray();
             tableView.reloadData()
-            self.tabBarController?.navigationItem.title = "Messages";
 
             // Go to login page if no user logged in
             self.tabBarController?.selectedIndex = 0;
@@ -58,6 +57,7 @@ class ConversationListTableViewController: TableViewController {
             return;
         }
         else {
+            self.tabBarController?.navigationItem.title = "Messages";
             loadConversations();
         }
         
@@ -105,6 +105,10 @@ class ConversationListTableViewController: TableViewController {
                 recentMessage = message;
             }
             cell.nameLabel.text = profile["Name"] as? String;
+            print("Name: " + cell.nameLabel.text!)
+            print("ReadMessageCount: " + String(readConversationCount))
+            print("Conversation Count: " + String(conversationCount))
+            
             if readConversationCount < conversationCount {
                 cell.unreadMessageMark.hidden = false;
             } else {
@@ -284,12 +288,11 @@ class ConversationListTableViewController: TableViewController {
             (objects: [AnyObject]?, error: NSError?) -> Void in
             if error == nil {
                 self.otherProfileList = objects!
-                print("-----------")
-                for (var i = 0; i < self.otherProfileList.count; i++) {
-                    let prof = self.otherProfileList[i] as? PFObject
-                    print("Name: " + (prof!["Name"] as? String)!)
-                    print((prof!["MostRecent"] as? NSDate)!)
-                }
+//                print("-----------")
+//                for (var i = 0; i < self.otherProfileList.count; i++) {
+//                    let prof = self.otherProfileList[i] as? PFObject
+//                    print((prof!["MostRecent"] as? NSDate)!)
+//                }
                 self.tableView.reloadData()
                 self.refreshControl?.endRefreshing()
             } else {

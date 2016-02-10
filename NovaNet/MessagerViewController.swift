@@ -266,7 +266,6 @@ class MessagerViewController: JSQMessagesViewController {
             (profile: AnyObject?, error: NSError?) -> Void in
             if error == nil {
                 let prof1:PFObject = profile as! PFObject;
-                
                 let profDate:NSDate! = prof1["MostRecent"] as? NSDate
                 if (profDate != nil) {
                     if date.timeIntervalSinceDate(profDate) > 0 {
@@ -306,6 +305,7 @@ class MessagerViewController: JSQMessagesViewController {
             if (error != nil || convPart == nil) {
                 print(error);
             } else if let convPart = convPart {
+                print(self.messages.count)
                 convPart["ReadMessageCount"] = self.messages.count;
                 if (date != nil) {
                     convPart["MostRecent"] = date;
@@ -333,7 +333,6 @@ class MessagerViewController: JSQMessagesViewController {
             if (error != nil || conversation == nil) {
                 print(error);
             } else if let conversation = conversation {
-
                 conversation["MessageCount"] = self.messages.count;
                 if (date != nil) {
                     conversation["MostRecent"] = date;
@@ -385,7 +384,7 @@ class MessagerViewController: JSQMessagesViewController {
     override func didPressSendButton(button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: NSDate!) {
         
         JSQSystemSoundPlayer.jsq_playMessageSentSound();
-        sendMessage(text, senderId: senderId, senderDisplayName: senderDisplayName, date: date);
+        sendMessage(text, senderId: senderId, senderDisplayName: senderDisplayName, date: NSDate());
         button.enabled = false;
     }
     override func didPressAccessoryButton(sender: UIButton!) {

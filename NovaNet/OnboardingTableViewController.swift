@@ -45,7 +45,7 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
             // Capitalize first letter of string
             nameField.text!.replaceRange(nameField.text!.startIndex...nameField.text!.startIndex, with: String(nameField.text![nameField.text!.startIndex]).capitalizedString)
             
-//            prepareDataStore();
+            prepareDataStore();
             saveProfile();
         } else {
             let alert = UIAlertController(title: "Empty Field", message: "Please enter all essential fields.", preferredStyle: UIAlertControllerStyle.Alert);
@@ -229,15 +229,15 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     }
     
     // Sets up the user's local datastore for profile information. Online is already set at create
-//    func prepareDataStore() {
-//        let interestsArr = interestsField.text!.componentsSeparatedByString(",")
-//        defaults.setObject(nameField.text, forKey: Constants.UserKeys.nameKey);
-//        defaults.setObject(aboutField.text, forKey: Constants.UserKeys.aboutKey);
-//        defaults.setObject(experienceField.text, forKey: Constants.UserKeys.experienceKey);
-//        defaults.setObject(interestsArr, forKey: Constants.UserKeys.interestsKey);
-//        defaults.setObject(lookingForField.text, forKey: Constants.UserKeys.lookingForKey);
-//        defaults.setBool(true, forKey: Constants.UserKeys.availableKey);
-//    }
+    func prepareDataStore() {
+        let interestsArr = interestsField.text!.componentsSeparatedByString(",")
+        defaults.setObject(nameField.text, forKey: Constants.UserKeys.nameKey);
+        defaults.setObject(aboutField.text, forKey: Constants.UserKeys.aboutKey);
+        defaults.setObject(experienceField.text, forKey: Constants.UserKeys.experienceKey);
+        defaults.setObject(interestsArr, forKey: Constants.UserKeys.interestsKey);
+        defaults.setObject(lookingForField.text, forKey: Constants.UserKeys.lookingForKey);
+        defaults.setBool(true, forKey: Constants.UserKeys.availableKey);
+    }
     
     func prepareTextFields() {
         nameField.backgroundColor = UIColor.clearColor();

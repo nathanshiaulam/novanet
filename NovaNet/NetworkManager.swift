@@ -26,13 +26,10 @@ class NetworkManager: NSObject {
                 
                 for (key, item) in profileFields {
                     object[key] = item;
-//                    print(key);
                 }
                 object.saveInBackgroundWithBlock {
                     (success, error) -> Void in
                     if (success) {
-                        print("yes");
-                        self.prepareDataStore(dataStoreFields);
                         if (segueType == "POP") {
                             sender.navigationController?.popViewControllerAnimated(true);
                         } else if (segueType == "DISMISS") {
@@ -43,14 +40,6 @@ class NetworkManager: NSObject {
             }
         }
         
-    }
-    
-    func prepareDataStore(dataStoreFields: Dictionary<String, Any>) {
-        for (key, item) in dataStoreFields {
-            print(key);
-            print(item);
-            defaults.setObject(item as? AnyObject, forKey: key);
-        }
     }
     
 
@@ -79,15 +68,8 @@ class NetworkManager: NSObject {
         newUser.email = email;
         newUser.password = password;
         newUser.username = username;
+
         
-        
-        let dataStoreFields:Dictionary<String, Any> = [
-            Constants.UserKeys.usernameKey : username,
-            Constants.UserKeys.emailKey : PFUser.currentUser()?.email,
-            Constants.UserKeys.distanceKey : 25,
-            Constants.TempKeys.fromNew : true,
-            Constants.UserKeys.greetingKey : Constants.ConstantStrings.greetingMessage
-        ]
         defaults.setObject(username, forKey: Constants.UserKeys.usernameKey)
         defaults.setObject(PFUser.currentUser()?.email, forKey: Constants.UserKeys.emailKey)
         defaults.setObject(25, forKey: Constants.UserKeys.distanceKey)
@@ -102,7 +84,6 @@ class NetworkManager: NSObject {
                 
                 // Sets up basic properites for uses
                 sender.setUpInstallations();
-                self.prepareDataStore(dataStoreFields);
                 self.createProfile();
                 
                 sender.dismissViewControllerAnimated(true, completion: { () -> Void in
@@ -122,9 +103,10 @@ class NetworkManager: NSObject {
     func userLogin(email: String, password:String, vc: LogInViewController) {
         let emailLen = email.characters.count;
         let passwordLen = password.characters.count;
-        
+
         // If either the username or password field are empty, alert user
         if (emailLen == 0 || passwordLen == 0) {
+            print("logged")
             let alert = UIAlertController(title: "Submission Failure", message: "Invalid email or password", preferredStyle: UIAlertControllerStyle.Alert);
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
             vc.presentViewController(alert, animated: true, completion: nil);
@@ -157,7 +139,8 @@ class NetworkManager: NSObject {
                             } else if let profile = profile {
                                 // Notes that the user is online
                                 profile["Online"] = true;
-                                
+                                profile["Available"] = true;
+
                                 // Sets up local datastore
                                 self.defaults.setObject(profile["Name"], forKey: Constants.UserKeys.nameKey)
                                 self.defaults.setObject(PFUser.currentUser()!.email, forKey: Constants.UserKeys.emailKey)
@@ -169,7 +152,8 @@ class NetworkManager: NSObject {
                                 self.defaults.setObject(profile["Available"], forKey: Constants.UserKeys.availableKey)
                                 self.defaults.setObject(profile["New"], forKey: Constants.TempKeys.fromNew)
                                 self.defaults.setObject(profile["Greeting"], forKey: Constants.UserKeys.greetingKey)
-
+                                
+                                profile.saveInBackground()
                                 // Sets installation so that push notifications get sent to this device
                                 let installation = PFInstallation.currentInstallation()
                                 installation["user"] = PFUser.currentUser()

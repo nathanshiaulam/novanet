@@ -29,9 +29,9 @@ class SystemSettingsTableViewController: TableViewController {
     
     // Logout user and reset datastore
     @IBAction func userLogOut(sender: UIButton) {
-        let query = PFQuery(className:"Profile");
-        let currentID = PFUser.currentUser()!.objectId;
-        query.whereKey("ID", equalTo:currentID!);
+        let query = PFQuery(className:"Profile")
+        let currentID = PFUser.currentUser()!.objectId
+        query.whereKey("ID", equalTo:currentID!)
         
         query.getFirstObjectInBackgroundWithBlock {
             (profile: PFObject?, error: NSError?) -> Void in
@@ -39,11 +39,12 @@ class SystemSettingsTableViewController: TableViewController {
                 print(error);
             } else if let profile = profile {
                 // Notes that the user is online
-                profile["Online"] = false;
-                profile.saveInBackground();
+                profile["Online"] = false
+                profile["Available"] = false
+                profile.saveInBackground()
             }
         }
-        PFUser.logOut();
+        PFUser.logOut()
         
         let dict = defaults.dictionaryRepresentation();
         for key in dict.keys {

@@ -49,6 +49,7 @@ class SelectedProfileViewController: ViewController {
     var thirdBot:CGFloat!;
     var fourthBot:CGFloat!;
     var fifthBot:CGFloat!;
+    var sixthBot:CGFloat!;
     var fromMessage:Bool! = false;
     
     
@@ -73,6 +74,7 @@ class SelectedProfileViewController: ViewController {
         bot = self.nameBottomToAbout.constant - 5
         otherBot = self.profileImageNameDist.constant/self.profileImageNameDist.multiplier - 5;
         thirdBot = self.profileImageTopDist.constant - 10;
+        sixthBot = self.profileImageTopDist.constant + 5
         fourthBot = self.profileImageNameDist.constant - 3;
         setValues();
         fifthBot = self.nameBottomToAbout.constant - 3;
@@ -162,6 +164,7 @@ class SelectedProfileViewController: ViewController {
             if (chatButtonHeight != nil) {
                 self.chatButtonHeight.constant = 40;
             }
+            self.profileImageTopDist.constant = sixthBot;
 
             // Set font size of each label
             self.nameLabel.font = self.nameLabel.font.fontWithSize(17.0);

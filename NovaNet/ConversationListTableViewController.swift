@@ -288,11 +288,6 @@ class ConversationListTableViewController: TableViewController {
             (objects: [AnyObject]?, error: NSError?) -> Void in
             if error == nil {
                 self.otherProfileList = objects!
-//                print("-----------")
-//                for (var i = 0; i < self.otherProfileList.count; i++) {
-//                    let prof = self.otherProfileList[i] as? PFObject
-//                    print((prof!["MostRecent"] as? NSDate)!)
-//                }
                 self.tableView.reloadData()
                 self.refreshControl?.endRefreshing()
             } else {

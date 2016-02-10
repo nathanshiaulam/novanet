@@ -274,6 +274,13 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         for (var i = 0; i < interestsArr.count; i++) {
             interestsArr[i] = interestsArr[i].stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         }
+        
+        defaults.setObject(nameField.text, forKey: Constants.UserKeys.nameKey)
+        defaults.setObject(interestsArr, forKey: Constants.UserKeys.interestsKey)
+        defaults.setObject(experienceField.text, forKey: Constants.UserKeys.experienceKey)
+        defaults.setObject(lookingForField.text, forKey: Constants.UserKeys.lookingForKey)
+        defaults.setObject(aboutField.text, forKey: Constants.UserKeys.aboutKey)
+        
         let profileFields:Dictionary<String, AnyObject> = [
             "Name" : nameField.text! as AnyObject,
             "InterestsList" : interestsArr as AnyObject,

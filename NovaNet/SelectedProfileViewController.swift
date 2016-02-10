@@ -68,7 +68,6 @@ class SelectedProfileViewController: ViewController {
         } else {
             profileImage.image = UIImage(named: "selectImage");
         }
-        print(image);
         self.view.backgroundColor = UIColor.whiteColor();
 
         bot = self.nameBottomToAbout.constant - 5

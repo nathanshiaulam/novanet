@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
-
+    var posted:Bool = false;
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         Parse.enableLocalDatastore()
         Parse.setApplicationId("ni7bpwOhWr114Rom27cx4QSv27Ud3tyMl0tZchxw",
@@ -24,7 +24,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GMSServices.provideAPIKey("AIzaSyBweBvAkvyDFpocqomLn9vNdM0OILJqBsQ")
         PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
         
-        print("nope")
         if (PFUser.currentUser() != nil) {
             let query = PFQuery(className:"Profile");
             let currentID = PFUser.currentUser()!.objectId;
@@ -103,7 +102,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if (PFUser.currentUser() != nil) {
                 if let notificationPayload = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
                     let name: AnyObject? = notificationPayload["name"];
-//                    var date: AnyObject? = notificationPayload["date"];
                     let id: AnyObject? = notificationPayload["id"];
                     defaults.setObject(notificationPayload, forKey: Constants.TempKeys.notificationPayloadKey);
                     defaults.setObject(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
@@ -111,6 +109,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     NSNotificationCenter.defaultCenter().postNotificationName("phoneVibrate", object: nil);
                     NSNotificationCenter.defaultCenter().postNotificationName("loadConversations", object: nil);
                     NSNotificationCenter.defaultCenter().postNotificationName("loadData", object: nil);
+                    posted = true
                     NSNotificationCenter.defaultCenter().postNotificationName("goToMessageVC", object: nil);
                     navigation.pushViewController(rootVC, animated: true);
                 }
@@ -164,9 +163,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 defaults.setObject(notificationPayload, forKey: Constants.TempKeys.notificationPayloadKey);
                 defaults.setObject(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
                 defaults.setObject(id, forKey: Constants.SelectedUserKeys.selectedIdKey)
-                NSNotificationCenter.defaultCenter().postNotificationName("phoneVibrate", object: nil);
-                NSNotificationCenter.defaultCenter().postNotificationName("loadConversations", object: nil);
-                NSNotificationCenter.defaultCenter().postNotificationName("loadData", object: nil);
+                if (!posted) {
+                    NSNotificationCenter.defaultCenter().postNotificationName("phoneVibrate", object: nil);
+                    NSNotificationCenter.defaultCenter().postNotificationName("loadConversations", object: nil);
+                    NSNotificationCenter.defaultCenter().postNotificationName("loadData", object: nil);
+                }
 //                if (navigation.topViewController.restorationIdentifier != "MessageVC") {
 //                    navigation.pushViewController(rootVC, animated: true);
 //                }

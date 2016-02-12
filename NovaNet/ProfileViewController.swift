@@ -177,22 +177,53 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
         
         if let name = defaults.stringForKey(Constants.UserKeys.nameKey) {
             nameLabel.text = name;
+            if name.characters.count == 0 {
+                nameLabel.text = "Name"
+            }
+        } else {
+            nameLabel.text = "Name"
         }
         if let about = defaults.stringForKey(Constants.UserKeys.aboutKey) {
             aboutLabel.text = about;
+            if about.characters.count == 0 {
+                aboutLabel.text = "A sentence or two illustrating what you're about. Who are you, in a nutshell?"
+            }
+        } else {
+            aboutLabel.text = "A sentence or two illustrating what you're about. Who are you, in a nutshell?"
         }
         if let interests = defaults.arrayForKey(Constants.UserKeys.interestsKey) {
             var interestsArr = interests;
-            firstInterestLabel.text = interestsArr[0] as? String;
-            secondInterestLabel.text = interestsArr[1] as? String;
-            thirdInterestLabel.text = interestsArr[2] as? String;
+            var interestsLabelArr:[UILabel] = [UILabel]()
+            interestsLabelArr.append(firstInterestLabel)
+            interestsLabelArr.append(secondInterestLabel)
+            interestsLabelArr.append(thirdInterestLabel)
+            for (var i = 0; i < interestsArr.count; i++) {
+                interestsLabelArr[i].text = interestsArr[i] as? String
+            }
+            for (var i = interestsArr.count; i < interestsLabelArr.count; i++) {
+                interestsLabelArr[i].text = ""
+            }
+            let firstInterest = interestsArr[0] as? String
+            if (firstInterest!.characters.count == 0) {
+                interestsLabelArr[0].text = "What are your interests?"
+            }
             
         }
         if let experience = defaults.stringForKey(Constants.UserKeys.experienceKey) {
             experienceLabel.text = experience;
+            if (experience.characters.count == 0) {
+                experienceLabel.text = "What's your experience?"
+            }
+        } else {
+            experienceLabel.text = "What's your experience?"
         }
         if let lookingFor = defaults.stringForKey(Constants.UserKeys.lookingForKey) {
             lookingForLabel.text = lookingFor;
+            if (lookingFor.characters.count == 0) {
+                lookingForLabel.text = "Who are you looking for?"
+            }
+        } else {
+            lookingForLabel.text = "Who are you looking for?"
         }
         
         experienceLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;

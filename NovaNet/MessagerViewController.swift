@@ -64,7 +64,6 @@ class MessagerViewController: JSQMessagesViewController {
     
     // Loads data for message when remote push notification sent
     func loadData() {
-        print("shit")
         var recentDate:NSDate = NSDate();
         var recentText:String = String();
         // Loads payload information

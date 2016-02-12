@@ -269,7 +269,7 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
 
     // Saves all necessary fields of the profile
     func saveProfile() {
-
+        
         var interestsArr = interestsField.text!.componentsSeparatedByString(",")
         for (var i = 0; i < interestsArr.count; i++) {
             interestsArr[i] = interestsArr[i].stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
@@ -298,6 +298,7 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         ];
         
         NetworkManager().updateObjectWithName("Profile", profileFields: profileFields, dataStoreFields: dataStoreFields, segueType: "POP", sender: self);
+        
     }
     
     // Prepares all text fields

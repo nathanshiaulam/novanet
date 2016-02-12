@@ -98,23 +98,55 @@ class SelectedProfileViewController: ViewController {
         
         if let name = defaults.stringForKey(Constants.SelectedUserKeys.selectedNameKey) {
             nameLabel.text = name;
+            if name.characters.count == 0 {
+                nameLabel.text = "Name"
+            }
+        } else {
+            nameLabel.text = "Name"
         }
-        if let about = defaults.stringForKey(Constants.SelectedUserKeys.selectedNameKey) {
+        if let about = defaults.stringForKey(Constants.SelectedUserKeys.selectedAboutKey) {
             aboutLabel.text = about;
+            if about.characters.count == 0 {
+                aboutLabel.text = "A sentence or two illustrating what you're about. Who are you, in a nutshell?"
+            }
+        } else {
+            aboutLabel.text = "A sentence or two illustrating what you're about. Who are you, in a nutshell?"
         }
         if let interests = defaults.arrayForKey(Constants.SelectedUserKeys.selectedInterestsKey) {
             var interestsArr = interests;
-            firstInterestLabel.text = interestsArr[0] as? String;
-            secondInterestLabel.text = interestsArr[1] as? String;
-            thirdInterestLabel.text = interestsArr[2] as? String;
+            var interestsLabelArr:[UILabel] = [UILabel]()
+            interestsLabelArr.append(firstInterestLabel)
+            interestsLabelArr.append(secondInterestLabel)
+            interestsLabelArr.append(thirdInterestLabel)
+            for (var i = 0; i < interestsArr.count; i++) {
+                interestsLabelArr[i].text = interestsArr[i] as? String
+            }
+            for (var i = interestsArr.count; i < interestsLabelArr.count; i++) {
+                interestsLabelArr[i].text = ""
+            }
+            let firstInterest = interestsArr[0] as? String
+            if (firstInterest!.characters.count == 0) {
+                interestsLabelArr[0].text = "What are your interests?"
+            }
             
         }
         if let experience = defaults.stringForKey(Constants.SelectedUserKeys.selectedExperienceKey) {
             experienceLabel.text = experience;
+            if (experience.characters.count == 0) {
+                experienceLabel.text = "What's your experience?"
+            }
+        } else {
+            experienceLabel.text = "What's your experience?"
         }
         if let lookingFor = defaults.stringForKey(Constants.SelectedUserKeys.selectedLookingForKey) {
             lookingForLabel.text = lookingFor;
+            if (lookingFor.characters.count == 0) {
+                lookingForLabel.text = "Who are you looking for?"
+            }
+        } else {
+            lookingForLabel.text = "Who are you looking for?"
         }
+        
         if let dist: AnyObject = defaults.objectForKey(Constants.SelectedUserKeys.selectedDistanceKey) {
             distLabel.text = String(stringInterpolationSegment: dist) + "km";
         } else {

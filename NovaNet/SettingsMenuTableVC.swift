@@ -157,8 +157,17 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         
         let newLength = (textField.text?.characters.count)! + string.characters.count - range.length
         if (textField == interestsField) {
-            let numEntries = interestsField.text!.characters.split {$0 == ","}
+            var numEntries = interestsField.text!.characters.split {$0 == ","}
+            if numEntries.count > 3 {
+                var fieldInfo = textField.text
+                fieldInfo = fieldInfo?.substringWithRange(Range<String.Index>(start: fieldInfo!.startIndex, end: fieldInfo!.endIndex.advancedBy(-2)))
+                interestsField.text = fieldInfo
+            }
+            numEntries = interestsField.text!.characters.split {$0 == ","}
+            
             return numEntries.count <= 3 && newLength <= 40; // Ensures that there are only three interest field entries
+        } else if (textField == lookingForField) {
+            return newLength <= 30
         } else {
             return newLength <= 40;
         }
@@ -270,9 +279,19 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
     // Saves all necessary fields of the profile
     func saveProfile() {
         
-        var interestsArr = interestsField.text!.componentsSeparatedByString(",")
-        for (var i = 0; i < interestsArr.count; i++) {
-            interestsArr[i] = interestsArr[i].stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        var oldInterestsArr = interestsField.text!.componentsSeparatedByString(",")
+        var interestsArr:[String] = [String]()
+        var numInterests = 0
+        if oldInterestsArr.count > Constants.MAX_NUM_INTERESTS {
+            numInterests = Constants.MAX_NUM_INTERESTS
+        } else  {
+            numInterests = oldInterestsArr.count
+        }
+        for (var i = 0; i < numInterests; i++) {
+            let interest = oldInterestsArr[i].stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            if interest.characters.count > 0 {
+                interestsArr.append(interest)
+            }
         }
         
         defaults.setObject(nameField.text, forKey: Constants.UserKeys.nameKey)

@@ -46,6 +46,13 @@ class Utilities: NSObject {
                         }
                     }
                 }
+                if (lastChar == ",") {
+                    let components =  ans.componentsSeparatedByString(",")
+                    let numCommas = components.count - 1
+                    if numCommas > 2 {
+                        ans = ans.substringToIndex(ans.endIndex.advancedBy(-1)); // truncate last character
+                    } 
+                }
             }
             textField.text = ans;
         }

@@ -87,7 +87,7 @@
                                 <color key="textColor" red="0.32549019610000002" green="0.34509803919999998" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="5F919775-F64F-4B84-976B-DA6FF6EF482E" translatesAutoresizingMaskIntoConstraints="NO" id="gw7-H5-l42">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="31A0817E-D6E4-47D7-9552-2595A0B74555" translatesAutoresizingMaskIntoConstraints="NO" id="gw7-H5-l42">
                                 <rect key="frame" x="212" y="72" width="175" height="175"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="175" id="DdL-Cx-WSs"/>
@@ -275,10 +275,13 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <segue destination="Q1k-Kh-qqj" kind="show" identifier="toSelectedProfile" id="3tx-68-n0F"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="z2I-28-iKY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="429" y="3694"/>
+            <point key="canvasLocation" x="-51" y="3674"/>
         </scene>
         <!--Log In View Controller-->
         <scene sceneID="A7f-pK-cvJ">
@@ -1076,7 +1079,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S4T-MV-afK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4220" y="329"/>
+            <point key="canvasLocation" x="-4377" y="329"/>
         </scene>
         <!--Finder-->
         <scene sceneID="vjC-tc-WsQ">
@@ -1231,7 +1234,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z7q-b5-e6W" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3480" y="319"/>
+            <point key="canvasLocation" x="-3756" y="215"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="kwh-Mt-2rt">
@@ -1566,7 +1569,7 @@
                     </state>
                 </button>
             </objects>
-            <point key="canvasLocation" x="-5020" y="567"/>
+            <point key="canvasLocation" x="-4960.5" y="855"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="AbU-5F-0fg">
@@ -2146,7 +2149,7 @@
                                 <color key="textColor" red="0.32549019610000002" green="0.34509803919999998" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Edit your info anytime in the profile tab. Congrats- your ready to network" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SQh-OL-WDu">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Edit your info anytime in the profile tab. Congrats- you're ready to network" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SQh-OL-WDu">
                                 <rect key="frame" x="151" y="122" width="300" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="5ng-Ze-HJq"/>
@@ -2367,7 +2370,7 @@
                                     </mask>
                                 </variation>
                                 <connections>
-                                    <segue destination="aTQ-Lq-Lod" kind="presentation" id="689-r4-eMG"/>
+                                    <action selector="chatButtonPressed:" destination="SDe-lt-4zy" eventType="touchUpInside" id="xuy-hG-4gY"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -2492,6 +2495,7 @@
                         <outlet property="secondInterestLabel" destination="Aye-WF-Nex" id="K1G-AO-mj1"/>
                         <outlet property="seekingHeaderLabel" destination="T6a-WV-PXd" id="w23-zN-9KK"/>
                         <outlet property="thirdInterestLabel" destination="BGc-LJ-zCr" id="LWk-r0-xtf"/>
+                        <segue destination="aTQ-Lq-Lod" kind="presentation" identifier="toMessageVC" id="0r2-21-TGC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="REi-hB-eTH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3146,7 +3150,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EoU-6M-ETf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-811.5" y="3852"/>
+            <point key="canvasLocation" x="118.5" y="4476"/>
         </scene>
         <!--EventsNav-->
         <scene sceneID="8zo-de-Gwy">
@@ -5500,7 +5504,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="5F919775-F64F-4B84-976B-DA6FF6EF482E" width="490" height="541">
+        <image name="31A0817E-D6E4-47D7-9552-2595A0B74555" width="490" height="541">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOjtYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISgrLjQ3VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA
@@ -23268,6 +23272,7 @@ AQAAAAAAAAA+AAAAAAAAAAAAAAAAABA9hQ
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="ddC-Zm-trS"/>
+        <segue reference="Jdt-Tg-m7p"/>
         <segue reference="FFm-6S-Tfa"/>
         <segue reference="dmk-mT-f4Q"/>
     </inferredMetricsTieBreakers>

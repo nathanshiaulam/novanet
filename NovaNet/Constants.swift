@@ -60,5 +60,6 @@ struct Constants {
         static let screenWidth = UIScreen.mainScreen().bounds.size.width;
     }
     static let DISCOVERY_RADIUS = 35;
+    static let MAX_NUM_INTERESTS = 3;
 
 }

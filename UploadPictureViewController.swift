@@ -31,7 +31,7 @@ class UploadPictureViewController: ViewController, UIGestureRecognizerDelegate, 
         defaults.setObject(false, forKey: Constants.TempKeys.fromNew);
         
         // Saves image to local datastore and preps image to store into Parse
-        Utilities().formatImage(uploadedImage);
+       
         Utilities().saveImage(uploadedImage.image!);
         onboardingComplete();
         
@@ -159,16 +159,17 @@ class UploadPictureViewController: ViewController, UIGestureRecognizerDelegate, 
         picker.dismissViewControllerAnimated(true, completion: nil);
         
         uploadedImage.image = info[UIImagePickerControllerOriginalImage] as? UIImage;
+        Utilities().formatImage(uploadedImage);
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         picker.dismissViewControllerAnimated(true, completion: nil);
-        print("Picker cancel.");
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         self.dismissViewControllerAnimated(true, completion: { () -> Void in})
         uploadedImage.image = image
+        Utilities().formatImage(uploadedImage);
     }
     
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/

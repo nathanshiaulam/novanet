@@ -53,6 +53,9 @@ class SelectedProfileViewController: ViewController {
     var fromMessage:Bool! = false;
     
     
+    @IBAction func chatButtonPressed(sender: UIButton) {
+        self.performSegueWithIdentifier("toMessageVC", sender: self)
+    }
     @IBAction func backPressed(sender: UIBarButtonItem) {
         if (fromMessage == true) {
             self.navigationController?.popViewControllerAnimated(true);
@@ -86,6 +89,18 @@ class SelectedProfileViewController: ViewController {
         
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        if segue.identifier == "toMessageVC" {
+            let destinationVC = segue.destinationViewController.childViewControllers[0] as! MessagerViewController
+            if (self.image != nil) {
+                destinationVC.nextImage = self.image;
+            } else {
+                destinationVC.nextImage = UIImage(named: "selectImage")
+            }
+        }
+    }
+
+    
     /*-------------------------------- HELPER METHODS ------------------------------------*/
 
     // Methods to format image and convert RGB to hex
@@ -114,19 +129,29 @@ class SelectedProfileViewController: ViewController {
         }
         if let interests = defaults.arrayForKey(Constants.SelectedUserKeys.selectedInterestsKey) {
             var interestsArr = interests;
-            var interestsLabelArr:[UILabel] = [UILabel]()
-            interestsLabelArr.append(firstInterestLabel)
-            interestsLabelArr.append(secondInterestLabel)
-            interestsLabelArr.append(thirdInterestLabel)
-            for (var i = 0; i < interestsArr.count; i++) {
-                interestsLabelArr[i].text = interestsArr[i] as? String
-            }
-            for (var i = interestsArr.count; i < interestsLabelArr.count; i++) {
-                interestsLabelArr[i].text = ""
-            }
-            let firstInterest = interestsArr[0] as? String
-            if (firstInterest!.characters.count == 0) {
-                interestsLabelArr[0].text = "What are your interests?"
+            if (interestsArr.count == 0) {
+                firstInterestLabel.text = "What are your interests?"
+            } else {
+                var interestsLabelArr:[UILabel] = [UILabel]()
+                interestsLabelArr.append(firstInterestLabel)
+                interestsLabelArr.append(secondInterestLabel)
+                interestsLabelArr.append(thirdInterestLabel)
+                var numInterests = 0
+                if interestsArr.count > Constants.MAX_NUM_INTERESTS {
+                    numInterests = Constants.MAX_NUM_INTERESTS
+                } else  {
+                    numInterests = interestsArr.count
+                }
+                for (var i = 0; i < numInterests; i++) {
+                    interestsLabelArr[i].text = interestsArr[i] as? String
+                }
+                for (var i = numInterests; i < interestsLabelArr.count; i++) {
+                    interestsLabelArr[i].text = ""
+                }
+                let firstInterest = interestsArr[0] as? String
+                if (firstInterest!.characters.count == 0) {
+                    interestsLabelArr[0].text = "What are your interests?"
+                }
             }
             
         }
@@ -150,6 +175,11 @@ class SelectedProfileViewController: ViewController {
         if let dist: AnyObject = defaults.objectForKey(Constants.SelectedUserKeys.selectedDistanceKey) {
             distLabel.text = String(stringInterpolationSegment: dist) + "km";
         } else {
+            distLabel.hidden = true
+            distHeader.hidden = true
+            distanceArrow.hidden = true
+        }
+        if (fromMessage == true) {
             distLabel.hidden = true
             distHeader.hidden = true
             distanceArrow.hidden = true

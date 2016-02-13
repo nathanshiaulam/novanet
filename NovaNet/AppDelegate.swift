@@ -36,30 +36,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 } else if let profile = profile {
                     
                     // Sets up local datastore
-                    self.defaults.setObject(profile["Name"], forKey: Constants.UserKeys.nameKey)
-                    self.defaults.setObject(PFUser.currentUser()!.email, forKey: Constants.UserKeys.emailKey)
-                    self.defaults.setObject(profile["InterestsList"], forKey: Constants.UserKeys.interestsKey)
-                    self.defaults.setObject(profile["About"], forKey: Constants.UserKeys.aboutKey)
-                    self.defaults.setObject(profile["Experience"], forKey: Constants.UserKeys.experienceKey)
-                    self.defaults.setObject(profile["Looking"], forKey: Constants.UserKeys.lookingForKey)
-                    self.defaults.setObject(profile["Distance"], forKey: Constants.UserKeys.distanceKey)
-                    self.defaults.setObject(profile["Available"], forKey: Constants.UserKeys.availableKey)
-                    self.defaults.setObject(profile["New"], forKey: Constants.TempKeys.fromNew)
-                    self.defaults.setObject(profile["Greeting"], forKey: Constants.UserKeys.greetingKey)
-                    
-                    
-                    // Stores image in local data store and refreshes image from Parse
-                    let userImageFile = profile["Image"] as! PFFile;
-                    userImageFile.getDataInBackgroundWithBlock {
-                        (imageData, error) -> Void in
-                        if (error == nil) {
-                            let image = UIImage(data:imageData!);
-                            Utilities().saveImage(image!);
-                        }
-                        else {
-                            let placeHolder = UIImage(named: "selectImage");
-                            Utilities().saveImage(placeHolder!);
-                            print(error);
+                    let fromNew:Bool = (profile["New"] as? Bool)!
+                    if (!fromNew) {
+                        self.defaults.setObject(profile["Name"], forKey: Constants.UserKeys.nameKey)
+                        self.defaults.setObject(PFUser.currentUser()!.email, forKey: Constants.UserKeys.emailKey)
+                        self.defaults.setObject(profile["InterestsList"], forKey: Constants.UserKeys.interestsKey)
+                        self.defaults.setObject(profile["About"], forKey: Constants.UserKeys.aboutKey)
+                        self.defaults.setObject(profile["Experience"], forKey: Constants.UserKeys.experienceKey)
+                        self.defaults.setObject(profile["Looking"], forKey: Constants.UserKeys.lookingForKey)
+                        self.defaults.setObject(profile["Distance"], forKey: Constants.UserKeys.distanceKey)
+                        self.defaults.setObject(profile["Available"], forKey: Constants.UserKeys.availableKey)
+                        self.defaults.setObject(profile["New"], forKey: Constants.TempKeys.fromNew)
+                        self.defaults.setObject(profile["Greeting"], forKey: Constants.UserKeys.greetingKey)
+                        
+                        
+                        // Stores image in local data store and refreshes image from Parse
+                        let userImageFile = profile["Image"] as! PFFile;
+                        userImageFile.getDataInBackgroundWithBlock {
+                            (imageData, error) -> Void in
+                            if (error == nil) {
+                                let image = UIImage(data:imageData!);
+                                Utilities().saveImage(image!);
+                            }
+                            else {
+                                let placeHolder = UIImage(named: "selectImage");
+                                Utilities().saveImage(placeHolder!);
+                                print(error);
+                            }
                         }
                     }
                     

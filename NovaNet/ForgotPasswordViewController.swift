@@ -12,7 +12,7 @@ import Bolts
 
 class ForgotPasswordViewController: ViewController {
 
-    @IBOutlet var emailField: UITextField!
+    @IBOutlet var emailField: TextField!
     @IBOutlet var buttonHeight: NSLayoutConstraint!
     var screenMovementHeightUp: CGFloat!;
     var screenMovementHeightDown: CGFloat!;
@@ -32,10 +32,9 @@ class ForgotPasswordViewController: ViewController {
         let emailFieldPlaceholder = NSAttributedString(string: "email", attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         emailField.attributedPlaceholder = emailFieldPlaceholder;
         emailField.textColor = UIColor.blackColor();
-        emailField.font = UIFont(name: "Avenir", size: 16);
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillShow:"), name:UIKeyboardWillShowNotification, object: nil);
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("keyboardWillHide:"), name:UIKeyboardWillHideNotification, object: nil)
+    
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ForgotPasswordViewController.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification, object: nil);
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ForgotPasswordViewController.keyboardWillHide(_:)), name:UIKeyboardWillHideNotification, object: nil)
         
         screenMovementHeightUp = 0.0;
         screenMovementHeightDown  = 0.0;
@@ -46,11 +45,10 @@ class ForgotPasswordViewController: ViewController {
         let border = CALayer()
         let width = CGFloat(1.0)
         border.borderColor = UIColor.lightGrayColor().CGColor
-        border.frame = CGRect(x: 0, y: emailField.frame.size.height - width, width:  emailField.frame.size.width, height: emailField.frame.size.height)
+        border.frame = CGRect(x: 0, y: emailField.frame.size.height - width, width:  emailField.frame.size.width, height: emailField.frame.size.height + 20)
         
         border.borderWidth = width
         emailField.layer.addSublayer(border)
-        emailField.layer.masksToBounds = true
     }
 
     

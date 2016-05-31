@@ -17,9 +17,33 @@
 		1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B1881B55367800DBF11A /* SignUpViewController.swift */; };
 		1616B18B1B554D0E00DBF11A /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */; };
 		1616B18F1B55560300DBF11A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B18E1B55560300DBF11A /* Constants.swift */; };
+		16252C081CF7942800728497 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 16252BFE1CF7942800728497 /* OpenSans-Bold.ttf */; };
+		16252C091CF7942800728497 /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 16252BFF1CF7942800728497 /* OpenSans-BoldItalic.ttf */; };
+		16252C0A1CF7942800728497 /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 16252C001CF7942800728497 /* OpenSans-ExtraBold.ttf */; };
+		16252C0B1CF7942800728497 /* OpenSans-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 16252C011CF7942800728497 /* OpenSans-ExtraBoldItalic.ttf */; };
+		16252C0C1CF7942800728497 /* OpenSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 16252C021CF7942800728497 /* OpenSans-Italic.ttf */; };
+		16252C0D1CF7942800728497 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 16252C031CF7942800728497 /* OpenSans-Light.ttf */; };
+		16252C0E1CF7942800728497 /* OpenSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 16252C041CF7942800728497 /* OpenSans-LightItalic.ttf */; };
+		16252C0F1CF7942800728497 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 16252C051CF7942800728497 /* OpenSans-Regular.ttf */; };
+		16252C101CF7942800728497 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 16252C061CF7942800728497 /* OpenSans-Semibold.ttf */; };
+		16252C111CF7942800728497 /* OpenSans-SemiboldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 16252C071CF7942800728497 /* OpenSans-SemiboldItalic.ttf */; };
+		163B198A1CF9214800E0A469 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163B19891CF9214800E0A469 /* TextView.swift */; };
+		163B198C1CFA36B200E0A469 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 163B198B1CFA36B200E0A469 /* Images.xcassets */; };
 		16629EB11BDDD7C4003C4F05 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB01BDDD7C4003C4F05 /* ViewController.swift */; };
 		16629EB31BDDD7F2003C4F05 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB21BDDD7F2003C4F05 /* TableViewController.swift */; };
 		16629EB71BDDDAEA003C4F05 /* NSDateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */; };
+		1668FEAD1CF78CE300D20F99 /* Brandon_bld_it.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEA11CF78CE200D20F99 /* Brandon_bld_it.otf */; };
+		1668FEAE1CF78CE300D20F99 /* Brandon_bld.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEA21CF78CE200D20F99 /* Brandon_bld.otf */; };
+		1668FEAF1CF78CE300D20F99 /* Brandon_blk_it.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEA31CF78CE200D20F99 /* Brandon_blk_it.otf */; };
+		1668FEB01CF78CE300D20F99 /* Brandon_blk.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEA41CF78CE200D20F99 /* Brandon_blk.otf */; };
+		1668FEB11CF78CE300D20F99 /* Brandon_light_it.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEA51CF78CE200D20F99 /* Brandon_light_it.otf */; };
+		1668FEB21CF78CE300D20F99 /* Brandon_light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEA61CF78CE200D20F99 /* Brandon_light.otf */; };
+		1668FEB31CF78CE300D20F99 /* Brandon_med_it.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEA71CF78CE200D20F99 /* Brandon_med_it.otf */; };
+		1668FEB41CF78CE300D20F99 /* Brandon_med.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEA81CF78CE200D20F99 /* Brandon_med.otf */; };
+		1668FEB51CF78CE300D20F99 /* Brandon_reg_it.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEA91CF78CE200D20F99 /* Brandon_reg_it.otf */; };
+		1668FEB61CF78CE300D20F99 /* Brandon_regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEAA1CF78CE200D20F99 /* Brandon_regular.otf */; };
+		1668FEB71CF78CE300D20F99 /* Brandon_thin_it.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEAB1CF78CE200D20F99 /* Brandon_thin_it.otf */; };
+		1668FEB81CF78CE300D20F99 /* Brandon_thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEAC1CF78CE200D20F99 /* Brandon_thin.otf */; };
 		166985DF1C0126A300154035 /* EventsSearchResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166985DE1C0126A300154035 /* EventsSearchResults.swift */; };
 		166985E11C012B2E00154035 /* EventsLocationFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166985E01C012B2E00154035 /* EventsLocationFinder.swift */; };
 		167114C11B8299F90024DC3E /* ImageUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167114C01B8299F90024DC3E /* ImageUtil.swift */; };
@@ -35,7 +59,6 @@
 		169FD23C1B9CF86E00A535D3 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 169FD23B1B9CF86E00A535D3 /* Parse.framework */; };
 		16A0E7001B54FC7400DDAE95 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */; };
 		16A0E7051B54FC7400DDAE95 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16A0E7031B54FC7400DDAE95 /* Main.storyboard */; };
-		16A0E7071B54FC7400DDAE95 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16A0E7061B54FC7400DDAE95 /* Images.xcassets */; };
 		16A0E70A1B54FC7400DDAE95 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 16A0E7081B54FC7400DDAE95 /* LaunchScreen.xib */; };
 		16A0E7161B54FC7400DDAE95 /* NovaNetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7151B54FC7400DDAE95 /* NovaNetTests.swift */; };
 		16A0E7251B55075D00DDAE95 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0E7241B55075D00DDAE95 /* AudioToolbox.framework */; };
@@ -91,9 +114,33 @@
 		1616B1881B55367800DBF11A /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		1616B18A1B554D0E00DBF11A /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		1616B18E1B55560300DBF11A /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		16252BFE1CF7942800728497 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Bold.ttf"; sourceTree = "<group>"; };
+		16252BFF1CF7942800728497 /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
+		16252C001CF7942800728497 /* OpenSans-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-ExtraBold.ttf"; sourceTree = "<group>"; };
+		16252C011CF7942800728497 /* OpenSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		16252C021CF7942800728497 /* OpenSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Italic.ttf"; sourceTree = "<group>"; };
+		16252C031CF7942800728497 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
+		16252C041CF7942800728497 /* OpenSans-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-LightItalic.ttf"; sourceTree = "<group>"; };
+		16252C051CF7942800728497 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		16252C061CF7942800728497 /* OpenSans-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Semibold.ttf"; sourceTree = "<group>"; };
+		16252C071CF7942800728497 /* OpenSans-SemiboldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiboldItalic.ttf"; sourceTree = "<group>"; };
+		163B19891CF9214800E0A469 /* TextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
+		163B198B1CFA36B200E0A469 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		16629EB01BDDD7C4003C4F05 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../ViewController.swift; sourceTree = "<group>"; };
 		16629EB21BDDD7F2003C4F05 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSDateExtensions.swift; path = ../NSDateExtensions.swift; sourceTree = "<group>"; };
+		1668FEA11CF78CE200D20F99 /* Brandon_bld_it.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_bld_it.otf; sourceTree = "<group>"; };
+		1668FEA21CF78CE200D20F99 /* Brandon_bld.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_bld.otf; sourceTree = "<group>"; };
+		1668FEA31CF78CE200D20F99 /* Brandon_blk_it.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_blk_it.otf; sourceTree = "<group>"; };
+		1668FEA41CF78CE200D20F99 /* Brandon_blk.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_blk.otf; sourceTree = "<group>"; };
+		1668FEA51CF78CE200D20F99 /* Brandon_light_it.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_light_it.otf; sourceTree = "<group>"; };
+		1668FEA61CF78CE200D20F99 /* Brandon_light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_light.otf; sourceTree = "<group>"; };
+		1668FEA71CF78CE200D20F99 /* Brandon_med_it.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_med_it.otf; sourceTree = "<group>"; };
+		1668FEA81CF78CE200D20F99 /* Brandon_med.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_med.otf; sourceTree = "<group>"; };
+		1668FEA91CF78CE200D20F99 /* Brandon_reg_it.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_reg_it.otf; sourceTree = "<group>"; };
+		1668FEAA1CF78CE200D20F99 /* Brandon_regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_regular.otf; sourceTree = "<group>"; };
+		1668FEAB1CF78CE200D20F99 /* Brandon_thin_it.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_thin_it.otf; sourceTree = "<group>"; };
+		1668FEAC1CF78CE200D20F99 /* Brandon_thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_thin.otf; sourceTree = "<group>"; };
 		166985DE1C0126A300154035 /* EventsSearchResults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsSearchResults.swift; sourceTree = "<group>"; };
 		166985E01C012B2E00154035 /* EventsLocationFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsLocationFinder.swift; sourceTree = "<group>"; };
 		167114C01B8299F90024DC3E /* ImageUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageUtil.swift; sourceTree = "<group>"; };
@@ -111,7 +158,6 @@
 		16A0E6FE1B54FC7400DDAE95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		16A0E7041B54FC7400DDAE95 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		16A0E7061B54FC7400DDAE95 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		16A0E7091B54FC7400DDAE95 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		16A0E70F1B54FC7400DDAE95 /* NovaNetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NovaNetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		16A0E7141B54FC7400DDAE95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -255,6 +301,35 @@
 			name = Profile;
 			sourceTree = "<group>";
 		};
+		1668FEA01CF78CB600D20F99 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				16252BFE1CF7942800728497 /* OpenSans-Bold.ttf */,
+				16252BFF1CF7942800728497 /* OpenSans-BoldItalic.ttf */,
+				16252C001CF7942800728497 /* OpenSans-ExtraBold.ttf */,
+				16252C011CF7942800728497 /* OpenSans-ExtraBoldItalic.ttf */,
+				16252C021CF7942800728497 /* OpenSans-Italic.ttf */,
+				16252C031CF7942800728497 /* OpenSans-Light.ttf */,
+				16252C041CF7942800728497 /* OpenSans-LightItalic.ttf */,
+				16252C051CF7942800728497 /* OpenSans-Regular.ttf */,
+				16252C061CF7942800728497 /* OpenSans-Semibold.ttf */,
+				16252C071CF7942800728497 /* OpenSans-SemiboldItalic.ttf */,
+				1668FEA11CF78CE200D20F99 /* Brandon_bld_it.otf */,
+				1668FEA21CF78CE200D20F99 /* Brandon_bld.otf */,
+				1668FEA31CF78CE200D20F99 /* Brandon_blk_it.otf */,
+				1668FEA41CF78CE200D20F99 /* Brandon_blk.otf */,
+				1668FEA51CF78CE200D20F99 /* Brandon_light_it.otf */,
+				1668FEA61CF78CE200D20F99 /* Brandon_light.otf */,
+				1668FEA71CF78CE200D20F99 /* Brandon_med_it.otf */,
+				1668FEA81CF78CE200D20F99 /* Brandon_med.otf */,
+				1668FEA91CF78CE200D20F99 /* Brandon_reg_it.otf */,
+				1668FEAA1CF78CE200D20F99 /* Brandon_regular.otf */,
+				1668FEAB1CF78CE200D20F99 /* Brandon_thin_it.otf */,
+				1668FEAC1CF78CE200D20F99 /* Brandon_thin.otf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
 		1685FB321BE988F600E05CDE /* Events */ = {
 			isa = PBXGroup;
 			children = (
@@ -302,6 +377,7 @@
 				16A0E7031B54FC7400DDAE95 /* Main.storyboard */,
 				16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */,
 				167114C01B8299F90024DC3E /* ImageUtil.swift */,
+				163B19891CF9214800E0A469 /* TextView.swift */,
 				16D333621BCB063200C1B405 /* Utilities.swift */,
 				169441131BDC29BC0049122C /* NetworkManager.swift */,
 				1616B18E1B55560300DBF11A /* Constants.swift */,
@@ -309,8 +385,9 @@
 				160B9C051BCF763400316AF3 /* OnboardingProcess */,
 				160B9C071BCF768600316AF3 /* HomeView */,
 				160B9C081BCF769800316AF3 /* MainTabs */,
-				16A0E7061B54FC7400DDAE95 /* Images.xcassets */,
+				1668FEA01CF78CB600D20F99 /* Fonts */,
 				16A0E7081B54FC7400DDAE95 /* LaunchScreen.xib */,
+				163B198B1CFA36B200E0A469 /* Images.xcassets */,
 				16A0E6FD1B54FC7400DDAE95 /* Supporting Files */,
 			);
 			path = NovaNet;
@@ -468,9 +545,31 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1668FEB81CF78CE300D20F99 /* Brandon_thin.otf in Resources */,
+				163B198C1CFA36B200E0A469 /* Images.xcassets in Resources */,
 				16A0E7051B54FC7400DDAE95 /* Main.storyboard in Resources */,
+				16252C081CF7942800728497 /* OpenSans-Bold.ttf in Resources */,
 				16A0E70A1B54FC7400DDAE95 /* LaunchScreen.xib in Resources */,
-				16A0E7071B54FC7400DDAE95 /* Images.xcassets in Resources */,
+				1668FEB51CF78CE300D20F99 /* Brandon_reg_it.otf in Resources */,
+				1668FEB11CF78CE300D20F99 /* Brandon_light_it.otf in Resources */,
+				16252C111CF7942800728497 /* OpenSans-SemiboldItalic.ttf in Resources */,
+				1668FEB01CF78CE300D20F99 /* Brandon_blk.otf in Resources */,
+				16252C091CF7942800728497 /* OpenSans-BoldItalic.ttf in Resources */,
+				1668FEB61CF78CE300D20F99 /* Brandon_regular.otf in Resources */,
+				16252C0D1CF7942800728497 /* OpenSans-Light.ttf in Resources */,
+				1668FEB71CF78CE300D20F99 /* Brandon_thin_it.otf in Resources */,
+				1668FEB21CF78CE300D20F99 /* Brandon_light.otf in Resources */,
+				16252C101CF7942800728497 /* OpenSans-Semibold.ttf in Resources */,
+				16252C0B1CF7942800728497 /* OpenSans-ExtraBoldItalic.ttf in Resources */,
+				16252C0A1CF7942800728497 /* OpenSans-ExtraBold.ttf in Resources */,
+				16252C0C1CF7942800728497 /* OpenSans-Italic.ttf in Resources */,
+				1668FEAE1CF78CE300D20F99 /* Brandon_bld.otf in Resources */,
+				16252C0E1CF7942800728497 /* OpenSans-LightItalic.ttf in Resources */,
+				1668FEB31CF78CE300D20F99 /* Brandon_med_it.otf in Resources */,
+				1668FEAF1CF78CE300D20F99 /* Brandon_blk_it.otf in Resources */,
+				1668FEAD1CF78CE300D20F99 /* Brandon_bld_it.otf in Resources */,
+				1668FEB41CF78CE300D20F99 /* Brandon_med.otf in Resources */,
+				16252C0F1CF7942800728497 /* OpenSans-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -539,6 +638,7 @@
 				16A0E7F01B7CC39800DE06A9 /* IntroductionViewController.swift in Sources */,
 				16A0E7F61B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift in Sources */,
 				16C1C8C91B7F5F5000C6166C /* ConversationListTableViewController.swift in Sources */,
+				163B198A1CF9214800E0A469 /* TextView.swift in Sources */,
 				16A111371BEBD224002CB7A1 /* EventDescriptionTableVC.swift in Sources */,
 				160D1F3D1B61080C00B3E4DB /* MessagerViewController.swift in Sources */,
 				16629EB71BDDDAEA003C4F05 /* NSDateExtensions.swift in Sources */,

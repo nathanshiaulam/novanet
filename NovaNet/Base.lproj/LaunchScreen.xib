@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -16,21 +17,29 @@
                     <color key="textColor" red="0.995049505" green="0.99009900989999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ipsum" translatesAutoresizingMaskIntoConstraints="NO" id="g88-fu-rjk">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch_screen" translatesAutoresizingMaskIntoConstraints="NO" id="g88-fu-rjk">
                     <rect key="frame" x="215" y="200" width="50" height="80"/>
                     <constraints>
+                        <constraint firstAttribute="width" constant="50" id="4tM-cT-3b5"/>
                         <constraint firstAttribute="width" constant="50" id="RWk-Ul-gan"/>
                         <constraint firstAttribute="height" constant="80" id="bEe-ZA-Zn0"/>
+                        <constraint firstAttribute="height" constant="80" id="tme-bp-FhJ"/>
                     </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="RWk-Ul-gan"/>
+                            <exclude reference="bEe-ZA-Zn0"/>
+                        </mask>
+                    </variation>
                 </imageView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="centerX" secondItem="g88-fu-rjk" secondAttribute="centerX" id="EKM-Uq-LOX"/>
                 <constraint firstAttribute="bottom" secondItem="8ie-xW-0ye" secondAttribute="bottom" constant="20" id="Kzo-t9-V3l"/>
                 <constraint firstItem="8ie-xW-0ye" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="MfP-vx-nX0"/>
                 <constraint firstAttribute="centerX" secondItem="8ie-xW-0ye" secondAttribute="centerX" id="ZEH-qu-HZ9"/>
-                <constraint firstAttribute="centerY" secondItem="g88-fu-rjk" secondAttribute="centerY" id="dfM-tc-9wp"/>
+                <constraint firstItem="g88-fu-rjk" firstAttribute="centerX" secondItem="8ie-xW-0ye" secondAttribute="centerX" id="gg1-BS-n7Y"/>
+                <constraint firstItem="g88-fu-rjk" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="qi5-NL-Xrw"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -38,6 +47,6 @@
         </view>
     </objects>
     <resources>
-        <image name="ipsum" width="390" height="594"/>
+        <image name="launch_screen" width="48" height="66"/>
     </resources>
 </document>

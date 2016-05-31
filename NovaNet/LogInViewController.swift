@@ -26,8 +26,11 @@ class LogInViewController: ViewController, UITextFieldDelegate {
     
     @IBAction func loginFunction(sender: UIButton) {
         
-        
-        NetworkManager().userLogin(usernameField.text!, password: passwordField.text!, vc: self);
+        let username = usernameField.text!.stringByTrimmingCharactersInSet(
+            NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        let password = passwordField.text!.stringByTrimmingCharactersInSet(
+            NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        NetworkManager().userLogin(username, password: password, vc: self);
     }
     
     // Set up local data store

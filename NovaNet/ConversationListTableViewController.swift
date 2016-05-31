@@ -27,10 +27,10 @@ class ConversationListTableViewController: TableViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad();
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "loadConversations", name: "loadConversations", object: nil);
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "phoneVibrate", name: "phoneVibrate", object: nil);
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateMostRecent", name: "updateMostRecent", object: nil);
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "goToMessageVC", name: "goToMessageVC", object: nil);
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.loadConversations), name: "loadConversations", object: nil);
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.phoneVibrate), name: "phoneVibrate", object: nil);
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("updateMostRecent"), name: "updateMostRecent", object: nil);
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.goToMessageVC), name: "goToMessageVC", object: nil);
 
         let refreshControl = UIRefreshControl()
         self.tabBarController?.navigationItem.title = "Messages";
@@ -39,7 +39,7 @@ class ConversationListTableViewController: TableViewController {
         manageiOSModelType();
         
         // Sets up refresh control on pull down so that it calls findUsersInRange
-        refreshControl.addTarget(self, action: Selector("loadConversations"), forControlEvents:UIControlEvents.ValueChanged);
+        refreshControl.addTarget(self, action: #selector(ConversationListTableViewController.loadConversations), forControlEvents:UIControlEvents.ValueChanged);
         self.refreshControl = refreshControl;
 
     }
@@ -72,10 +72,61 @@ class ConversationListTableViewController: TableViewController {
     }
     
     
+    func switchToFinder(sender:UIButton!) {
+        let tb:UITabBarController! = self.navigationController?.parentViewController as! UITabBarController
+        tb.selectedIndex = 0
+    }
+    
+    
     /*-------------------------------- TABLE VIEW METHODS ------------------------------------*/
     
     // Return the number of rows in the section.
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let backgroundLabel = UILabel()
+        let backgroundView = UIView()
+        var backgroundImage = UIImageView()
+        let button = UIButton(type: UIButtonType.System) as UIButton
+        
+        let screenSize: CGRect = UIScreen.mainScreen().bounds
+        let screenWidth = screenSize.width
+        let screenHeight = screenSize.height
+        
+        if (self.conversationList.count == 0) {
+            
+            backgroundLabel.text = "Don’t have any messages yet? Find Novas and get started!"
+            backgroundLabel.font = UIFont(name: "OpenSans", size: 16.0)
+            backgroundLabel.textColor = Utilities().UIColorFromHex(0x3A4A49, alpha: 1.0)
+            backgroundLabel.frame = CGRect(x: screenWidth * 0.55, y: screenHeight * 0.4, width: 160, height: 20)
+            backgroundLabel.numberOfLines = 0
+            backgroundLabel.textAlignment = NSTextAlignment.Left
+            backgroundLabel.sizeToFit()
+            backgroundView.addSubview(backgroundLabel)
+            
+            let imageName = "about_chat_bubbles.png"
+            let image = UIImage(named: imageName)
+            backgroundImage = UIImageView(image: image!)
+            backgroundImage.frame = CGRect(x: screenWidth * 0.10, y: screenHeight * 0.4, width: backgroundImage.bounds.width, height: backgroundImage.bounds.height)
+            backgroundView.addSubview(backgroundImage)
+
+            button.frame = CGRect(x: screenWidth * 0.16, y: screenHeight * 0.6, width: 250, height: 50)
+            button.backgroundColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+            button.setTitle("FIND NOVAS", forState: UIControlState.Normal)
+            button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+            button.layer.cornerRadius = 5
+            button.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: 16.0)
+            button.addTarget(self, action: #selector(ConversationListTableViewController.switchToFinder(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            backgroundView.addSubview(button)
+            
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+            tableView.backgroundView = backgroundView
+        } else {
+
+            backgroundLabel.hidden = true
+            backgroundImage.hidden = true
+            tableView.backgroundView?.hidden = true
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+        }
+
         return conversationList.count;
     }
     
@@ -98,21 +149,31 @@ class ConversationListTableViewController: TableViewController {
             
 
             // Stores variables to mark unread messages and most recent message
-            let readConversationCount:Int = conversationParticipant["ReadMessageCount"] as! Int;
-            let conversationCount:Int = conversation["MessageCount"] as! Int;
+            let readConversationCount:Int = conversationParticipant["ReadMessageCount"] as! Int
+            let conversationCount:Int = conversation["MessageCount"] as! Int
+            var recentDate:NSDate = NSDate()
             var recentMessage="";
             if let message:String = conversation["RecentMessage"] as? String {
                 recentMessage = message;
+                recentDate = conversation["MostRecent"] as! NSDate
             }
             cell.nameLabel.text = profile["Name"] as? String;
-            print("Name: " + cell.nameLabel.text!)
-            print("ReadMessageCount: " + String(readConversationCount))
-            print("Conversation Count: " + String(conversationCount))
             
-            if readConversationCount < conversationCount {
-                cell.unreadMessageMark.hidden = false;
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "MMM d|h:mm a"
+            
+            let dateString = dateFormatter.stringFromDate(recentDate)
+            let dateComponents = dateString.characters.split{$0 == "|"}.map(String.init)
+            
+            if ((NSDate().hoursFrom(recentDate)) > 24) {
+                cell.timeString.text = dateComponents[0]
             } else {
-                cell.unreadMessageMark.hidden = true;
+                cell.timeString.text = dateComponents[1]
+            }
+            if readConversationCount < conversationCount {
+                cell.timeString.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+            } else {
+                cell.timeString.textColor = Utilities().UIColorFromHex(0x53585F, alpha: 1.0)
             }
             cell.recentMessageLabel.text = recentMessage;
             cell.recentMessageLabel.lineBreakMode = NSLineBreakMode.ByTruncatingTail
@@ -143,7 +204,7 @@ class ConversationListTableViewController: TableViewController {
                 cell.profileImage.hidden = true;
                 cell.recentMessageLabel.hidden = true;
                 cell.nameLabel.hidden = true;
-                cell.unreadMessageMark.hidden = true;
+//                cell.unreadMessageMark.hidden = true;
             }
         return cell;
     }

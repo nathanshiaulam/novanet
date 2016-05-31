@@ -19,11 +19,11 @@ class AboutVC: ViewController, UIPageViewControllerDataSource {
     
     override func viewDidLoad() {
         let firstString = "At Nova, we believe in the power of connections-that every conversation should count."
-        let secondString = "Find the coolest young professionals in your area..."
-        let thirdString = "Meet them for coffee or tea..."
-        let fourthString = "...and build a community that will last a lifetime."
+        let secondString = "Start a conversation with Novas around you and meet them for a coffee."
+        let thirdString = "Create a meet up, an afterwork, study group or another event to bring Novas together."
+        let fourthString = "Build your network that will last a lifetime."
         self.pageTitles = NSArray(objects:firstString, secondString, thirdString, fourthString);
-        self.pageImages = NSArray(objects: "Weak Network", "Map", "Coffee Cup", "Strong Network");
+        self.pageImages = NSArray(objects: "about_chat_bubbles", "about_map", "about_event", "about_people");
         
         self.pageViewController = self.storyboard?.instantiateViewControllerWithIdentifier("PageViewController") as! UIPageViewController
         
@@ -69,7 +69,7 @@ class AboutVC: ViewController, UIPageViewControllerDataSource {
         {
             return nil;
         }
-        index--;
+        index -= 1;
         return self.viewControllerAtIndex(index);
     }
     
@@ -83,7 +83,7 @@ class AboutVC: ViewController, UIPageViewControllerDataSource {
             return nil;
         }
         
-        index++;
+        index += 1;
         
         if (index == self.pageTitles.count) {
             return nil;

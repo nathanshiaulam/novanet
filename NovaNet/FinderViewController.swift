@@ -38,10 +38,10 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         if byDist == false {
             byDist = true
             let currentFont = distanceButton.titleLabel!.font
-            distanceButton.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: currentFont.pointSize)
+            distanceButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: currentFont.pointSize)
             
             let otherCurrentFont = alphabeticalButton.titleLabel!.font
-            alphabeticalButton.titleLabel!.font = UIFont(name: "AvenirNext-Regular", size: otherCurrentFont.pointSize)
+            alphabeticalButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Thin", size: otherCurrentFont.pointSize)
 
             loadAndRefreshData()
         }
@@ -50,15 +50,12 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     @IBAction func sortByAlphabet(sender: UIButton) {
         if byDist == true {
             byDist = false
+            
             let currentFont = distanceButton.titleLabel!.font
-            print(distanceButton.titleLabel!.font)
-
-            distanceButton.titleLabel!.font = UIFont(name: "AvenirNext-Regular", size: currentFont.pointSize)
+            distanceButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Thin", size: currentFont.pointSize)
 
             let otherCurrentFont = alphabeticalButton.titleLabel!.font
-            print(distanceButton.titleLabel!.font)
-
-            alphabeticalButton.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: otherCurrentFont.pointSize)
+            alphabeticalButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: otherCurrentFont.pointSize)
 
             loadAndRefreshData()
         }
@@ -72,14 +69,18 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "loadAndRefreshData", name: "loadAndRefreshData", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "phoneVibrate", name: "phoneVibrate", object: nil)
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FinderViewController.loadAndRefreshData), name: "loadAndRefreshData", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FinderViewController.phoneVibrate), name: "phoneVibrate", object: nil)
         byDist = true
         self.tabBarController?.navigationItem.leftBarButtonItem = nil
 
         // Sets up the row height of Table View Cells
         manageiOSModelType()
         self.tabBarController?.navigationItem.title = "Finder"
+        
+        
+        
 
         // Go to login page if no user logged in
         if (!self.userLoggedIn()) {
@@ -90,7 +91,10 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     override func viewDidAppear(animated: Bool) {
         // If the user logged out, empty the tableView and perform segue to User Login
         self.tabBarController?.navigationItem.title = "Finder"
-
+        let appearance = UITabBarItem.appearance()
+        let font:UIFont = UIFont(name: "OpenSans", size: 18)!
+        let attributes = [NSFontAttributeName:font]
+        appearance.setTitleTextAttributes(attributes, forState: .Normal)
         if (!self.userLoggedIn()) {
             profileList = NSArray()
             tableView.reloadData()
@@ -108,7 +112,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
             locationManager.startUpdatingLocation()
             
             // Sets up refresh control on pull down so that it calls findUsersInRange
-            refreshControl.addTarget(self, action: Selector("loadAndRefreshData"), forControlEvents: UIControlEvents.ValueChanged)
+            refreshControl.addTarget(self, action: #selector(FinderViewController.loadAndRefreshData), forControlEvents: UIControlEvents.ValueChanged)
             
             tableView.addSubview(self.refreshControl)
             
@@ -133,7 +137,39 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     
     // Return the number of rows in the section.
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let backgroundLabel = UILabel()
+        let backgroundView = UIView()
+        var backgroundImage = UIImageView()
+
+        let screenSize: CGRect = UIScreen.mainScreen().bounds
+        let screenWidth = screenSize.width
+        let screenHeight = screenSize.height
         
+        if (self.profileList.count == 0) {
+            
+            backgroundLabel.text = "Can’t see anyone here? Pull down to refresh and find more Novas around you."
+            backgroundLabel.font = UIFont(name: "OpenSans", size: 16.0)
+            backgroundLabel.textColor = Utilities().UIColorFromHex(0x3A4A49, alpha: 1.0)
+            backgroundLabel.frame = CGRect(x: screenWidth * 0.5, y: screenHeight * 0.45, width: 160, height: 20)
+            backgroundLabel.numberOfLines = 0
+            backgroundLabel.textAlignment = NSTextAlignment.Left
+            backgroundLabel.sizeToFit()
+            backgroundView.addSubview(backgroundLabel)
+            
+            let imageName = "about_map.png"
+            let image = UIImage(named: imageName)
+            backgroundImage = UIImageView(image: image!)
+            
+            backgroundImage.frame = CGRect(x: screenWidth * 0.10, y: screenHeight * 0.45, width: backgroundImage.bounds.width, height: backgroundImage.bounds.height)
+
+            backgroundView.addSubview(backgroundImage)
+            self.tableView.backgroundView = backgroundView
+        } else {
+            print("thishappened")
+            backgroundLabel.hidden = true
+            backgroundImage.hidden = true
+            self.tableView.backgroundView?.hidden = true
+        }
         return profileList.count
     }
     
@@ -317,7 +353,6 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
             (result: AnyObject?, error:NSError?) -> Void in
             if error == nil {
                 self.profileList = result as! NSArray
-                
                 self.findDistList(longitude, latitude: latitude, distance: distance)
             } else {
                 print(error)

@@ -102,7 +102,7 @@ class MessagerViewController: JSQMessagesViewController {
         queryAll.limit = 1000;
         
         queryAll.findObjectsInBackgroundWithBlock {
-            (NSArray messages, NSError error) -> Void in
+            (messages, error) -> Void in
             if (error != nil || messages == nil) {
                 print(error);
             } else if let messages = messages as? [PFObject]{
@@ -396,35 +396,43 @@ class MessagerViewController: JSQMessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad();
+        
 
+        self.navigationController?.navigationBar.barTintColor = UIColorFromHex(0xFC6706, alpha: 1.0)
+        
         // Ensures that it loads the data when you receive a message while in view
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "loadData", name: "loadData", object: nil);
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MessagerViewController.loadData), name: "loadData", object: nil);
         let button =  UIButton(type: UIButtonType.Custom) as UIButton;
         button.frame = CGRectMake(0, 0, 100, 40) as CGRect
-
-        button.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal);
+        button.titleLabel?.font = UIFont(name: "OpenSans", size: 18)
+        button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal);
         button.setTitle(defaults.stringForKey(Constants.SelectedUserKeys.selectedNameKey), forState: UIControlState.Normal)
-        button.addTarget(self, action: Selector("moveToProfile:"), forControlEvents: UIControlEvents.TouchUpInside)
+        button.addTarget(self, action: #selector(MessagerViewController.moveToProfile(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.navigationItem.titleView = button
         
         inputToolbar!.contentView!.leftBarButtonItem = nil;
         self.inputToolbar!.contentView!.textView!.delegate = self;
-        
+        self.automaticallyScrollsToMostRecentMessage = true
+        inputToolbar.contentView.rightBarButtonItem.setTitle("SEND", forState: UIControlState.Normal)
+        inputToolbar.contentView.rightBarButtonItem.titleLabel!.font = UIFont(name: "OpenSans", size: 14.0)
+        inputToolbar.contentView.rightBarButtonItem.setTitleColor(UIColorFromHex(0xFC6706, alpha: 1.0), forState: UIControlState.Normal)
+
         // User IDs are used as sender/recipient tags
-        self.senderDisplayName = defaults.stringForKey(Constants.UserKeys.nameKey);
+        self.senderDisplayName = defaults.stringForKey(Constants.UserKeys.nameKey)
         
         self.senderId = PFUser.currentUser()!.objectId;
         self.selectedId = defaults.stringForKey(Constants.SelectedUserKeys.selectedIdKey)!;
         
         // Generates queries based off of both users to load messages
-        findMessages(senderId, selectedId: selectedId);
+        findMessages(senderId, selectedId: selectedId)
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true);
         
-        self.collectionView!.reloadData();
         collectionView!.collectionViewLayout.springinessEnabled = true
+        self.automaticallyScrollsToMostRecentMessage = true
+        self.collectionView!.reloadData();
         
     }
     

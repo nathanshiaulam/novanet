@@ -96,7 +96,13 @@ class SignUpViewController: ViewController {
             passwordField.becomeFirstResponder();
         }
         else {
-            NetworkManager().createUser(usernameField.text!, password: passwordField.text!, email:emailField.text!, sender: self);
+            let username:String = usernameField.text!.stringByTrimmingCharactersInSet(
+                NSCharacterSet.whitespaceAndNewlineCharacterSet())
+            let password:String = passwordField.text!.stringByTrimmingCharactersInSet(
+                NSCharacterSet.whitespaceAndNewlineCharacterSet())
+            let email:String = emailField.text!.stringByTrimmingCharactersInSet(
+                NSCharacterSet.whitespaceAndNewlineCharacterSet())
+            NetworkManager().createUser(username, password: password, email: email, sender: self);
             textField.resignFirstResponder();
         }
         return false;
@@ -120,6 +126,7 @@ class SignUpViewController: ViewController {
         passwordFrameRect.size.height = 200;
         emailFrameRect.size.height = 200;
         
+        self.navigationController?.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         
         usernameField.frame = userFrameRect;
         passwordField.frame = passwordFrameRect;

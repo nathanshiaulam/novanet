@@ -255,7 +255,7 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
         lookingForLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
         lookingForLabel.sizeToFit();
         
-        self.title = "Profile";
+//        self.title = "";
         self.profileImage.image = Utilities().readImage();
     }
     

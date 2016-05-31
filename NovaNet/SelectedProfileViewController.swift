@@ -72,7 +72,7 @@ class SelectedProfileViewController: ViewController {
             profileImage.image = UIImage(named: "selectImage");
         }
         self.view.backgroundColor = UIColor.whiteColor();
-
+        self.navigationController?.navigationBar.backgroundColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         bot = self.nameBottomToAbout.constant - 5
         otherBot = self.profileImageNameDist.constant/self.profileImageNameDist.multiplier - 5;
         thirdBot = self.profileImageTopDist.constant - 10;

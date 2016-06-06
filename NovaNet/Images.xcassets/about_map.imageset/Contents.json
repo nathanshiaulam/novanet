@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Large Finder Icon-1.png",
+      "filename" : "FINDER ICON LARGE.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Large Finder Icon.png",
+      "filename" : "FINDER ICON LARGE-1.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Large Finder Icon-2.png",
+      "filename" : "FINDER ICON LARGE-2.png",
       "scale" : "3x"
     }
   ],

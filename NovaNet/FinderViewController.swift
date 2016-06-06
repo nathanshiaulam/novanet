@@ -152,7 +152,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
             backgroundLabel.text = "Can’t see anyone here? Pull down to refresh and find more Novas around you."
             backgroundLabel.font = UIFont(name: "OpenSans", size: 16.0)
             backgroundLabel.textColor = Utilities().UIColorFromHex(0x3A4A49, alpha: 1.0)
-            backgroundLabel.frame = CGRect(x: screenWidth * 0.5, y: screenHeight * 0.45, width: 160, height: 20)
+            backgroundLabel.frame = CGRect(x: screenWidth * 0.5, y: screenHeight * 0.4, width: 160, height: 20)
             backgroundLabel.numberOfLines = 0
             backgroundLabel.textAlignment = NSTextAlignment.Left
             backgroundLabel.sizeToFit()
@@ -162,7 +162,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
             let image = UIImage(named: imageName)
             backgroundImage = UIImageView(image: image!)
             
-            backgroundImage.frame = CGRect(x: screenWidth * 0.10, y: screenHeight * 0.45, width: backgroundImage.bounds.width, height: backgroundImage.bounds.height)
+            backgroundImage.frame = CGRect(x: screenWidth * 0.15, y: screenHeight * 0.4, width: backgroundImage.bounds.width, height: backgroundImage.bounds.height)
             
             
 

@@ -301,6 +301,50 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     
     // Return the number of rows in the section.
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let backgroundLabel = UILabel()
+        let backgroundView = UIView()
+        var backgroundImage = UIImageView()
+        let button = UIButton(type: UIButtonType.System) as UIButton
+        
+        let screenSize: CGRect = UIScreen.mainScreen().bounds
+        let screenWidth = screenSize.width
+        let screenHeight = screenSize.height
+        
+        if (self.eventsList.count == 0) {
+            
+            backgroundLabel.text = "There are no current events in your area. Want to create one?"
+            backgroundLabel.font = UIFont(name: "OpenSans", size: 16.0)
+            backgroundLabel.textColor = Utilities().UIColorFromHex(0x3A4A49, alpha: 1.0)
+            backgroundLabel.frame = CGRect(x: screenWidth * 0.45, y: screenHeight * 0.4, width: 160, height: 20)
+            backgroundLabel.numberOfLines = 0
+            backgroundLabel.textAlignment = NSTextAlignment.Left
+            backgroundLabel.sizeToFit()
+            backgroundView.addSubview(backgroundLabel)
+            
+            let imageName = "about_event.png"
+            let image = UIImage(named: imageName)
+            backgroundImage = UIImageView(image: image!)
+            backgroundImage.frame = CGRect(x: screenWidth * 0.15, y: screenHeight * 0.4, width: backgroundImage.bounds.width, height: backgroundImage.bounds.height)
+            backgroundView.addSubview(backgroundImage)
+            
+            button.frame = CGRect(x: screenWidth * 0.16, y: screenHeight * 0.6, width: 250, height: 50)
+            button.backgroundColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+            button.setTitle("CREATE EVENT", forState: UIControlState.Normal)
+            button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+            button.layer.cornerRadius = 5
+            button.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: 16.0)
+            button.addTarget(self, action: #selector(EventsFinderTableVC.toCreateEvent(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            backgroundView.addSubview(button)
+            
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+            tableView.backgroundView = backgroundView
+        } else {
+            
+            backgroundLabel.hidden = true
+            backgroundImage.hidden = true
+            tableView.backgroundView?.hidden = true
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+        }
         return eventsList.count
     }
     
@@ -418,7 +462,10 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         cell.eventDistance.text = String(dist) + " km";
         
     }
-    
+    func toCreateEvent(sender:UIButton!) {
+        performSegueWithIdentifier("toCreateEvent", sender: self)
+        
+    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "toEventDescription" {

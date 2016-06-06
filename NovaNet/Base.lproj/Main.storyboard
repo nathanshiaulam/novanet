@@ -154,7 +154,7 @@
                                 <color key="textColor" red="0.32549019610000002" green="0.34509803919999998" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="B8F37269-6DDC-417E-82E9-20F6F46BE8B5" translatesAutoresizingMaskIntoConstraints="NO" id="gw7-H5-l42">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="C44B3877-CC2E-4618-B58C-9BB17F648769" translatesAutoresizingMaskIntoConstraints="NO" id="gw7-H5-l42">
                                 <rect key="frame" x="212" y="72" width="175" height="175"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="175" id="DdL-Cx-WSs"/>
@@ -4150,7 +4150,7 @@
                     <navigationItem key="navigationItem" title="Events" id="wvT-Yr-oVP">
                         <barButtonItem key="leftBarButtonItem" systemItem="add" id="xA7-aD-Ec3">
                             <connections>
-                                <segue destination="kfD-vT-cln" kind="presentation" id="34g-KW-mkX"/>
+                                <segue destination="kfD-vT-cln" kind="presentation" identifier="toCreateEvent" id="34g-KW-mkX"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -6372,7 +6372,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="B8F37269-6DDC-417E-82E9-20F6F46BE8B5" width="490" height="541">
+        <image name="C44B3877-CC2E-4618-B58C-9BB17F648769" width="490" height="541">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOjtYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISgrLjQ3VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA

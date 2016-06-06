@@ -16,6 +16,7 @@ class LogInViewController: ViewController, UITextFieldDelegate {
 
     var bot:CGFloat!;
 
+    @IBOutlet weak var loginButton: UIButton!
     
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -63,6 +64,8 @@ class LogInViewController: ViewController, UITextFieldDelegate {
         usernameField.attributedPlaceholder = usernamePlaceholder;
         passwordField.attributedPlaceholder = passwordPlaceholder;
         
+        loginButton.layer.cornerRadius = 5
+        
         var userFrameRect = usernameField.frame;
         var passwordFrameRect = passwordField.frame;
         userFrameRect.size.height = 250;
@@ -74,6 +77,19 @@ class LogInViewController: ViewController, UITextFieldDelegate {
         passwordField.layer.cornerRadius = 15;
         passwordField.secureTextEntry = true;
         
+        let email_image = UIImageView(image: UIImage(named: "login_email.png"))
+        email_image.frame = CGRect(x: 0, y: 0, width: email_image.frame.width + 30, height: email_image.frame.height)
+        email_image.contentMode = UIViewContentMode.Center
+        usernameField.leftView = email_image
+        usernameField.leftViewMode = UITextFieldViewMode.Always
+        
+        let password_image = UIImageView(image: UIImage(named: "login_password.png"))
+        password_image.frame = CGRect(x: 0, y: 0, width: password_image.frame.width + 30, height: password_image.frame.height)
+        password_image.contentMode = UIViewContentMode.Center
+        passwordField.leftView = password_image
+        passwordField.leftViewMode = UITextFieldViewMode.Always
+        
+        
         let usernameFieldPlaceholder = NSAttributedString(string: "E-Mail", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
         usernameField.attributedPlaceholder = usernameFieldPlaceholder;
         usernameField.textColor = UIColor.whiteColor();
@@ -84,7 +100,7 @@ class LogInViewController: ViewController, UITextFieldDelegate {
     }
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true);
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "dismissToHomePage", name: "dismissToHomePage", object: nil);
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LogInViewController.dismissToHomePage), name: "dismissToHomePage", object: nil);
     }
     
     override func viewDidLayoutSubviews() {

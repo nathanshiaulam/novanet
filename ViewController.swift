@@ -31,6 +31,7 @@ class ViewController: UIViewController {
                     let dateFormatter = NSDateFormatter()
                     dateFormatter.dateFormat = "MM/dd/yyyy"
                     profile["last_active"] = dateFormatter.stringFromDate(NSDate());
+                    profile["Available"] = true
                     profile.saveInBackground();
                     print(dateFormatter.stringFromDate(NSDate()));
                 }

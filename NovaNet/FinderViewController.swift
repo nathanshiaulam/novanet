@@ -77,7 +77,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
 
         // Sets up the row height of Table View Cells
         manageiOSModelType()
-        self.tabBarController?.navigationItem.title = "Finder"
+        self.tabBarController?.navigationItem.title = "FINDER"
         
         
         
@@ -90,7 +90,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     
     override func viewDidAppear(animated: Bool) {
         // If the user logged out, empty the tableView and perform segue to User Login
-        self.tabBarController?.navigationItem.title = "Finder"
+        self.tabBarController?.navigationItem.title = "FINDER"
         let appearance = UITabBarItem.appearance()
         let font:UIFont = UIFont(name: "OpenSans", size: 18)!
         let attributes = [NSFontAttributeName:font]
@@ -139,11 +139,13 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let backgroundLabel = UILabel()
         let backgroundView = UIView()
+
         var backgroundImage = UIImageView()
 
         let screenSize: CGRect = UIScreen.mainScreen().bounds
         let screenWidth = screenSize.width
         let screenHeight = screenSize.height
+        backgroundView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         
         if (self.profileList.count == 0) {
             
@@ -161,11 +163,14 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
             backgroundImage = UIImageView(image: image!)
             
             backgroundImage.frame = CGRect(x: screenWidth * 0.10, y: screenHeight * 0.45, width: backgroundImage.bounds.width, height: backgroundImage.bounds.height)
+            
+            
 
             backgroundView.addSubview(backgroundImage)
             self.tableView.backgroundView = backgroundView
+            
+            
         } else {
-            print("thishappened")
             backgroundLabel.hidden = true
             backgroundImage.hidden = true
             self.tableView.backgroundView?.hidden = true

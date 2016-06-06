@@ -20,6 +20,7 @@ class SignUpViewController: ViewController {
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var usernameField: UITextField!
     
+    @IBOutlet weak var signupButton: UIButton!
     @IBAction func cancelFunction(sender: UIBarButtonItem) {
         self.dismissViewControllerAnimated(true, completion: nil);
     }
@@ -117,6 +118,7 @@ class SignUpViewController: ViewController {
         
         passwordField.secureTextEntry = true;
         bot = distFromSignInToBottom.constant - 20;
+        signupButton.layer.cornerRadius = 5
 
         var userFrameRect = usernameField.frame;
         var passwordFrameRect = passwordField.frame;
@@ -136,6 +138,19 @@ class SignUpViewController: ViewController {
         passwordField.layer.cornerRadius = 15;
         emailField.layer.cornerRadius = 15;
  
+        let email_image = UIImageView(image: UIImage(named: "login_email.png"))
+        email_image.frame = CGRect(x: 0, y: 0, width: email_image.frame.width + 30, height: email_image.frame.height)
+        email_image.contentMode = UIViewContentMode.Center
+        emailField.leftView = email_image
+        emailField.leftViewMode = UITextFieldViewMode.Always
+        
+        let password_image = UIImageView(image: UIImage(named: "login_password.png"))
+        password_image.frame = CGRect(x: 0, y: 0, width: password_image.frame.width + 30, height: password_image.frame.height)
+        password_image.contentMode = UIViewContentMode.Center
+        passwordField.leftView = password_image
+        passwordField.leftViewMode = UITextFieldViewMode.Always
+        
+        
         let usernameFieldPlaceholder = NSAttributedString(string: "Username", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
         usernameField.attributedPlaceholder = usernameFieldPlaceholder;
         usernameField.textColor = UIColor.whiteColor();

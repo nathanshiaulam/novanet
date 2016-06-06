@@ -29,54 +29,56 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var addEventButton: UIBarButtonItem!
     @IBOutlet var tableView: UITableView!
     
-
-    @IBAction func segmentValueChanged(sender: UISegmentedControl) {
-        if sender.selectedSegmentIndex == 0 {
-            self.tableView.addSubview(eventHeaderView);
-            self.tableView.frame =
-                CGRectMake(0, 0, self.tableView.frame.width, self.tableView.frame.height + 30)
-            refreshControl.removeTarget(self, action: Selector("findSavedEvents"), forControlEvents: UIControlEvents.ValueChanged)
-            refreshControl.addTarget(self, action: Selector("findAllEvents"), forControlEvents: UIControlEvents.ValueChanged)
-            findAllEvents();
-            
-        } else {
-            eventHeaderView.removeFromSuperview()
-            self.tableView.frame =
-                CGRectMake(0, 0 - eventHeaderView.frame.height, self.tableView.frame.width, self.tableView.frame.height + 30)
-            refreshControl.removeTarget(self, action: Selector("findAllEvents"), forControlEvents: UIControlEvents.ValueChanged)
-            refreshControl.addTarget(self, action: Selector("findSavedEvents"), forControlEvents: UIControlEvents.ValueChanged)
-            findSavedEvents();
-            
-        }
-        
-    }
+//
+//    @IBAction func segmentValueChanged(sender: UISegmentedControl) {
+//        if sender.selectedSegmentIndex == 0 {
+//            self.tableView.addSubview(eventHeaderView);
+//            self.tableView.frame =
+//                CGRectMake(0, 0, self.tableView.frame.width, self.tableView.frame.height + 30)
+//            refreshControl.removeTarget(self, action: #selector(EventsFinderTableVC.findSavedEvents), forControlEvents: UIControlEvents.ValueChanged)
+//            refreshControl.addTarget(self, action: #selector(EventsFinderTableVC.findAllEvents), forControlEvents: UIControlEvents.ValueChanged)
+//            findAllEvents();
+//            
+//        } else {
+//            eventHeaderView.removeFromSuperview()
+//            self.tableView.frame =
+//                CGRectMake(0, 0 - eventHeaderView.frame.height, self.tableView.frame.width, self.tableView.frame.height + 30)
+//            refreshControl.removeTarget(self, action: #selector(EventsFinderTableVC.findAllEvents), forControlEvents: UIControlEvents.ValueChanged)
+//            refreshControl.addTarget(self, action: #selector(EventsFinderTableVC.findSavedEvents), forControlEvents: UIControlEvents.ValueChanged)
+//            findSavedEvents();
+//            
+//        }
+//        
+//    }
     @IBAction func findLocalEvents(sender: UIButton) {
         if localEvents == false {
             localEvents = true;
             let currentFont = localEventButton.titleLabel!.font
-            localEventButton.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: currentFont.pointSize)
+            localEventButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: currentFont.pointSize)
             
             let otherCurrentFont = memberEventButton.titleLabel!.font
-            memberEventButton.titleLabel!.font = UIFont(name: "AvenirNext-Regular", size: otherCurrentFont.pointSize)
+            memberEventButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Thin", size: otherCurrentFont.pointSize)
+            
             findAllEvents();
             
         }
     }
     
-    @IBAction func findMemberEvents(sender: UIButton) {
+    @IBAction func findMyEvents(sender: UIButton) {
         if localEvents == true {
             localEvents = false;
             let currentFont = localEventButton.titleLabel!.font
-            localEventButton.titleLabel!.font = UIFont(name: "AvenirNext-Regular", size: currentFont.pointSize)
+            localEventButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Thin", size: currentFont.pointSize)
             
             let otherCurrentFont = memberEventButton.titleLabel!.font
-            memberEventButton.titleLabel!.font = UIFont(name: "AvenirNext-DemiBold", size: otherCurrentFont.pointSize)
-            findAllEvents();
+            memberEventButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: otherCurrentFont.pointSize)
+            
+            findSavedEvents();
             
             
         }
+
     }
-    
     override func viewDidLoad() {
 
         localEvents = true;
@@ -85,31 +87,32 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         distList = NSArray();
         
         self.tableView.rowHeight = 100.0;
-        
+        self.tabBarController!.navigationItem.title = "EVENTS";
+
         
         refreshControl = UIRefreshControl();
         
-        segmentControl.selectedSegmentIndex = 0;
+//        segmentControl.selectedSegmentIndex = 0;
     }
     
     override func viewDidAppear(animated: Bool) {
-        self.tabBarController!.navigationItem.title = "Events";
+        self.tabBarController!.navigationItem.title = "EVENTS";
         self.tabBarController!.navigationItem.leftBarButtonItem = addEventButton;
         self.oldTitleView = self.tabBarController!.navigationItem.titleView
         self.tabBarController!.navigationItem.titleView = segmentControl;
         
         tableView.addSubview(self.refreshControl)
-        if segmentControl.selectedSegmentIndex == 0 {
+        if localEvents == true {
             findAllEvents();
-            refreshControl.removeTarget(self, action: Selector("findSavedEvents"), forControlEvents: UIControlEvents.ValueChanged)
-            refreshControl.addTarget(self, action: Selector("findAllEvents"), forControlEvents: UIControlEvents.ValueChanged)
+            refreshControl.removeTarget(self, action: #selector(EventsFinderTableVC.findSavedEvents), forControlEvents: UIControlEvents.ValueChanged)
+            refreshControl.addTarget(self, action: #selector(EventsFinderTableVC.findAllEvents), forControlEvents: UIControlEvents.ValueChanged)
             
         } else {
             findSavedEvents();
-            self.tableView.frame =
-                CGRectMake(0, 0 - eventHeaderView.frame.height, self.tableView.frame.width, self.tableView.frame.height + 30)
-            refreshControl.removeTarget(self, action: Selector("findAllEvents"), forControlEvents: UIControlEvents.ValueChanged)
-            refreshControl.addTarget(self, action: Selector("findSavedEvents"), forControlEvents: UIControlEvents.ValueChanged)
+//            self.tableView.frame =
+//                CGRectMake(0, 0 - eventHeaderView.frame.height, self.tableView.frame.width, self.tableView.frame.height + 30)
+            refreshControl.removeTarget(self, action: #selector(EventsFinderTableVC.findAllEvents), forControlEvents: UIControlEvents.ValueChanged)
+            refreshControl.addTarget(self, action: #selector(EventsFinderTableVC.findSavedEvents), forControlEvents: UIControlEvents.ValueChanged)
         }
         super.viewDidAppear(true);
     }
@@ -133,13 +136,13 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         let lon = defaults.doubleForKey(Constants.UserKeys.longitudeKey);
         let dist = Constants.DISCOVERY_RADIUS;
         
-        PFCloud.callFunctionInBackground("findAllEvents", withParameters: ["lat": lat, "lon": lon, "dist":dist, "local":localEvents]) {
+        PFCloud.callFunctionInBackground("findAllEvents", withParameters: ["lat": lat, "lon": lon, "dist":dist]) {
             (result: AnyObject?, error:NSError?) -> Void in
             if error != nil {
                 print(error);
             } else if let result = result {
                 self.eventsList = result as! NSArray;
-                self.findDistList(lon, lat:lat, dist:dist, local:self.localEvents, all:true);
+                self.findDistList(lon, lat:lat, dist:dist, all:true);
             }
         }
     }
@@ -154,21 +157,19 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             if error != nil {
                 print(error);
             } else if let result = result {
-                print(result)
                 self.eventsList = result as! NSArray;
-                self.findDistList(lon, lat:lat, dist:dist, local: self.localEvents, all:false);
+                self.findDistList(lon, lat:lat, dist:dist, all:false);
             }
         }
         
     }
     
-    func findDistList(lon: Double, lat: Double, dist: Int, local: Bool, all:Bool) {
-        PFCloud.callFunctionInBackground("findEventsDist", withParameters: ["lat":lat, "lon":lon, "dist":dist, "local":localEvents, "all":all]) {
+    func findDistList(lon: Double, lat: Double, dist: Int, all:Bool) {
+        PFCloud.callFunctionInBackground("findEventsDist", withParameters: ["lat":lat, "lon":lon, "dist":dist, "all":all]) {
             (result: AnyObject?, error:NSError?) -> Void in
             if error != nil {
                 print(error);
             } else if let result = result {
-                print(result)
                 self.distList = result as! NSArray;
                 self.tableView.reloadData();
                 self.refreshControl.endRefreshing();
@@ -189,7 +190,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             event["Going"] = arr;
             event.saveInBackground();
             
-            sender.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
         } else  {
             if (maybeButton.selected) {
                 var arr:[String]! = event["Maybe"] as! [String];
@@ -198,7 +198,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
                 event.saveInBackground();
                 maybeButton.highlighted = false;
                 maybeButton.selected = false;
-                maybeButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
             }
             if (notGoingButton.selected) {
                 var arr:[String]! = event["NotGoing"] as! [String];
@@ -207,7 +206,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
                 event.saveInBackground();
                 notGoingButton.highlighted = false;
                 notGoingButton.selected = false;
-                notGoingButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
             }
             var arr:[String]! = event["Going"] as! [String];
             if !arr.contains(PFUser.currentUser()!.objectId!) {
@@ -215,7 +213,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             }
             event["Going"] = arr;
             event.saveInBackground();
-            sender.backgroundColor = Utilities().UIColorFromHex(0xBFBFBF, alpha: 1.0);
             
         }
 
@@ -234,7 +231,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             event["Maybe"] = arr;
             event.saveInBackground();
             
-            sender.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
         } else  {
             if (goingButton.selected) {
                 var arr:[String]! = event["Going"] as! [String];
@@ -243,7 +239,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
                 event.saveInBackground();
                 goingButton.highlighted = false;
                 goingButton.selected = false;
-                goingButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
             }
             if (notGoingButton.selected) {
                 var arr:[String]! = event["NotGoing"] as! [String];
@@ -252,7 +247,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
                 event.saveInBackground();
                 notGoingButton.highlighted = false;
                 notGoingButton.selected = false;
-                notGoingButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
             }
             var arr:[String]! = event["Maybe"] as! [String];
             if !arr.contains(PFUser.currentUser()!.objectId!) {
@@ -260,7 +254,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             }
             event["Maybe"] = arr;
             event.saveInBackground();
-            sender.backgroundColor = Utilities().UIColorFromHex(0xBFBFBF, alpha: 1.0);
             
         }
         sender.selected = !sender.selected;
@@ -278,7 +271,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             event["NotGoing"] = arr;
             event.saveInBackground();
             
-            sender.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
         } else  {
             if (maybeButton.selected) {
                 var arr:[String]! = event["Maybe"] as! [String];
@@ -287,7 +279,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
                 event.saveInBackground();
                 maybeButton.highlighted = false;
                 maybeButton.selected = false;
-                maybeButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
             }
             if (goingButton.selected) {
                 var arr:[String]! = event["Going"] as! [String];
@@ -296,7 +287,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
                 event.saveInBackground();
                 goingButton.highlighted = false;
                 goingButton.selected = false;
-                goingButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
             }
             var arr:[String]! = event["NotGoing"] as! [String];
             if !arr.contains(PFUser.currentUser()!.objectId!) {
@@ -304,7 +294,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             }
             event["NotGoing"] = arr;
             event.saveInBackground();
-            sender.backgroundColor = Utilities().UIColorFromHex(0xBFBFBF, alpha: 1.0);
         }
         sender.selected = !sender.selected;
     }
@@ -329,9 +318,14 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         cell.maybeButton.tag = 100 + indexPath.row * 3 + 1
         cell.notGoingButton.tag = 100 + indexPath.row * 3 + 2
         
-        cell.goingButton.addTarget(self, action: "goingPressed:", forControlEvents: UIControlEvents.TouchUpInside);
-        cell.maybeButton.addTarget(self, action: "maybePressed:", forControlEvents: UIControlEvents.TouchUpInside);
-        cell.notGoingButton.addTarget(self, action: "notGoingPressed:", forControlEvents: UIControlEvents.TouchUpInside);
+       
+        cell.goingButton.titleLabel!.font = UIFont(name: "OpenSans", size: 12.0)
+        cell.maybeButton.titleLabel?.font = UIFont(name: "OpenSans", size: 12.0)
+        cell.notGoingButton.titleLabel!.font = UIFont(name: "OpenSans", size: 12.0)
+        
+        cell.goingButton.addTarget(self, action: #selector(EventsFinderTableVC.goingPressed(_:)), forControlEvents: UIControlEvents.TouchUpInside);
+        cell.maybeButton.addTarget(self, action: #selector(EventsFinderTableVC.maybePressed(_:)), forControlEvents: UIControlEvents.TouchUpInside);
+        cell.notGoingButton.addTarget(self, action: #selector(EventsFinderTableVC.notGoingPressed(_:)), forControlEvents: UIControlEvents.TouchUpInside);
 
         
         
@@ -339,6 +333,15 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         formatTableViewCell(event, cell: cell, dist: dist);
         cell.layoutIfNeeded();
         
+        let leftLine:UIView = UIView(frame: CGRectMake(1, 2.5, 1.5, cell.maybeButton.frame.size.height - 5.0))
+        let rightLine:UIView = UIView(frame: CGRectMake(cell.maybeButton.frame.size.width - 1, 2.5, 1.5, cell.maybeButton.frame.size.height - 5.0))
+        
+        leftLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
+        rightLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
+
+        
+        cell.maybeButton.addSubview(leftLine)
+        cell.maybeButton.addSubview(rightLine)
         
         return cell;
     }
@@ -355,43 +358,42 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     
     
     func formatTableViewCell(event: PFObject, cell: EventCell, dist: Double) {
-        let date:NSDate = event["Date"] as! NSDate;
-        let title:String = event["Title"] as! String;
-        let creator:String = event["CreatorName"] as! String;
-        let locationName:String = event["EventName"] as! String;
+        let date:NSDate = event["Date"] as! NSDate
+        let title:String = event["Title"] as! String
+        let creator:String = event["CreatorName"] as! String
+        let locationName:String = event["EventName"] as! String
         
-        let goingList:[String] = event["Going"] as! [String];
-        let maybeList:[String] = event["Maybe"] as! [String];
-        let notGoingList:[String] = event["NotGoing"] as! [String];
+        let goingList:[String] = event["Going"] as! [String]
+        let maybeList:[String] = event["Maybe"] as! [String]
+        let notGoingList:[String] = event["NotGoing"] as! [String]
         
         if goingList.contains(PFUser.currentUser()!.objectId!) {
-            cell.goingButton.selected = true;
-            cell.goingButton.highlighted = true;
-            cell.goingButton.backgroundColor = Utilities().UIColorFromHex(0xBFBFBF, alpha: 1.0);
+
+            cell.goingButton.selected = true
+            cell.goingButton.titleLabel?.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         } else {
-            cell.goingButton.selected = false;
+            
+            cell.goingButton.selected = false
             cell.goingButton.highlighted = false
-            cell.goingButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
         }
         
         if maybeList.contains(PFUser.currentUser()!.objectId!) {
-            cell.maybeButton.selected = true;
-            cell.maybeButton.highlighted = true;
-            cell.maybeButton.backgroundColor = Utilities().UIColorFromHex(0xBFBFBF, alpha: 1.0);
+            cell.maybeButton.selected = true
+            cell.maybeButton.titleLabel?.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         } else {
-            cell.maybeButton.selected = false;
+            cell.maybeButton.selected = false
             cell.maybeButton.highlighted = false
-            cell.maybeButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
         }
         
         if notGoingList.contains(PFUser.currentUser()!.objectId!) {
-            cell.notGoingButton.selected = true;
-            cell.notGoingButton.highlighted = true;
-            cell.notGoingButton.backgroundColor = Utilities().UIColorFromHex(0xBFBFBF, alpha: 1.0);
+
+            cell.notGoingButton.titleLabel?.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+            cell.notGoingButton.selected = true
+
         } else {
-            cell.notGoingButton.selected = false;
+
+            cell.notGoingButton.selected = false
             cell.notGoingButton.highlighted = false
-            cell.notGoingButton.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
         }
         
         
@@ -406,13 +408,14 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         dateFormatter.dateFormat = "HH:mm"
         let time = dateFormatter.stringFromDate(date);
         
+        let locationArr = locationName.characters.split{$0 == ","}.map(String.init)
         cell.eventDay.text = String(day);
         cell.eventMonth.text = month;
         cell.eventTime.text = time;
         cell.eventTitle.text = title;
-        cell.eventLocation.text = locationName;
+        cell.eventLocation.text = locationArr[0];
         cell.eventOrganizer.text = "Organized by " + creator;
-        cell.eventDistance.text = String(dist);
+        cell.eventDistance.text = String(dist) + " km";
         
     }
     

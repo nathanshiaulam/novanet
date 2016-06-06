@@ -56,6 +56,7 @@ class UploadPictureViewController: ViewController, UIGestureRecognizerDelegate, 
             } else if let profile = profile {
                 profile["New"] = false;
                 self.defaults.setObject(false, forKey: Constants.TempKeys.fromNew);
+                profile.saveInBackground();
             }
         }
     }

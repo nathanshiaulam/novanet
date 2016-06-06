@@ -29,11 +29,11 @@ class ConversationListTableViewController: TableViewController {
         super.viewDidLoad();
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.loadConversations), name: "loadConversations", object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.phoneVibrate), name: "phoneVibrate", object: nil);
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("updateMostRecent"), name: "updateMostRecent", object: nil);
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("updateMostRecent"), name: "updateMostRecent", object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.goToMessageVC), name: "goToMessageVC", object: nil);
 
         let refreshControl = UIRefreshControl()
-        self.tabBarController?.navigationItem.title = "Messages";
+        self.tabBarController?.navigationItem.title = "MESSAGES";
 
         // Sets up the row height of Table View Cells
         manageiOSModelType();
@@ -57,7 +57,7 @@ class ConversationListTableViewController: TableViewController {
             return;
         }
         else {
-            self.tabBarController?.navigationItem.title = "Messages";
+            self.tabBarController?.navigationItem.title = "MESSAGES";
             loadConversations();
         }
         

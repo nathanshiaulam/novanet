@@ -12,16 +12,15 @@ import UIKit
 class EventAttendanceButton: UIButton {
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!
-        self.layer.cornerRadius = 5.0;
-        let cornerRadius : CGFloat = 0.0
         
-        self.setTitleColor(Utilities().UIColorFromHex(0x4e5665, alpha: 1.0), forState: UIControlState.Normal)
-        self.setTitleColor(UIColor.lightGrayColor(), forState: UIControlState.Highlighted)
-
-        self.backgroundColor = Utilities().UIColorFromHex(0xf6f7f8, alpha: 1.0);
-        self.layer.borderWidth = 1.0;
-        self.layer.borderColor = UIColor.grayColor().CGColor
-        self.layer.cornerRadius = cornerRadius
+        self.setTitleColor(Utilities().UIColorFromHex(0x879494, alpha: 1.0), forState: UIControlState.Normal)
+        self.setTitleColor(Utilities().UIColorFromHex(0xFC6706, alpha: 1.0), forState: UIControlState.Highlighted)
+        self.setTitleColor(Utilities().UIColorFromHex(0xFC6706, alpha: 1.0), forState: UIControlState.Selected)
+        
+        self.titleLabel!.font = UIFont(name: "OpenSans", size: 12.0)
+        
+        self.backgroundColor = UIColor.whiteColor();
+        self.layer.borderWidth = 0.0;
         
     }
 }

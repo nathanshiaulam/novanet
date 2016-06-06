@@ -14,17 +14,115 @@ class EventAttendanceVC:  ViewController, UITableViewDelegate, UITableViewDataSo
     
     @IBOutlet var tableView: UITableView!
     
+    @IBAction func goingClicked(sender: UIButton) {
+        self.maybeButton.selected = false
+        self.notGoingButton.selected = false
+        
+        self.maybeButton.titleLabel?.textColor = Utilities().UIColorFromHex(0x879494, alpha: 1.0)
+        self.notGoingButton.titleLabel?.textColor = Utilities().UIColorFromHex(0x879494, alpha: 1.0)
+
+        self.maybeCount.textColor = Utilities().UIColorFromHex(0x879494, alpha: 1.0)
+        self.notGoingCount.textColor = Utilities().UIColorFromHex(0x879494, alpha: 1.0)
+        
+        self.goingCount.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+        self.goingButton.titleLabel?.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+        self.goingButton.selected = true
+
+        activeList = goingList
+        
+        self.tableView.reloadData()
+
+
+    }
+    @IBAction func maybeClicked(sender: UIButton) {
+        self.goingButton.selected = false
+        self.notGoingButton.selected = false
+        
+        self.goingCount.textColor = Utilities().UIColorFromHex(0x879494, alpha: 1.0)
+        self.notGoingCount.textColor = Utilities().UIColorFromHex(0x879494, alpha: 1.0)
+        
+        self.maybeButton.titleLabel?.textColor = Utilities().UIColorFromHex(0x879494, alpha: 1.0)
+        self.notGoingButton.titleLabel?.textColor = Utilities().UIColorFromHex(0x879494, alpha: 1.0)
+        
+        self.maybeCount.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+        self.maybeButton.titleLabel?.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+        self.maybeButton.selected = true
+        
+        activeList = maybeList
+        
+        self.tableView.reloadData()
+        
+    }
+    @IBAction func notGoingClicked(sender: UIButton) {
+        self.goingButton.selected = false
+        self.maybeButton.selected = false
+        
+        self.goingCount.textColor = Utilities().UIColorFromHex(0x879494, alpha: 1.0)
+        self.maybeCount.textColor = Utilities().UIColorFromHex(0x879494, alpha: 1.0)
+        
+        self.goingCount.textColor = Utilities().UIColorFromHex(0x879494, alpha: 1.0)
+        self.maybeCount.textColor = Utilities().UIColorFromHex(0x879494, alpha: 1.0)
+        
+        self.notGoingCount.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+        self.notGoingButton.titleLabel?.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+        self.notGoingButton.selected = true
+
+        activeList = notGoingList
+        
+        self.tableView.reloadData()
+        
+    }
+    
+    @IBOutlet weak var notGoingButton: EventAttendanceButton!
+    @IBOutlet weak var maybeButton: EventAttendanceButton!
+    @IBOutlet weak var goingButton: EventAttendanceButton!
+    
+    @IBOutlet weak var notGoingCount: UILabel!
+    @IBOutlet weak var maybeCount: UILabel!
+    @IBOutlet weak var goingCount: UILabel!
+    
+    @IBOutlet weak var eventOrganizer: UILabel!
+    @IBOutlet weak var eventTitle: UILabel!
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
-    var userList:[PFObject] = [PFObject]();
+    
+    var activeList:[PFObject] = [PFObject]();
+    var goingList:[PFObject] = [PFObject]();
+    var maybeList:[PFObject] = [PFObject]();
+    var notGoingList:[PFObject] = [PFObject]();
     var imageList = [UIImage?]()
     var nextImage:UIImage? = UIImage()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        maybeButton.layoutIfNeeded()
+        let leftLine:UIView = UIView(frame: CGRectMake(1, 2.5, 1.5, maybeButton.frame.size.height - 5.0))
+        let rightLine:UIView = UIView(frame: CGRectMake(maybeButton.frame.size.width - 1, 2.5, 1.5, maybeButton.frame.size.height - 5.0))
+        
+        
+        leftLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
+        rightLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
+        
+        maybeButton.addSubview(leftLine)
+        maybeButton.addSubview(rightLine)
+        
+        self.goingCount.text = String(goingList.count)
+        self.maybeCount.text = String(maybeList.count)
+        self.notGoingCount.text = String(notGoingList.count)
+        
+        self.goingButton.selected = true
+        self.goingCount.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+        
+        self.activeList = goingList
         manageiOSModelType()
 
     }
 
+    override func viewDidAppear(animated: Bool) {
+        loadList()
+        super.viewDidAppear(true)
+    }
+    
     @IBAction func backPressed(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil);
     }
@@ -33,12 +131,26 @@ class EventAttendanceVC:  ViewController, UITableViewDelegate, UITableViewDataSo
         // Dispose of any resources that can be recreated.
     }
     
+    func loadList() {
+        if goingButton.selected == true {
+            self.goingCount.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+            activeList = goingList
+        }
+        else if maybeButton.selected == true {
+            self.maybeCount.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+            activeList = maybeList
+        }
+        else {
+            self.notGoingCount.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+            activeList = notGoingList
+        }
+    }
     /*-------------------------------- TABLE VIEW METHODS ------------------------------------*/
     
     // Return the number of rows in the section.
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return userList.count;
+        return activeList.count;
     }
     
     // Return the number of sections.
@@ -50,9 +162,9 @@ class EventAttendanceVC:  ViewController, UITableViewDelegate, UITableViewDataSo
         let cell = tableView.dequeueReusableCellWithIdentifier("ProfileCell", forIndexPath: indexPath) as! HomeTableViewCell
         manageiOSModelTypeCellLabels(cell);
         formatLabels(cell);
-        imageList = [UIImage?](count: userList.count, repeatedValue: nil);
-        if (userList.count > 0) {
-            let profile: AnyObject = userList[indexPath.row];
+        imageList = [UIImage?](count: activeList.count, repeatedValue: nil);
+        if (activeList.count > 0) {
+            let profile: AnyObject = activeList[indexPath.row];
             
             cell.name.text = profile["Name"] as? String;
             cell.experience.text = profile["Experience"] as? String;
@@ -84,8 +196,8 @@ class EventAttendanceVC:  ViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if (userList.count > 0) {
-            let profile: AnyObject = userList[indexPath.row]
+        if (activeList.count > 0) {
+            let profile: AnyObject = activeList[indexPath.row]
             let image: UIImage! = imageList[indexPath.row] as UIImage!
             
             if ((image) != nil) {

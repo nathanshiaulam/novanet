@@ -62,7 +62,7 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
         tapGestureRecognizer.delegate = self;
         self.profileImage.addGestureRecognizer(tapGestureRecognizer);
         self.profileImage.userInteractionEnabled = true;
-        self.tabBarController?.navigationItem.title = "Profile";
+        self.tabBarController?.navigationItem.title = "PROFILE";
 
         picker.delegate = self;
         bot = self.nameBottomToAbout.constant - 5;
@@ -82,7 +82,7 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
             self.tabBarController?.selectedIndex = 0;
             return;
         }
-        self.tabBarController?.navigationItem.title = "Profile";
+        self.tabBarController?.navigationItem.title = "PROFILE";
 
         setValues();
         super.viewDidAppear(true);

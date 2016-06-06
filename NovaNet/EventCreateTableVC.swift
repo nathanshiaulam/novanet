@@ -59,13 +59,14 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         }
     }
     override func viewDidLoad() {
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: "endEditing:"));
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:))));
         tableView.allowsSelection = false;
+        self.navigationController?.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         
         descField.text = Constants.ConstantStrings.placeHolderDesc;
         descField.textColor = UIColor.lightGrayColor()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "saveNewLocation:", name: "saveNewLocation", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(EventCreateTableVC.saveNewLocation(_:)), name: "saveNewLocation", object: nil)
         if marker == nil {
             addressCell.hidden = true;
         }
@@ -91,18 +92,21 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
             datePickerView.date = currDate!;
         }
         sender.inputView = datePickerView
-        datePickerView.addTarget(self, action: Selector("handleDatePicker:"), forControlEvents: UIControlEvents.ValueChanged)
+        datePickerView.addTarget(self, action: #selector(EventCreateTableVC.handleDatePicker(_:)), forControlEvents: UIControlEvents.ValueChanged)
         handleDatePicker(datePickerView);
         
     }
     
     func saveNewLocation(notification: NSNotification?) {
-        marker = notification?.valueForKey("object") as? GMSMarker;
-        self.eventField.text = marker!.title;
-        let lat = marker.position.latitude;
-        let lon = marker.position.longitude;
+        marker = notification?.valueForKey("object") as? GMSMarker
+        let placeName = marker!.title
+        let placeTokens = placeName.characters.split{$0 == ","}.map(String.init)
         
-        let location = CLLocation(latitude: lat, longitude: lon);
+        self.eventField.text = placeTokens[0]
+        let lat = marker.position.latitude
+        let lon = marker.position.longitude
+        
+        let location = CLLocation(latitude: lat, longitude: lon)
         
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
             (placemarks, error) -> Void in
@@ -134,7 +138,7 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
     /* TABLEVIEW DELEGATE METHODS*/
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 3 && descField.textColor != UIColor.lightGrayColor(){
+        if indexPath.section == 1 && descField.textColor != UIColor.lightGrayColor(){
             return descField.frame.height + 20;
         } else {
             return self.tableView.rowHeight;

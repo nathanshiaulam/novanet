@@ -84,11 +84,11 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
     }
     
     override func viewDidLoad() {
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: "endEditing:"));
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:))));
         tableView.allowsSelection = false;
         
         prepareView()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "saveNewLocation:", name: "saveNewLocation", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(EventEditTableVC.saveNewLocation(_:)), name: "saveNewLocation", object: nil)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -111,17 +111,19 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
             datePickerView.date = currDate!;
         }
         sender.inputView = datePickerView
-        datePickerView.addTarget(self, action: Selector("handleDatePicker:"), forControlEvents: UIControlEvents.ValueChanged)
+        datePickerView.addTarget(self, action: #selector(EventEditTableVC.handleDatePicker(_:)), forControlEvents: UIControlEvents.ValueChanged)
         handleDatePicker(datePickerView);
         
     }
     
     func saveNewLocation(notification: NSNotification?) {
         marker = notification?.valueForKey("object") as? GMSMarker;
-        self.eventField.text = marker!.title;
         let lat = marker.position.latitude;
         let lon = marker.position.longitude;
+        let placeName = marker!.title
+        let placeTokens = placeName.characters.split{$0 == ","}.map(String.init)
         
+        self.eventField.text = placeTokens[0]
         let location = CLLocation(latitude: lat, longitude: lon);
         
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
@@ -141,6 +143,7 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
     }
     
     func prepareView() {
+        self.navigationController?.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateStyle = NSDateFormatterStyle.LongStyle;
         dateFormatter.timeStyle = NSDateFormatterStyle.LongStyle;
@@ -158,7 +161,11 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
         marker.title = selectedEvent["EventName"] as? String
         marker.position.latitude = lat
         marker.position.longitude = lon
-        eventField.text = selectedEvent["EventName"] as? String
+        
+        let placeName = marker!.title
+        let placeTokens = placeName.characters.split{$0 == ","}.map(String.init)
+        
+        self.eventField.text = placeTokens[0]
         let location = CLLocation(latitude: lat, longitude: lon)
         
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
@@ -190,7 +197,7 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
     /* TABLEVIEW DELEGATE METHODS*/
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 3 && descField.textColor != UIColor.lightGrayColor(){
+        if indexPath.section == 1 && descField.textColor != UIColor.lightGrayColor(){
             return descField.frame.height + 20;
         } else {
             return self.tableView.rowHeight;

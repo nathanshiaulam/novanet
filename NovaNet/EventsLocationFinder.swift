@@ -16,6 +16,7 @@ class EventsLocationFinder: ViewController, UISearchBarDelegate, LocateOnTheMap 
     let placesClient = GMSPlacesClient()
     var selectedLocation:GMSMarker!;
     
+    @IBOutlet weak var setEventButton: UIButton!
     
     @IBOutlet weak var googleMapsView: GMSMapView!
     
@@ -49,10 +50,10 @@ class EventsLocationFinder: ViewController, UISearchBarDelegate, LocateOnTheMap 
 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-       
+        setEventButton.layer.cornerRadius = 5.0
         searchResultController = EventsSearchResults()
         searchResultController.delegate = self
-        
+        self.navigationController?.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         if selectedLocation == nil {
             centerOnSelf();
         } else {

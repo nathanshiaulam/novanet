@@ -125,7 +125,7 @@ class NetworkManager: NSObject {
                 let username = user!.username;
                 PFUser.logInWithUsernameInBackground(username!!, password: password) {
                     (success, error) -> Void in
-                    if (user != nil) {
+                    if (error == nil && user != nil) {
                         vc.defaults.setObject(vc.usernameField.text, forKey: Constants.UserKeys.usernameKey);
                         
                         let query = PFQuery(className:"Profile");

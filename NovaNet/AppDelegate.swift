@@ -38,6 +38,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     // Sets up local datastore
                     let fromNew:Bool = (profile["New"] as? Bool)!
                     if (!fromNew) {
+                        profile["Available"] = true
+                        
                         self.defaults.setObject(profile["Name"], forKey: Constants.UserKeys.nameKey)
                         self.defaults.setObject(PFUser.currentUser()!.email, forKey: Constants.UserKeys.emailKey)
                         self.defaults.setObject(profile["InterestsList"], forKey: Constants.UserKeys.interestsKey)
@@ -64,6 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                 print(error);
                             }
                         }
+                        profile.saveInBackground()
                     }
                     
                 }
@@ -80,8 +83,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // Track an app open here if we launch with a push, unless
             // "content_available" was used to trigger a background push (introduced in iOS 7).
             // In that case, we skip tracking here to avoid double counting the app-open.
-            let preBackgroundPush = !application.respondsToSelector("backgroundRefreshStatus")
-            let oldPushHandlerOnly = !self.respondsToSelector("application:didReceiveRemoteNotification:fetchCompletionHandler:")
+            let preBackgroundPush = !application.respondsToSelector(Selector("backgroundRefreshStatus"))
+            let oldPushHandlerOnly = !self.respondsToSelector(#selector(UIApplicationDelegate.application(_:didReceiveRemoteNotification:fetchCompletionHandler:)))
             var pushPayload = false
             if let options = launchOptions {
                 pushPayload = options[UIApplicationLaunchOptionsRemoteNotificationKey] != nil
@@ -90,7 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
             }
         }
-        if application.respondsToSelector("registerUserNotificationSettings:") {
+        if application.respondsToSelector(#selector(UIApplication.registerUserNotificationSettings(_:))) {
             let settings = UIUserNotificationSettings(forTypes: [.Alert, .Badge, .Sound], categories: nil)
             UIApplication.sharedApplication().registerUserNotificationSettings(settings)
             application.registerForRemoteNotifications()
@@ -191,7 +194,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillEnterForeground(application: UIApplication) {
-        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        if (Utilities().userLoggedIn()) {
+            let query:PFQuery = PFQuery(className: "Profile");
+            let currentID = PFUser.currentUser()!.objectId;
+            query.whereKey("ID", equalTo:currentID!);
+            
+            query.getFirstObjectInBackgroundWithBlock {
+                (profile: PFObject?, error: NSError?) -> Void in
+                if (profile == nil || error != nil) {
+                    print(error);
+                } else if let profile = profile {
+                    let dateFormatter = NSDateFormatter()
+                    dateFormatter.dateFormat = "MM/dd/yyyy"
+                    profile["last_active"] = dateFormatter.stringFromDate(NSDate());
+                    profile["Available"] = true
+                    profile.saveInBackground();
+                    print(dateFormatter.stringFromDate(NSDate()));
+                }
+            }
+        }
+
     }
 
     func applicationDidBecomeActive(application: UIApplication) {

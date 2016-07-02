@@ -33,7 +33,7 @@ struct Constants {
         static let notificationPayloadKey = "notificationPayloadKey";
     }
     struct ConstantStrings {
-        static let greetingMessage = "I thought your background was really interesting and I'd love to meet up sometime soon. What's a good time for you this week?";
+        static let greetingMessage = "I saw you were in the same area as me. Would you like to meet up some time?";
         static let aboutText = "A sentence or two illustrating what you're about. Who are you in a nutshell?";
         static let loadText = "Please wait while we find other Novas nearby...";
         static let feedbackText = "Write your feedback or support request here. Try to be specific so we can address the issue as precisely as possible!";

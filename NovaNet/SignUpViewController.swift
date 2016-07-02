@@ -18,14 +18,14 @@ class SignUpViewController: ViewController {
     
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
-    @IBOutlet weak var usernameField: UITextField!
+    @IBOutlet weak var confirmPasswordField: UITextField!
     
     @IBOutlet weak var signupButton: UIButton!
     @IBAction func cancelFunction(sender: UIBarButtonItem) {
         self.dismissViewControllerAnimated(true, completion: nil);
     }
     @IBAction func signUpFunction(sender: UIButton) {
-        NetworkManager().createUser(usernameField.text!, password:passwordField.text!, email:emailField.text!, sender: self);
+        NetworkManager().createUser( emailField.text!, password:passwordField.text!, confPassword:confirmPasswordField.text!, sender: self);
     }
     
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
@@ -89,7 +89,7 @@ class SignUpViewController: ViewController {
     
     // Allows users to hit enter and move to the next text field
     func textFieldShouldReturn(textField: UITextField)-> Bool {
-        if (textField == usernameField) {
+        if (textField ==  confirmPasswordField) {
             emailField.becomeFirstResponder();
         }
         else if (textField == emailField) {
@@ -97,13 +97,13 @@ class SignUpViewController: ViewController {
             passwordField.becomeFirstResponder();
         }
         else {
-            let username:String = usernameField.text!.stringByTrimmingCharactersInSet(
+            let confPassword:String =  confirmPasswordField.text!.stringByTrimmingCharactersInSet(
                 NSCharacterSet.whitespaceAndNewlineCharacterSet())
             let password:String = passwordField.text!.stringByTrimmingCharactersInSet(
                 NSCharacterSet.whitespaceAndNewlineCharacterSet())
             let email:String = emailField.text!.stringByTrimmingCharactersInSet(
                 NSCharacterSet.whitespaceAndNewlineCharacterSet())
-            NetworkManager().createUser(username, password: password, email: email, sender: self);
+            NetworkManager().createUser(email, password: password, confPassword: confPassword, sender: self);
             textField.resignFirstResponder();
         }
         return false;
@@ -117,24 +117,24 @@ class SignUpViewController: ViewController {
         super.viewDidLoad()
         
         passwordField.secureTextEntry = true;
+        confirmPasswordField.secureTextEntry = true;
         bot = distFromSignInToBottom.constant - 20;
         signupButton.layer.cornerRadius = 5
-
-        var userFrameRect = usernameField.frame;
+        var confPasswordFramRect =  confirmPasswordField.frame;
         var passwordFrameRect = passwordField.frame;
         var emailFrameRect = emailField.frame;
 
-        userFrameRect.size.height = 200;
+        confPasswordFramRect.size.height = 200;
         passwordFrameRect.size.height = 200;
         emailFrameRect.size.height = 200;
         
         self.navigationController?.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         
-        usernameField.frame = userFrameRect;
+        confirmPasswordField.frame = confPasswordFramRect;
         passwordField.frame = passwordFrameRect;
         emailField.frame = emailFrameRect;
         
-        usernameField.layer.cornerRadius = 15;
+        confirmPasswordField.layer.cornerRadius = 15;
         passwordField.layer.cornerRadius = 15;
         emailField.layer.cornerRadius = 15;
  
@@ -150,10 +150,15 @@ class SignUpViewController: ViewController {
         passwordField.leftView = password_image
         passwordField.leftViewMode = UITextFieldViewMode.Always
         
+        let confirmPasswordImage = UIImageView(image: UIImage(named: "login_password.png"))
+        confirmPasswordImage.frame = CGRect(x: 0, y: 0, width: confirmPasswordImage.frame.width + 30, height: confirmPasswordImage.frame.height)
+        confirmPasswordImage.contentMode = UIViewContentMode.Center
+        confirmPasswordField.leftView = confirmPasswordImage
+        confirmPasswordField.leftViewMode = UITextFieldViewMode.Always
         
-        let usernameFieldPlaceholder = NSAttributedString(string: "Username", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
-        usernameField.attributedPlaceholder = usernameFieldPlaceholder;
-        usernameField.textColor = UIColor.whiteColor();
+        let  confirmPasswordFieldPlaceholder = NSAttributedString(string: "Confirm Password", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+         confirmPasswordField.attributedPlaceholder =  confirmPasswordFieldPlaceholder;
+         confirmPasswordField.textColor = UIColor.whiteColor();
         
         let passwordFieldPlaceholder = NSAttributedString(string: "Password", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
         passwordField.attributedPlaceholder = passwordFieldPlaceholder;
@@ -168,7 +173,6 @@ class SignUpViewController: ViewController {
         manageiOSModelType();
     }
     
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

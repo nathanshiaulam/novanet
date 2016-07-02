@@ -12,6 +12,8 @@ import Bolts
 
 class SystemSettingsTableViewController: TableViewController {
     
+    @IBOutlet weak var footerView: UIView!
+    @IBOutlet weak var logoutButton: UIButton!
     @IBAction func backButtonPressed(sender: UIBarButtonItem) {
         if (isValidEmail(emailField.text!)) {
             self.dismissViewControllerAnimated(true, completion: nil);
@@ -53,10 +55,36 @@ class SystemSettingsTableViewController: TableViewController {
         defaults.synchronize();
         self.dismissViewControllerAnimated(true, completion: nil);
     }
-    
+    func logoutUser(sender: UIButton) {
+        let query = PFQuery(className:"Profile")
+        let currentID = PFUser.currentUser()!.objectId
+        query.whereKey("ID", equalTo:currentID!)
+        
+        query.getFirstObjectInBackgroundWithBlock {
+            (profile: PFObject?, error: NSError?) -> Void in
+            if error != nil || profile == nil {
+                print(error);
+            } else if let profile = profile {
+                // Notes that the user is online
+                profile["Online"] = false
+                profile["Available"] = false
+                profile.saveInBackground()
+            }
+        }
+        PFUser.logOut()
+        
+        let dict = defaults.dictionaryRepresentation();
+        for key in dict.keys {
+            defaults.removeObjectForKey(key.debugDescription);
+        }
+        defaults.synchronize();
+        self.dismissViewControllerAnimated(true, completion: nil);
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad();
         
+        logoutButton.layer.cornerRadius = 5
         emailField.backgroundColor = UIColor.clearColor();
         let emailFieldPlaceholder = NSAttributedString(string: "E-Mail", attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         emailField.attributedPlaceholder = emailFieldPlaceholder;
@@ -70,6 +98,17 @@ class SystemSettingsTableViewController: TableViewController {
             defaults.setObject(Constants.ConstantStrings.greetingMessage, forKey: Constants.UserKeys.greetingKey);
             greetingTemplate.text = Constants.ConstantStrings.greetingMessage;
         }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Make footerview so it fill up size of the screen
+        // The button is aligned to bottom of the footerview
+        // using autolayout constraints
+        self.tableView.tableFooterView = nil
+        self.footerView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.tableView.frame.size.height - self.tableView.contentSize.height - self.footerView.frame.size.height)
+        self.tableView.tableFooterView = self.footerView
     }
     
     override func viewWillDisappear(animated: Bool) {

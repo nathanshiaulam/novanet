@@ -53,12 +53,19 @@ class NetworkManager: NSObject {
     }
     
     // Creates user with information
-    func createUser(username: String, password: String, email: String, sender: SignUpViewController) {
+    func createUser(email: String, password: String, confPassword: String, sender: SignUpViewController) {
         let newUser = PFUser();
         
         // Ensures that fields are not equal
-        if (username.characters.count == 0 || password.characters.count == 0 || email.characters.count == 0) {
-            let alert = UIAlertController(title: "Submission Failure", message: "Invalid username, password, or email", preferredStyle: UIAlertControllerStyle.Alert);
+        if (email.characters.count == 0 || password.characters.count == 0 || confPassword.characters.count == 0) {
+            let alert = UIAlertController(title: "Submission Failure", message: "Invalid password or email", preferredStyle: UIAlertControllerStyle.Alert);
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
+            sender.presentViewController(alert, animated: true, completion: nil);
+            return;
+        }
+        
+        if (password != confPassword) {
+            let alert = UIAlertController(title: "Submission Failure", message: "Your passwords don't match!", preferredStyle: UIAlertControllerStyle.Alert);
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
             sender.presentViewController(alert, animated: true, completion: nil);
             return;
@@ -67,10 +74,10 @@ class NetworkManager: NSObject {
         // Sets attributes of new users
         newUser.email = email;
         newUser.password = password;
-        newUser.username = username;
+        newUser.username = email;
 
         
-        defaults.setObject(username, forKey: Constants.UserKeys.usernameKey)
+        defaults.setObject(email, forKey: Constants.UserKeys.usernameKey)
         defaults.setObject(PFUser.currentUser()?.email, forKey: Constants.UserKeys.emailKey)
         defaults.setObject(25, forKey: Constants.UserKeys.distanceKey)
         defaults.setObject(true, forKey: Constants.TempKeys.fromNew)

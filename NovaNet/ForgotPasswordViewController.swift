@@ -12,7 +12,7 @@ import Bolts
 
 class ForgotPasswordViewController: ViewController {
 
-    @IBOutlet var emailField: TextField!
+    @IBOutlet var emailField: UITextField!
     @IBOutlet var buttonHeight: NSLayoutConstraint!
     var screenMovementHeightUp: CGFloat!;
     var screenMovementHeightDown: CGFloat!;
@@ -27,12 +27,32 @@ class ForgotPasswordViewController: ViewController {
         NetworkManager().sendResetPasswordEmail(emailField, sender: self);
     }
     
-    override func viewDidLoad() {
-        emailField.backgroundColor = UIColor.clearColor();
-        let emailFieldPlaceholder = NSAttributedString(string: "email", attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
-        emailField.attributedPlaceholder = emailFieldPlaceholder;
-        emailField.textColor = UIColor.blackColor();
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+    }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        var emailFrameRect = emailField.frame
+        emailFrameRect.size.height = 200
+        emailField.frame = emailFrameRect
+        emailField.layer.cornerRadius = 15
+        emailField.layer.borderWidth = 1.3
+        emailField.layer.borderColor = UIColor.lightGrayColor().CGColor
+        
+        self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
+        
+        let email_image = UIImageView(image: UIImage(named: "login_email.png"))
+        email_image.frame = CGRect(x: 0, y: 0, width: email_image.frame.width + 30, height: email_image.frame.height)
+        email_image.contentMode = UIViewContentMode.Center
+        emailField.leftView = email_image
+        emailField.leftViewMode = UITextFieldViewMode.Always
+        
+        let emailFieldPlaceholder = NSAttributedString(string: "Email", attributes: [NSForegroundColorAttributeName : UIColor.lightGrayColor()]);
+        emailField.attributedPlaceholder = emailFieldPlaceholder;
+        emailField.textColor = UIColor.lightGrayColor();
+
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ForgotPasswordViewController.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification, object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ForgotPasswordViewController.keyboardWillHide(_:)), name:UIKeyboardWillHideNotification, object: nil)
         
@@ -40,17 +60,6 @@ class ForgotPasswordViewController: ViewController {
         screenMovementHeightDown  = 0.0;
         manageiOSModelType();
     }
-    
-    override func viewDidLayoutSubviews() {
-        let border = CALayer()
-        let width = CGFloat(1.0)
-        border.borderColor = UIColor.lightGrayColor().CGColor
-        border.frame = CGRect(x: 0, y: emailField.frame.size.height - width, width:  emailField.frame.size.width, height: emailField.frame.size.height + 20)
-        
-        border.borderWidth = width
-        emailField.layer.addSublayer(border)
-    }
-
     
     func manageiOSModelType() {
         if (Constants.ScreenDimensions.screenHeight == 480) {

@@ -16,7 +16,9 @@ class ViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.willEnterForeground(_:)), name: UIApplicationDidFinishLaunchingNotification, object: nil)
 
     }
-    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return UIStatusBarStyle.LightContent;
+    }
     func willEnterForeground(notification: NSNotification!) {
         if (Utilities().userLoggedIn()) {
             let query:PFQuery = PFQuery(className: "Profile");

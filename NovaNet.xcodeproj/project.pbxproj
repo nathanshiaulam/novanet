@@ -76,7 +76,6 @@
 		16A0E73D1B5507BD00DDAE95 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16A0E73C1B5507BD00DDAE95 /* Social.framework */; };
 		16A0E7411B55096F00DDAE95 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7401B55096F00DDAE95 /* LogInViewController.swift */; };
 		16A0E7EC1B78CA1700DE06A9 /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7EB1B78CA1700DE06A9 /* ConversationTableViewCell.swift */; };
-		16A0E7F01B7CC39800DE06A9 /* IntroductionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7EF1B7CC39800DE06A9 /* IntroductionViewController.swift */; };
 		16A0E7F61B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E7F51B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift */; };
 		16A0E82A1B7E47D400DE06A9 /* SystemSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E8291B7E47D400DE06A9 /* SystemSettingsTableViewController.swift */; };
 		16A0E82E1B7E4DCD00DE06A9 /* FinderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E82D1B7E4DCD00DE06A9 /* FinderViewController.swift */; };
@@ -177,7 +176,6 @@
 		16A0E73C1B5507BD00DDAE95 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		16A0E7401B55096F00DDAE95 /* LogInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		16A0E7EB1B78CA1700DE06A9 /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
-		16A0E7EF1B7CC39800DE06A9 /* IntroductionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IntroductionViewController.swift; path = ../IntroductionViewController.swift; sourceTree = "<group>"; };
 		16A0E7F51B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinishOnboardingViewController.swift; sourceTree = "<group>"; };
 		16A0E8291B7E47D400DE06A9 /* SystemSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemSettingsTableViewController.swift; sourceTree = "<group>"; };
 		16A0E82D1B7E4DCD00DE06A9 /* FinderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinderViewController.swift; sourceTree = "<group>"; };
@@ -231,7 +229,6 @@
 		160B9C051BCF763400316AF3 /* OnboardingProcess */ = {
 			isa = PBXGroup;
 			children = (
-				16A0E7EF1B7CC39800DE06A9 /* IntroductionViewController.swift */,
 				16D333601BCADE1600C1B405 /* OnboardingTableViewController.swift */,
 				160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */,
 				16A0E7F51B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift */,
@@ -635,7 +632,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16A0E7F01B7CC39800DE06A9 /* IntroductionViewController.swift in Sources */,
 				16A0E7F61B7CDCEE00DE06A9 /* FinishOnboardingViewController.swift in Sources */,
 				16C1C8C91B7F5F5000C6166C /* ConversationListTableViewController.swift in Sources */,
 				163B198A1CF9214800E0A469 /* TextView.swift in Sources */,

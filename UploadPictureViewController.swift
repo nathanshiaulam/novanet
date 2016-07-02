@@ -178,9 +178,9 @@ class UploadPictureViewController: ViewController, UIGestureRecognizerDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad();
         bot = self.continueDistFromBot.constant - 10;
-        self.title = "3 of 4";
+        self.title = "2 of 2";
         // Initializes gesture recognizer
-        let tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tappedImage");
+        let tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UploadPictureViewController.tappedImage));
         tapGestureRecognizer.delegate = self;
         self.uploadedImage.addGestureRecognizer(tapGestureRecognizer);
         self.uploadedImage.userInteractionEnabled = true;

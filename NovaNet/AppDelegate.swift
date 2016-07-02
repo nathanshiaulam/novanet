@@ -18,6 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
     var posted:Bool = false;
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        UIApplication.sharedApplication().statusBarStyle = .LightContent
+        
         Parse.enableLocalDatastore()
         Parse.setApplicationId("ni7bpwOhWr114Rom27cx4QSv27Ud3tyMl0tZchxw",
             clientKey: "NqfIkHWioqiH93TsSijAvcoMNzWDgyx8Z9hoLJL2")

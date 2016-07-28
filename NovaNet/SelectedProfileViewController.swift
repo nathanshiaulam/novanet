@@ -18,40 +18,19 @@ class SelectedProfileViewController: ViewController {
     @IBOutlet weak var aboutLabel: UILabel!
     @IBOutlet weak var experienceLabel: UILabel!
     
-    @IBOutlet weak var distanceArrow: UIImageView!
     @IBOutlet weak var firstInterestLabel: UILabel!
     @IBOutlet weak var secondInterestLabel: UILabel!
     @IBOutlet weak var thirdInterestLabel: UILabel!
     
     @IBOutlet weak var lookingForLabel: UILabel!
-
     @IBOutlet weak var distLabel: UILabel!
-    @IBOutlet weak var distHeader: UILabel!
+    @IBOutlet weak var chatButton: UIButton!
     
-    @IBOutlet weak var seekingHeaderLabel: UILabel!
-    @IBOutlet weak var interestsHeaderLabel: UILabel!
-    @IBOutlet weak var professionHeaderLabel: UILabel!
-    
-    /*-------------------------------- CONSTRAINTS ------------------------------------*/
-    @IBOutlet weak var profileImageHeight: NSLayoutConstraint!
-    @IBOutlet weak var profileImageWidth: NSLayoutConstraint!
-    
-    @IBOutlet weak var graySeparatorWidth: NSLayoutConstraint!
-    @IBOutlet weak var graySeparatorHeight: NSLayoutConstraint!
-    @IBOutlet weak var chatButtonHeight: NSLayoutConstraint!
-    @IBOutlet weak var nameBottomToAbout: NSLayoutConstraint!
-    @IBOutlet weak var profileImageNameDist: NSLayoutConstraint!
-    @IBOutlet weak var profileImageTopDist: NSLayoutConstraint!
+    @IBOutlet weak var distanceArrow: UIImageView!
+
     var image:UIImage? = nil
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
-    var bot:CGFloat!;
-    var otherBot:CGFloat!;
-    var thirdBot:CGFloat!;
-    var fourthBot:CGFloat!;
-    var fifthBot:CGFloat!;
-    var sixthBot:CGFloat!;
     var fromMessage:Bool! = false;
-    
     
     @IBAction func chatButtonPressed(sender: UIButton) {
         self.performSegueWithIdentifier("toMessageVC", sender: self)
@@ -66,6 +45,24 @@ class SelectedProfileViewController: ViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad();
+        
+        let dotOne = UIImageView(image: UIImage(named: "orangeDot.png"))
+        dotOne.frame = CGRectMake(-10 , firstInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
+        dotOne.contentMode = UIViewContentMode.Center
+        firstInterestLabel.addSubview(dotOne)
+        
+        let dotTwo = UIImageView(image: UIImage(named: "orangeDot.png"))
+        dotTwo.frame = CGRectMake(-10 , secondInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
+        dotTwo.contentMode = UIViewContentMode.Center
+        secondInterestLabel.addSubview(dotTwo)
+        
+        let dotThree = UIImageView(image: UIImage(named: "orangeDot.png"))
+        dotThree.frame = CGRectMake(-10 , firstInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
+        dotThree.contentMode = UIViewContentMode.Center
+        thirdInterestLabel.addSubview(dotThree)
+        
+        setValues()
+
         if (self.image != nil) {
             profileImage.image = image;
         } else {
@@ -73,20 +70,11 @@ class SelectedProfileViewController: ViewController {
         }
         self.view.backgroundColor = UIColor.whiteColor();
         self.navigationController?.navigationBar.backgroundColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
-        bot = self.nameBottomToAbout.constant - 5
-        otherBot = self.profileImageNameDist.constant/self.profileImageNameDist.multiplier - 5;
-        thirdBot = self.profileImageTopDist.constant - 10;
-        sixthBot = self.profileImageTopDist.constant + 5
-        fourthBot = self.profileImageNameDist.constant - 3;
-        setValues();
-        fifthBot = self.nameBottomToAbout.constant - 3;
-
     }
     
     override func viewDidLayoutSubviews() {
         formatImage(self.profileImage);
-        manageiOSModelType();
-        
+        getChangeLabelDict();
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
@@ -164,7 +152,16 @@ class SelectedProfileViewController: ViewController {
             experienceLabel.text = "What's your experience?"
         }
         if let lookingFor = defaults.stringForKey(Constants.SelectedUserKeys.selectedLookingForKey) {
-            lookingForLabel.text = lookingFor;
+            let seekingString = NSMutableAttributedString(string: lookingFor)
+            let seekingHeader = "Seeking // "
+            
+            let attrs:[String : AnyObject] =  [NSFontAttributeName : UIFont(name: "OpenSans-Semibold", size: Constants.MEDIUM_FONT_SIZE)!, NSForegroundColorAttributeName: Utilities().UIColorFromHex(0x879494, alpha: 1.0)]
+            
+            let boldedString = NSMutableAttributedString(string:seekingHeader, attributes:attrs)
+            
+            boldedString.appendAttributedString(seekingString)
+            
+            lookingForLabel.text = boldedString.string
             if (lookingFor.characters.count == 0) {
                 lookingForLabel.text = "Who are you looking for?"
             }
@@ -174,14 +171,13 @@ class SelectedProfileViewController: ViewController {
         
         if let dist: AnyObject = defaults.objectForKey(Constants.SelectedUserKeys.selectedDistanceKey) {
             distLabel.text = String(stringInterpolationSegment: dist) + "km";
+            chatButton.layer.cornerRadius = 5
         } else {
             distLabel.hidden = true
-            distHeader.hidden = true
             distanceArrow.hidden = true
         }
         if (fromMessage == true) {
             distLabel.hidden = true
-            distHeader.hidden = true
             distanceArrow.hidden = true
         }
         
@@ -207,87 +203,61 @@ class SelectedProfileViewController: ViewController {
     }
     
     // Edits font sizes and image constraints to fit in each mode
-    func manageiOSModelType() {
-        if (Constants.ScreenDimensions.screenHeight == 480) {
+    private func getChangeLabelDict() -> [CGFloat : [UILabel]]{
+        var fontDict:[CGFloat : [UILabel]] = [CGFloat : [UILabel]]()
+        
+        var doubleExtraSmallLabels:[UILabel] = [UILabel]()
+        var extraSmallLabels:[UILabel] = [UILabel]()
+        var smallLabels:[UILabel] = [UILabel]()
+        var mediumLabels:[UILabel] = [UILabel]()
+        var largeLabels:[UILabel] = [UILabel]()
+        var extraLargeLabels:[UILabel] = [UILabel]()
+        
+        switch Constants.ScreenDimensions.screenHeight {
+        case Constants.ScreenDimensions.IPHONE_4_HEIGHT:
+            doubleExtraSmallLabels.append(experienceLabel)
             
-            if (fromMessage != true) {
-                self.profileImageTopDist.constant = self.profileImageTopDist.constant - 17;
-                self.profileImageHeight.constant = 120;
-                self.profileImageWidth.constant = 120;
-            } else {
-                self.profileImageHeight.constant = 125;
-                self.profileImageWidth.constant = 125;
-            }
-            self.nameBottomToAbout.constant = bot;
-            self.profileImageNameDist.constant = otherBot;
-            self.graySeparatorHeight.constant = 8;
-            self.graySeparatorWidth.constant = 80;
-            if (chatButtonHeight != nil) {
-                self.chatButtonHeight.constant = 40;
-            }
-            self.profileImageTopDist.constant = sixthBot;
-
-            // Set font size of each label
-            self.nameLabel.font = self.nameLabel.font.fontWithSize(17.0);
-            self.aboutLabel.font = self.aboutLabel.font.fontWithSize(13.0);
-            self.experienceLabel.font = self.experienceLabel.font.fontWithSize(13.0);
-            self.firstInterestLabel.font = self.firstInterestLabel.font.fontWithSize(13.0);
-            self.secondInterestLabel.font = self.secondInterestLabel.font.fontWithSize(13.0);
-            self.thirdInterestLabel.font = self.thirdInterestLabel.font.fontWithSize(13.0);
-            self.lookingForLabel.font = self.lookingForLabel.font.fontWithSize(13.0);
-            self.professionHeaderLabel.font = self.professionHeaderLabel.font.fontWithSize(13.0);
-            self.interestsHeaderLabel.font = self.interestsHeaderLabel.font.fontWithSize(13.0);
-            self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(13.0);
-            self.distLabel.font = self.distLabel.font.fontWithSize(13.0);
-            self.distHeader.font = self.distHeader.font.fontWithSize(13.0);
-            return;
-        } else if (Constants.ScreenDimensions.screenHeight == 568) {
+            extraSmallLabels.append(firstInterestLabel)
+            extraSmallLabels.append(secondInterestLabel)
+            extraSmallLabels.append(thirdInterestLabel)
+            extraSmallLabels.append(aboutLabel)
+            extraSmallLabels.append(lookingForLabel)
             
-            self.profileImageTopDist.constant = thirdBot;
-            self.profileImageNameDist.constant = fourthBot;
-            self.profileImageHeight.constant = 150;
-            self.profileImageWidth.constant = 150;
-            self.nameBottomToAbout.constant = fifthBot;
-            if (chatButtonHeight != nil) {
-                self.chatButtonHeight.constant = 50;
-            }
-            self.profileImageTopDist.constant = 18;
-
-            // Set font size of each label
-            self.nameLabel.font = self.nameLabel.font.fontWithSize(20.0);
-            self.aboutLabel.font = self.aboutLabel.font.fontWithSize(15.0);
-            self.experienceLabel.font = self.experienceLabel.font.fontWithSize(15.0);
-            self.firstInterestLabel.font = self.firstInterestLabel.font.fontWithSize(15.0);
-            self.secondInterestLabel.font = self.secondInterestLabel.font.fontWithSize(15.0);
-            self.thirdInterestLabel.font = self.thirdInterestLabel.font.fontWithSize(15.0);
-            self.lookingForLabel.font = self.lookingForLabel.font.fontWithSize(15.0);
-            self.professionHeaderLabel.font = self.professionHeaderLabel.font.fontWithSize(15.0);
-            self.interestsHeaderLabel.font = self.interestsHeaderLabel.font.fontWithSize(15.0);
-            self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(15.0);
-            self.distLabel.font = self.distLabel.font.fontWithSize(15.0);
-            self.distHeader.font = self.distHeader.font.fontWithSize(15.0);
-            return;
-        } else if (Constants.ScreenDimensions.screenHeight == 667) {
-            if (chatButtonHeight != nil) {
-                self.chatButtonHeight.constant = 60;
-            }
-            self.profileImageTopDist.constant = 18;
-            self.profileImageHeight.constant = 175;
-            self.profileImageWidth.constant = 175;
-            return; // Do nothing because designed on iPhone 6 viewport
-        } else if (Constants.ScreenDimensions.screenHeight == 736) {
-            if (chatButtonHeight != nil) {
-                self.chatButtonHeight.constant = 60;
-            }
-            self.profileImageTopDist.constant = 20;
-            self.profileImageHeight.constant = 200;
-            self.profileImageWidth.constant = 200;
+            smallLabels.append(nameLabel)
+            break
+        case Constants.ScreenDimensions.IPHONE_6_HEIGHT:
+            smallLabels.append(experienceLabel)
             
-            return;
+            mediumLabels.append(firstInterestLabel)
+            mediumLabels.append(secondInterestLabel)
+            mediumLabels.append(thirdInterestLabel)
+            mediumLabels.append(aboutLabel)
+            mediumLabels.append(lookingForLabel)
+            
+            largeLabels.append(nameLabel)
+            break
+        case Constants.ScreenDimensions.IPHONE_6_PLUS_HEIGHT:
+            mediumLabels.append(experienceLabel)
+            
+            largeLabels.append(firstInterestLabel)
+            largeLabels.append(secondInterestLabel)
+            largeLabels.append(thirdInterestLabel)
+            largeLabels.append(aboutLabel)
+            largeLabels.append(lookingForLabel)
+            
+            extraLargeLabels.append(nameLabel)
+            break
+        default:
+            break
         }
-
+        
+        fontDict[Constants.XXSMALL_FONT_SIZE] = doubleExtraSmallLabels
+        fontDict[Constants.XSMALL_FONT_SIZE] = extraSmallLabels
+        fontDict[Constants.SMALL_FONT_SIZE] = smallLabels
+        fontDict[Constants.MEDIUM_FONT_SIZE] = mediumLabels
+        fontDict[Constants.LARGE_FONT_SIZE] = largeLabels
+        fontDict[Constants.XLARGE_FONT_SIZE] = extraLargeLabels
+        
+        return fontDict
     }
-
-   
-
 }

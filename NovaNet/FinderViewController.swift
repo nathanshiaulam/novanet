@@ -72,6 +72,8 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FinderViewController.loadAndRefreshData), name: "loadAndRefreshData", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FinderViewController.phoneVibrate), name: "phoneVibrate", object: nil)
+         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FinderViewController.selectProfileVC), name: "selectProfileVC", object: nil)
+        
         byDist = true
         self.tabBarController?.navigationItem.leftBarButtonItem = nil
 
@@ -218,7 +220,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
 
             }
             // Formats image into circle
-            formatImage(cell.profileImage)
+            Utilities().formatImage(cell.profileImage)
         }
         return cell
     }
@@ -303,6 +305,10 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
             return true
         }
         return false
+    }
+    
+    func selectProfileVC() {
+        self.tabBarController?.selectedIndex = 3
     }
     
     func manageiOSModelTypeCellLabels(cell: HomeTableViewCell) {
@@ -439,14 +445,6 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         defaults.setObject(profile["Available"], forKey: Constants.SelectedUserKeys.selectedAvailableKey)
         defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey)
 
-    }
-    
-
-    
-    // Formats image into circle if the image is a square *should probably crop to square first*
-    func formatImage( profileImage: UIImageView) {
-        profileImage.layer.cornerRadius = profileImage.frame.size.width / 2
-        profileImage.clipsToBounds = true
     }
 
     // formats labels for each cell

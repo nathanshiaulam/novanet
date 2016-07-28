@@ -29,27 +29,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var addEventButton: UIBarButtonItem!
     @IBOutlet var tableView: UITableView!
     
-//
-//    @IBAction func segmentValueChanged(sender: UISegmentedControl) {
-//        if sender.selectedSegmentIndex == 0 {
-//            self.tableView.addSubview(eventHeaderView);
-//            self.tableView.frame =
-//                CGRectMake(0, 0, self.tableView.frame.width, self.tableView.frame.height + 30)
-//            refreshControl.removeTarget(self, action: #selector(EventsFinderTableVC.findSavedEvents), forControlEvents: UIControlEvents.ValueChanged)
-//            refreshControl.addTarget(self, action: #selector(EventsFinderTableVC.findAllEvents), forControlEvents: UIControlEvents.ValueChanged)
-//            findAllEvents();
-//            
-//        } else {
-//            eventHeaderView.removeFromSuperview()
-//            self.tableView.frame =
-//                CGRectMake(0, 0 - eventHeaderView.frame.height, self.tableView.frame.width, self.tableView.frame.height + 30)
-//            refreshControl.removeTarget(self, action: #selector(EventsFinderTableVC.findAllEvents), forControlEvents: UIControlEvents.ValueChanged)
-//            refreshControl.addTarget(self, action: #selector(EventsFinderTableVC.findSavedEvents), forControlEvents: UIControlEvents.ValueChanged)
-//            findSavedEvents();
-//            
-//        }
-//        
-//    }
     @IBAction func findLocalEvents(sender: UIButton) {
         if localEvents == false {
             localEvents = true;

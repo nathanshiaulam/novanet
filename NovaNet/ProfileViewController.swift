@@ -13,79 +13,75 @@ import Parse
 class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate,UINavigationControllerDelegate {
     
     @IBOutlet weak var profileImage: UIImageView!
-    
     @IBOutlet weak var nameLabel: UILabel!
-    
     @IBOutlet weak var aboutLabel: UILabel!
-    
     @IBOutlet weak var experienceLabel: UILabel!
-
     @IBOutlet weak var firstInterestLabel: UILabel!
     @IBOutlet weak var secondInterestLabel: UILabel!
     @IBOutlet weak var thirdInterestLabel: UILabel!
-    
     @IBOutlet weak var lookingForLabel: UILabel!
     
-    @IBOutlet weak var seekingHeaderLabel: UILabel!
-    @IBOutlet weak var professionHeaderLabel: UILabel!
-    @IBOutlet weak var interestsHeaderLabel: UILabel!
     @IBOutlet weak var editLabel: UIButton!
-    let picker = UIImagePickerController();
-    var popover:UIPopoverController? = nil;
+    let picker = UIImagePickerController()
+    var popover:UIPopoverController? = nil
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
     
-    /*-------------------------------- CONSTRAINTS ------------------------------------*/
-    
-    // Creates dictionary of subviews for constraint adjustment
-    var bot:CGFloat!;
-    var otherBot:CGFloat!;
-    
-    // Profile Image Constraints
-    @IBOutlet weak var profileImageTopDist: NSLayoutConstraint!
-    @IBOutlet weak var profileImageHeight: NSLayoutConstraint!
-    @IBOutlet weak var profileImageWidth: NSLayoutConstraint!
-    @IBOutlet weak var profileImageNameDist: NSLayoutConstraint!
-    
-    // Gray Separator Constraints
-    @IBOutlet weak var graySeparatorHeight: NSLayoutConstraint!
-    @IBOutlet weak var graySeparatorWidth: NSLayoutConstraint!
-    
-    @IBOutlet weak var nameBottomToAbout: NSLayoutConstraint!
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = UIColor.whiteColor();
+        let dotOne = UIImageView(image: UIImage(named: "orangeDot.png"))
+        dotOne.frame = CGRectMake(-10, firstInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
+        dotOne.contentMode = UIViewContentMode.Center
+        firstInterestLabel.addSubview(dotOne)
+        
+        let dotTwo = UIImageView(image: UIImage(named: "orangeDot.png"))
+        dotTwo.frame = CGRectMake(-10, secondInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
+        dotTwo.contentMode = UIViewContentMode.Center
+        secondInterestLabel.addSubview(dotTwo)
+        
+        let dotThree = UIImageView(image: UIImage(named: "orangeDot.png"))
+        dotThree.frame = CGRectMake(-10, thirdInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
+        dotThree.contentMode = UIViewContentMode.Center
+        thirdInterestLabel.addSubview(dotThree)
+        
+        self.view.backgroundColor = UIColor.whiteColor()
+        
         // Allows user to upload photo
-        let tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "tappedImage");
-        tapGestureRecognizer.delegate = self;
-        self.profileImage.addGestureRecognizer(tapGestureRecognizer);
-        self.profileImage.userInteractionEnabled = true;
-        self.tabBarController?.navigationItem.title = "PROFILE";
+        let tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.tappedImage))
+        tapGestureRecognizer.delegate = self
 
-        picker.delegate = self;
-        bot = self.nameBottomToAbout.constant - 5;
-        otherBot = self.profileImageNameDist.constant/self.profileImageNameDist.multiplier - 5;
-        setValues();
+        self.profileImage.addGestureRecognizer(tapGestureRecognizer)
+        self.profileImage.userInteractionEnabled = true
+        self.tabBarController?.navigationItem.title = "PROFILE"
+        
+        editLabel.layer.cornerRadius = 5
+        
+        picker.delegate = self
+        setValues()
+
     }
     
     override func viewWillLayoutSubviews() {
-        Utilities().formatImage(self.profileImage);
-        manageiOSModelType()
+        let fontDict:[CGFloat : [UILabel]] = getChangeLabelDict()
+        
+        Utilities.manageFontSizes(fontDict)
+        Utilities().formatImage(self.profileImage)
     }
     
     override func viewDidAppear(animated: Bool) {
         
         // Go to login page if no user logged in
-        if (!self.userLoggedIn()) {
-            self.tabBarController?.selectedIndex = 0;
-            return;
+        if (!NetworkManager.userLoggedIn()) {
+            self.tabBarController?.selectedIndex = 0
+            return
         }
-        self.tabBarController?.navigationItem.title = "PROFILE";
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileViewController.setValues), name: "setValues", object: nil)
 
-        setValues();
-        super.viewDidAppear(true);
+        self.tabBarController?.navigationItem.title = "PROFILE"
+
+        super.viewDidAppear(true)
     }
     
     
@@ -94,89 +90,72 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
         // Dispose of any resources that can be recreated.
     }
     
-    
-
-    
-    
-
-    
     /*-------------------------------- HELPER METHODS ------------------------------------*/
     
-    // Checks if user is logged in
-    func userLoggedIn() -> Bool{
-        let currentUser = PFUser.currentUser();
-        if ((currentUser) != nil) {
-            return true;
-        }
-        return false;
-    }
-    
-    // Edits font sizes and image constraints to fit in each mode
-    func manageiOSModelType() {
+    private func getChangeLabelDict() -> [CGFloat : [UILabel]]{
+        var fontDict:[CGFloat : [UILabel]] = [CGFloat : [UILabel]]()
         
+        var doubleExtraSmallLabels:[UILabel] = [UILabel]()
+        var extraSmallLabels:[UILabel] = [UILabel]()
+        var smallLabels:[UILabel] = [UILabel]()
+        var mediumLabels:[UILabel] = [UILabel]()
+        var largeLabels:[UILabel] = [UILabel]()
+        var extraLargeLabels:[UILabel] = [UILabel]()
+        
+        switch Constants.ScreenDimensions.screenHeight {
+        case Constants.ScreenDimensions.IPHONE_4_HEIGHT:
+            doubleExtraSmallLabels.append(experienceLabel)
+            
+            extraSmallLabels.append(firstInterestLabel)
+            extraSmallLabels.append(secondInterestLabel)
+            extraSmallLabels.append(thirdInterestLabel)
+            extraSmallLabels.append(aboutLabel)
+            extraSmallLabels.append(lookingForLabel)
 
-        if (Constants.ScreenDimensions.screenHeight == 480) {
-                
-                self.profileImageTopDist.constant = 10;
-                self.profileImageHeight.constant = 130;
-                self.profileImageWidth.constant = 130;
-                self.nameBottomToAbout.constant = bot;
-                self.profileImageNameDist.constant = otherBot;
-                
-                // Set font size of each label
-                self.nameLabel.font = self.nameLabel.font.fontWithSize(20.0);
-                self.editLabel.titleLabel!.font = self.editLabel.titleLabel!.font.fontWithSize(10.0);
-                self.aboutLabel.font = self.aboutLabel.font.fontWithSize(13.0);
-                self.experienceLabel.font = self.experienceLabel.font.fontWithSize(13.0);
-                self.firstInterestLabel.font = self.firstInterestLabel.font.fontWithSize(13.0);
-                self.secondInterestLabel.font = self.secondInterestLabel.font.fontWithSize(13.0);
-                self.thirdInterestLabel.font = self.thirdInterestLabel.font.fontWithSize(13.0);
-                self.lookingForLabel.font = self.lookingForLabel.font.fontWithSize(13.0);
-                self.professionHeaderLabel.font = self.professionHeaderLabel.font.fontWithSize(13.0);
-                self.interestsHeaderLabel.font = self.interestsHeaderLabel.font.fontWithSize(13.0);
-                self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(13.0);
-                
-                return;
-        } else if (Constants.ScreenDimensions.screenHeight == 568) {
-                self.profileImageTopDist.constant = 20;
-                self.profileImageHeight.constant = 150;
-                self.profileImageWidth.constant = 150;
-                
-                // Set font size of each label
-                self.nameLabel.font = self.nameLabel.font.fontWithSize(23.0);
-                self.editLabel.titleLabel!.font = self.editLabel.titleLabel!.font.fontWithSize(13.0);
-                self.aboutLabel.font = self.aboutLabel.font.fontWithSize(16.0);
-                self.experienceLabel.font = self.experienceLabel.font.fontWithSize(16.0);
-                self.firstInterestLabel.font = self.firstInterestLabel.font.fontWithSize(16.0);
-                self.secondInterestLabel.font = self.secondInterestLabel.font.fontWithSize(16.0);
-                self.thirdInterestLabel.font = self.thirdInterestLabel.font.fontWithSize(16.0);
-                self.lookingForLabel.font = self.lookingForLabel.font.fontWithSize(16.0);
-                self.professionHeaderLabel.font = self.professionHeaderLabel.font.fontWithSize(16.0);
-                self.interestsHeaderLabel.font = self.interestsHeaderLabel.font.fontWithSize(16.0);
-                self.seekingHeaderLabel.font = self.seekingHeaderLabel.font.fontWithSize(16.0);
-
-                return;
-        } else if (Constants.ScreenDimensions.screenHeight == 667) {
-                self.profileImageTopDist.constant = 10;
-                self.profileImageHeight.constant = 200;
-                self.profileImageWidth.constant = 200;
-                return; // Do nothing because designed on iPhone 6 viewport
-        } else if (Constants.ScreenDimensions.screenHeight == 736) {
-                self.profileImageTopDist.constant = 30;
-                self.profileImageHeight.constant = 225;
-                self.profileImageWidth.constant = 225;
-
-                return;
+            smallLabels.append(nameLabel)
+            smallLabels.append(editLabel.titleLabel!)
+            break
+        case Constants.ScreenDimensions.IPHONE_6_HEIGHT:
+            smallLabels.append(experienceLabel)
+            
+            mediumLabels.append(firstInterestLabel)
+            mediumLabels.append(secondInterestLabel)
+            mediumLabels.append(thirdInterestLabel)
+            mediumLabels.append(aboutLabel)
+            mediumLabels.append(lookingForLabel)
+            
+            largeLabels.append(nameLabel)
+            break
+        case Constants.ScreenDimensions.IPHONE_6_PLUS_HEIGHT:
+            mediumLabels.append(experienceLabel)
+            
+            largeLabels.append(firstInterestLabel)
+            largeLabels.append(secondInterestLabel)
+            largeLabels.append(thirdInterestLabel)
+            largeLabels.append(aboutLabel)
+            largeLabels.append(lookingForLabel)
+            
+            extraLargeLabels.append(nameLabel)
+            break
+        default:
+            break
         }
-    }
+        
+        fontDict[Constants.XXSMALL_FONT_SIZE] = doubleExtraSmallLabels
+        fontDict[Constants.XSMALL_FONT_SIZE] = extraSmallLabels
+        fontDict[Constants.SMALL_FONT_SIZE] = smallLabels
+        fontDict[Constants.MEDIUM_FONT_SIZE] = mediumLabels
+        fontDict[Constants.LARGE_FONT_SIZE] = largeLabels
+        fontDict[Constants.XLARGE_FONT_SIZE] = extraLargeLabels
 
-    
+        return fontDict
+    }
     
     // Sets all values of the user profile fields
-    func setValues() {
+    @objc private func setValues() {
         
         if let name = defaults.stringForKey(Constants.UserKeys.nameKey) {
-            nameLabel.text = name;
+            nameLabel.text = name
             if name.characters.count == 0 {
                 nameLabel.text = "Name"
             }
@@ -184,7 +163,7 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
             nameLabel.text = "Name"
         }
         if let about = defaults.stringForKey(Constants.UserKeys.aboutKey) {
-            aboutLabel.text = about;
+            aboutLabel.text = about
             if about.characters.count == 0 {
                 aboutLabel.text = "A sentence or two illustrating what you're about. Who are you, in a nutshell?"
             }
@@ -192,7 +171,7 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
             aboutLabel.text = "A sentence or two illustrating what you're about. Who are you, in a nutshell?"
         }
         if let interests = defaults.arrayForKey(Constants.UserKeys.interestsKey) {
-            var interestsArr = interests;
+            var interestsArr = interests
             if (interestsArr.count == 0) {
                 firstInterestLabel.text = "What are your interests?"
             } else {
@@ -206,11 +185,11 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
                 } else  {
                     numInterests = interestsArr.count
                 }
-                for (var i = 0; i < numInterests; i++) {
+                for i in 0..<numInterests {
                     let interest = interestsArr[i] as? String
                     interestsLabelArr[i].text = interest!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
                 }
-                for (var i = numInterests; i < interestsLabelArr.count; i++) {
+                for i in 0..<interestsLabelArr.count{
                     interestsLabelArr[i].text = ""
                 }
                 let firstInterest = interestsArr[0] as? String
@@ -221,7 +200,7 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
             
         }
         if let experience = defaults.stringForKey(Constants.UserKeys.experienceKey) {
-            experienceLabel.text = experience;
+            experienceLabel.text = experience
             if (experience.characters.count == 0) {
                 experienceLabel.text = "What's your experience?"
             }
@@ -229,7 +208,16 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
             experienceLabel.text = "What's your experience?"
         }
         if let lookingFor = defaults.stringForKey(Constants.UserKeys.lookingForKey) {
-            lookingForLabel.text = lookingFor;
+            let seekingString = NSMutableAttributedString(string: lookingFor)
+            let seekingHeader = "Seeking // "
+            
+            let attrs:[String : AnyObject] =  [NSFontAttributeName : UIFont(name: "OpenSans-Bold", size: Constants.SMALL_FONT_SIZE)!, NSForegroundColorAttributeName: Utilities().UIColorFromHex(0x879494, alpha: 1.0)]
+            
+            let boldedString = NSMutableAttributedString(string:seekingHeader, attributes:attrs)
+            
+            boldedString.appendAttributedString(seekingString)
+            
+            lookingForLabel.text = boldedString.string
             if (lookingFor.characters.count == 0) {
                 lookingForLabel.text = "Who are you looking for?"
             }
@@ -237,30 +225,29 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
             lookingForLabel.text = "Who are you looking for?"
         }
         
-        experienceLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
-        experienceLabel.sizeToFit();
+        experienceLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        experienceLabel.sizeToFit()
         
-        nameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
-        nameLabel.sizeToFit();
+        nameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        nameLabel.sizeToFit()
         
-        firstInterestLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
-        firstInterestLabel.sizeToFit();
+        firstInterestLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        firstInterestLabel.sizeToFit()
         
-        secondInterestLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
-        secondInterestLabel.sizeToFit();
+        secondInterestLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        secondInterestLabel.sizeToFit()
 
-        thirdInterestLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
-        thirdInterestLabel.sizeToFit();
+        thirdInterestLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        thirdInterestLabel.sizeToFit()
 
-        lookingForLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
-        lookingForLabel.sizeToFit();
+        lookingForLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        lookingForLabel.sizeToFit()
         
-//        self.title = "";
-        self.profileImage.image = Utilities().readImage();
+        self.profileImage.image = Utilities().readImage()
     }
     
     func tappedImage() {
-        let alert:UIAlertController = UIAlertController(title: "Choose an Image", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet);
+        let alert:UIAlertController = UIAlertController(title: "Choose an Image", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
         
         let galleryAction = UIAlertAction(title: "Upload a Photo", style: UIAlertActionStyle.Default)
             {
@@ -277,9 +264,9 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
                 UIAlertAction in
         }
         // Add the actions
-        alert.addAction(galleryAction);
-        alert.addAction(cameraAction);
-        alert.addAction(cancelAction);
+        alert.addAction(galleryAction)
+        alert.addAction(cameraAction)
+        alert.addAction(cancelAction)
         
         // Present the actionsheet
         self.presentViewController(alert, animated: true, completion: nil)
@@ -292,7 +279,7 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
         }
         else
         {
-            popover = UIPopoverController(contentViewController: picker);
+            popover = UIPopoverController(contentViewController: picker)
             popover?.presentPopoverFromRect(profileImage.frame, inView: self.view, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
         }
     }
@@ -310,39 +297,23 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
     }
     
     /*-------------------------------- Image Picker Delegate Methods ------------------------------------*/
-
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        picker.dismissViewControllerAnimated(true, completion: nil);
-        profileImage.image = info[UIImagePickerControllerOriginalImage] as? UIImage;
+        picker.dismissViewControllerAnimated(true, completion: nil)
+        profileImage.image = info[UIImagePickerControllerOriginalImage] as? UIImage
         
-        Utilities().saveImage(profileImage.image!);
+        Utilities().saveImage(profileImage.image!)
         
     }
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        picker.dismissViewControllerAnimated(true, completion: nil);
-        print("Picker cancel.");
+        picker.dismissViewControllerAnimated(true, completion: nil)
+        print("Picker cancel.")
     }
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
 
         profileImage.image = image
         self.dismissViewControllerAnimated(true, completion: { () -> Void in})
-        
          
-        Utilities().saveImage(profileImage.image!);
-
-        
+        Utilities().saveImage(profileImage.image!)
     }
-
-    
-        /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

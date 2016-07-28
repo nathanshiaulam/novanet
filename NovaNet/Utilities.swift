@@ -59,18 +59,20 @@ class Utilities: NSObject {
     }
     // Methods to read and write images from local data store/Parse
     func readImage() -> UIImage {
+        var oldImage =  UIImage(named: "selectImage")!
+        
         let relativePath = NSUserDefaults.standardUserDefaults().stringForKey(Constants.UserKeys.profileImageKey)
         let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-        let fullPath = NSURL(fileURLWithPath: paths).URLByAppendingPathComponent(relativePath!).absoluteString;
-        let truncatedPath = fullPath.substringFromIndex(fullPath.startIndex.advancedBy(7));
-        var oldImage = UIImage();
-        if (fileManager.fileExistsAtPath(truncatedPath)) {
-            oldImage = UIImage(contentsOfFile: truncatedPath)!
-        } else {
-            oldImage = UIImage(named: "selectImage")!;
+        if (relativePath != nil) {
+            let fullPath = NSURL(fileURLWithPath: paths).URLByAppendingPathComponent(relativePath!).absoluteString
+            let truncatedPath = fullPath.substringFromIndex(fullPath.startIndex.advancedBy(7))
+            if (fileManager.fileExistsAtPath(truncatedPath)) {
+                oldImage = UIImage(contentsOfFile: truncatedPath)!
+            }
         }
-        return oldImage;
+        return oldImage
     }
+    
     func saveImage(image: UIImage) {
         let query = PFQuery(className:"Profile");
         let currentID = PFUser.currentUser()!.objectId;
@@ -96,19 +98,29 @@ class Utilities: NSObject {
                 profile.saveInBackground();
             }
         }
+        print(relativePath);
         NSUserDefaults.standardUserDefaults().setObject(relativePath, forKey: Constants.UserKeys.profileImageKey)
 //        NSUserDefaults.standardUserDefaults().synchronize()
     }
     
     // Methods to format image and convert RGB to hex
-    func formatImage( profileImage: UIImageView) {
+    func formatImage(profileImage: UIImageView) {
+        Utilities.formatImageWithWidth(profileImage, width: profileImage.frame.size.width)
+    }
+    
+    static func formatImageWithWidth(profileImage: UIImageView, width: CGFloat) {
         let croppedImage: UIImage = ImageUtil.cropToSquare(image: profileImage.image!)
         profileImage.image = croppedImage
-        profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
+        profileImage.layer.cornerRadius = width / 2;
         profileImage.clipsToBounds = true;
     }
-
     
-    
-
+    static func manageFontSizes(sizeToTextField: [CGFloat:[UILabel]]) {
+        for (fontSize, textLabels) in sizeToTextField {
+            for i in 0..<textLabels.count {
+                let textLabel = textLabels[i]
+                textLabel.font = UIFont(name: textLabel.font!.fontName, size: fontSize)
+            }
+        }
+    }
 }

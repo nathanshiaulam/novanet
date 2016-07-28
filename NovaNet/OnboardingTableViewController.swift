@@ -20,6 +20,7 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     @IBOutlet weak var seekingCheck: UIImageView!
     
     
+    @IBOutlet weak var continueButton: UIButton!
     
     /* TEXTFIELDS */
     @IBOutlet weak var nameField: UITextField!
@@ -49,8 +50,43 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     @IBOutlet weak var interestsFieldWidth: NSLayoutConstraint!
     @IBOutlet weak var professionFieldWidth: NSLayoutConstraint!
     
+    private let firstInterestPlaceholder = "Nova"
+    private let secondInterestPlaceholder = "Reading"
+    private let thirdInterestPlaceholder = "Sports"
+    
+    private let seekingPlaceholder = "Novas."
+    
     @IBAction func skipTutorial(sender: UIButton) {
-        
+        if (nameField.text?.characters.count > 0 && experienceField.text?.characters.count > 0) {
+            
+            if interestFieldOne.text?.characters.count == 0 {
+                interestFieldOne.text = firstInterestPlaceholder
+            }
+            if interestFieldTwo.text?.characters.count == 0 {
+                interestFieldTwo.text = secondInterestPlaceholder
+            }
+            if interestFieldThree.text?.characters.count == 0 {
+                interestFieldThree.text = thirdInterestPlaceholder
+            }
+            if lookingForField.text?.characters.count == 0 {
+                lookingForField.text = seekingPlaceholder
+            }
+            
+            
+            saveTempImage()
+            prepareDataStore()
+            saveProfile()
+            
+            NSNotificationCenter.defaultCenter().postNotificationName("selectProfileVC", object: nil)
+            NetworkManager().onboardingComplete()
+            
+            self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+
+        } else {
+            let alert = UIAlertController(title: "Empty Field", message: "In order to skip, please tell us your name and profession.", preferredStyle: UIAlertControllerStyle.Alert);
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
+            self.presentViewController(alert, animated: true, completion: nil);
+        }
     }
     // Prepares local datastore for profile information and saves profile;
     @IBAction func continueButtonPressed(sender: UIButton) {
@@ -67,13 +103,23 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
             capitalizeTextFieldLetter(interestFieldThree)
             capitalizeTextViewLetter(aboutField)
 
-            prepareDataStore();
-            saveProfile();
+            prepareDataStore()
+            saveProfile()
         } else {
             let alert = UIAlertController(title: "Empty Field", message: "Please enter all essential fields.", preferredStyle: UIAlertControllerStyle.Alert);
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
             self.presentViewController(alert, animated: true, completion: nil);
         }
+    }
+    
+    private func saveTempImage() {
+        let tempImage = UIImageView(image: UIImage(named: "selectImage"))
+        Utilities().saveImage(tempImage.image!)
+    }
+    
+    // Takes user back to homeview after coming from uploadProfilePictureVC
+    func backToHomeView() {
+        self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil);
     }
     
     private func capitalizeTextFieldLetter(textField: UITextField) {
@@ -87,14 +133,24 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
         super.viewDidLoad();
         self.title = "1 of 2";
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None;
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(OnboardingTableViewController.backToHomeView), name: "backToHomeView", object: nil);
         
-        tableView.allowsSelection = false;
-        manageiOSModelType();
-        prepareTextFields();
+        continueButton.layer.cornerRadius = 5
+        nameCheck.hidden = true
+        professionCheck.hidden = true
+        aboutCheck.hidden = true
+        interestCheck.hidden = true
+        seekingCheck.hidden = true
+        self.tableView.tableHeaderView = nil
+        tableView.allowsSelection = false
+        manageiOSModelType()
+        prepareTextFields()
+        self.tableView.reloadData()
+
     }
     
     override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(true);
+        super.viewDidAppear(true)
     }
     
     /* TEXTVIEW DELEGATE METHODS*/
@@ -115,6 +171,11 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
             aboutCheck.hidden = false
         }
     }
+    func textViewShouldReturn(textView: UITextView!) -> Bool {
+        self.view.endEditing(true)
+        interestFieldOne.becomeFirstResponder()
+        return true;
+    }
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         let maxtext = 80
         //If the text is larger than the maxtext, the return is false
@@ -127,15 +188,25 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     // Allows users to hit enter and move to the next text field
     func textFieldShouldReturn(textField: UITextField)-> Bool {
         if (textField == nameField) {
-            aboutField.becomeFirstResponder();
+            experienceField.becomeFirstResponder();
         }
         else if (textField == experienceField) {
             textField.resignFirstResponder()
-            interestFieldOne.becomeFirstResponder();
+            aboutField.becomeFirstResponder();
         }
-        else {
-            textField.resignFirstResponder();
+        if (textField == interestFieldOne) {
+            textField.resignFirstResponder()
+            interestFieldTwo.becomeFirstResponder()
+        } else if (textField == interestFieldTwo) {
+            textField.resignFirstResponder()
+            interestFieldThree.becomeFirstResponder()
+        } else if (textField == interestFieldThree) {
+            textField.resignFirstResponder()
+            lookingForField.becomeFirstResponder()
+        } else {
+            textField.resignFirstResponder()
         }
+        
         return false;
     }
     
@@ -233,7 +304,7 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
             "InterestsList" : interestsArr as AnyObject,
             "Experience" : experienceField.text! as AnyObject,
             "Looking" : lookingForField.text! as AnyObject,
-            "Distance" : 25 as AnyObject,
+            "Distance" : Constants.DISCOVERY_RADIUS as AnyObject,
             "Available" : true as AnyObject,
             "Online" : true as AnyObject
         ];
@@ -244,7 +315,7 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
             Constants.UserKeys.interestsKey : interestsArr,
             Constants.UserKeys.experienceKey : experienceField.text,
             Constants.UserKeys.lookingForKey : lookingForField.text,
-            Constants.UserKeys.distanceKey : 25,
+            Constants.UserKeys.distanceKey : Constants.DISCOVERY_RADIUS,
             Constants.UserKeys.availableKey : true
         ];
         
@@ -261,6 +332,7 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
         defaults.setObject(interestsArr, forKey: Constants.UserKeys.interestsKey);
         defaults.setObject(lookingForField.text, forKey: Constants.UserKeys.lookingForKey);
         defaults.setBool(true, forKey: Constants.UserKeys.availableKey);
+        defaults.setBool(false, forKey: Constants.TempKeys.fromNew);
     }
     
     func prepareTextFields() {
@@ -278,53 +350,53 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
         aboutField.font = UIFont(name: "OpenSans", size: 16);
         
         interestFieldOne.backgroundColor = UIColor.clearColor();
-        let interestsFieldOnePlaceholder = NSAttributedString(string: "Computer Science", attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
+        let interestsFieldOnePlaceholder = NSAttributedString(string: firstInterestPlaceholder, attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         interestFieldOne.attributedPlaceholder = interestsFieldOnePlaceholder;
         interestFieldOne.textColor = UIColor.blackColor();
         interestFieldOne.borderStyle = UITextBorderStyle.None
         interestFieldOne.font = UIFont(name: "OpenSans", size: 16);
         
         let dotOneImage = UIImageView(image: UIImage(named: "orangeDot.png"))
-        dotOneImage.frame = CGRect(x: 0, y: 0, width: dotOneImage.frame.width, height: dotOneImage.frame.height)
+        dotOneImage.frame = CGRect(x: 0, y: 0, width: dotOneImage.frame.width + 15, height: dotOneImage.frame.height)
         dotOneImage.contentMode = UIViewContentMode.Center
         interestFieldOne.leftView = dotOneImage
         interestFieldOne.leftViewMode = UITextFieldViewMode.Always
         
         interestFieldTwo.backgroundColor = UIColor.clearColor();
-        let interestsFieldTwoPlaceholder = NSAttributedString(string: "Entrepreneurship", attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
+        let interestsFieldTwoPlaceholder = NSAttributedString(string: secondInterestPlaceholder, attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         interestFieldTwo.attributedPlaceholder = interestsFieldTwoPlaceholder;
         interestFieldTwo.textColor = UIColor.blackColor();
         interestFieldTwo.borderStyle = UITextBorderStyle.None
         interestFieldTwo.font = UIFont(name: "OpenSans", size: 16);
         
         let dotTwoImage = UIImageView(image: UIImage(named: "orangeDot.png"))
-        dotTwoImage.frame = CGRect(x: 0, y: 0, width: dotTwoImage.frame.width, height: dotTwoImage.frame.height)
+        dotTwoImage.frame = CGRect(x: 0, y: 0, width: dotTwoImage.frame.width + 15, height: dotTwoImage.frame.height)
         dotTwoImage.contentMode = UIViewContentMode.Center
         interestFieldTwo.leftView = dotTwoImage
         interestFieldTwo.leftViewMode = UITextFieldViewMode.Always
         
         interestFieldThree.backgroundColor = UIColor.clearColor();
-        let interestsFieldThreePlaceholder = NSAttributedString(string: "Boxing", attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
+        let interestsFieldThreePlaceholder = NSAttributedString(string: thirdInterestPlaceholder, attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         interestFieldThree.attributedPlaceholder = interestsFieldThreePlaceholder;
         interestFieldThree.textColor = UIColor.blackColor();
         interestFieldThree.borderStyle = UITextBorderStyle.None
         interestFieldThree.font = UIFont(name: "OpenSans", size: 16)
         
         let dotThreeImage = UIImageView(image: UIImage(named: "orangeDot.png"))
-        dotThreeImage.frame = CGRect(x: 0, y: 0, width: dotThreeImage.frame.width, height: dotThreeImage.frame.height)
+        dotThreeImage.frame = CGRect(x: 0, y: 0, width: dotThreeImage.frame.width + 15, height: dotThreeImage.frame.height)
         dotThreeImage.contentMode = UIViewContentMode.Center
         interestFieldThree.leftView = dotThreeImage
         interestFieldThree.leftViewMode = UITextFieldViewMode.Always
         
         experienceField.backgroundColor = UIColor.clearColor();
-        let backgroundFieldPlaceholder = NSAttributedString(string: "e.g. Systems Engineer", attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
+        let backgroundFieldPlaceholder = NSAttributedString(string: "e.g. systems engineer", attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         experienceField.attributedPlaceholder = backgroundFieldPlaceholder;
         experienceField.textColor = UIColor.blackColor();
         experienceField.borderStyle = UITextBorderStyle.None
         experienceField.font = UIFont(name: "OpenSans", size: 16);
         
         lookingForField.backgroundColor = UIColor.clearColor();
-        let goalsFieldPlaceholder = NSAttributedString(string: "What are you looking for?", attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
+        let goalsFieldPlaceholder = NSAttributedString(string: seekingPlaceholder, attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         lookingForField.attributedPlaceholder = goalsFieldPlaceholder;
         lookingForField.textColor = UIColor.blackColor();
         lookingForField.borderStyle = UITextBorderStyle.None
@@ -344,10 +416,10 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
         // return the number of rows
         return 7
     }
-
     
-  
-    
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

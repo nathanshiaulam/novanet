@@ -14,6 +14,30 @@ import Parse
 class NetworkManager: NSObject {
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
     
+    static func userLoggedIn() -> Bool{
+        let currentUser = PFUser.currentUser()
+        if ((currentUser) != nil) {
+            return true
+        }
+        return false
+    }
+    
+    func onboardingComplete() {
+        let query = PFQuery(className:"Profile");
+        let currentID = PFUser.currentUser()!.objectId;
+        query.whereKey("ID", equalTo:currentID!);
+        
+        query.getFirstObjectInBackgroundWithBlock {
+            (profile: PFObject?, error: NSError?) -> Void in
+            if (error != nil || profile == nil) {
+                print(error);
+            } else if let profile = profile {
+                profile["New"] = false;
+                profile.saveInBackground();
+            }
+        }
+    }
+    
     func updateObjectWithName(name: String, profileFields: Dictionary<String, AnyObject>, dataStoreFields: Dictionary<String, Any>, segueType: String, sender: UIViewController) {
         let query = PFQuery(className: name);
         let currentID = PFUser.currentUser()!.objectId;
@@ -42,7 +66,6 @@ class NetworkManager: NSObject {
         
     }
     
-
     func createProfile() {
         let newProfile = PFObject(className: "Profile");
         newProfile["ID"] = PFUser.currentUser()!.objectId;
@@ -113,7 +136,6 @@ class NetworkManager: NSObject {
 
         // If either the username or password field are empty, alert user
         if (emailLen == 0 || passwordLen == 0) {
-            print("logged")
             let alert = UIAlertController(title: "Submission Failure", message: "Invalid email or password", preferredStyle: UIAlertControllerStyle.Alert);
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
             vc.presentViewController(alert, animated: true, completion: nil);

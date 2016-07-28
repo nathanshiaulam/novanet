@@ -25,40 +25,48 @@ class UploadPictureViewController: ViewController, UIGestureRecognizerDelegate, 
     @IBOutlet weak var imageWidth: NSLayoutConstraint!
     @IBOutlet weak var subWelcomeLabel: UILabel!
     
+    @IBOutlet weak var finishButton: UIButton!
     // Finish button clicked, store all information and dismiss VC
     @IBAction func finishedOnboarding(sender: UIButton) {
-        // Indicate that the user has finished onboarding and can have access to app
-        defaults.setObject(false, forKey: Constants.TempKeys.fromNew);
         
-        // Saves image to local datastore and preps image to store into Parse
+        if uploadedImage.image != nil {
+            // Indicate that the user has finished onboarding and can have access to app
+            defaults.setObject(false, forKey: Constants.TempKeys.fromNew);
+        
+            // Saves image to local datastore and preps image to store into Parse
        
-        Utilities().saveImage(uploadedImage.image!);
-        onboardingComplete();
-        
+            Utilities().saveImage(uploadedImage.image!);
+            
+            NSNotificationCenter.defaultCenter().postNotificationName("selectProfileVC", object: nil)
+            NSNotificationCenter.defaultCenter().postNotificationName("backToHomeView", object: nil);
+            
+            NetworkManager().onboardingComplete()
+            
+            self.navigationController?.popToRootViewControllerAnimated(true);
+        } else {
+            let alert = UIAlertController(title: "Upload an Image", message: "Please upload an image first.", preferredStyle: UIAlertControllerStyle.Alert);
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
+            self.presentViewController(alert, animated: true, completion: nil);
+        }
     }
     
+    @IBAction func skipUpload(sender: AnyObject) {
+        saveTempImage()
+        NSNotificationCenter.defaultCenter().postNotificationName("selectProfileVC", object: nil)
+        NSNotificationCenter.defaultCenter().postNotificationName("backToHomeView", object: nil)
+        NetworkManager().onboardingComplete()
+        self.navigationController?.popToRootViewControllerAnimated(true);
+    }
     // Prepares local data store and image picker
     let picker = UIImagePickerController();
     var popover:UIPopoverController? = nil;
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
     
     /*-------------------------------- HELPER METHODS ------------------------------------*/
-    
-    func onboardingComplete() {
-        let query = PFQuery(className:"Profile");
-        let currentID = PFUser.currentUser()!.objectId;
-        query.whereKey("ID", equalTo:currentID!);
-        
-        query.getFirstObjectInBackgroundWithBlock {
-            (profile: PFObject?, error: NSError?) -> Void in
-            if (error != nil || profile == nil) {
-                print(error);
-            } else if let profile = profile {
-                profile["New"] = false;
-                self.defaults.setObject(false, forKey: Constants.TempKeys.fromNew);
-                profile.saveInBackground();
-            }
-        }
+ 
+    private func saveTempImage() {
+        var tempImage = UIImageView(image: UIImage(named: "selectImage"))
+        Utilities().saveImage(tempImage.image!)
     }
     
     func manageiOSModelType() {
@@ -89,14 +97,6 @@ class UploadPictureViewController: ViewController, UIGestureRecognizerDelegate, 
             imageWidth.constant = 250
             return;
         }
-    }
-
-    
-    func formatImage(profileImage: UIImageView) {
-        let croppedImage: UIImage = ImageUtil.cropToSquare(image: profileImage.image!)
-        profileImage.image = croppedImage
-        profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
-        profileImage.clipsToBounds = true;
     }
 
     // If image tapped, prompt user to upload or take photos
@@ -180,13 +180,13 @@ class UploadPictureViewController: ViewController, UIGestureRecognizerDelegate, 
         bot = self.continueDistFromBot.constant - 10;
         self.title = "2 of 2";
         // Initializes gesture recognizer
-        let tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UploadPictureViewController.tappedImage));
+        let tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UploadPictureViewController.tappedImage))
         tapGestureRecognizer.delegate = self;
         self.uploadedImage.addGestureRecognizer(tapGestureRecognizer);
         self.uploadedImage.userInteractionEnabled = true;
-        
         // Initializes the delegate of the picker to the view controller
         picker.delegate = self
+        finishButton.layer.cornerRadius = 5
         
     }
     override func viewDidLayoutSubviews() {

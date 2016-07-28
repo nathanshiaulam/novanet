@@ -89,12 +89,12 @@ class SignUpViewController: ViewController {
     
     // Allows users to hit enter and move to the next text field
     func textFieldShouldReturn(textField: UITextField)-> Bool {
-        if (textField ==  confirmPasswordField) {
-            emailField.becomeFirstResponder();
-        }
-        else if (textField == emailField) {
-            textField.resignFirstResponder()
+        if (textField ==  emailField) {
             passwordField.becomeFirstResponder();
+        }
+        else if (textField == passwordField) {
+            textField.resignFirstResponder()
+            confirmPasswordField.becomeFirstResponder();
         }
         else {
             let confPassword:String =  confirmPasswordField.text!.stringByTrimmingCharactersInSet(

@@ -130,10 +130,10 @@ class SelectedProfileViewController: ViewController {
                 } else  {
                     numInterests = interestsArr.count
                 }
-                for (var i = 0; i < numInterests; i++) {
+                for i in 0..<numInterests {
                     interestsLabelArr[i].text = interestsArr[i] as? String
                 }
-                for (var i = numInterests; i < interestsLabelArr.count; i++) {
+                for i in numInterests..<interestsLabelArr.count {
                     interestsLabelArr[i].text = ""
                 }
                 let firstInterest = interestsArr[0] as? String

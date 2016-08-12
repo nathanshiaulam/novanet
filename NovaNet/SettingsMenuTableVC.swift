@@ -360,16 +360,11 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
             aboutField.textColor = Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0);
         }
         
+        let interestsFields = [interestFieldOne, interestFieldTwo, interestFieldThree]
         if let interests = defaults.arrayForKey(Constants.UserKeys.interestsKey) {
             var interestsArr = interests;
             for i in 0..<interestsArr.count {
-                if i == 0 {
-                    interestFieldOne.text = interestsArr[i] as? String
-                } else if i == 1 {
-                    interestFieldTwo.text = interestsArr[i] as? String
-                } else {
-                    interestFieldThree.text = interestsArr[i] as? String
-                }
+                interestsFields[i].text = interestsArr[i] as? String
             }
 
         }
@@ -382,15 +377,6 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         self.profileImage.image = Utilities().readImage();
     }
     
-    
-//    @IBOutlet weak var nameField: UITextField!
-//    @IBOutlet weak var experienceField: UITextField!
-//    @IBOutlet weak var lookingForField: UITextField!
-//    @IBOutlet weak var aboutField: UITextView!
-//    var activeField:UITextField = UITextField();
-//    @IBOutlet weak var interestFieldOne: UITextField!
-//    @IBOutlet weak var interestFieldTwo: UITextField!
-//    @IBOutlet weak var interestFieldThree: UITextField!
     private func getChangeLabelDict() -> [CGFloat : [UILabel]]{
         var fontDict:[CGFloat : [UILabel]] = [CGFloat : [UILabel]]()
         

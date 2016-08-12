@@ -41,15 +41,6 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     @IBOutlet weak var aboutHeaderLabel: UILabel!
     @IBOutlet weak var nameHeaderLabel: UILabel!
     
-    /* CONSTRAINTS */
-    
-    @IBOutlet weak var nameFieldWidth: NSLayoutConstraint!
-    @IBOutlet weak var buttonHeight: NSLayoutConstraint!
-    @IBOutlet weak var aboutFieldWidth: NSLayoutConstraint!
-    @IBOutlet weak var seekingFieldWidth: NSLayoutConstraint!
-    @IBOutlet weak var interestsFieldWidth: NSLayoutConstraint!
-    @IBOutlet weak var professionFieldWidth: NSLayoutConstraint!
-    
     private let firstInterestPlaceholder = "Nova"
     private let secondInterestPlaceholder = "Reading"
     private let thirdInterestPlaceholder = "Sports"
@@ -71,8 +62,7 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
             if lookingForField.text?.characters.count == 0 {
                 lookingForField.text = seekingPlaceholder
             }
-            
-            
+              
             saveTempImage()
             prepareDataStore()
             saveProfile()
@@ -141,12 +131,12 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
         aboutCheck.hidden = true
         interestCheck.hidden = true
         seekingCheck.hidden = true
+        
         self.tableView.tableHeaderView = nil
         tableView.allowsSelection = false
-        manageiOSModelType()
+
         prepareTextFields()
         self.tableView.reloadData()
-
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -266,37 +256,15 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
 
     /* HELPER METHODS */
     
-    // Manages iOS sizes
-    func manageiOSModelType() {
-        if (Constants.ScreenDimensions.screenHeight == 480 || Constants.ScreenDimensions.screenHeight == 568) {
-            overallHeaderLabel.font = overallHeaderLabel.font.fontWithSize(19.0);
-            nameHeaderLabel.font = nameHeaderLabel.font.fontWithSize(19.0);
-            aboutHeaderLabel.font = aboutHeaderLabel.font.fontWithSize(19.0);
-            professionHeaderLabel.font = professionHeaderLabel.font.fontWithSize(19.0);
-            interestsHeaderLabel.font = interestsHeaderLabel.font.fontWithSize(19.0);
-            seekingHeaderLabel.font = seekingHeaderLabel.font.fontWithSize(19.0);
-            
-            nameFieldWidth.constant = 190;
-            aboutFieldWidth.constant = 195;
-            seekingFieldWidth.constant = 190;
-            interestsFieldWidth.constant = 190;
-            professionFieldWidth.constant = 190;
-            buttonHeight.constant = 45;
-            
-            return;
-        } else if (Constants.ScreenDimensions.screenHeight == 667) {
-            nameFieldWidth.constant = 250;
-            return; // Do nothing because designed on iPhone 6 viewport
-        } else if (Constants.ScreenDimensions.screenHeight == 736) {
-            overallHeaderLabel.font = overallHeaderLabel.font.fontWithSize(24.0);
-            nameFieldWidth.constant = 250;
-            return;
-        }
-    }
-    
     // Saves all necessary fields of the profile
     func saveProfile() {
-        let interestsArr:[String] = [interestFieldOne.text!, interestFieldTwo.text!, interestFieldThree.text!]
+        let tempInterestsArr:[String!] = [interestFieldOne.text!, interestFieldTwo.text!, interestFieldThree.text!]
+        var interestsArr:[String] = [String]()
+        for i in 0..<tempInterestsArr.count {
+            if tempInterestsArr[i] != nil && tempInterestsArr[i].characters.count > 0 {
+                interestsArr.append(trim(tempInterestsArr[i]!))
+            }
+        }
 
         let profileFields:Dictionary<String, AnyObject> = [
             "Name" : nameField.text! as AnyObject,
@@ -310,11 +278,11 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
         ];
         
         let dataStoreFields:Dictionary<String, Any> = [
-            Constants.UserKeys.nameKey : nameField.text,
-            Constants.UserKeys.aboutKey : aboutField.text,
+            Constants.UserKeys.nameKey : trim(nameField.text!),
+            Constants.UserKeys.aboutKey : trim(aboutField.text),
             Constants.UserKeys.interestsKey : interestsArr,
-            Constants.UserKeys.experienceKey : experienceField.text,
-            Constants.UserKeys.lookingForKey : lookingForField.text,
+            Constants.UserKeys.experienceKey : trim(experienceField.text!),
+            Constants.UserKeys.lookingForKey : trim(lookingForField.text!),
             Constants.UserKeys.distanceKey : Constants.DISCOVERY_RADIUS,
             Constants.UserKeys.availableKey : true
         ];
@@ -325,14 +293,25 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     
     // Sets up the user's local datastore for profile information. Online is already set at create
     func prepareDataStore() {
-        let interestsArr = [interestFieldOne.text!, interestFieldTwo.text!, interestFieldThree.text!]
-        defaults.setObject(nameField.text, forKey: Constants.UserKeys.nameKey);
-        defaults.setObject(aboutField.text, forKey: Constants.UserKeys.aboutKey);
-        defaults.setObject(experienceField.text, forKey: Constants.UserKeys.experienceKey);
+        let tempInterestsArr:[String!] = [interestFieldOne.text!, interestFieldTwo.text!, interestFieldThree.text!]
+        var interestsArr:[String] = [String]()
+        for i in 0..<tempInterestsArr.count {
+            if tempInterestsArr[i] != nil && tempInterestsArr[i].characters.count > 0 {
+                interestsArr.append(trim(tempInterestsArr[i]))
+            }
+        }
+        
+        defaults.setObject(trim(nameField.text!), forKey: Constants.UserKeys.nameKey);
+        defaults.setObject(trim(aboutField.text), forKey: Constants.UserKeys.aboutKey);
+        defaults.setObject(trim(experienceField.text!), forKey: Constants.UserKeys.experienceKey);
         defaults.setObject(interestsArr, forKey: Constants.UserKeys.interestsKey);
-        defaults.setObject(lookingForField.text, forKey: Constants.UserKeys.lookingForKey);
+        defaults.setObject(trim(lookingForField.text!), forKey: Constants.UserKeys.lookingForKey);
         defaults.setBool(true, forKey: Constants.UserKeys.availableKey);
         defaults.setBool(false, forKey: Constants.TempKeys.fromNew);
+    }
+    
+    func trim(val: String) -> String {
+        return val.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
     }
     
     func prepareTextFields() {
@@ -402,7 +381,79 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
         lookingForField.borderStyle = UITextBorderStyle.None
         lookingForField.font = UIFont(name: "OpenSans", size: 16);
     }
-
+    
+    private func getChangeLabelDict() -> [CGFloat : [UILabel]]{
+        var fontDict:[CGFloat : [UILabel]] = [CGFloat : [UILabel]]()
+        
+        var extraSmallLabels:[UILabel] = [UILabel]()
+        var smallLabels:[UILabel] = [UILabel]()
+        var mediumLabels:[UILabel] = [UILabel]()
+        var largeLabels:[UILabel] = [UILabel]()
+        
+        switch Constants.ScreenDimensions.screenHeight {
+        case Constants.ScreenDimensions.IPHONE_4_HEIGHT:
+            extraSmallLabels.append(seekingHeaderLabel)
+            extraSmallLabels.append(interestsHeaderLabel)
+            extraSmallLabels.append(professionHeaderLabel)
+            extraSmallLabels.append(aboutHeaderLabel)
+            extraSmallLabels.append(nameHeaderLabel)
+            
+            smallLabels.append(overallHeaderLabel)
+            smallLabels.append(continueButton.titleLabel!)
+            
+            nameField.font = UIFont(name: nameField.font!.fontName, size: Constants.XSMALL_FONT_SIZE)
+            experienceField.font = UIFont(name: experienceField.font!.fontName, size: Constants.XSMALL_FONT_SIZE)
+            lookingForField.font = UIFont(name: lookingForField.font!.fontName, size: Constants.XSMALL_FONT_SIZE)
+            aboutField.font = UIFont(name: aboutField.font!.fontName, size: Constants.XSMALL_FONT_SIZE)
+            activeField.font = UIFont(name: activeField.font!.fontName, size: Constants.XSMALL_FONT_SIZE)
+            interestFieldOne.font = UIFont(name: interestFieldOne.font!.fontName, size: Constants.XSMALL_FONT_SIZE)
+            interestFieldTwo.font = UIFont(name: interestFieldTwo.font!.fontName, size: Constants.XSMALL_FONT_SIZE)
+            interestFieldThree.font = UIFont(name: interestFieldThree.font!.fontName, size: Constants.XSMALL_FONT_SIZE)
+            break
+        case Constants.ScreenDimensions.IPHONE_6_HEIGHT:
+            mediumLabels.append(seekingHeaderLabel)
+            mediumLabels.append(interestsHeaderLabel)
+            mediumLabels.append(professionHeaderLabel)
+            mediumLabels.append(aboutHeaderLabel)
+            mediumLabels.append(nameHeaderLabel)
+            
+            largeLabels.append(overallHeaderLabel)
+            largeLabels.append(continueButton.titleLabel!)
+            nameField.font = UIFont(name: nameField.font!.fontName, size: Constants.MEDIUM_FONT_SIZE)
+            experienceField.font = UIFont(name: experienceField.font!.fontName, size: Constants.MEDIUM_FONT_SIZE)
+            lookingForField.font = UIFont(name: lookingForField.font!.fontName, size: Constants.MEDIUM_FONT_SIZE)
+            aboutField.font = UIFont(name: aboutField.font!.fontName, size: Constants.MEDIUM_FONT_SIZE)
+            activeField.font = UIFont(name: activeField.font!.fontName, size: Constants.MEDIUM_FONT_SIZE)
+            interestFieldOne.font = UIFont(name: interestFieldOne.font!.fontName, size: Constants.MEDIUM_FONT_SIZE)
+            interestFieldTwo.font = UIFont(name: interestFieldTwo.font!.fontName, size: Constants.MEDIUM_FONT_SIZE)
+            interestFieldThree.font = UIFont(name: interestFieldThree.font!.fontName, size: Constants.MEDIUM_FONT_SIZE)
+            break
+        case Constants.ScreenDimensions.IPHONE_6_PLUS_HEIGHT:
+            largeLabels.append(seekingHeaderLabel)
+            largeLabels.append(interestsHeaderLabel)
+            largeLabels.append(professionHeaderLabel)
+            largeLabels.append(aboutHeaderLabel)
+            largeLabels.append(nameHeaderLabel)
+            
+            nameField.font = UIFont(name: nameField.font!.fontName, size: Constants.LARGE_FONT_SIZE)
+            experienceField.font = UIFont(name: experienceField.font!.fontName, size: Constants.LARGE_FONT_SIZE)
+            lookingForField.font = UIFont(name: lookingForField.font!.fontName, size: Constants.LARGE_FONT_SIZE)
+            aboutField.font = UIFont(name: aboutField.font!.fontName, size: Constants.LARGE_FONT_SIZE)
+            activeField.font = UIFont(name: activeField.font!.fontName, size: Constants.LARGE_FONT_SIZE)
+            interestFieldOne.font = UIFont(name: interestFieldOne.font!.fontName, size: Constants.LARGE_FONT_SIZE)
+            interestFieldTwo.font = UIFont(name: interestFieldTwo.font!.fontName, size: Constants.LARGE_FONT_SIZE)
+            interestFieldThree.font = UIFont(name: interestFieldThree.font!.fontName, size: Constants.LARGE_FONT_SIZE)
+            break
+        default:
+            break
+        }
+        
+        fontDict[Constants.XSMALL_FONT_SIZE] = extraSmallLabels
+        fontDict[Constants.MEDIUM_FONT_SIZE] = mediumLabels
+        fontDict[Constants.LARGE_FONT_SIZE] = largeLabels
+        
+        return fontDict
+    }
     
     
     /* TABLEVIEW DELEGATE METHODS */
@@ -426,15 +477,20 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
         // Dispose of any resources that can be recreated.
     }
 
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        let screenHeight = Constants.ScreenDimensions.screenHeight
+        
+        switch indexPath.row {
+        case 0:
+            return screenHeight / 5.0
+        case 3:
+            return screenHeight / 5.5
+        case 4:
+            return screenHeight / 4.0
+        case 6:
+            return screenHeight / 8.0
+        default:
+            return screenHeight / 10.0
+        }
     }
-    */
-
 }

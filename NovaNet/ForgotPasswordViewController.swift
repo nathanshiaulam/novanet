@@ -11,15 +11,13 @@ import Parse
 import Bolts
 
 class ForgotPasswordViewController: ViewController {
-
+    
+    @IBOutlet weak var novaLogo: UIImageView!
+    @IBOutlet weak var centerConstraint: NSLayoutConstraint!
+    var keyboardVisible:Bool = false
+    
     @IBOutlet var emailField: UITextField!
-    @IBOutlet var buttonHeight: NSLayoutConstraint!
-    var screenMovementHeightUp: CGFloat!;
-    var screenMovementHeightDown: CGFloat!;
-   
-    @IBOutlet var centerY: NSLayoutConstraint!
-    @IBOutlet var subWelcomeLabel: UILabel!
-    @IBOutlet var welcomeLabel: UILabel!
+
     @IBAction func backToLogin(sender: UIBarButtonItem) {
         self.navigationController?.dismissViewControllerAnimated(true, completion: nil);
     }
@@ -55,49 +53,41 @@ class ForgotPasswordViewController: ViewController {
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ForgotPasswordViewController.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification, object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ForgotPasswordViewController.keyboardWillHide(_:)), name:UIKeyboardWillHideNotification, object: nil)
-        
-        screenMovementHeightUp = 0.0;
-        screenMovementHeightDown  = 0.0;
-        manageiOSModelType();
     }
     
-    func manageiOSModelType() {
-        if (Constants.ScreenDimensions.screenHeight == 480) {
-            welcomeLabel.font = welcomeLabel.font.fontWithSize(17.0);
-            subWelcomeLabel.font = subWelcomeLabel.font.fontWithSize(14.0);
-            buttonHeight.constant = 45;
-            screenMovementHeightUp = 20.0;
-            screenMovementHeightDown = 60.0;
-            return;
-        } else if (Constants.ScreenDimensions.screenHeight == 568) {
-            
-            welcomeLabel.font = welcomeLabel.font.fontWithSize(18.0);
-            subWelcomeLabel.font = subWelcomeLabel.font.fontWithSize(14.0);
-            screenMovementHeightUp = 20.0;
-            screenMovementHeightDown = 60.0;
-            return;
-        } else if (Constants.ScreenDimensions.screenHeight == 667) {
-            
-            return; // Do nothing because designed on iPhone 6 viewport
-        } else if (Constants.ScreenDimensions.screenHeight == 736) {
-            welcomeLabel.font = welcomeLabel.font.fontWithSize(24.0);
-            subWelcomeLabel.font = subWelcomeLabel.font.fontWithSize(18.0);
-            return;
+    func keyboardWillShow(notification:NSNotification) {
+        let changeInHeight:CGFloat = -140.0
+        if (!keyboardVisible) {
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.centerConstraint.constant += changeInHeight
+            })
         }
+        keyboardVisible = true
+        novaLogo.hidden = true
     }
+    
+    func keyboardWillHide(notification:NSNotification) {
+        let changeInHeight:CGFloat = 140.0
+        if (keyboardVisible) {
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.centerConstraint.constant += changeInHeight
+            })
+        }
+        keyboardVisible = false
+        novaLogo.hidden = false
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: self.view.window)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: self.view.window)
+    }
+
     // Allows users to hit enter and move to the next text field
     func textFieldShouldReturn(textField: UITextField)-> Bool {
         if (textField == emailField) {
             textField.resignFirstResponder();
         }
         return false;
-    }
-    
-    func keyboardWillShow(sender: NSNotification) {
-        self.view.frame.origin.y -= screenMovementHeightUp
-    }
-    func keyboardWillHide(sender: NSNotification) {
-        self.view.frame.origin.y += screenMovementHeightDown
     }
     
     // Removes keyboard when tap outside

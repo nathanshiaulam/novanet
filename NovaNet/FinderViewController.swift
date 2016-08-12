@@ -15,6 +15,7 @@ import AudioToolbox
 
 class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate  {
     
+    @IBOutlet weak var toggleView: UIView!
     @IBOutlet var tableView: UITableView!
     @IBOutlet weak var distanceButton: UIButton!
     @IBOutlet weak var alphabeticalButton: UIButton!
@@ -25,6 +26,9 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     var distList:NSArray = NSArray()
     var imageList = [UIImage?]()
     var byDist:Bool!
+    let backgroundLabel = UILabel()
+    let backgroundView = UIView()
+    var backgroundImage = UIImageView()
     
     // Sets up CLLocationManager and Local Data Store
     let locationManager = CLLocationManager()
@@ -32,7 +36,6 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     
     // Sets up pull to refresh
     var refreshControl:UIRefreshControl! = UIRefreshControl()
-    
     
     @IBAction func sortByDistance(sender: UIButton) {
         if byDist == false {
@@ -78,12 +81,9 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         self.tabBarController?.navigationItem.leftBarButtonItem = nil
 
         // Sets up the row height of Table View Cells
-        manageiOSModelType()
+        self.tableView.rowHeight = 75.0
         self.tabBarController?.navigationItem.title = "FINDER"
         
-        
-        
-
         // Go to login page if no user logged in
         if (!self.userLoggedIn()) {
             self.performSegueWithIdentifier("toUserLogin", sender: self)
@@ -139,38 +139,39 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     
     // Return the number of rows in the section.
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let backgroundLabel = UILabel()
-        let backgroundView = UIView()
-
-        var backgroundImage = UIImageView()
-
-        let screenSize: CGRect = UIScreen.mainScreen().bounds
-        let screenWidth = screenSize.width
-        let screenHeight = screenSize.height
+        let screenWidth = Constants.ScreenDimensions.screenWidth
+        let screenHeight = Constants.ScreenDimensions.screenHeight
+        
         backgroundView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
+        
+        let midHeight = (screenHeight - (self.navigationController?.navigationBar.frame.height)! - (self.tabBarController?.tabBar.frame.height)!) * 0.5 + self.toggleView.frame.height
+        let imageHeight = screenHeight / 7.0
+        
+        var fontSize:CGFloat = 13.0
+        if (Constants.ScreenDimensions.screenHeight >= Constants.ScreenDimensions.IPHONE_6_HEIGHT) {
+            fontSize = 15.0
+        }
         
         if (self.profileList.count == 0) {
             
+            let imageName = "about_map.png"
+            let image = UIImage(named: imageName)
+            backgroundImage = UIImageView(image: image!)
+            let aspectRatio = backgroundImage.bounds.width / backgroundImage.bounds.height
+            backgroundImage.frame = CGRect(x: screenWidth * 0.5 - imageHeight * aspectRatio * 1.3, y: midHeight, width: imageHeight * aspectRatio, height: imageHeight)
+            backgroundView.addSubview(backgroundImage)
+            
             backgroundLabel.text = "Can’t see anyone here? Pull down to refresh and find more Novas around you."
-            backgroundLabel.font = UIFont(name: "OpenSans", size: 16.0)
+            backgroundLabel.font = UIFont(name: "OpenSans", size: fontSize)
             backgroundLabel.textColor = Utilities().UIColorFromHex(0x3A4A49, alpha: 1.0)
-            backgroundLabel.frame = CGRect(x: screenWidth * 0.5, y: screenHeight * 0.4, width: 160, height: 20)
+            backgroundLabel.frame = CGRect(x: screenWidth * 0.5, y: midHeight, width:imageHeight * aspectRatio * 1.5 , height: imageHeight)
             backgroundLabel.numberOfLines = 0
             backgroundLabel.textAlignment = NSTextAlignment.Left
             backgroundLabel.sizeToFit()
             backgroundView.addSubview(backgroundLabel)
             
-            let imageName = "about_map.png"
-            let image = UIImage(named: imageName)
-            backgroundImage = UIImageView(image: image!)
-            
-            backgroundImage.frame = CGRect(x: screenWidth * 0.15, y: screenHeight * 0.4, width: backgroundImage.bounds.width, height: backgroundImage.bounds.height)
-            
-            
-
-            backgroundView.addSubview(backgroundImage)
             self.tableView.backgroundView = backgroundView
-            
+
             
         } else {
             backgroundLabel.hidden = true
@@ -182,7 +183,6 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     
     // Return the number of sections.
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        
         return 1
     }
     
@@ -217,8 +217,9 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
             } else {
                 cell.profileImage.image = UIImage(named: "selectImage")!
                 self.imageList[indexPath.row] = nil
-
             }
+            
+            
             // Formats image into circle
             Utilities().formatImage(cell.profileImage)
         }
@@ -236,6 +237,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
             } else {
                 self.nextImage = nil
             }
+            
             // Sets values for selected user
             prepareDataStore(profile as! PFObject)
             defaults.setObject(dist, forKey: Constants.SelectedUserKeys.selectedDistanceKey)
@@ -335,23 +337,6 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         
     }
     
-    func manageiOSModelType() {
-        if (Constants.ScreenDimensions.screenHeight == 480) {
-            self.tableView.rowHeight = 65.0
-            return
-        } else if (Constants.ScreenDimensions.screenHeight == 568) {
-            self.tableView.rowHeight = 70.0
-            return
-        } else if (Constants.ScreenDimensions.screenHeight == 667) {
-            self.tableView.rowHeight = 75.0
-            return // Do nothing because designed on iPhone 6 viewport
-        } else if (Constants.ScreenDimensions.screenHeight == 736) {
-            self.tableView.rowHeight = 80.0
-            return
-        }
-    }
-  
-    
     // Takes in a few parameters and returns a list of users that are available and within range
     func findUsersInRange() {
         let longitude = defaults.doubleForKey(Constants.UserKeys.longitudeKey)
@@ -382,7 +367,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
                     var byDistDict:Dictionary = Dictionary<PFObject, Double>()
                     let byDistList:NSMutableArray = NSMutableArray()
                     let sortedDistances:NSMutableArray = NSMutableArray()
-                    for (var i = 0; i < self.profileList.count; i++) {
+                    for i in 0..<self.profileList.count {
                         byDistDict[self.profileList[i] as! PFObject] = Double(self.distList[i].doubleValue)
                     }
                     for (k,v) in (Array(byDistDict).sort({$0.1 < $1.1})) {
@@ -449,7 +434,6 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
 
     // formats labels for each cell
     func formatLabels(cell: HomeTableViewCell) {
-        
         // If run out of room, go to next line so it doesn't go off page
         cell.experience.lineBreakMode = NSLineBreakMode.ByWordWrapping
         cell.experience.sizeToFit()
@@ -457,7 +441,6 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         cell.name.sizeToFit()
         cell.dist.lineBreakMode = NSLineBreakMode.ByWordWrapping
         cell.dist.sizeToFit()
-
     }
     
     // Vibrates the phone when receives message

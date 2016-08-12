@@ -69,9 +69,10 @@ class SystemSettingsTableViewController: TableViewController {
                 profile["Online"] = false
                 profile["Available"] = false
                 profile.saveInBackground()
+                PFUser.logOut()
             }
         }
-        PFUser.logOut()
+        
         
         let dict = defaults.dictionaryRepresentation();
         for key in dict.keys {
@@ -107,7 +108,11 @@ class SystemSettingsTableViewController: TableViewController {
         // The button is aligned to bottom of the footerview
         // using autolayout constraints
         self.tableView.tableFooterView = nil
-        self.footerView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.tableView.frame.size.height - self.tableView.contentSize.height - self.footerView.frame.size.height)
+        var footerHeight = self.tableView.frame.size.height - self.tableView.contentSize.height - self.footerView.frame.size.height
+        if (Constants.ScreenDimensions.screenHeight == Constants.ScreenDimensions.IPHONE_4_HEIGHT) {
+            footerHeight += 160
+        }
+        self.footerView.frame = CGRectMake(0, 0, self.view.frame.size.width, footerHeight)
         self.tableView.tableFooterView = self.footerView
     }
     

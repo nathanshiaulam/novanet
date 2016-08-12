@@ -25,23 +25,26 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
     let picker = UIImagePickerController()
     var popover:UIPopoverController? = nil
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+    var dotOne:UIImageView!
+    var dotTwo:UIImageView!
+    var dotThree:UIImageView!
     
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let dotOne = UIImageView(image: UIImage(named: "orangeDot.png"))
+        dotOne = UIImageView(image: UIImage(named: "orangeDot.png"))
         dotOne.frame = CGRectMake(-10, firstInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
         dotOne.contentMode = UIViewContentMode.Center
         firstInterestLabel.addSubview(dotOne)
         
-        let dotTwo = UIImageView(image: UIImage(named: "orangeDot.png"))
+        dotTwo = UIImageView(image: UIImage(named: "orangeDot.png"))
         dotTwo.frame = CGRectMake(-10, secondInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
         dotTwo.contentMode = UIViewContentMode.Center
         secondInterestLabel.addSubview(dotTwo)
         
-        let dotThree = UIImageView(image: UIImage(named: "orangeDot.png"))
+        dotThree = UIImageView(image: UIImage(named: "orangeDot.png"))
         dotThree.frame = CGRectMake(-10, thirdInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
         dotThree.contentMode = UIViewContentMode.Center
         thirdInterestLabel.addSubview(dotThree)
@@ -179,22 +182,30 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
                 interestsLabelArr.append(firstInterestLabel)
                 interestsLabelArr.append(secondInterestLabel)
                 interestsLabelArr.append(thirdInterestLabel)
+                
+                var dotsImage:[UIImageView] = UIImageView()
+                dotsImage.append(dotOne)
+                dotsImage.append(dotTwo)
+                dotsImage.append(dotThree)
                 var numInterests = 0
                 if interestsArr.count > Constants.MAX_NUM_INTERESTS {
                     numInterests = Constants.MAX_NUM_INTERESTS
                 } else  {
                     numInterests = interestsArr.count
                 }
+                
+                
                 for i in 0..<numInterests {
                     let interest = interestsArr[i] as? String
                     interestsLabelArr[i].text = interest!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
                 }
-                for i in 0..<interestsLabelArr.count{
+                for i in numInterests..<interestsLabelArr.count {
                     interestsLabelArr[i].text = ""
+                    dotsImage[i].hidden = true
                 }
                 let firstInterest = interestsArr[0] as? String
                 if (firstInterest!.characters.count == 0) {
-                    interestsLabelArr[0].text = "What are your interests?"
+                    interestsLabelArr[1].text = "What are your interests?"
                 }
             }
             

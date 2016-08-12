@@ -160,7 +160,7 @@ class EventsLocationFinder: ViewController, UISearchBarDelegate, LocateOnTheMap 
                     self.centerOnItem(firstItem);
                 }
 
-                for (var i = 0; i < threshold; i++) {
+                for i in 0..<threshold {
                     let item = searchResponse?.mapItems[i];
                     
                     let marker:GMSMarker = GMSMarker();

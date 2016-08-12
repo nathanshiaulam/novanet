@@ -15,33 +15,40 @@ import AudioToolbox
 class ConversationListTableViewController: TableViewController {
     // Sets up Local Data Store
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
-    
+
     // Sets up conversation lists to load in later
-    var conversationList:NSArray = NSArray();
-    var conversationParticipantList:NSArray = NSArray();
-    var otherProfileList:NSArray = NSArray();
-    var imageList = [UIImage?]();
-    var nextImage:UIImage? = UIImage();
+    var conversationList:NSArray!
+    var conversationParticipantList:NSArray!
+    var otherProfileList:NSArray!
+    var imageList:[UIImage?]!
+    var nextImage:UIImage!
+    var backgroundLabel = UILabel()
+    var backgroundView = UIView()
+    var backgroundImage = UIImageView()
+    let button = UIButton(type: UIButtonType.System) as UIButton
+    
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
 
     override func viewDidLoad() {
-        
         super.viewDidLoad();
+        conversationList = NSArray()
+        conversationParticipantList = NSArray()
+        otherProfileList = NSArray()
+        imageList = [UIImage?]()
+        nextImage = UIImage()
+        
+        self.tableView.rowHeight = 75.0
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.loadConversations), name: "loadConversations", object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.phoneVibrate), name: "phoneVibrate", object: nil);
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("updateMostRecent"), name: "updateMostRecent", object: nil);
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.goToMessageVC), name: "goToMessageVC", object: nil);
 
         let refreshControl = UIRefreshControl()
         self.tabBarController?.navigationItem.title = "MESSAGES";
-
-        // Sets up the row height of Table View Cells
-        manageiOSModelType();
         
         // Sets up refresh control on pull down so that it calls findUsersInRange
         refreshControl.addTarget(self, action: #selector(ConversationListTableViewController.loadConversations), forControlEvents:UIControlEvents.ValueChanged);
         self.refreshControl = refreshControl;
-
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -82,38 +89,41 @@ class ConversationListTableViewController: TableViewController {
     
     // Return the number of rows in the section.
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let backgroundLabel = UILabel()
-        let backgroundView = UIView()
-        var backgroundImage = UIImageView()
-        let button = UIButton(type: UIButtonType.System) as UIButton
+        let screenWidth = Constants.ScreenDimensions.screenWidth
+        let screenHeight = Constants.ScreenDimensions.screenHeight
         
-        let screenSize: CGRect = UIScreen.mainScreen().bounds
-        let screenWidth = screenSize.width
-        let screenHeight = screenSize.height
-        
+        let midHeight = (screenHeight - (self.navigationController?.navigationBar.frame.height)! - (self.tabBarController?.tabBar.frame.height)!) * 0.5
+        let imageHeight = screenHeight / 8.0
+        let buttonHeight = screenHeight / 10.0
+        let buttonWidth = screenWidth * 0.7
+        var fontSize:CGFloat = 13.0
+        if (Constants.ScreenDimensions.screenHeight >= Constants.ScreenDimensions.IPHONE_6_HEIGHT) {
+            fontSize = 15.0
+        }
+
         if (self.conversationList.count == 0) {
+            let imageName = "about_chat_bubbles.png"
+            let image = UIImage(named: imageName)
+            backgroundImage = UIImageView(image: image!)
+            let aspectRatio = backgroundImage.bounds.width / backgroundImage.bounds.height
+            backgroundImage.frame = CGRect(x: screenWidth * 0.5 - imageHeight * aspectRatio * 1.2, y: midHeight, width: imageHeight * aspectRatio, height: imageHeight)
+            backgroundView.addSubview(backgroundImage)
             
             backgroundLabel.text = "Don’t have any messages yet? Find Novas and get started!"
-            backgroundLabel.font = UIFont(name: "OpenSans", size: 16.0)
+            backgroundLabel.font = UIFont(name: "OpenSans", size: fontSize)
             backgroundLabel.textColor = Utilities().UIColorFromHex(0x3A4A49, alpha: 1.0)
-            backgroundLabel.frame = CGRect(x: screenWidth * 0.55, y: screenHeight * 0.4, width: 160, height: 20)
+            backgroundLabel.frame = CGRect(x: screenWidth * 0.5, y: midHeight, width:imageHeight * aspectRatio * 1.4, height: imageHeight)
             backgroundLabel.numberOfLines = 0
             backgroundLabel.textAlignment = NSTextAlignment.Left
             backgroundLabel.sizeToFit()
             backgroundView.addSubview(backgroundLabel)
-            
-            let imageName = "about_chat_bubbles.png"
-            let image = UIImage(named: imageName)
-            backgroundImage = UIImageView(image: image!)
-            backgroundImage.frame = CGRect(x: screenWidth * 0.10, y: screenHeight * 0.4, width: backgroundImage.bounds.width, height: backgroundImage.bounds.height)
-            backgroundView.addSubview(backgroundImage)
 
-            button.frame = CGRect(x: screenWidth * 0.16, y: screenHeight * 0.6, width: 250, height: 50)
+            button.frame = CGRect(x: screenWidth * 0.5 - buttonWidth * 0.5, y: midHeight * 1.5, width: buttonWidth, height: buttonHeight)
             button.backgroundColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
             button.setTitle("FIND NOVAS", forState: UIControlState.Normal)
             button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
             button.layer.cornerRadius = 5
-            button.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: 16.0)
+            button.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: fontSize)
             button.addTarget(self, action: #selector(ConversationListTableViewController.switchToFinder(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             backgroundView.addSubview(button)
             
@@ -132,7 +142,6 @@ class ConversationListTableViewController: TableViewController {
     
     // Return the number of sections.
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        
         return 1
     }
     
@@ -196,7 +205,7 @@ class ConversationListTableViewController: TableViewController {
                 cell.profileImage.image = UIImage(named: "selectImage")!;
                 self.imageList[indexPath.row] = UIImage(named: "selectImage")!;
             }
-            formatImage(cell.profileImage);
+            
             cell.profileImage.hidden = false;
             cell.recentMessageLabel.hidden = false;
             cell.nameLabel.hidden = false;
@@ -204,12 +213,12 @@ class ConversationListTableViewController: TableViewController {
                 cell.profileImage.hidden = true;
                 cell.recentMessageLabel.hidden = true;
                 cell.nameLabel.hidden = true;
-//                cell.unreadMessageMark.hidden = true;
-            }
+        }
+        
+        Utilities().formatImage(cell.profileImage);
         return cell;
     }
     func manageiOSModelTypeCellLabels(cell: ConversationTableViewCell) {
-        
         if (Constants.ScreenDimensions.screenHeight == 480) {
             cell.nameLabel.font = cell.nameLabel.font.fontWithSize(16.0);
             cell.recentMessageLabel.font = cell.recentMessageLabel.font.fontWithSize(12.0)
@@ -255,41 +264,6 @@ class ConversationListTableViewController: TableViewController {
         return false;
     }
     
-    
-    func manageiOSModelType() {
-        
-        if (Constants.ScreenDimensions.screenHeight == 480) {
-            self.tableView.rowHeight = 65.0;
-            return;
-        } else if (Constants.ScreenDimensions.screenHeight == 568) {
-            self.tableView.rowHeight = 70.0;
-            return;
-        } else if (Constants.ScreenDimensions.screenHeight == 667) {
-            self.tableView.rowHeight = 75.0;
-            return; // Do nothing because designed on iPhone 6 viewport
-        } else if (Constants.ScreenDimensions.screenHeight == 736) {
-            self.tableView.rowHeight = 75.0;
-            return;
-        }
-    }
-    
-    // Converts string into NSDate with format
-    func dateFromString(date: String, format: String) -> NSDate {
-        let formatter = NSDateFormatter()
-        let locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        
-        formatter.locale = locale
-        formatter.dateFormat = format
-        
-        return formatter.dateFromString(date)!
-    }
-    
-    // Formats image into circle if the image is a square *should probably crop to square first*
-    func formatImage( profileImage: UIImageView) {
-        profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
-        profileImage.clipsToBounds = true;
-    }
-    
     // Vibrates the phone when receives message
     func phoneVibrate() {
         AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
@@ -304,40 +278,21 @@ class ConversationListTableViewController: TableViewController {
         defaults.setObject(profile["Looking"], forKey: Constants.SelectedUserKeys.selectedLookingForKey);
         defaults.setObject(profile["Available"], forKey: Constants.SelectedUserKeys.selectedAvailableKey);
         defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey);
-        
-        
     }
     
     func goToMessageVC() {
         self.performSegueWithIdentifier("toMessageVC", sender: self);
     }
-    
-    // Helper methods to save images into local datastore from Parse
-    func documentsPathForFileName(name: String) -> String {
-        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true);
-        let path = paths[0];
-        let fullPath = NSURL(fileURLWithPath: path).URLByAppendingPathComponent(name)
-        
-        return String(fullPath);
-    }
-    func saveOtherImage(image: UIImage) {
-        let imageData = UIImageJPEGRepresentation(image, 1)
-        let relativePath = "image_\(NSDate.timeIntervalSinceReferenceDate()).jpg"
-        let path = self.documentsPathForFileName(relativePath)
-        imageData!.writeToFile(path, atomically: true)
-        NSUserDefaults.standardUserDefaults().setObject(relativePath, forKey: Constants.SelectedUserKeys.selectedProfileImageKey)
-        NSUserDefaults.standardUserDefaults().synchronize()
-    }
 
     // Calls main helper functions to load all conversations
     func loadConversations() {
-        findConversationParticipants();
+        findConversationParticipants()
     }
     
     // Finds the list of IDs of the other conversation participants in the area
     func findOtherProfiles() {
         let otherIDs:NSMutableArray = NSMutableArray();
-        for (var i = 0; i < conversationParticipantList.count; i++){
+        for i in 0..<conversationParticipantList.count {
             let participant = conversationParticipantList[i] as! PFObject;
             otherIDs.addObject(participant["OtherUser"]!);
         }

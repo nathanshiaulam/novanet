@@ -59,6 +59,7 @@ struct Constants {
         static let screenHeight = UIScreen.mainScreen().bounds.size.height
         static let screenWidth = UIScreen.mainScreen().bounds.size.width
         static let IPHONE_4_HEIGHT:CGFloat = 480
+        static let IPHONE_5_HEIGHT:CGFloat = 568
         static let IPHONE_6_HEIGHT:CGFloat = 667
         static let IPHONE_6_PLUS_HEIGHT:CGFloat = 736
     }

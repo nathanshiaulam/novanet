@@ -16,11 +16,20 @@ class SignUpViewController: ViewController {
     var bot:CGFloat!;
 
     
+    @IBOutlet weak var novaLogo: UIImageView!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var confirmPasswordField: UITextField!
     
     @IBOutlet weak var signupButton: UIButton!
+    
+    var keyboardVisible:Bool = false
+    var hideLogo:Bool =
+        Constants.ScreenDimensions.screenHeight ==
+            Constants.ScreenDimensions.IPHONE_4_HEIGHT ||
+            Constants.ScreenDimensions.screenHeight ==
+            Constants.ScreenDimensions.IPHONE_5_HEIGHT
+    
     @IBAction func cancelFunction(sender: UIBarButtonItem) {
         self.dismissViewControllerAnimated(true, completion: nil);
     }
@@ -36,20 +45,8 @@ class SignUpViewController: ViewController {
     
     /*-------------------------------- CONSTRAINTS ------------------------------------*/
     
-    @IBOutlet weak var signInHeight: NSLayoutConstraint!
-    
-    @IBOutlet weak var textFieldY: NSLayoutConstraint!
-    @IBOutlet weak var distFromSignInToBottom: NSLayoutConstraint!
-    @IBOutlet weak var distFromLogoToText: NSLayoutConstraint!
-    @IBOutlet weak var logoWidth: NSLayoutConstraint!
-    @IBOutlet weak var logoHeight: NSLayoutConstraint!
-    @IBOutlet weak var textFieldHeight: NSLayoutConstraint!
-    
-    @IBOutlet weak var splashHorizontal: NSLayoutConstraint!
-    @IBOutlet weak var splashBottom: NSLayoutConstraint!
-    @IBOutlet weak var splashOtherHorizontal: NSLayoutConstraint!
-    @IBOutlet weak var splashTop: NSLayoutConstraint!
-  
+    @IBOutlet weak var centerConstraint: NSLayoutConstraint!
+    @IBOutlet weak var aboutTopConstraint: NSLayoutConstraint!
     /*-------------------------------- HELPER METHODS ------------------------------------*/
    
     // Sets up installation so that the current user receives push notifications
@@ -58,34 +55,6 @@ class SignUpViewController: ViewController {
         installation["user"] = PFUser.currentUser()
         installation.saveInBackground()
     }
-    
-    func manageiOSModelType() {
-        if (Constants.ScreenDimensions.screenHeight == 480) {
-            signInHeight.constant = 50
-            textFieldHeight.constant = 40
-            distFromSignInToBottom.constant = bot - 10;
-            textFieldY.constant = -30
-
-            return;
-        } else if (Constants.ScreenDimensions.screenHeight == 568) {
-            signInHeight.constant = 50
-            textFieldHeight.constant = 50
-            distFromSignInToBottom.constant = bot;
-            return;
-        } else if (Constants.ScreenDimensions.screenHeight == 667) {
-            
-            return; // Do nothing because designed on iPhone 6 viewport
-        } else if (Constants.ScreenDimensions.screenHeight == 736) {
-            splashHorizontal.constant = -20;
-            splashOtherHorizontal.constant = -20;
-            splashTop.constant = 0;
-            return;
-        }
-    }
-
-
-    
-    
     
     // Allows users to hit enter and move to the next text field
     func textFieldShouldReturn(textField: UITextField)-> Bool {
@@ -109,6 +78,29 @@ class SignUpViewController: ViewController {
         return false;
     }
     
+    func keyboardWillShow(notification:NSNotification) {
+        let changeInHeight:CGFloat = -75.0
+        if (!keyboardVisible) {
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.centerConstraint.constant += changeInHeight
+                self.aboutTopConstraint.constant += changeInHeight
+            })
+        }
+        keyboardVisible = true
+        novaLogo.hidden = hideLogo
+    }
+    
+    func keyboardWillHide(notification:NSNotification) {
+        let changeInHeight:CGFloat = 75.0
+        if (keyboardVisible) {
+            UIView.animateWithDuration(0.5, animations: { () -> Void in
+                self.centerConstraint.constant += changeInHeight
+                self.aboutTopConstraint.constant += changeInHeight
+            })
+        }
+        keyboardVisible = false
+        novaLogo.hidden = false
+    }
 
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
 
@@ -116,9 +108,12 @@ class SignUpViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SignUpViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SignUpViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        
         passwordField.secureTextEntry = true;
         confirmPasswordField.secureTextEntry = true;
-        bot = distFromSignInToBottom.constant - 20;
+
         signupButton.layer.cornerRadius = 5
         var confPasswordFramRect =  confirmPasswordField.frame;
         var passwordFrameRect = passwordField.frame;
@@ -169,24 +164,13 @@ class SignUpViewController: ViewController {
         emailField.textColor = UIColor.whiteColor();
     }
     
-    override func viewDidLayoutSubviews() {
-        manageiOSModelType();
+    override func viewWillDisappear(animated: Bool) {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: self.view.window)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: self.view.window)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

@@ -23,7 +23,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     var selectedEvent:PFObject!;
     
     @IBOutlet weak var eventHeaderView: UIView!
-    @IBOutlet weak var segmentControl: UISegmentedControl!
+
     @IBOutlet weak var memberEventButton: UIButton!
     @IBOutlet weak var localEventButton: UIButton!
     @IBOutlet weak var addEventButton: UIBarButtonItem!
@@ -59,7 +59,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
 
     }
     override func viewDidLoad() {
-
         localEvents = true;
         
         eventsList = NSArray();
@@ -67,19 +66,15 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         
         self.tableView.rowHeight = 100.0;
         self.tabBarController!.navigationItem.title = "EVENTS";
-
         
         refreshControl = UIRefreshControl();
-        
-//        segmentControl.selectedSegmentIndex = 0;
     }
     
     override func viewDidAppear(animated: Bool) {
         self.tabBarController!.navigationItem.title = "EVENTS";
         self.tabBarController!.navigationItem.leftBarButtonItem = addEventButton;
         self.oldTitleView = self.tabBarController!.navigationItem.titleView
-        self.tabBarController!.navigationItem.titleView = segmentControl;
-        
+
         tableView.addSubview(self.refreshControl)
         if localEvents == true {
             findAllEvents();
@@ -88,8 +83,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             
         } else {
             findSavedEvents();
-//            self.tableView.frame =
-//                CGRectMake(0, 0 - eventHeaderView.frame.height, self.tableView.frame.width, self.tableView.frame.height + 30)
             refreshControl.removeTarget(self, action: #selector(EventsFinderTableVC.findAllEvents), forControlEvents: UIControlEvents.ValueChanged)
             refreshControl.addTarget(self, action: #selector(EventsFinderTableVC.findSavedEvents), forControlEvents: UIControlEvents.ValueChanged)
         }
@@ -284,34 +277,43 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         let backgroundView = UIView()
         var backgroundImage = UIImageView()
         let button = UIButton(type: UIButtonType.System) as UIButton
+
+        let screenWidth = Constants.ScreenDimensions.screenWidth
+        let screenHeight = Constants.ScreenDimensions.screenHeight
         
-        let screenSize: CGRect = UIScreen.mainScreen().bounds
-        let screenWidth = screenSize.width
-        let screenHeight = screenSize.height
+        let midHeight = (screenHeight - (self.navigationController?.navigationBar.frame.height)! - (self.tabBarController?.tabBar.frame.height)!) * 0.5
+        let imageHeight = screenHeight / 8.0
+        let buttonHeight = screenHeight / 10.0
+        let buttonWidth = screenWidth * 0.7
+        var fontSize:CGFloat = 13.0
+        if (Constants.ScreenDimensions.screenHeight >= Constants.ScreenDimensions.IPHONE_6_HEIGHT) {
+            fontSize = 15.0
+        }
         
         if (self.eventsList.count == 0) {
             
+            let imageName = "about_event.png"
+            let image = UIImage(named: imageName)
+            backgroundImage = UIImageView(image: image!)
+            let aspectRatio = backgroundImage.bounds.width / backgroundImage.bounds.height
+            backgroundImage.frame = CGRect(x: screenWidth * 0.5 - imageHeight * aspectRatio * 1.5, y: midHeight, width: imageHeight * aspectRatio, height: imageHeight)
+            backgroundView.addSubview(backgroundImage)
+            
             backgroundLabel.text = "There are no current events in your area. Want to create one?"
-            backgroundLabel.font = UIFont(name: "OpenSans", size: 16.0)
+            backgroundLabel.font = UIFont(name: "OpenSans", size: fontSize)
             backgroundLabel.textColor = Utilities().UIColorFromHex(0x3A4A49, alpha: 1.0)
-            backgroundLabel.frame = CGRect(x: screenWidth * 0.45, y: screenHeight * 0.4, width: 160, height: 20)
+            backgroundLabel.frame = CGRect(x: screenWidth * 0.5, y: midHeight, width:imageHeight * aspectRatio * 1.8, height: imageHeight)
             backgroundLabel.numberOfLines = 0
             backgroundLabel.textAlignment = NSTextAlignment.Left
             backgroundLabel.sizeToFit()
             backgroundView.addSubview(backgroundLabel)
             
-            let imageName = "about_event.png"
-            let image = UIImage(named: imageName)
-            backgroundImage = UIImageView(image: image!)
-            backgroundImage.frame = CGRect(x: screenWidth * 0.15, y: screenHeight * 0.4, width: backgroundImage.bounds.width, height: backgroundImage.bounds.height)
-            backgroundView.addSubview(backgroundImage)
-            
-            button.frame = CGRect(x: screenWidth * 0.16, y: screenHeight * 0.6, width: 250, height: 50)
+            button.frame = CGRect(x: screenWidth * 0.5 - buttonWidth * 0.5, y: midHeight * 1.5, width: buttonWidth, height: buttonHeight)
             button.backgroundColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
             button.setTitle("CREATE EVENT", forState: UIControlState.Normal)
             button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
             button.layer.cornerRadius = 5
-            button.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: 16.0)
+            button.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: fontSize)
             button.addTarget(self, action: #selector(EventsFinderTableVC.toCreateEvent(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             backgroundView.addSubview(button)
             

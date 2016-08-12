@@ -42,7 +42,7 @@ class FeedbackViewController: ViewController {
     override func viewDidLoad() {
         self.automaticallyAdjustsScrollViewInsets = false;
         self.tabBarController?.navigationItem.title = "Feedback";
-        self.leftBarButtonItem = UIBarButtonItem(title: "Done", style:         UIBarButtonItemStyle.Plain, target: self, action: "removeKeyboard")
+        self.leftBarButtonItem = UIBarButtonItem(title: "Done", style:         UIBarButtonItemStyle.Plain, target: self, action: #selector(FeedbackViewController.removeKeyboard))
         
 
         feedbackTextField.backgroundColor = UIColor.clearColor();

@@ -108,6 +108,14 @@ class Utilities: NSObject {
         Utilities.formatImageWithWidth(profileImage, width: profileImage.frame.size.width)
     }
     
+    static func formatImageReturn(profileImage: UIImageView) -> UIImage {
+        let croppedImage: UIImage = ImageUtil.cropToSquare(image: profileImage.image!)
+        profileImage.image = croppedImage
+        profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
+        profileImage.clipsToBounds = true;
+        return profileImage.image!
+    }
+    
     static func formatImageWithWidth(profileImage: UIImageView, width: CGFloat) {
         let croppedImage: UIImage = ImageUtil.cropToSquare(image: profileImage.image!)
         profileImage.image = croppedImage

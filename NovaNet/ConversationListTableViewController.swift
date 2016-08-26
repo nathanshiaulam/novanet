@@ -14,7 +14,7 @@ import AudioToolbox
 
 class ConversationListTableViewController: TableViewController {
     // Sets up Local Data Store
-    let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+    let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
 
     // Sets up conversation lists to load in later
     var conversationList:NSArray!
@@ -22,6 +22,7 @@ class ConversationListTableViewController: TableViewController {
     var otherProfileList:NSArray!
     var imageList:[UIImage?]!
     var nextImage:UIImage!
+    var formattedImages:[UIImage?] = [UIImage]()
     var backgroundLabel = UILabel()
     var backgroundView = UIView()
     var backgroundImage = UIImageView()
@@ -30,7 +31,7 @@ class ConversationListTableViewController: TableViewController {
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
 
     override func viewDidLoad() {
-        super.viewDidLoad();
+        super.viewDidLoad()
         conversationList = NSArray()
         conversationParticipantList = NSArray()
         otherProfileList = NSArray()
@@ -39,42 +40,44 @@ class ConversationListTableViewController: TableViewController {
         
         self.tableView.rowHeight = 75.0
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.loadConversations), name: "loadConversations", object: nil);
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.phoneVibrate), name: "phoneVibrate", object: nil);
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.goToMessageVC), name: "goToMessageVC", object: nil);
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.loadConversations), name: "loadConversations", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.phoneVibrate), name: "phoneVibrate", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.goToMessageVC), name: "goToMessageVC", object: nil)
 
+        self.tableView.tableFooterView = UIView()
         let refreshControl = UIRefreshControl()
-        self.tabBarController?.navigationItem.title = "MESSAGES";
-        
+        self.tabBarController?.navigationItem.title = "MESSAGES"
+        loadConversations()
+
         // Sets up refresh control on pull down so that it calls findUsersInRange
-        refreshControl.addTarget(self, action: #selector(ConversationListTableViewController.loadConversations), forControlEvents:UIControlEvents.ValueChanged);
-        self.refreshControl = refreshControl;
+        refreshControl.addTarget(self, action: #selector(ConversationListTableViewController.loadConversations), forControlEvents:UIControlEvents.ValueChanged)
+        self.refreshControl = refreshControl
     }
     
     override func viewDidAppear(animated: Bool) {
         if (!self.userLoggedIn()) {
-            conversationList = NSArray();
-            conversationParticipantList = NSArray();
-            otherProfileList = NSArray();
+            conversationList = NSArray()
+            conversationParticipantList = NSArray()
+            otherProfileList = NSArray()
             tableView.reloadData()
 
             // Go to login page if no user logged in
-            self.tabBarController?.selectedIndex = 0;
-            super.viewDidAppear(true);
-            return;
+            self.tabBarController?.selectedIndex = 0
+            super.viewDidAppear(true)
+            return
         }
         else {
-            self.tabBarController?.navigationItem.title = "MESSAGES";
-            loadConversations();
+            self.tabBarController?.navigationItem.title = "MESSAGES"
+            loadConversations()
         }
         
-        super.viewDidAppear(true);
+        super.viewDidAppear(true)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if segue.identifier == "toMessageVC" {
             let destinationVC = segue.destinationViewController.childViewControllers.first as! MessagerViewController
-            destinationVC.nextImage = self.nextImage;
+            destinationVC.nextImage = self.nextImage
         }
     }
     
@@ -93,8 +96,8 @@ class ConversationListTableViewController: TableViewController {
         let screenHeight = Constants.ScreenDimensions.screenHeight
         
         let midHeight = (screenHeight - (self.navigationController?.navigationBar.frame.height)! - (self.tabBarController?.tabBar.frame.height)!) * 0.5
-        let imageHeight = screenHeight / 8.0
-        let buttonHeight = screenHeight / 10.0
+        let imageHeight = screenHeight / 7.0
+        let buttonHeight:CGFloat = 44.0
         let buttonWidth = screenWidth * 0.7
         var fontSize:CGFloat = 13.0
         if (Constants.ScreenDimensions.screenHeight >= Constants.ScreenDimensions.IPHONE_6_HEIGHT) {
@@ -123,10 +126,12 @@ class ConversationListTableViewController: TableViewController {
             button.setTitle("FIND NOVAS", forState: UIControlState.Normal)
             button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
             button.layer.cornerRadius = 5
-            button.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: fontSize)
+            button.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: 18.0)
             button.addTarget(self, action: #selector(ConversationListTableViewController.switchToFinder(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             backgroundView.addSubview(button)
             
+            backgroundView.backgroundColor = Utilities().UIColorFromHex(0xFBFBFB, alpha: 1.0)
+
             tableView.separatorStyle = UITableViewCellSeparatorStyle.None
             tableView.backgroundView = backgroundView
         } else {
@@ -137,7 +142,7 @@ class ConversationListTableViewController: TableViewController {
             tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
         }
 
-        return conversationList.count;
+        return conversationList.count
     }
     
     // Return the number of sections.
@@ -146,27 +151,27 @@ class ConversationListTableViewController: TableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let chatCellIdentifier:String = "ChatCell";
+        let chatCellIdentifier:String = "ChatCell"
         let cell = tableView.dequeueReusableCellWithIdentifier(chatCellIdentifier, forIndexPath: indexPath) as! ConversationTableViewCell
-        manageiOSModelTypeCellLabels(cell);
-        imageList = [UIImage?](count: otherProfileList.count, repeatedValue: nil);
+        manageiOSModelTypeCellLabels(cell)
+        imageList = [UIImage?](count: otherProfileList.count, repeatedValue: nil)
         if (conversationList.count > 0) {
 
-            let conversationParticipant: AnyObject = conversationParticipantList[indexPath.row];
-            let conversation: AnyObject = conversationList[indexPath.row];
-            let profile:AnyObject = otherProfileList[indexPath.row];
+            let conversationParticipant: AnyObject = conversationParticipantList[indexPath.row]
+            let conversation: AnyObject = conversationList[indexPath.row]
+            let profile:AnyObject = otherProfileList[indexPath.row]
             
 
             // Stores variables to mark unread messages and most recent message
             let readConversationCount:Int = conversationParticipant["ReadMessageCount"] as! Int
             let conversationCount:Int = conversation["MessageCount"] as! Int
             var recentDate:NSDate = NSDate()
-            var recentMessage="";
+            var recentMessage=""
             if let message:String = conversation["RecentMessage"] as? String {
-                recentMessage = message;
+                recentMessage = message
                 recentDate = conversation["MostRecent"] as! NSDate
             }
-            cell.nameLabel.text = profile["Name"] as? String;
+            cell.nameLabel.text = profile["Name"] as? String
             
             let dateFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "MMM d|h:mm a"
@@ -180,75 +185,76 @@ class ConversationListTableViewController: TableViewController {
                 cell.timeString.text = dateComponents[1]
             }
             if readConversationCount < conversationCount {
+                cell.nameLabel.font = UIFont(name: "OpenSans-Bold", size: (cell.nameLabel.font?.pointSize)!)
                 cell.timeString.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
             } else {
                 cell.timeString.textColor = Utilities().UIColorFromHex(0x53585F, alpha: 1.0)
             }
-            cell.recentMessageLabel.text = recentMessage;
+            cell.recentMessageLabel.text = recentMessage
             cell.recentMessageLabel.lineBreakMode = NSLineBreakMode.ByTruncatingTail
-            cell.recentMessageLabel.sizeToFit();
+            cell.recentMessageLabel.sizeToFit()
 
-            var image = PFFile();
+            var image = PFFile()
             if let userImageFile = profile["Image"] as? PFFile {
-                image = userImageFile;
+                image = userImageFile
                 image.getDataInBackgroundWithBlock {
                     (imageData, error) -> Void in
                     if (error == nil) {
-                        cell.profileImage.image = UIImage(data:imageData!);
-                        self.imageList[indexPath.row] = UIImage(data:imageData!);
+                        cell.profileImage.image = UIImage(data:imageData!)
+                        Utilities().formatImage(cell.profileImage)
+                        self.imageList[indexPath.row] = UIImage(data:imageData!)
                     }
                     else {
-                        print(error);
+                        print(error)
                     }
                 }
             } else {
-                cell.profileImage.image = UIImage(named: "selectImage")!;
-                self.imageList[indexPath.row] = UIImage(named: "selectImage")!;
+                cell.profileImage.image = UIImage(named: "selectImage")!
+                self.imageList[indexPath.row] = UIImage(named: "selectImage")!
             }
             
-            cell.profileImage.hidden = false;
-            cell.recentMessageLabel.hidden = false;
-            cell.nameLabel.hidden = false;
+            cell.profileImage.hidden = false
+            cell.recentMessageLabel.hidden = false
+            cell.nameLabel.hidden = false
         } else {
-                cell.profileImage.hidden = true;
-                cell.recentMessageLabel.hidden = true;
-                cell.nameLabel.hidden = true;
+                cell.profileImage.hidden = true
+                cell.recentMessageLabel.hidden = true
+                cell.nameLabel.hidden = true
         }
         
-        Utilities().formatImage(cell.profileImage);
-        return cell;
+        return cell
     }
     func manageiOSModelTypeCellLabels(cell: ConversationTableViewCell) {
-        if (Constants.ScreenDimensions.screenHeight == 480) {
-            cell.nameLabel.font = cell.nameLabel.font.fontWithSize(16.0);
-            cell.recentMessageLabel.font = cell.recentMessageLabel.font.fontWithSize(12.0)
-            return;
-        } else if (Constants.ScreenDimensions.screenHeight == 568) {
-            cell.nameLabel.font = cell.nameLabel.font.fontWithSize(19.0);
-            cell.recentMessageLabel.font = cell.recentMessageLabel.font.fontWithSize(13.0)
-            return;
+        if (Constants.ScreenDimensions.screenHeight == Constants.ScreenDimensions.IPHONE_4_HEIGHT) {
+            cell.nameLabel.font = cell.nameLabel.font.fontWithSize(12.0)
+            cell.recentMessageLabel.font = cell.recentMessageLabel.font.fontWithSize(10.0)
+            return
+        } else if (Constants.ScreenDimensions.screenHeight == Constants.ScreenDimensions.IPHONE_5_HEIGHT) {
+            cell.nameLabel.font = cell.nameLabel.font.fontWithSize(14.0)
+            cell.recentMessageLabel.font = cell.recentMessageLabel.font.fontWithSize(10.0)
+            return
         } else if (Constants.ScreenDimensions.screenHeight == 667) {
-            return; // Do nothing because designed on iPhone 6 viewport
+            return // Do nothing because designed on iPhone 6 viewport
         } else if (Constants.ScreenDimensions.screenHeight == 736) {
-            cell.nameLabel.font = cell.nameLabel.font.fontWithSize(22.0);
-            cell.recentMessageLabel.font = cell.recentMessageLabel.font.fontWithSize(13.0)
-            return;
+            cell.nameLabel.font = cell.nameLabel.font.fontWithSize(20.0)
+            cell.recentMessageLabel.font = cell.recentMessageLabel.font.fontWithSize(14.0)
+            return
         }
         
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let profile: PFObject = otherProfileList[indexPath.row] as! PFObject;
-        let image: UIImage! = imageList[indexPath.row] as UIImage!;
+        let profile: PFObject = otherProfileList[indexPath.row] as! PFObject
+        let image: UIImage! = imageList[indexPath.row] as UIImage!
         if ((image) != nil) {
-            self.nextImage = image;
+            self.nextImage = image
         } else {
-            self.nextImage = UIImage(named: "selectImage")!;
+            self.nextImage = UIImage(named: "selectImage")!
         }
         
         // Sets values for selected user
-        prepareDataStore(profile);
-        self.performSegueWithIdentifier("toMessageVC", sender: self);
+        prepareDataStore(profile)
+        self.performSegueWithIdentifier("toMessageVC", sender: self)
     }
     
     
@@ -257,11 +263,11 @@ class ConversationListTableViewController: TableViewController {
 
     // Checks if user is logged in
     func userLoggedIn() -> Bool{
-        let currentUser = PFUser.currentUser();
+        let currentUser = PFUser.currentUser()
         if ((currentUser) != nil) {
-            return true;
+            return true
         }
-        return false;
+        return false
     }
     
     // Vibrates the phone when receives message
@@ -271,17 +277,17 @@ class ConversationListTableViewController: TableViewController {
     
     // Sets up local datastore
     func prepareDataStore(profile: PFObject) {
-        defaults.setObject(profile["Name"], forKey: Constants.SelectedUserKeys.selectedNameKey);
-        defaults.setObject(profile["InterestsList"], forKey: Constants.SelectedUserKeys.selectedInterestsKey);
-        defaults.setObject(profile["About"], forKey: Constants.SelectedUserKeys.selectedAboutKey);
-        defaults.setObject(profile["Experience"], forKey: Constants.SelectedUserKeys.selectedExperienceKey);
-        defaults.setObject(profile["Looking"], forKey: Constants.SelectedUserKeys.selectedLookingForKey);
-        defaults.setObject(profile["Available"], forKey: Constants.SelectedUserKeys.selectedAvailableKey);
-        defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey);
+        defaults.setObject(profile["Name"], forKey: Constants.SelectedUserKeys.selectedNameKey)
+        defaults.setObject(profile["InterestsList"], forKey: Constants.SelectedUserKeys.selectedInterestsKey)
+        defaults.setObject(profile["About"], forKey: Constants.SelectedUserKeys.selectedAboutKey)
+        defaults.setObject(profile["Experience"], forKey: Constants.SelectedUserKeys.selectedExperienceKey)
+        defaults.setObject(profile["Looking"], forKey: Constants.SelectedUserKeys.selectedLookingForKey)
+        defaults.setObject(profile["Available"], forKey: Constants.SelectedUserKeys.selectedAvailableKey)
+        defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey)
     }
     
     func goToMessageVC() {
-        self.performSegueWithIdentifier("toMessageVC", sender: self);
+        self.performSegueWithIdentifier("toMessageVC", sender: self)
     }
 
     // Calls main helper functions to load all conversations
@@ -291,14 +297,14 @@ class ConversationListTableViewController: TableViewController {
     
     // Finds the list of IDs of the other conversation participants in the area
     func findOtherProfiles() {
-        let otherIDs:NSMutableArray = NSMutableArray();
+        let otherIDs:NSMutableArray = NSMutableArray()
         for i in 0..<conversationParticipantList.count {
-            let participant = conversationParticipantList[i] as! PFObject;
-            otherIDs.addObject(participant["OtherUser"]!);
+            let participant = conversationParticipantList[i] as! PFObject
+            otherIDs.addObject(participant["OtherUser"]!)
         }
-        let query = PFQuery(className: "Profile");
-        query.whereKey("ID", containedIn: otherIDs as [AnyObject]);
-        query.orderByDescending("MostRecent");
+        let query = PFQuery(className: "Profile")
+        query.whereKey("ID", containedIn: otherIDs as [AnyObject])
+        query.orderByDescending("MostRecent")
         
         query.findObjectsInBackgroundWithBlock {
             (objects: [AnyObject]?, error: NSError?) -> Void in
@@ -317,12 +323,12 @@ class ConversationListTableViewController: TableViewController {
         PFCloud.callFunctionInBackground("findConversations", withParameters: [:]) {
             (result: AnyObject?, error:NSError?) -> Void in
             if error == nil {
-                self.conversationList = result as! NSArray;
-                self.findOtherProfiles();
+                self.conversationList = result as! NSArray
+                self.findOtherProfiles()
             } else {
-                print(error);
+                print(error)
             }
-        };
+        }
     }
     
     // Finds all conversations initiated in background sorted by date of most recent message
@@ -331,12 +337,12 @@ class ConversationListTableViewController: TableViewController {
         PFCloud.callFunctionInBackground("findConversationParticipants", withParameters: [:]) {
             (result: AnyObject?, error:NSError?) -> Void in
             if error == nil {
-                self.conversationParticipantList = result as! NSArray;
+                self.conversationParticipantList = result as! NSArray
                 self.findConversations()
             } else {
-                print(error);
+                print(error)
             }
-        };
+        }
     }
 
 }

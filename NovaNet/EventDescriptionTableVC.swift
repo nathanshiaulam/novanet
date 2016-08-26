@@ -327,11 +327,14 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
                 print(error)
             } else if let event = event {
                 self.selectedEvent = event;
-                self.prepareView();
             }
         }
         
         super.viewDidAppear(true);
+    }
+    
+    override func viewDidLayoutSubviews() {
+        self.prepareView()
     }
     
     
@@ -422,8 +425,8 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
             maybeButton.titleLabel?.font = UIFont(name: "OpenSans", size: 12.0)
             notGoingButton.titleLabel!.font = UIFont(name: "OpenSans", size: 12.0)
             
-            let leftLine:UIView = UIView(frame: CGRectMake(1, 2.5, 1.5, maybeButton.frame.size.height - 5.0))
-            let rightLine:UIView = UIView(frame: CGRectMake(maybeButton.frame.size.width - 1, 2.5, 1.5, maybeButton.frame.size.height - 5.0))
+            let leftLine:UIView = UIView(frame: CGRectMake(1, 2.0, 0.5, maybeButton.frame.size.height - 5.0))
+            let rightLine:UIView = UIView(frame: CGRectMake(maybeButton.frame.size.width - 1.0, 2.0, 1.5, maybeButton.frame.size.height - 5.0))
             
             leftLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
             rightLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)

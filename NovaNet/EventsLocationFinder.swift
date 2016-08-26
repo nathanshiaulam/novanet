@@ -47,7 +47,7 @@ class EventsLocationFinder: ViewController, UISearchBarDelegate, LocateOnTheMap 
     }
     var searchResultController:EventsSearchResults!
     var resultsArray = [String]()
-
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         setEventButton.layer.cornerRadius = 5.0

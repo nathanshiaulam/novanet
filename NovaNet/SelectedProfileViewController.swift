@@ -73,7 +73,7 @@ class SelectedProfileViewController: ViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        formatImage(self.profileImage);
+        Utilities().formatImage(self.profileImage)
         getChangeLabelDict();
     }
     
@@ -155,7 +155,7 @@ class SelectedProfileViewController: ViewController {
             let seekingString = NSMutableAttributedString(string: lookingFor)
             let seekingHeader = "Seeking // "
             
-            let attrs:[String : AnyObject] =  [NSFontAttributeName : UIFont(name: "OpenSans-Semibold", size: Constants.MEDIUM_FONT_SIZE)!, NSForegroundColorAttributeName: Utilities().UIColorFromHex(0x879494, alpha: 1.0)]
+            let attrs:[String : AnyObject] =  [NSFontAttributeName : UIFont(name: "OpenSans-Bold", size: Constants.MEDIUM_FONT_SIZE)!, NSForegroundColorAttributeName: Utilities().UIColorFromHex(0x879494, alpha: 1.0)]
             
             let boldedString = NSMutableAttributedString(string:seekingHeader, attributes:attrs)
             

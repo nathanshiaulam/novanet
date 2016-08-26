@@ -75,7 +75,16 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FinderViewController.loadAndRefreshData), name: "loadAndRefreshData", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FinderViewController.phoneVibrate), name: "phoneVibrate", object: nil)
-         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FinderViewController.selectProfileVC), name: "selectProfileVC", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FinderViewController.selectProfileVC), name: "selectProfileVC", object: nil)
+        self.tableView.tableFooterView = UIView()
+        
+        let border = CALayer()
+        let width = CGFloat(1.0)
+        border.borderColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0).CGColor
+        border.frame = CGRect(x: 0, y: toggleView.frame.size.height - width, width:  toggleView.frame.size.width, height: toggleView.frame.size.height)
+        border.borderWidth = width
+        toggleView.layer.addSublayer(border)
+        toggleView.layer.masksToBounds = true
         
         byDist = true
         self.tabBarController?.navigationItem.leftBarButtonItem = nil
@@ -94,6 +103,8 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         // If the user logged out, empty the tableView and perform segue to User Login
         self.tabBarController?.navigationItem.title = "FINDER"
         let appearance = UITabBarItem.appearance()
+        
+        self.navigationController?.navigationBar.shadowImage = UIImage()
         let font:UIFont = UIFont(name: "OpenSans", size: 18)!
         let attributes = [NSFontAttributeName:font]
         appearance.setTitleTextAttributes(attributes, forState: .Normal)
@@ -132,7 +143,6 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
             }
         }
         super.viewDidAppear(true)
-        
     }
     
     /*-------------------------------- TABLE VIEW METHODS ------------------------------------*/
@@ -170,6 +180,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
             backgroundLabel.sizeToFit()
             backgroundView.addSubview(backgroundLabel)
             
+            backgroundView.backgroundColor = Utilities().UIColorFromHex(0xFBFBFB, alpha: 1.0)
             self.tableView.backgroundView = backgroundView
 
             
@@ -208,6 +219,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
                     (imageData, error) -> Void in
                     if (error == nil) {
                         cell.profileImage.image = UIImage(data:imageData!)
+                        Utilities().formatImage(cell.profileImage)
                         self.imageList[indexPath.row] = UIImage(data:imageData!)
                     }
                     else {
@@ -218,12 +230,14 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
                 cell.profileImage.image = UIImage(named: "selectImage")!
                 self.imageList[indexPath.row] = nil
             }
-            
-            
-            // Formats image into circle
-            Utilities().formatImage(cell.profileImage)
         }
         return cell
+    }
+    
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        if (indexPath.row == 0) {
+            cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, CGRectGetWidth(tableView.bounds));
+        }
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -243,7 +257,6 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
             defaults.setObject(dist, forKey: Constants.SelectedUserKeys.selectedDistanceKey)
             self.performSegueWithIdentifier("toProfileView", sender: self)
         }
-
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
@@ -314,21 +327,21 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     }
     
     func manageiOSModelTypeCellLabels(cell: HomeTableViewCell) {
-        if (Constants.ScreenDimensions.screenHeight == 480) {
-            cell.name.font = cell.name.font.fontWithSize(16.0)
-            cell.experience.font = cell.experience.font.fontWithSize(12.0)
-            cell.dist.font = cell.dist.font.fontWithSize(12.0)
+        if (Constants.ScreenDimensions.screenHeight == Constants.ScreenDimensions.IPHONE_4_HEIGHT) {
+            cell.name.font = cell.name.font.fontWithSize(14.0)
+            cell.experience.font = cell.experience.font.fontWithSize(10.0)
+            cell.dist.font = cell.dist.font.fontWithSize(10.0)
             
             return
-        } else if (Constants.ScreenDimensions.screenHeight == 568) {
-            cell.name.font = cell.name.font.fontWithSize(19.0)
-            cell.experience.font = cell.experience.font.fontWithSize(13.0)
-            cell.dist.font = cell.dist.font.fontWithSize(13.0)
+        } else if (Constants.ScreenDimensions.screenHeight == Constants.ScreenDimensions.IPHONE_5_HEIGHT) {
+            cell.name.font = cell.name.font.fontWithSize(14.0)
+            cell.experience.font = cell.experience.font.fontWithSize(10.0)
+            cell.dist.font = cell.dist.font.fontWithSize(10.0)
             
             return
-        } else if (Constants.ScreenDimensions.screenHeight == 667) {
+        } else if (Constants.ScreenDimensions.screenHeight == Constants.ScreenDimensions.IPHONE_6_HEIGHT) {
             return // Do nothing because designed on iPhone 6 viewport
-        } else if (Constants.ScreenDimensions.screenHeight == 736) {
+        } else if (Constants.ScreenDimensions.screenHeight == Constants.ScreenDimensions.IPHONE_6_PLUS_HEIGHT) {
             cell.name.font = cell.name.font.fontWithSize(22.0)
             cell.experience.font = cell.experience.font.fontWithSize(13.0)
             cell.dist.font = cell.dist.font.fontWithSize(13.0)

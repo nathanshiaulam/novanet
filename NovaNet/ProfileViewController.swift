@@ -25,38 +25,29 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
     let picker = UIImagePickerController()
     var popover:UIPopoverController? = nil
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
-    var dotOne:UIImageView!
-    var dotTwo:UIImageView!
-    var dotThree:UIImageView!
     
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        dotOne = UIImageView(image: UIImage(named: "orangeDot.png"))
+        let dotOne = UIImageView(image: UIImage(named: "orangeDot.png"))
         dotOne.frame = CGRectMake(-10, firstInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
         dotOne.contentMode = UIViewContentMode.Center
         firstInterestLabel.addSubview(dotOne)
         
-        dotTwo = UIImageView(image: UIImage(named: "orangeDot.png"))
+        let dotTwo = UIImageView(image: UIImage(named: "orangeDot.png"))
         dotTwo.frame = CGRectMake(-10, secondInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
         dotTwo.contentMode = UIViewContentMode.Center
         secondInterestLabel.addSubview(dotTwo)
         
-        dotThree = UIImageView(image: UIImage(named: "orangeDot.png"))
+        let dotThree = UIImageView(image: UIImage(named: "orangeDot.png"))
         dotThree.frame = CGRectMake(-10, thirdInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
         dotThree.contentMode = UIViewContentMode.Center
         thirdInterestLabel.addSubview(dotThree)
         
         self.view.backgroundColor = UIColor.whiteColor()
-        
-        // Allows user to upload photo
-        let tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ProfileViewController.tappedImage))
-        tapGestureRecognizer.delegate = self
-
-        self.profileImage.addGestureRecognizer(tapGestureRecognizer)
-        self.profileImage.userInteractionEnabled = true
+   
         self.tabBarController?.navigationItem.title = "PROFILE"
         
         editLabel.layer.cornerRadius = 5
@@ -70,8 +61,12 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
         let fontDict:[CGFloat : [UILabel]] = getChangeLabelDict()
         
         Utilities.manageFontSizes(fontDict)
+    }
+    
+    override func viewDidLayoutSubviews() {
         Utilities().formatImage(self.profileImage)
     }
+    
     
     override func viewDidAppear(animated: Bool) {
         
@@ -182,30 +177,22 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
                 interestsLabelArr.append(firstInterestLabel)
                 interestsLabelArr.append(secondInterestLabel)
                 interestsLabelArr.append(thirdInterestLabel)
-                
-                var dotsImage:[UIImageView] = UIImageView()
-                dotsImage.append(dotOne)
-                dotsImage.append(dotTwo)
-                dotsImage.append(dotThree)
                 var numInterests = 0
                 if interestsArr.count > Constants.MAX_NUM_INTERESTS {
                     numInterests = Constants.MAX_NUM_INTERESTS
                 } else  {
                     numInterests = interestsArr.count
                 }
-                
-                
                 for i in 0..<numInterests {
                     let interest = interestsArr[i] as? String
                     interestsLabelArr[i].text = interest!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
                 }
                 for i in numInterests..<interestsLabelArr.count {
                     interestsLabelArr[i].text = ""
-                    dotsImage[i].hidden = true
                 }
                 let firstInterest = interestsArr[0] as? String
                 if (firstInterest!.characters.count == 0) {
-                    interestsLabelArr[1].text = "What are your interests?"
+                    interestsLabelArr[0].text = "What are your interests?"
                 }
             }
             
@@ -255,76 +242,5 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
         lookingForLabel.sizeToFit()
         
         self.profileImage.image = Utilities().readImage()
-    }
-    
-    func tappedImage() {
-        let alert:UIAlertController = UIAlertController(title: "Choose an Image", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-        
-        let galleryAction = UIAlertAction(title: "Upload a Photo", style: UIAlertActionStyle.Default)
-            {
-                UIAlertAction in
-                self.openGallery()
-        }
-        let cameraAction = UIAlertAction(title: "Take a Photo", style: UIAlertActionStyle.Default)
-            {
-                UIAlertAction in
-                self.openCamera()
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel)
-            {
-                UIAlertAction in
-        }
-        // Add the actions
-        alert.addAction(galleryAction)
-        alert.addAction(cameraAction)
-        alert.addAction(cancelAction)
-        
-        // Present the actionsheet
-        self.presentViewController(alert, animated: true, completion: nil)
-    }
-    func openGallery() {
-        picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone
-        {
-            self.presentViewController(picker, animated: true, completion: nil)
-        }
-        else
-        {
-            popover = UIPopoverController(contentViewController: picker)
-            popover?.presentPopoverFromRect(profileImage.frame, inView: self.view, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
-        }
-    }
-    
-    func openCamera() {
-        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera))
-        {
-            picker.sourceType = UIImagePickerControllerSourceType.Camera
-            self.presentViewController(picker, animated: true, completion: nil)
-        }
-        else
-        {
-            openGallery()
-        }
-    }
-    
-    /*-------------------------------- Image Picker Delegate Methods ------------------------------------*/
-    
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        picker.dismissViewControllerAnimated(true, completion: nil)
-        profileImage.image = info[UIImagePickerControllerOriginalImage] as? UIImage
-        
-        Utilities().saveImage(profileImage.image!)
-        
-    }
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        picker.dismissViewControllerAnimated(true, completion: nil)
-        print("Picker cancel.")
-    }
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
-
-        profileImage.image = image
-        self.dismissViewControllerAnimated(true, completion: { () -> Void in})
-         
-        Utilities().saveImage(profileImage.image!)
     }
 }

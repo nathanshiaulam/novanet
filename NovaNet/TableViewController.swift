@@ -19,8 +19,9 @@ class TableViewController: UITableViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "OpenSans", size: 18)!]
-        
+        self.tableView.backgroundColor = Utilities().UIColorFromHex(0xFBFBFB, alpha: 1.0)
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "BrandonGrotesque-Medium", size: 18)!]
+        self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TableViewController.willEnterForeground(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TableViewController.willEnterForeground(_:)), name: UIApplicationDidFinishLaunchingNotification, object: nil)

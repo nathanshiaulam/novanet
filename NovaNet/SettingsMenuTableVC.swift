@@ -63,8 +63,7 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         self.profileImage.frame = CGRectMake(0, 0, profileImageHeight, profileImageHeight)
         
         Utilities.formatImageWithWidth(profileImage, width: profileImageHeight)
-        
-        
+
         tableView.allowsSelection = false;
         picker.delegate = self;
         
@@ -80,6 +79,14 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
     
     /* TEXTVIEW DELEGATE METHODS*/
     
+    private func capitalizeTextFieldLetter(textField: UITextField) {
+        textField.text!.replaceRange(textField.text!.startIndex...textField.text!.startIndex, with: String(textField.text![textField.text!.startIndex]).capitalizedString)
+    }
+    private func capitalizeTextViewLetter(textView: UITextView) {
+        textView.text!.replaceRange(textView.text!.startIndex...textView.text!.startIndex, with: String(textView.text![textView.text!.startIndex]).capitalizedString)
+    }
+    
+    
     func textViewDidBeginEditing(textView: UITextView) {
         if textView.textColor == Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0) {
             textView.text = nil
@@ -91,6 +98,8 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         if textView.text.isEmpty {
             textView.text = "A sentence or two illustrating what you're about. Who are you in a nutshell?";
             textView.textColor = Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)
+        } else {
+            capitalizeTextViewLetter(textView);
         }
     }
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
@@ -135,10 +144,15 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         activeField = textField;
         
     }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        if textField.text!.characters.count != 0 {
+            capitalizeTextFieldLetter(textField)
+        }
+    }
 
     // Sets the character limit of each text field
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        
         if (textField == nameField) {
             return textField.text?.characters.count <= 29
         } else if (textField == experienceField) {
@@ -162,9 +176,6 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         picker.dismissViewControllerAnimated(true, completion: nil);
         profileImage.image = info[UIImagePickerControllerOriginalImage] as? UIImage;
-        
-        Utilities().saveImage(profileImage.image!);
-        
     }
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         picker.dismissViewControllerAnimated(true, completion: nil);
@@ -179,7 +190,6 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         let currentID = PFUser.currentUser()!.objectId;
         query.whereKey("ID", equalTo:currentID!);
         
-        Utilities().saveImage(profileImage.image!);
         let pickedImage:UIImage = self.profileImage.image!;
         let imageData = UIImageJPEGRepresentation(pickedImage, 0.5);
         let imageFile:PFFile = PFFile(data: imageData!)
@@ -249,17 +259,24 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
 
     /* HELPER METHODS */
 
+    func trim(val: String) -> String {
+        return val.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+    }
+    
     // Saves all necessary fields of the profile
     func saveProfile() {
-        
-        let interestsArr:[String] = [interestFieldOne.text!, interestFieldTwo.text!, interestFieldThree.text!]
+        var interestsArr:[String] = [String]()
+        interestFieldOne.text != nil ? interestsArr.append(trim(interestFieldOne.text!)) : interestsArr.append(firstInterestPlaceholder)
+        interestFieldTwo.text != nil ? interestsArr.append(trim(interestFieldTwo.text!)) : interestsArr.append(secondInterestPlaceholder)
+        interestFieldThree.text != nil ? interestsArr.append(trim(interestFieldThree.text!)) : interestsArr.append(thirdInterestPlaceholder)
         
         defaults.setObject(nameField.text, forKey: Constants.UserKeys.nameKey)
         defaults.setObject(interestsArr, forKey: Constants.UserKeys.interestsKey)
         defaults.setObject(experienceField.text, forKey: Constants.UserKeys.experienceKey)
         defaults.setObject(lookingForField.text, forKey: Constants.UserKeys.lookingForKey)
         defaults.setObject(aboutField.text, forKey: Constants.UserKeys.aboutKey)
-        
+        Utilities().saveImage(profileImage.image!);
+
         let profileFields:Dictionary<String, AnyObject> = [
             "Name" : nameField.text! as AnyObject,
             "InterestsList" : interestsArr as AnyObject,
@@ -457,9 +474,9 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         case 3:
             return screenHeight / 5.5
         case 4:
-            return screenHeight / 4.0
+            return screenHeight / 4.5
         case 6:
-            return screenHeight / 8.0
+            return screenHeight / 7.5
         default:
             return screenHeight / 10.0
         }

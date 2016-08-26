@@ -40,7 +40,7 @@ struct Constants {
         static let feedbackAlertText = "We'll do our best to reply to support any requests by email and squash any bugs found. To submit further feedback, simply fill out the form + resubmit!"
         static let feedbackEmptyText = "Please fill out the form."
         static let placeHolderAbout = "A sentence or two illustrating what you're about. Who are you in a nutshell?"
-        static let placeHolderDesc = "More info..."
+        static let placeHolderDesc = "Describe your event. Who should go?"
     }
     struct SelectedUserKeys {
         static let selectedUsernameKey = "selectedUsernameKey"

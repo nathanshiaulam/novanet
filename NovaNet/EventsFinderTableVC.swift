@@ -53,21 +53,28 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             memberEventButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: otherCurrentFont.pointSize)
             
             findSavedEvents();
-            
-            
         }
-
     }
     override func viewDidLoad() {
-        localEvents = true;
+        localEvents = true
         
-        eventsList = NSArray();
-        distList = NSArray();
+        eventsList = NSArray()
+        distList = NSArray()
         
-        self.tableView.rowHeight = 100.0;
-        self.tabBarController!.navigationItem.title = "EVENTS";
+        self.tableView.rowHeight = 100.0
+        self.tabBarController!.navigationItem.title = "EVENTS"
         
-        refreshControl = UIRefreshControl();
+        let border = CALayer()
+        let width = CGFloat(1.0)
+        border.borderColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0).CGColor
+        border.frame = CGRect(x: 0, y: eventHeaderView.frame.size.height - width, width:  eventHeaderView.frame.size.width, height: eventHeaderView.frame.size.height)
+        border.borderWidth = width
+        eventHeaderView.layer.addSublayer(border)
+        eventHeaderView.layer.masksToBounds = true
+        
+        refreshControl = UIRefreshControl()
+        self.tableView.tableFooterView = UIView()
+
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -282,8 +289,8 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         let screenHeight = Constants.ScreenDimensions.screenHeight
         
         let midHeight = (screenHeight - (self.navigationController?.navigationBar.frame.height)! - (self.tabBarController?.tabBar.frame.height)!) * 0.5
-        let imageHeight = screenHeight / 8.0
-        let buttonHeight = screenHeight / 10.0
+        let imageHeight = screenHeight / 7.0
+        let buttonHeight:CGFloat = 44.0
         let buttonWidth = screenWidth * 0.7
         var fontSize:CGFloat = 13.0
         if (Constants.ScreenDimensions.screenHeight >= Constants.ScreenDimensions.IPHONE_6_HEIGHT) {
@@ -313,10 +320,12 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             button.setTitle("CREATE EVENT", forState: UIControlState.Normal)
             button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
             button.layer.cornerRadius = 5
-            button.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: fontSize)
+            button.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: 18.0)
             button.addTarget(self, action: #selector(EventsFinderTableVC.toCreateEvent(_:)), forControlEvents: UIControlEvents.TouchUpInside)
             backgroundView.addSubview(button)
             
+            backgroundView.backgroundColor = Utilities().UIColorFromHex(0xFBFBFB, alpha: 1.0)
+
             tableView.separatorStyle = UITableViewCellSeparatorStyle.None
             tableView.backgroundView = backgroundView
         } else {
@@ -358,8 +367,8 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         formatTableViewCell(event, cell: cell, dist: dist);
         cell.layoutIfNeeded();
         
-        let leftLine:UIView = UIView(frame: CGRectMake(1, 2.5, 1.5, cell.maybeButton.frame.size.height - 5.0))
-        let rightLine:UIView = UIView(frame: CGRectMake(cell.maybeButton.frame.size.width - 1, 2.5, 1.5, cell.maybeButton.frame.size.height - 5.0))
+        let leftLine:UIView = UIView(frame: CGRectMake(1, 2.0, 0.5, cell.maybeButton.frame.size.height - 5.0))
+        let rightLine:UIView = UIView(frame: CGRectMake(cell.maybeButton.frame.size.width - 1.0, 2.0, 1.5, cell.maybeButton.frame.size.height - 5.0))
         
         leftLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
         rightLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)

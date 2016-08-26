@@ -34,7 +34,8 @@ class UploadPictureViewController: ViewController, UIGestureRecognizerDelegate, 
             defaults.setObject(false, forKey: Constants.TempKeys.fromNew);
         
             // Saves image to local datastore and preps image to store into Parse
-       
+            
+            uploadedImage.contentMode = .ScaleAspectFit
             Utilities().saveImage(uploadedImage.image!);
             
             NSNotificationCenter.defaultCenter().postNotificationName("selectProfileVC", object: nil)
@@ -65,7 +66,7 @@ class UploadPictureViewController: ViewController, UIGestureRecognizerDelegate, 
     /*-------------------------------- HELPER METHODS ------------------------------------*/
  
     private func saveTempImage() {
-        var tempImage = UIImageView(image: UIImage(named: "selectImage"))
+        let tempImage = UIImageView(image: UIImage(named: "selectImage"))
         Utilities().saveImage(tempImage.image!)
     }
     

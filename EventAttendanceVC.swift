@@ -12,6 +12,7 @@ import Bolts
 
 class EventAttendanceVC:  ViewController, UITableViewDelegate, UITableViewDataSource {
     
+    @IBOutlet weak var firstCell: UIView!
     @IBOutlet var tableView: UITableView!
     
     @IBAction func goingClicked(sender: UIButton) {
@@ -20,7 +21,7 @@ class EventAttendanceVC:  ViewController, UITableViewDelegate, UITableViewDataSo
         
         self.maybeButton.titleLabel?.textColor = Utilities().UIColorFromHex(0x879494, alpha: 1.0)
         self.notGoingButton.titleLabel?.textColor = Utilities().UIColorFromHex(0x879494, alpha: 1.0)
-
+        
         self.maybeCount.textColor = Utilities().UIColorFromHex(0x879494, alpha: 1.0)
         self.notGoingCount.textColor = Utilities().UIColorFromHex(0x879494, alpha: 1.0)
         
@@ -93,31 +94,34 @@ class EventAttendanceVC:  ViewController, UITableViewDelegate, UITableViewDataSo
     var nextImage:UIImage? = UIImage()
     
     override func viewDidLoad() {
-        super.viewDidLoad()
         
+        self.tableView.tableFooterView = UIView()
         maybeButton.layoutIfNeeded()
-        let leftLine:UIView = UIView(frame: CGRectMake(1, 2.5, 1.5, maybeButton.frame.size.height - 5.0))
-        let rightLine:UIView = UIView(frame: CGRectMake(maybeButton.frame.size.width - 1, 2.5, 1.5, maybeButton.frame.size.height - 5.0))
-        
-        
-        leftLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
-        rightLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
-        
-        maybeButton.addSubview(leftLine)
-        maybeButton.addSubview(rightLine)
-        
+
         self.goingCount.text = String(goingList.count)
         self.maybeCount.text = String(maybeList.count)
         self.notGoingCount.text = String(notGoingList.count)
         
         self.goingButton.selected = true
         self.goingCount.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
-        
         self.activeList = goingList
         manageiOSModelType()
+        super.viewDidLoad()
+
 
     }
-
+    
+    override func viewDidLayoutSubviews() {
+        let leftLine:UIView = UIView(frame: CGRectMake(1, 2.0, 0.5, 20.0))
+        let rightLine:UIView = UIView(frame: CGRectMake(69.0, 2.0, 1.5, 20.0))
+        
+        leftLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
+        rightLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
+        
+        maybeButton.addSubview(leftLine)
+        maybeButton.addSubview(rightLine)
+    }
+    
     override func viewDidAppear(animated: Bool) {
         loadList()
         super.viewDidAppear(true)
@@ -286,17 +290,4 @@ class EventAttendanceVC:  ViewController, UITableViewDelegate, UITableViewDataSo
         defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey)
         
     }
-
-
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

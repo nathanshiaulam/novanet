@@ -83,15 +83,6 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
         if (nameField.text?.characters.count > 0 && experienceField.text?.characters.count > 0 && lookingForField.text!.characters.count > 0 && aboutField.text.characters.count > 0
             && (interestFieldOne.text!.characters.count > 0 && interestFieldTwo.text!.characters.count > 0
             && interestFieldThree.text!.characters.count > 0)) {
-            
-            // Capitalize first letter of string
-            capitalizeTextFieldLetter(nameField)
-            capitalizeTextFieldLetter(experienceField)
-            capitalizeTextFieldLetter(lookingForField)
-            capitalizeTextFieldLetter(interestFieldOne)
-            capitalizeTextFieldLetter(interestFieldTwo)
-            capitalizeTextFieldLetter(interestFieldThree)
-            capitalizeTextViewLetter(aboutField)
 
             prepareDataStore()
             saveProfile()
@@ -159,6 +150,7 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
             aboutCheck.hidden = true
         } else {
             aboutCheck.hidden = false
+            capitalizeTextViewLetter(textView)
         }
     }
     func textViewShouldReturn(textView: UITextView!) -> Bool {
@@ -207,10 +199,8 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        if textField.text!.characters.count == 0 {
-            setChecks(textField, hidden: true)
-        } else {
-            setChecks(textField, hidden: false)
+        if textField.text!.characters.count != 0 {
+            capitalizeTextFieldLetter(textField)
         }
     }
     
@@ -258,13 +248,10 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     
     // Saves all necessary fields of the profile
     func saveProfile() {
-        let tempInterestsArr:[String!] = [interestFieldOne.text!, interestFieldTwo.text!, interestFieldThree.text!]
         var interestsArr:[String] = [String]()
-        for i in 0..<tempInterestsArr.count {
-            if tempInterestsArr[i] != nil && tempInterestsArr[i].characters.count > 0 {
-                interestsArr.append(trim(tempInterestsArr[i]!))
-            }
-        }
+        interestFieldOne.text != nil ? interestsArr.append(trim(interestFieldOne.text!)) : interestsArr.append(firstInterestPlaceholder)
+        interestFieldTwo.text != nil ? interestsArr.append(trim(interestFieldTwo.text!)) : interestsArr.append(secondInterestPlaceholder)
+        interestFieldThree.text != nil ? interestsArr.append(trim(interestFieldThree.text!)) : interestsArr.append(thirdInterestPlaceholder)
 
         let profileFields:Dictionary<String, AnyObject> = [
             "Name" : nameField.text! as AnyObject,

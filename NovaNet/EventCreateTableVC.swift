@@ -62,10 +62,11 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:))));
         tableView.allowsSelection = false;
         self.navigationController?.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
-        
+        titleField.autocapitalizationType = UITextAutocapitalizationType.Words
+        descField.autocapitalizationType = UITextAutocapitalizationType.Sentences
         descField.text = Constants.ConstantStrings.placeHolderDesc;
         descField.textColor = UIColor.lightGrayColor()
-        
+
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(EventCreateTableVC.saveNewLocation(_:)), name: "saveNewLocation", object: nil)
         if marker == nil {
             addressCell.hidden = true;

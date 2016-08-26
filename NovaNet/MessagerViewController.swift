@@ -26,8 +26,10 @@ class MessagerViewController: JSQMessagesViewController {
     var userName = "";
     var selectedId = "";
     var messages = [JSQMessage]();
-    let incomingBubble = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(UIColor(red: 10/255, green: 180/255, blue: 230/244, alpha: 1.0));
-    let outgoingBubble = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(UIColor.lightGrayColor());
+    let incomingBubble = JSQMessagesBubbleImageFactory().incomingMessagesBubbleImageWithColor(Utilities().UIColorFromHex(0xAAAAAA, alpha: 1.0));
+    
+    let outgoingBubble = JSQMessagesBubbleImageFactory().outgoingMessagesBubbleImageWithColor(Utilities().UIColorFromHex(0xFC6706, alpha: 1.0));
+    
     let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
     
     var nextImage:UIImage? = UIImage();
@@ -41,16 +43,7 @@ class MessagerViewController: JSQMessagesViewController {
         showTypingIndicator = !showTypingIndicator;
         scrollToBottomAnimated(true);
     }
-    
-    // Converts to RGB from Hex
-    func UIColorFromHex(rgbValue:UInt32, alpha:Double)->UIColor {
-        let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0
-        let green = CGFloat((rgbValue & 0xFF00) >> 8)/256.0
-        let blue = CGFloat(rgbValue & 0xFF)/256.0
-        
-        return UIColor(red:red, green:green, blue:blue, alpha:CGFloat(alpha))
-    }
-    
+
     // Gets an NSDate from a string of specific format
     func dateFromString(date: String, format: String) -> NSDate {
         let formatter = NSDateFormatter()
@@ -396,14 +389,13 @@ class MessagerViewController: JSQMessagesViewController {
     override func viewDidLoad() {
         super.viewDidLoad();
         
-
-        self.navigationController?.navigationBar.barTintColor = UIColorFromHex(0xFC6706, alpha: 1.0)
+        self.navigationController?.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         
         // Ensures that it loads the data when you receive a message while in view
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MessagerViewController.loadData), name: "loadData", object: nil);
         let button =  UIButton(type: UIButtonType.Custom) as UIButton;
         button.frame = CGRectMake(0, 0, 100, 40) as CGRect
-        button.titleLabel?.font = UIFont(name: "OpenSans", size: 18)
+        button.titleLabel?.font = UIFont(name: "BrandonGrotesque-Bold", size: 18)
         button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal);
         button.setTitle(defaults.stringForKey(Constants.SelectedUserKeys.selectedNameKey), forState: UIControlState.Normal)
         button.addTarget(self, action: #selector(MessagerViewController.moveToProfile(_:)), forControlEvents: UIControlEvents.TouchUpInside)
@@ -411,10 +403,10 @@ class MessagerViewController: JSQMessagesViewController {
         
         inputToolbar!.contentView!.leftBarButtonItem = nil;
         self.inputToolbar!.contentView!.textView!.delegate = self;
-        self.automaticallyScrollsToMostRecentMessage = true
+        self.automaticallyScrollsToMostRecentMessage = false
         inputToolbar.contentView.rightBarButtonItem.setTitle("SEND", forState: UIControlState.Normal)
-        inputToolbar.contentView.rightBarButtonItem.titleLabel!.font = UIFont(name: "OpenSans", size: 14.0)
-        inputToolbar.contentView.rightBarButtonItem.setTitleColor(UIColorFromHex(0xFC6706, alpha: 1.0), forState: UIControlState.Normal)
+        inputToolbar.contentView.rightBarButtonItem.titleLabel!.font = UIFont(name: "BrandonGrotesque-Bold", size: 14.0)
+        inputToolbar.contentView.rightBarButtonItem.setTitleColor(Utilities().UIColorFromHex(0xFC6706, alpha: 1.0), forState: UIControlState.Normal)
 
         // User IDs are used as sender/recipient tags
         self.senderDisplayName = defaults.stringForKey(Constants.UserKeys.nameKey)

@@ -86,8 +86,10 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
     override func viewDidLoad() {
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:))));
         tableView.allowsSelection = false;
-        
+        titleField.autocapitalizationType = UITextAutocapitalizationType.Words
+        descField.autocapitalizationType = UITextAutocapitalizationType.Sentences
         prepareView()
+
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(EventEditTableVC.saveNewLocation(_:)), name: "saveNewLocation", object: nil)
     }
     

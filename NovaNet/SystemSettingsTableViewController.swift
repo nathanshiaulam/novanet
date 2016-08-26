@@ -15,15 +15,8 @@ class SystemSettingsTableViewController: TableViewController {
     @IBOutlet weak var footerView: UIView!
     @IBOutlet weak var logoutButton: UIButton!
     @IBAction func backButtonPressed(sender: UIBarButtonItem) {
-        if (isValidEmail(emailField.text!)) {
             self.dismissViewControllerAnimated(true, completion: nil);
-        } else {
-            let alert = UIAlertController(title: "Invalid Email", message: "Please enter a valid e-mail.", preferredStyle: UIAlertControllerStyle.Alert);
-            alert.addAction(UIAlertAction(title: "GOT IT", style: UIAlertActionStyle.Default, handler: nil));
-            self.presentViewController(alert, animated: true, completion: nil);
-        }
     }
-    @IBOutlet weak var emailField: UITextField!
     
     @IBOutlet weak var greetingTemplate: UITextView!
     // Set up local datastore
@@ -69,10 +62,9 @@ class SystemSettingsTableViewController: TableViewController {
                 profile["Online"] = false
                 profile["Available"] = false
                 profile.saveInBackground()
-                PFUser.logOut()
             }
         }
-        
+        PFUser.logOut()
         
         let dict = defaults.dictionaryRepresentation();
         for key in dict.keys {
@@ -86,12 +78,6 @@ class SystemSettingsTableViewController: TableViewController {
         super.viewDidLoad();
         
         logoutButton.layer.cornerRadius = 5
-        emailField.backgroundColor = UIColor.clearColor();
-        let emailFieldPlaceholder = NSAttributedString(string: "E-Mail", attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
-        emailField.attributedPlaceholder = emailFieldPlaceholder;
-        emailField.textColor = UIColor.blackColor();
-        emailField.borderStyle = UITextBorderStyle.None;
-        self.emailField.text = PFUser.currentUser()?.email;
         tableView.allowsSelection = false;
         if let template = defaults.stringForKey(Constants.UserKeys.greetingKey) {
             greetingTemplate.text = template;
@@ -126,7 +112,6 @@ class SystemSettingsTableViewController: TableViewController {
                 if (error != nil || profile == nil) {
                     print(error);
                 } else if let profile = profile {
-                    PFUser.currentUser()!.email = self.emailField.text;
                     profile["Greeting"] = self.greetingTemplate.text;
                     self.defaults.setObject(self.greetingTemplate.text, forKey: Constants.UserKeys.greetingKey);
                     profile.saveInBackground();
@@ -147,13 +132,5 @@ class SystemSettingsTableViewController: TableViewController {
         }
         return false;
     }
-    // Converts to RGB from Hex
 
-    func isValidEmail(testStr:String) -> Bool {
-        // println("validate calendar: \(testStr)")
-        let emailRegEx = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
-        
-        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-        return emailTest.evaluateWithObject(testStr)
-    }
-}
+  }

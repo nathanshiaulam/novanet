@@ -47,11 +47,11 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
     private let thirdInterestPlaceholder = "Sports"
     private let seekingPlaceholder = "Novas."
     private let profileImageHeight = Constants.ScreenDimensions.screenHeight / 4.0 - 14.0
-    
+    private var lightenedImage:Bool!
     /* NIB LIFE CYCLE METHODS */
     override func viewDidLoad() {
+        lightenedImage = false
         super.viewDidLoad()
-        
         updateButton.layer.cornerRadius = 5
 
         // Allows user to upload photo
@@ -61,7 +61,6 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         self.profileImage.addGestureRecognizer(tapGestureRecognizer);
         self.profileImage.userInteractionEnabled = true;
         self.profileImage.frame = CGRectMake(0, 0, profileImageHeight, profileImageHeight)
-        
         Utilities.formatImageWithWidth(profileImage, width: profileImageHeight)
 
         tableView.allowsSelection = false;
@@ -70,11 +69,25 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         prepareTextFields();
     }
     
+    override func viewDidAppear(animated: Bool) {
+        
+        super.viewDidAppear(true)
+    }
     override func viewWillLayoutSubviews() {
         let fontDict:[CGFloat : [UILabel]] = getChangeLabelDict()
+        if (!lightenedImage) {
+            self.profileImage.image = alpha(0.7, image: self.profileImage.image!)
+            lightenedImage = true
+        }
+        
         Utilities().formatImage(profileImage)
         Utilities.manageFontSizes(fontDict)
         super.viewWillLayoutSubviews()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        
+        super.viewDidLayoutSubviews()
     }
     
     /* TEXTVIEW DELEGATE METHODS*/
@@ -463,6 +476,25 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         fontDict[Constants.LARGE_FONT_SIZE] = largeLabels
         
         return fontDict
+    }
+    
+    func alpha(value:CGFloat, image:UIImage)->UIImage
+    {
+        UIGraphicsBeginImageContextWithOptions(image.size, false, 0.0)
+        
+        let ctx = UIGraphicsGetCurrentContext();
+        let area = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height);
+        
+        CGContextScaleCTM(ctx, 1, -1);
+        CGContextTranslateCTM(ctx, 0, -area.size.height);
+        CGContextSetBlendMode(ctx, CGBlendMode.Multiply);
+        CGContextSetAlpha(ctx, value);
+        CGContextDrawImage(ctx, area, image.CGImage);
+        
+        let newImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        return newImage;
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {

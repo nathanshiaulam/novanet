@@ -106,20 +106,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let storyboard = UIStoryboard(name: "Main", bundle: nil);
             let appDelegate  = UIApplication.sharedApplication().delegate as! AppDelegate
             let navigation = appDelegate.window!.rootViewController as! UINavigationController
-            let rootVC = storyboard.instantiateViewControllerWithIdentifier("MessageListVC") as! ConversationListTableViewController
+            let messageVC = storyboard.instantiateViewControllerWithIdentifier("MessageListVC") as! ConversationListTableViewController
+            let eventsListVC = storyboard.instantiateViewControllerWithIdentifier("EventsListVC") as! EventsFinderTableVC
+
             if (PFUser.currentUser() != nil) {
                 if let notificationPayload = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey] as? NSDictionary {
-                    let name: AnyObject? = notificationPayload["name"];
-                    let id: AnyObject? = notificationPayload["id"];
-                    defaults.setObject(notificationPayload, forKey: Constants.TempKeys.notificationPayloadKey);
-                    defaults.setObject(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
-                    defaults.setObject(id, forKey: Constants.SelectedUserKeys.selectedIdKey)
-                    NSNotificationCenter.defaultCenter().postNotificationName("phoneVibrate", object: nil);
-                    NSNotificationCenter.defaultCenter().postNotificationName("loadConversations", object: nil);
-                    NSNotificationCenter.defaultCenter().postNotificationName("loadData", object: nil);
-                    posted = true
-                    NSNotificationCenter.defaultCenter().postNotificationName("goToMessageVC", object: nil);
-                    navigation.pushViewController(rootVC, animated: true);
+                    let name: AnyObject? = notificationPayload["name"]
+                    let alert: String? = notificationPayload["alert"] as? String
+                    let id: AnyObject? = notificationPayload["id"]
+                    
+                    print(((alert)! as NSString).substringToIndex(7))
+                    if (((alert)! as NSString).substringToIndex(7) == "Events:") {
+                        NSNotificationCenter.defaultCenter().postNotificationName("phoneVibrate", object: nil)
+                        posted = true
+                        navigation.pushViewController(eventsListVC, animated: true);
+                    } else {
+                        defaults.setObject(notificationPayload, forKey: Constants.TempKeys.notificationPayloadKey);
+                        defaults.setObject(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
+                        defaults.setObject(id, forKey: Constants.SelectedUserKeys.selectedIdKey)
+                        NSNotificationCenter.defaultCenter().postNotificationName("phoneVibrate", object: nil);
+                        NSNotificationCenter.defaultCenter().postNotificationName("loadConversations", object: nil);
+                        NSNotificationCenter.defaultCenter().postNotificationName("loadData", object: nil);
+                        posted = true
+                        NSNotificationCenter.defaultCenter().postNotificationName("goToMessageVC", object: nil);
+                        navigation.pushViewController(messageVC, animated: true);
+                    }
                 }
             }
         }
@@ -157,17 +168,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
    
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-//        PFPush.handlePush(userInfo)
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil);
-//        let appDelegate  = UIApplication.sharedApplication().delegate as! AppDelegate
-//        let navigation = appDelegate.window!.rootViewController as! UINavigationController
-//        let rootVC = storyboard.instantiateViewControllerWithIdentifier("MessageListVC") as! MessagerViewController
+
         if (PFUser.currentUser() != nil) {
-            if let notificationPayload = userInfo as? NSDictionary {
+            if let notificationPayload:NSDictionary = userInfo {
                 let name: AnyObject? = notificationPayload["name"];
-//                var date: AnyObject? = notificationPayload["date"];
                 let id: AnyObject? = notificationPayload["id"];
-//                var text: AnyObject? = notificationPayload["alert"];
+
                 defaults.setObject(notificationPayload, forKey: Constants.TempKeys.notificationPayloadKey);
                 defaults.setObject(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
                 defaults.setObject(id, forKey: Constants.SelectedUserKeys.selectedIdKey)
@@ -176,9 +182,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     NSNotificationCenter.defaultCenter().postNotificationName("loadConversations", object: nil);
                     NSNotificationCenter.defaultCenter().postNotificationName("loadData", object: nil);
                 }
-//                if (navigation.topViewController.restorationIdentifier != "MessageVC") {
-//                    navigation.pushViewController(rootVC, animated: true);
-//                }
             }
         }
         PFAnalytics.trackAppOpenedWithRemoteNotificationPayload(userInfo)

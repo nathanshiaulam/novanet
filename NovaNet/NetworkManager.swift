@@ -148,7 +148,10 @@ class NetworkManager: NSObject {
         userQuery.getFirstObjectInBackgroundWithBlock {
             (user: AnyObject?, error: NSError?) -> Void in
             if (error != nil || user == nil) {
-                print(error);
+                let alert = UIAlertController(title: "Submission Failure", message: "Invalid email or password", preferredStyle: UIAlertControllerStyle.Alert);
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
+                vc.presentViewController(alert, animated: true, completion: nil);
+                return;
             } else {
                 // Log in function and set up datastore
                 let username = user!.username;

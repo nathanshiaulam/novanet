@@ -62,7 +62,9 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         distList = NSArray()
         
         self.tableView.rowHeight = 100.0
-        self.tabBarController!.navigationItem.title = "EVENTS"
+        self.tabBarController!.navigationItem.title = "MEETUPS"
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.phoneVibrate), name: "phoneVibrate", object: nil)
         
         let border = CALayer()
         let width = CGFloat(1.0)
@@ -78,7 +80,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     }
     
     override func viewDidAppear(animated: Bool) {
-        self.tabBarController!.navigationItem.title = "EVENTS";
+        self.tabBarController!.navigationItem.title = "MEETUPS";
         self.tabBarController!.navigationItem.leftBarButtonItem = addEventButton;
         self.oldTitleView = self.tabBarController!.navigationItem.titleView
 
@@ -306,7 +308,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             backgroundImage.frame = CGRect(x: screenWidth * 0.5 - imageHeight * aspectRatio * 1.5, y: midHeight, width: imageHeight * aspectRatio, height: imageHeight)
             backgroundView.addSubview(backgroundImage)
             
-            backgroundLabel.text = "There are no current events in your area. Want to create one?"
+            backgroundLabel.text = "There are no current meetups in your area. Want to create one?"
             backgroundLabel.font = UIFont(name: "OpenSans", size: fontSize)
             backgroundLabel.textColor = Utilities().UIColorFromHex(0x3A4A49, alpha: 1.0)
             backgroundLabel.frame = CGRect(x: screenWidth * 0.5, y: midHeight, width:imageHeight * aspectRatio * 1.8, height: imageHeight)
@@ -317,7 +319,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             
             button.frame = CGRect(x: screenWidth * 0.5 - buttonWidth * 0.5, y: midHeight * 1.5, width: buttonWidth, height: buttonHeight)
             button.backgroundColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
-            button.setTitle("CREATE EVENT", forState: UIControlState.Normal)
+            button.setTitle("CREATE MEETUP", forState: UIControlState.Normal)
             button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
             button.layer.cornerRadius = 5
             button.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: 18.0)

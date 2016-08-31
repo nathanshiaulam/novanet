@@ -72,9 +72,13 @@ class SelectedProfileViewController: ViewController {
         self.navigationController?.navigationBar.backgroundColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
     }
     
+    override func viewWillLayoutSubviews() {
+        let fontDict:[CGFloat : [UILabel]] = getChangeLabelDict();
+        Utilities.manageFontSizes(fontDict)
+    }
+    
     override func viewDidLayoutSubviews() {
         Utilities().formatImage(self.profileImage)
-        getChangeLabelDict();
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
@@ -171,10 +175,10 @@ class SelectedProfileViewController: ViewController {
         
         if let dist: AnyObject = defaults.objectForKey(Constants.SelectedUserKeys.selectedDistanceKey) {
             distLabel.text = String(stringInterpolationSegment: dist) + "km";
-            chatButton.layer.cornerRadius = 5
         } else {
             distLabel.hidden = true
             distanceArrow.hidden = true
+            chatButton.layer.cornerRadius = 5
         }
         if (fromMessage == true) {
             distLabel.hidden = true

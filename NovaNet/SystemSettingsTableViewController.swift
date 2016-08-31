@@ -37,9 +37,9 @@ class SystemSettingsTableViewController: TableViewController {
                 profile["Online"] = false
                 profile["Available"] = false
                 profile.saveInBackground()
+                PFUser.logOut()
             }
         }
-        PFUser.logOut()
         
         let dict = defaults.dictionaryRepresentation();
         for key in dict.keys {
@@ -48,6 +48,7 @@ class SystemSettingsTableViewController: TableViewController {
         defaults.synchronize();
         self.dismissViewControllerAnimated(true, completion: nil);
     }
+    
     func logoutUser(sender: UIButton) {
         let query = PFQuery(className:"Profile")
         let currentID = PFUser.currentUser()!.objectId
@@ -62,9 +63,9 @@ class SystemSettingsTableViewController: TableViewController {
                 profile["Online"] = false
                 profile["Available"] = false
                 profile.saveInBackground()
+                PFUser.logOut()
             }
         }
-        PFUser.logOut()
         
         let dict = defaults.dictionaryRepresentation();
         for key in dict.keys {

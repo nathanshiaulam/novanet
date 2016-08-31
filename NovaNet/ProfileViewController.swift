@@ -59,7 +59,6 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
     
     override func viewWillLayoutSubviews() {
         let fontDict:[CGFloat : [UILabel]] = getChangeLabelDict()
-        
         Utilities.manageFontSizes(fontDict)
     }
     

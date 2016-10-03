@@ -16,12 +16,14 @@ class ForgotPasswordViewController: ViewController {
     @IBOutlet weak var centerConstraint: NSLayoutConstraint!
     var keyboardVisible:Bool = false
     
+    @IBAction func backLogin(_ sender: UIButton) {
+        self.dismiss(animated: true, completion: nil);
+
+    }
     @IBOutlet var emailField: UITextField!
 
-    @IBAction func backToLogin(sender: UIBarButtonItem) {
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil);
-    }
-    @IBAction func sendResetEmail(sender: UIButton) {
+
+    @IBAction func sendResetEmail(_ sender: UIButton) {
         NetworkManager().sendResetPasswordEmail(emailField, sender: self);
     }
     
@@ -31,59 +33,61 @@ class ForgotPasswordViewController: ViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = UIColor.white
+        self.navigationController?.navigationBar.shadowImage = UIImage()
         
         var emailFrameRect = emailField.frame
         emailFrameRect.size.height = 200
         emailField.frame = emailFrameRect
         emailField.layer.cornerRadius = 15
         emailField.layer.borderWidth = 1.3
-        emailField.layer.borderColor = UIColor.lightGrayColor().CGColor
+        emailField.layer.borderColor = UIColor.lightGray.cgColor
         
-        self.navigationController?.navigationBar.barTintColor = UIColor.whiteColor()
+        self.navigationController?.navigationBar.barTintColor = UIColor.white
         
         let email_image = UIImageView(image: UIImage(named: "login_email.png"))
         email_image.frame = CGRect(x: 0, y: 0, width: email_image.frame.width + 30, height: email_image.frame.height)
-        email_image.contentMode = UIViewContentMode.Center
+        email_image.contentMode = UIViewContentMode.center
         emailField.leftView = email_image
-        emailField.leftViewMode = UITextFieldViewMode.Always
+        emailField.leftViewMode = UITextFieldViewMode.always
         
-        let emailFieldPlaceholder = NSAttributedString(string: "Email", attributes: [NSForegroundColorAttributeName : UIColor.lightGrayColor()]);
+        let emailFieldPlaceholder = NSAttributedString(string: "Email", attributes: [NSForegroundColorAttributeName : UIColor.lightGray]);
         emailField.attributedPlaceholder = emailFieldPlaceholder;
-        emailField.textColor = UIColor.lightGrayColor();
+        emailField.textColor = UIColor.lightGray;
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ForgotPasswordViewController.keyboardWillShow(_:)), name:UIKeyboardWillShowNotification, object: nil);
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ForgotPasswordViewController.keyboardWillHide(_:)), name:UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ForgotPasswordViewController.keyboardWillShow(_:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil);
+        NotificationCenter.default.addObserver(self, selector: #selector(ForgotPasswordViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    func keyboardWillShow(notification:NSNotification) {
+    func keyboardWillShow(_ notification:Notification) {
         let changeInHeight:CGFloat = -140.0
         if (!keyboardVisible) {
-            UIView.animateWithDuration(0.5, animations: { () -> Void in
+            UIView.animate(withDuration: 0.5, animations: { () -> Void in
                 self.centerConstraint.constant += changeInHeight
             })
         }
         keyboardVisible = true
-        novaLogo.hidden = true
+        novaLogo.isHidden = true
     }
     
-    func keyboardWillHide(notification:NSNotification) {
+    func keyboardWillHide(_ notification:Notification) {
         let changeInHeight:CGFloat = 140.0
         if (keyboardVisible) {
-            UIView.animateWithDuration(0.5, animations: { () -> Void in
+            UIView.animate(withDuration: 0.5, animations: { () -> Void in
                 self.centerConstraint.constant += changeInHeight
             })
         }
         keyboardVisible = false
-        novaLogo.hidden = false
+        novaLogo.isHidden = false
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: self.view.window)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: self.view.window)
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
     }
 
     // Allows users to hit enter and move to the next text field
-    func textFieldShouldReturn(textField: UITextField)-> Bool {
+    func textFieldShouldReturn(_ textField: UITextField)-> Bool {
         if (textField == emailField) {
             textField.resignFirstResponder();
         }
@@ -91,7 +95,7 @@ class ForgotPasswordViewController: ViewController {
     }
     
     // Removes keyboard when tap outside
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true);
     }
     

@@ -30,46 +30,46 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
     var email: String!
     @IBOutlet weak var descField: UITextView!
 
-    @IBAction func contactOrganizer(sender: UIButton) {
+    @IBAction func contactOrganizer(_ sender: UIButton) {
         let email = self.email
-        let url = NSURL(string: "mailto:\(email)")
-        UIApplication.sharedApplication().openURL(url!)
+        let url = URL(string: "mailto:\(email)")
+        UIApplication.shared.openURL(url!)
     }
-    @IBAction func goBack(sender: UIBarButtonItem) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func goBack(_ sender: UIBarButtonItem) {
+        self.dismiss(animated: true, completion: nil)
     }
-    @IBAction func editEvent(sender: AnyObject) {
-        self.performSegueWithIdentifier("toEventEdit", sender: self)
+    @IBAction func editEvent(_ sender: AnyObject) {
+        self.performSegue(withIdentifier: "toEventEdit", sender: self)
     }
     
-    @IBAction func goingCountClicked(sender: UIButton) {
+    @IBAction func goingCountClicked(_ sender: UIButton) {
         goToUserList("Going")
 
     }
     
-    func goToUserList(status: String) {
+    func goToUserList(_ status: String) {
         let list = selectedEvent[status] as! [String]
         let query:PFQuery = PFQuery(className: "Profile")
         query.whereKey("ID", containedIn: list)
-        query.findObjectsInBackgroundWithBlock {
+        query.findObjectsInBackground {
             (objects: [AnyObject]?, error: NSError?) -> Void in
             if error == nil {
                 self.userList = objects as? [PFObject]
                 let maybeList = self.selectedEvent["Maybe"] as! [String]
                 let maybeQuery:PFQuery = PFQuery(className: "Profile")
                 maybeQuery.whereKey("ID", containedIn: maybeList)
-                maybeQuery.findObjectsInBackgroundWithBlock {
+                maybeQuery.findObjectsInBackground {
                     (objects: [AnyObject]?, error: NSError?) -> Void in
                     if error == nil {
                         self.maybeList = objects as? [PFObject]
                         let notGoingList = self.selectedEvent["NotGoing"] as! [String]
                         let notGoingQuery:PFQuery = PFQuery(className: "Profile")
                         notGoingQuery.whereKey("ID", containedIn: notGoingList)
-                        notGoingQuery.findObjectsInBackgroundWithBlock {
+                        notGoingQuery.findObjectsInBackground {
                             (objects: [AnyObject]?, error: NSError?) -> Void in
                             if error == nil {
                                 self.notGoingList = objects as? [PFObject]
-                                self.performSegueWithIdentifier("toUserList", sender: self)
+                                self.performSegue(withIdentifier: "toUserList", sender: self)
                             } else {
                                 print(error)
                             }
@@ -93,20 +93,21 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
     
     @IBOutlet weak var goingCount: UIButton!
 
-    @IBAction func goToCalendar(sender: UIButton) {
-        let alert:UIAlertController = UIAlertController(title: "Save Event", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-        
-        let calendarAction = UIAlertAction(title: "Add to Calendar", style: UIAlertActionStyle.Default) {
+    @IBAction func goToCalendar(_ sender: UIButton) {
+        let alert:UIAlertController = UIAlertController(title: "Save Event", message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+        let calendarAction = UIAlertAction(title: "Add to Calendar", style: UIAlertActionStyle.default) {
             UIAlertAction in
             self.insertEvent()
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style:UIAlertActionStyle.Cancel) {
+
+        let cancelAction = UIAlertAction(title: "Cancel", style:UIAlertActionStyle.cancel) {
             UIAlertAction in
         }
+
         alert.addAction(calendarAction)
         alert.addAction(cancelAction)
         
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
         
     }
     
@@ -115,7 +116,7 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
         
         // 'EKEntityTypeReminder' or 'EKEntityTypeEvent'
         
-        eventStore.requestAccessToEntityType(EKEntityType.Event, completion: {
+        eventStore.requestAccess(to: EKEntityType.event, completion: {
             (granted, error) in
             
             if (granted) && (error == nil) {
@@ -125,8 +126,8 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
                 var array:[String]!
                 do {
                     //Create a reggae and replace "," with any following spaces with just a comma
-                    let regex = try NSRegularExpression(pattern: ", +", options: NSRegularExpressionOptions.CaseInsensitive)
-                    venueName = regex.stringByReplacingMatchesInString(venueName, options: NSMatchingOptions.WithoutAnchoringBounds, range: NSMakeRange(0, venueName.characters.count), withTemplate: ",")
+                    let regex = try NSRegularExpression(pattern: ", +", options: NSRegularExpression.Options.caseInsensitive)
+                    venueName = regex.stringByReplacingMatches(in: venueName, options: NSRegularExpression.MatchingOptions.withoutAnchoringBounds, range: NSMakeRange(0, venueName.characters.count), withTemplate: ",")
                     array = venueName.characters.split { $0 == ","}.map(String.init)
                 } catch {
                     //Bad regex created
@@ -134,15 +135,15 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
                 let eventName = array[0]
                 
                 let event:EKEvent = EKEvent(eventStore: eventStore)
-                let startDate = (self.selectedEvent["Date"] as? NSDate)!
-                let endDate = startDate.dateByAddingTimeInterval(60 * 60 * 2)
+                let startDate = (self.selectedEvent["Date"] as? Date)!
+                let endDate = startDate.addingTimeInterval(60 * 60 * 2)
                 event.title = eventName
                 event.startDate = startDate
                 event.endDate = endDate
                 event.notes = (self.selectedEvent["Description"] as? String)!
                 event.calendar = eventStore.defaultCalendarForNewEvents
                 do {
-                    try eventStore.saveEvent(event, span: EKSpan.ThisEvent, commit: true)
+                    try eventStore.save(event, span: EKSpan.thisEvent, commit: true)
                 } catch {
                 }
                 
@@ -150,20 +151,20 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
             } 
         })
     }
-    @IBAction func goToAppleMaps(sender: UIButton) {
-        let alert:UIAlertController = UIAlertController(title: "Find Location", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+    @IBAction func goToAppleMaps(_ sender: UIButton) {
+        let alert:UIAlertController = UIAlertController(title: "Find Location", message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         
-        let mapsAction = UIAlertAction(title: "Open in Maps", style: UIAlertActionStyle.Default) {
+        let mapsAction = UIAlertAction(title: "Open in Maps", style: UIAlertActionStyle.default) {
             UIAlertAction in
             self.openMaps()
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style:UIAlertActionStyle.Cancel) {
+        let cancelAction = UIAlertAction(title: "Cancel", style:UIAlertActionStyle.cancel) {
             UIAlertAction in
         }
         alert.addAction(mapsAction)
         alert.addAction(cancelAction)
         
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
     func openMaps() -> Void {
@@ -172,8 +173,8 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
         var array:[String]!
         do {
             //Create a reggae and replace "," with any following spaces with just a comma
-            let regex = try NSRegularExpression(pattern: ", +", options: NSRegularExpressionOptions.CaseInsensitive)
-            venueName = regex.stringByReplacingMatchesInString(venueName, options: NSMatchingOptions.WithoutAnchoringBounds, range: NSMakeRange(0, venueName.characters.count), withTemplate: ",")
+            let regex = try NSRegularExpression(pattern: ", +", options: NSRegularExpression.Options.caseInsensitive)
+            venueName = regex.stringByReplacingMatches(in: venueName, options: NSRegularExpression.MatchingOptions.withoutAnchoringBounds, range: NSMakeRange(0, venueName.characters.count), withTemplate: ",")
             array = venueName.characters.split { $0 == ","}.map(String.init)
         } catch {
             //Bad regex created
@@ -189,139 +190,139 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
         let coordinates = CLLocationCoordinate2DMake(latitute, longitute)
         let regionSpan = MKCoordinateRegionMakeWithDistance(coordinates, regionDistance, regionDistance)
         let options = [
-            MKLaunchOptionsMapCenterKey: NSValue(MKCoordinate: regionSpan.center),
-            MKLaunchOptionsMapSpanKey: NSValue(MKCoordinateSpan: regionSpan.span)
+            MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: regionSpan.center),
+            MKLaunchOptionsMapSpanKey: NSValue(mkCoordinateSpan: regionSpan.span)
         ]
         let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
         let mapItem = MKMapItem(placemark: placemark)
         mapItem.name = "\(eventName)"
-        mapItem.openInMapsWithLaunchOptions(options)
+        mapItem.openInMaps(launchOptions: options)
 
     }
     
-    @IBAction func notGoingPressed(sender: EventAttendanceButton) {
-        if (sender.selected) {
+    @IBAction func notGoingPressed(_ sender: EventAttendanceButton) {
+        if (sender.isSelected) {
             var arr:[String]! = selectedEvent["NotGoing"] as! [String];
-            arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+            arr = arr.filter() {$0 != PFUser.current()!.objectId};
             selectedEvent["NotGoing"] = arr;
             selectedEvent.saveInBackground();
             
         } else  {
-            if (maybeButton.selected) {
+            if (maybeButton.isSelected) {
                 var arr:[String]! = selectedEvent["Maybe"] as! [String];
-                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                arr = arr.filter() {$0 != PFUser.current()!.objectId};
                 selectedEvent["Maybe"] = arr;
                 selectedEvent.saveInBackground();
-                maybeButton.highlighted = false;
-                maybeButton.selected = false;
+                maybeButton.isHighlighted = false;
+                maybeButton.isSelected = false;
             }
-            if (goingButton.selected) {
+            if (goingButton.isSelected) {
                 var arr:[String]! = selectedEvent["Going"] as! [String];
-                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                arr = arr.filter() {$0 != PFUser.current()!.objectId};
                 selectedEvent["Going"] = arr;
                 selectedEvent.saveInBackground();
-                goingButton.highlighted = false;
-                goingButton.selected = false;
+                goingButton.isHighlighted = false;
+                goingButton.isSelected = false;
             }
             var arr:[String]! = selectedEvent["NotGoing"] as! [String];
-            if !arr.contains(PFUser.currentUser()!.objectId!) {
-                arr.append(PFUser.currentUser()!.objectId!);
+            if !arr.contains(PFUser.current()!.objectId!) {
+                arr.append(PFUser.current()!.objectId!);
             }
             selectedEvent["NotGoing"] = arr;
             selectedEvent.saveInBackground();
         }
-        sender.selected = !sender.selected;
+        sender.isSelected = !sender.isSelected;
         
     }
-    @IBAction func maybePressed(sender: EventAttendanceButton) {
-        if (sender.selected) {
+    @IBAction func maybePressed(_ sender: EventAttendanceButton) {
+        if (sender.isSelected) {
             var arr:[String]! = selectedEvent["Maybe"] as! [String];
-            arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+            arr = arr.filter() {$0 != PFUser.current()!.objectId};
             selectedEvent["Maybe"] = arr;
             selectedEvent.saveInBackground();
             
         } else  {
-            if (goingButton.selected) {
+            if (goingButton.isSelected) {
                 var arr:[String]! = selectedEvent["Going"] as! [String];
-                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                arr = arr.filter() {$0 != PFUser.current()!.objectId};
                 selectedEvent["Going"] = arr;
                 selectedEvent.saveInBackground();
-                goingButton.highlighted = false;
-                goingButton.selected = false;
+                goingButton.isHighlighted = false;
+                goingButton.isSelected = false;
             }
-            if (notGoingButton.selected) {
+            if (notGoingButton.isSelected) {
                 var arr:[String]! = selectedEvent["NotGoing"] as! [String];
-                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                arr = arr.filter() {$0 != PFUser.current()!.objectId};
                 selectedEvent["NotGoing"] = arr;
                 selectedEvent.saveInBackground();
-                notGoingButton.highlighted = false;
-                notGoingButton.selected = false;
+                notGoingButton.isHighlighted = false;
+                notGoingButton.isSelected = false;
             }
             var arr:[String]! = selectedEvent["Maybe"] as! [String];
-            if !arr.contains(PFUser.currentUser()!.objectId!) {
-                arr.append(PFUser.currentUser()!.objectId!);
+            if !arr.contains(PFUser.current()!.objectId!) {
+                arr.append(PFUser.current()!.objectId!);
             }
             selectedEvent["Maybe"] = arr;
             selectedEvent.saveInBackground();
             
         }
-        sender.selected = !sender.selected;
+        sender.isSelected = !sender.isSelected;
         
     }
-    @IBAction func goingPressed(sender: EventAttendanceButton) {
-        if (sender.selected) {
+    @IBAction func goingPressed(_ sender: EventAttendanceButton) {
+        if (sender.isSelected) {
             var arr:[String]! = selectedEvent["Going"] as! [String];
-            arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+            arr = arr.filter() {$0 != PFUser.current()!.objectId};
             selectedEvent["Going"] = arr;
             selectedEvent.saveInBackground();
             
         } else  {
-            if (maybeButton.selected) {
+            if (maybeButton.isSelected) {
                 var arr:[String]! = selectedEvent["Maybe"] as! [String];
-                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                arr = arr.filter() {$0 != PFUser.current()!.objectId};
                 selectedEvent["Maybe"] = arr;
                 selectedEvent.saveInBackground();
-                maybeButton.highlighted = false;
-                maybeButton.selected = false;
+                maybeButton.isHighlighted = false;
+                maybeButton.isSelected = false;
             }
-            if (notGoingButton.selected) {
+            if (notGoingButton.isSelected) {
                 var arr:[String]! = selectedEvent["NotGoing"] as! [String];
-                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                arr = arr.filter() {$0 != PFUser.current()!.objectId};
                 selectedEvent["NotGoing"] = arr;
                 selectedEvent.saveInBackground();
-                notGoingButton.highlighted = false;
-                notGoingButton.selected = false;
+                notGoingButton.isHighlighted = false;
+                notGoingButton.isSelected = false;
             }
             var arr:[String]! = selectedEvent["Going"] as! [String];
-            if !arr.contains(PFUser.currentUser()!.objectId!) {
-                arr.append(PFUser.currentUser()!.objectId!);
+            if !arr.contains(PFUser.current()!.objectId!) {
+                arr.append(PFUser.current()!.objectId!);
             }
             selectedEvent["Going"] = arr;
             selectedEvent.saveInBackground()
         }
-        sender.selected = !sender.selected
+        sender.isSelected = !sender.isSelected
       
     }
 
     override func viewDidLoad() {
         tableView.allowsSelection = false
-        descField.editable = false;
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(EventDescriptionTableVC.eventDeleted), name: "eventDeleted", object: nil)
+        descField.isEditable = false;
+        NotificationCenter.default.addObserver(self, selector: #selector(EventDescriptionTableVC.eventDeleted), name: NSNotification.Name(rawValue: "eventDeleted"), object: nil)
         firstCell.layoutIfNeeded()
         super.viewDidLoad()
     }
     
     func eventDeleted() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         
         let id:String? = selectedEvent.objectId;
         let query = PFQuery(className: "Event")
         query.whereKey("objectId", equalTo: id!);
         
-        query.getFirstObjectInBackgroundWithBlock {
+        query.getFirstObjectInBackground {
             (event:PFObject?, error: NSError?) -> Void in
             if error != nil || event == nil {
                 print(error)
@@ -340,8 +341,7 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
     
     func prepareView() {
         if let event = selectedEvent {
-            
-            let date:NSDate! = event["Date"] as! NSDate
+            let date:Date! = event["Date"] as! Date
             let position:PFGeoPoint = event["Position"] as! PFGeoPoint
             let lat = position.latitude;
             let lon = position.longitude;
@@ -380,12 +380,12 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
             let id:String? = event["Creator"] as? String
             
             let creator:String!
-            if id != PFUser.currentUser()!.objectId {
+            if id != PFUser.current()!.objectId {
                 self.navigationItem.rightBarButtonItem = nil;
                 creator = event["CreatorName"] as? String
                 let query : PFQuery = PFUser.query()!
                 query.whereKey("objectId", equalTo: creator)
-                query.getFirstObjectInBackgroundWithBlock {
+                query.getFirstObjectInBackground {
                     (user: PFObject?, error: NSError?) -> Void in
                     if error != nil || user == nil {
                         print(error);
@@ -395,19 +395,15 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
                         self.email = creator_user.email
                     }
                 }
-
             }
             else {
                 creator = "you!"
-                self.email = PFUser.currentUser()?.email
+                self.email = PFUser.current()?.email
             }
-            
-            
-
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateStyle = NSDateFormatterStyle.LongStyle;
-            dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle;
-            let dateString = dateFormatter.stringFromDate(date)
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = DateFormatter.Style.long;
+            dateFormatter.timeStyle = DateFormatter.Style.short;
+            let dateString = dateFormatter.string(from: date)
             
             titleField.text = event["Title"] as? String
             timeLabel.text = dateString;
@@ -425,8 +421,8 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
             maybeButton.titleLabel?.font = UIFont(name: "OpenSans", size: 12.0)
             notGoingButton.titleLabel!.font = UIFont(name: "OpenSans", size: 12.0)
             
-            let leftLine:UIView = UIView(frame: CGRectMake(1, 2.0, 0.5, maybeButton.frame.size.height - 5.0))
-            let rightLine:UIView = UIView(frame: CGRectMake(maybeButton.frame.size.width - 1.0, 2.0, 1.5, maybeButton.frame.size.height - 5.0))
+            let leftLine:UIView = UIView(frame: CGRect(x: 1, y: 2.0, width: 0.5, height: maybeButton.frame.size.height - 5.0))
+            let rightLine:UIView = UIView(frame: CGRect(x: maybeButton.frame.size.width - 1.0, y: 2.0, width: 1.5, height: maybeButton.frame.size.height - 5.0))
             
             leftLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
             rightLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
@@ -434,18 +430,18 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
             maybeButton.addSubview(leftLine)
             maybeButton.addSubview(rightLine)
             
-            if goingList.contains(PFUser.currentUser()!.objectId!) {
-                goingButton.selected = true;
+            if goingList.contains(PFUser.current()!.objectId!) {
+                goingButton.isSelected = true;
                 goingButton.titleLabel?.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
             }
             
-            if maybeList.contains(PFUser.currentUser()!.objectId!) {
-                maybeButton.selected = true;
+            if maybeList.contains(PFUser.current()!.objectId!) {
+                maybeButton.isSelected = true;
                 maybeButton.titleLabel?.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
             }
             
-            if notGoingList.contains(PFUser.currentUser()!.objectId!) {
-                notGoingButton.selected = true;
+            if notGoingList.contains(PFUser.current()!.objectId!) {
+                notGoingButton.isSelected = true;
                 notGoingButton.titleLabel?.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
             }
             
@@ -454,10 +450,10 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
     }
     /* TABLEVIEW DELEGATE METHODS*/
     
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         let fixedWidth = textView.frame.size.width
-        textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
-        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
+        textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
         var newFrame = textView.frame
         newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
         textView.frame = newFrame;
@@ -465,17 +461,17 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
         self.tableView.endUpdates()
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            if indexPath.row == 0 {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if (indexPath as NSIndexPath).section == 0 {
+            if (indexPath as NSIndexPath).row == 0 {
                 descField.sizeToFit()
                 descField.layoutIfNeeded()
                 return 100 + descField.frame.height
             }
-            if indexPath.row >= 1 && indexPath.row <= 4 {
+            if (indexPath as NSIndexPath).row >= 1 && (indexPath as NSIndexPath).row <= 4 {
                 return 40
             }
-            if indexPath.row == 5 {
+            if (indexPath as NSIndexPath).row == 5 {
                 return Constants.ScreenDimensions.screenWidth
             }
         }
@@ -483,15 +479,16 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
         
     }
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         if segue.identifier == "toEventEdit" {
-            let destinationVC = segue.destinationViewController.childViewControllers[0] as! EventEditTableVC
+            let destinationVC = segue.destination.childViewControllers[0] as! EventEditTableVC
             destinationVC.selectedEvent = self.selectedEvent
         } else if segue.identifier == "toUserList" {
-            let destinationVC = segue.destinationViewController.childViewControllers[0] as! EventAttendanceVC
+            let destinationVC = segue.destination.childViewControllers[0] as! EventAttendanceVC
             destinationVC.goingList = self.userList
             destinationVC.maybeList = self.maybeList
             destinationVC.notGoingList = self.notGoingList
+            destinationVC.event = self.selectedEvent
         }
     }
     

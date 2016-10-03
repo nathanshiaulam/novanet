@@ -32,33 +32,33 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     
     // Sets up CLLocationManager and Local Data Store
     let locationManager = CLLocationManager()
-    let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+    let defaults:UserDefaults = UserDefaults.standard
     
     // Sets up pull to refresh
     var refreshControl:UIRefreshControl! = UIRefreshControl()
     
-    @IBAction func sortByDistance(sender: UIButton) {
+    @IBAction func sortByDistance(_ sender: UIButton) {
         if byDist == false {
             byDist = true
             let currentFont = distanceButton.titleLabel!.font
-            distanceButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: currentFont.pointSize)
+            distanceButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: (currentFont?.pointSize)!)
             
             let otherCurrentFont = alphabeticalButton.titleLabel!.font
-            alphabeticalButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Thin", size: otherCurrentFont.pointSize)
+            alphabeticalButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Thin", size: (otherCurrentFont?.pointSize)!)
 
             loadAndRefreshData()
         }
     }
     
-    @IBAction func sortByAlphabet(sender: UIButton) {
+    @IBAction func sortByAlphabet(_ sender: UIButton) {
         if byDist == true {
             byDist = false
             
             let currentFont = distanceButton.titleLabel!.font
-            distanceButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Thin", size: currentFont.pointSize)
+            distanceButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Thin", size: (currentFont?.pointSize)!)
 
             let otherCurrentFont = alphabeticalButton.titleLabel!.font
-            alphabeticalButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: otherCurrentFont.pointSize)
+            alphabeticalButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: (otherCurrentFont?.pointSize)!)
 
             loadAndRefreshData()
         }
@@ -73,14 +73,16 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FinderViewController.loadAndRefreshData), name: "loadAndRefreshData", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FinderViewController.phoneVibrate), name: "phoneVibrate", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FinderViewController.selectProfileVC), name: "selectProfileVC", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(FinderViewController.loadAndRefreshData), name: NSNotification.Name(rawValue: "loadAndRefreshData"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(FinderViewController.phoneVibrate), name: NSNotification.Name(rawValue: "phoneVibrate"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(FinderViewController.selectProfileVC), name: NSNotification.Name(rawValue: "selectProfileVC"), object: nil)
         self.tableView.tableFooterView = UIView()
+        
+        self.tabBarController?.tabBar.tintColor = UIColor.black
         
         let border = CALayer()
         let width = CGFloat(1.0)
-        border.borderColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0).CGColor
+        border.borderColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0).cgColor
         border.frame = CGRect(x: 0, y: toggleView.frame.size.height - width, width:  toggleView.frame.size.width, height: toggleView.frame.size.height)
         border.borderWidth = width
         toggleView.layer.addSublayer(border)
@@ -95,11 +97,11 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         
         // Go to login page if no user logged in
         if (!self.userLoggedIn()) {
-            self.performSegueWithIdentifier("toUserLogin", sender: self)
+            self.performSegue(withIdentifier: "toUserLogin", sender: self)
         }
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         // If the user logged out, empty the tableView and perform segue to User Login
         self.tabBarController?.navigationItem.title = "FINDER"
         let appearance = UITabBarItem.appearance()
@@ -107,16 +109,16 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         self.navigationController?.navigationBar.shadowImage = UIImage()
         let font:UIFont = UIFont(name: "OpenSans", size: 18)!
         let attributes = [NSFontAttributeName:font]
-        appearance.setTitleTextAttributes(attributes, forState: .Normal)
+        appearance.setTitleTextAttributes(attributes, for: UIControlState())
         if (!self.userLoggedIn()) {
             profileList = NSArray()
             tableView.reloadData()
-            self.performSegueWithIdentifier("toUserLogin", sender: self)
+            self.performSegue(withIdentifier: "toUserLogin", sender: self)
             return
         } else {
             // Sets up core location manager
             locationManager.distanceFilter = 50.0
-            locationManager.activityType = CLActivityType.AutomotiveNavigation
+            locationManager.activityType = CLActivityType.automotiveNavigation
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             
@@ -125,16 +127,16 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
             locationManager.startUpdatingLocation()
             
             // Sets up refresh control on pull down so that it calls findUsersInRange
-            refreshControl.addTarget(self, action: #selector(FinderViewController.loadAndRefreshData), forControlEvents: UIControlEvents.ValueChanged)
+            refreshControl.addTarget(self, action: #selector(FinderViewController.loadAndRefreshData), for: UIControlEvents.valueChanged)
             
             tableView.addSubview(self.refreshControl)
             
             // Notes whether or not user was just created
-            let fromNew = defaults.boolForKey(Constants.TempKeys.fromNew)
+            let fromNew = defaults.bool(forKey: Constants.TempKeys.fromNew)
             
             // Since view appears, if the user is logged in for the first time, segue to Onboarding
             if (fromNew) {
-                self.performSegueWithIdentifier("toOnboardingPage", sender: nil)
+                self.performSegue(withIdentifier: "toOnboardingPage", sender: nil)
             }
             // If the user successfully completes onboarding, found the user's current location, save it, and call findUsersInRange
             else {
@@ -148,14 +150,14 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     /*-------------------------------- TABLE VIEW METHODS ------------------------------------*/
     
     // Return the number of rows in the section.
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let screenWidth = Constants.ScreenDimensions.screenWidth
         let screenHeight = Constants.ScreenDimensions.screenHeight
         
         backgroundView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         
-        let midHeight = (screenHeight - (self.navigationController?.navigationBar.frame.height)! - (self.tabBarController?.tabBar.frame.height)!) * 0.5 + self.toggleView.frame.height
         let imageHeight = screenHeight / 7.0
+        let midHeight = (screenHeight - (self.navigationController?.navigationBar.frame.height)! - (self.tabBarController?.tabBar.frame.height)!) * 0.5 - imageHeight * 0.7
         
         var fontSize:CGFloat = 13.0
         if (Constants.ScreenDimensions.screenHeight >= Constants.ScreenDimensions.IPHONE_6_HEIGHT) {
@@ -176,7 +178,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
             backgroundLabel.textColor = Utilities().UIColorFromHex(0x3A4A49, alpha: 1.0)
             backgroundLabel.frame = CGRect(x: screenWidth * 0.5, y: midHeight, width:imageHeight * aspectRatio * 1.5 , height: imageHeight)
             backgroundLabel.numberOfLines = 0
-            backgroundLabel.textAlignment = NSTextAlignment.Left
+            backgroundLabel.textAlignment = NSTextAlignment.left
             backgroundLabel.sizeToFit()
             backgroundView.addSubview(backgroundLabel)
             
@@ -185,42 +187,42 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
 
             
         } else {
-            backgroundLabel.hidden = true
-            backgroundImage.hidden = true
-            self.tableView.backgroundView?.hidden = true
+            backgroundLabel.isHidden = true
+            backgroundImage.isHidden = true
+            self.tableView.backgroundView?.isHidden = true
         }
         return profileList.count
     }
     
     // Return the number of sections.
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ProfileCell", forIndexPath: indexPath) as! HomeTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as! HomeTableViewCell
         manageiOSModelTypeCellLabels(cell)
         formatLabels(cell)
-        imageList = [UIImage?](count: profileList.count, repeatedValue: nil)
+        imageList = [UIImage?](repeating: nil, count: profileList.count)
         if (profileList.count > 0) {
-            let profile: AnyObject = profileList[indexPath.row]
-            let dist: AnyObject = distList[indexPath.row]
+            let profile: AnyObject = profileList[(indexPath as NSIndexPath).row] as AnyObject
+            let dist: AnyObject = distList[(indexPath as NSIndexPath).row] as AnyObject
             
             cell.name.text = profile["Name"] as? String
             cell.experience.text = profile["Experience"] as? String
             cell.selectedUserId = (profile["ID"] as? String)!
             cell.dist.text = String(stringInterpolationSegment: dist) + "km"
-            cell.experience.lineBreakMode = NSLineBreakMode.ByWordWrapping
+            cell.experience.lineBreakMode = NSLineBreakMode.byWordWrapping
             cell.experience.sizeToFit()
             var image = PFFile()
             if let userImageFile = profile["Image"] as? PFFile {
                 image = userImageFile
-                image.getDataInBackgroundWithBlock {
+                image.getDataInBackground {
                     (imageData, error) -> Void in
                     if (error == nil) {
                         cell.profileImage.image = UIImage(data:imageData!)
                         Utilities().formatImage(cell.profileImage)
-                        self.imageList[indexPath.row] = UIImage(data:imageData!)
+                        self.imageList[(indexPath as NSIndexPath).row] = UIImage(data:imageData!)
                     }
                     else {
                         print(error)
@@ -228,23 +230,23 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
                 }
             } else {
                 cell.profileImage.image = UIImage(named: "selectImage")!
-                self.imageList[indexPath.row] = nil
+                self.imageList[(indexPath as NSIndexPath).row] = nil
             }
         }
         return cell
     }
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        if (indexPath.row == 0) {
-            cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, CGRectGetWidth(tableView.bounds));
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if ((indexPath as NSIndexPath).row == 0) {
+            cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, tableView.bounds.width);
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (profileList.count > 0) {
-            let profile: AnyObject = profileList[indexPath.row]
-            let dist: AnyObject = distList[indexPath.row]
-            let image: UIImage! = imageList[indexPath.row] as UIImage!
+            let profile: AnyObject = profileList[(indexPath as NSIndexPath).row] as AnyObject
+            let dist: AnyObject = distList[(indexPath as NSIndexPath).row] as AnyObject
+            let image: UIImage! = imageList[(indexPath as NSIndexPath).row] as UIImage!
             
             if ((image) != nil) {
                 self.nextImage = image
@@ -254,14 +256,14 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
             
             // Sets values for selected user
             prepareDataStore(profile as! PFObject)
-            defaults.setObject(dist, forKey: Constants.SelectedUserKeys.selectedDistanceKey)
-            self.performSegueWithIdentifier("toProfileView", sender: self)
+            defaults.set(dist, forKey: Constants.SelectedUserKeys.selectedDistanceKey)
+            self.performSegue(withIdentifier: "toProfileView", sender: self)
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         if segue.identifier == "toProfileView" {
-            let destinationVC = segue.destinationViewController.childViewControllers.first as! SelectedProfileViewController
+            let destinationVC = segue.destination.childViewControllers.first as! SelectedProfileViewController
             destinationVC.image = self.nextImage
             destinationVC.fromMessage = false
         }
@@ -271,23 +273,23 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     
     /*-------------------------------- LOCATION MANAGER METHODS ------------------------------------*/
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         var currentLocation = CLLocation()
         
-        if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedWhenInUse ||
-            CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways){
+        if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
+            CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
                 currentLocation = locationManager.location!
         }
-        defaults.setObject(currentLocation.coordinate.longitude, forKey: Constants.UserKeys.longitudeKey)
-        defaults.setObject(currentLocation.coordinate.latitude, forKey: Constants.UserKeys.latitudeKey)
+        defaults.set(currentLocation.coordinate.longitude, forKey: Constants.UserKeys.longitudeKey)
+        defaults.set(currentLocation.coordinate.latitude, forKey: Constants.UserKeys.latitudeKey)
         
         
-        if userLoggedIn() && defaults.stringForKey(Constants.UserKeys.latitudeKey) != nil {
+        if userLoggedIn() && defaults.string(forKey: Constants.UserKeys.latitudeKey) != nil {
             let query = PFQuery(className:"Profile")
-            let currentID = PFUser.currentUser()!.objectId
+            let currentID = PFUser.current()!.objectId
             query.whereKey("ID", equalTo:currentID!)
             
-            query.getFirstObjectInBackgroundWithBlock {
+            query.getFirstObjectInBackground {
                 (profile: PFObject?, error: NSError?) -> Void in
                 if error != nil || profile == nil {
                     print(error)
@@ -301,11 +303,11 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Error while updating location " + error.localizedDescription)
     }
     
-    func locationManager(manager: CLLocationManager!, error: NSError!) {
+    func locationManager(_ manager: CLLocationManager!, error: NSError!) {
         print("Error while updating location " + error.localizedDescription)
     }
     
@@ -315,7 +317,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     
     // Checks if user is logged in
     func userLoggedIn() -> Bool{
-        let currentUser = PFUser.currentUser()
+        let currentUser = PFUser.current()
         if ((currentUser) != nil) {
             return true
         }
@@ -326,25 +328,25 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         self.tabBarController?.selectedIndex = 3
     }
     
-    func manageiOSModelTypeCellLabels(cell: HomeTableViewCell) {
+    func manageiOSModelTypeCellLabels(_ cell: HomeTableViewCell) {
         if (Constants.ScreenDimensions.screenHeight == Constants.ScreenDimensions.IPHONE_4_HEIGHT) {
-            cell.name.font = cell.name.font.fontWithSize(14.0)
-            cell.experience.font = cell.experience.font.fontWithSize(10.0)
-            cell.dist.font = cell.dist.font.fontWithSize(10.0)
+            cell.name.font = cell.name.font.withSize(14.0)
+            cell.experience.font = cell.experience.font.withSize(10.0)
+            cell.dist.font = cell.dist.font.withSize(10.0)
             
             return
         } else if (Constants.ScreenDimensions.screenHeight == Constants.ScreenDimensions.IPHONE_5_HEIGHT) {
-            cell.name.font = cell.name.font.fontWithSize(14.0)
-            cell.experience.font = cell.experience.font.fontWithSize(10.0)
-            cell.dist.font = cell.dist.font.fontWithSize(10.0)
+            cell.name.font = cell.name.font.withSize(14.0)
+            cell.experience.font = cell.experience.font.withSize(10.0)
+            cell.dist.font = cell.dist.font.withSize(10.0)
             
             return
         } else if (Constants.ScreenDimensions.screenHeight == Constants.ScreenDimensions.IPHONE_6_HEIGHT) {
             return // Do nothing because designed on iPhone 6 viewport
         } else if (Constants.ScreenDimensions.screenHeight == Constants.ScreenDimensions.IPHONE_6_PLUS_HEIGHT) {
-            cell.name.font = cell.name.font.fontWithSize(22.0)
-            cell.experience.font = cell.experience.font.fontWithSize(13.0)
-            cell.dist.font = cell.dist.font.fontWithSize(13.0)
+            cell.name.font = cell.name.font.withSize(22.0)
+            cell.experience.font = cell.experience.font.withSize(13.0)
+            cell.dist.font = cell.dist.font.withSize(13.0)
             return
         }
         
@@ -352,13 +354,13 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     
     // Takes in a few parameters and returns a list of users that are available and within range
     func findUsersInRange() {
-        let longitude = defaults.doubleForKey(Constants.UserKeys.longitudeKey)
-        let distance = defaults.integerForKey(Constants.UserKeys.distanceKey)
-        let latitude = defaults.doubleForKey(Constants.UserKeys.latitudeKey)
+        let longitude = defaults.double(forKey: Constants.UserKeys.longitudeKey)
+        let distance = defaults.integer(forKey: Constants.UserKeys.distanceKey)
+        let latitude = defaults.double(forKey: Constants.UserKeys.latitudeKey)
 
         // Wipes away old profiles in data stored
         // Might be useless, may remove key in near future
-        PFCloud.callFunctionInBackground("findUsers", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {
+        PFCloud.callFunction(inBackground: "findUsers", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {
             (result: AnyObject?, error:NSError?) -> Void in
             if error == nil {
                 self.profileList = result as! NSArray
@@ -371,8 +373,8 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
    
     
     // Takes in geopoint + currentID and finds distances of users in range
-    func findDistList(longitude: Double, latitude: Double, distance: Int) {
-        PFCloud.callFunctionInBackground("findDistances", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {
+    func findDistList(_ longitude: Double, latitude: Double, distance: Int) {
+        PFCloud.callFunction(inBackground: "findDistances", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {
             (result: AnyObject?, error:NSError?) -> Void in
             if error == nil {
                 self.distList = result as! NSArray
@@ -383,9 +385,9 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
                     for i in 0..<self.profileList.count {
                         byDistDict[self.profileList[i] as! PFObject] = Double(self.distList[i].doubleValue)
                     }
-                    for (k,v) in (Array(byDistDict).sort({$0.1 < $1.1})) {
-                        byDistList.addObject(k)
-                        sortedDistances.addObject(Double(round(100*v)/100))
+                    for (k,v) in (Array(byDistDict).sorted(by: {$0.1 < $1.1})) {
+                        byDistList.add(k)
+                        sortedDistances.add(Double(round(100*v)/100))
                     }
                     self.profileList = byDistList.copy() as! NSArray
                     self.distList = sortedDistances.copy() as! NSArray
@@ -406,21 +408,21 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     // Loads the users and distances into the tableview list
     func loadAndRefreshData() {
         let query = PFQuery(className:"Profile")
-        let currentID = PFUser.currentUser()!.objectId
+        let currentID = PFUser.current()!.objectId
         query.whereKey("ID", equalTo:currentID!)
         
         // Gets current geopoint of the user and saves it
-        let latitude = self.defaults.doubleForKey(Constants.UserKeys.latitudeKey)
-        let longitude = self.defaults.doubleForKey(Constants.UserKeys.longitudeKey)
+        let latitude = self.defaults.double(forKey: Constants.UserKeys.latitudeKey)
+        let longitude = self.defaults.double(forKey: Constants.UserKeys.longitudeKey)
         let point:PFGeoPoint = PFGeoPoint(latitude: latitude, longitude: longitude)
         
-        query.getFirstObjectInBackgroundWithBlock {
+        query.getFirstObjectInBackground {
             (profile: PFObject?, error: NSError?) -> Void in
             if error != nil || profile == nil {
                 print(error)
             } else if let profile = profile {
                 profile["Location"] = point
-                profile.saveInBackgroundWithBlock {
+                profile.saveInBackground {
                     (success, error) -> Void in
                     if (success) {
                         self.findUsersInRange()
@@ -434,25 +436,25 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
 
     
     // Sets up local datastore
-    func prepareDataStore(profile: PFObject) {
-        defaults.setObject(profile["Name"], forKey: Constants.SelectedUserKeys.selectedNameKey)
-        defaults.setObject(profile["InterestsList"], forKey: Constants.SelectedUserKeys.selectedInterestsKey)
-        defaults.setObject(profile["About"], forKey: Constants.SelectedUserKeys.selectedAboutKey)
-        defaults.setObject(profile["Experience"], forKey: Constants.SelectedUserKeys.selectedExperienceKey)
-        defaults.setObject(profile["Looking"], forKey: Constants.SelectedUserKeys.selectedLookingForKey)
-        defaults.setObject(profile["Available"], forKey: Constants.SelectedUserKeys.selectedAvailableKey)
-        defaults.setObject(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey)
+    func prepareDataStore(_ profile: PFObject) {
+        defaults.set(profile["Name"], forKey: Constants.SelectedUserKeys.selectedNameKey)
+        defaults.set(profile["InterestsList"], forKey: Constants.SelectedUserKeys.selectedInterestsKey)
+        defaults.set(profile["About"], forKey: Constants.SelectedUserKeys.selectedAboutKey)
+        defaults.set(profile["Experience"], forKey: Constants.SelectedUserKeys.selectedExperienceKey)
+        defaults.set(profile["Looking"], forKey: Constants.SelectedUserKeys.selectedLookingForKey)
+        defaults.set(profile["Available"], forKey: Constants.SelectedUserKeys.selectedAvailableKey)
+        defaults.set(profile["ID"], forKey: Constants.SelectedUserKeys.selectedIdKey)
 
     }
 
     // formats labels for each cell
-    func formatLabels(cell: HomeTableViewCell) {
+    func formatLabels(_ cell: HomeTableViewCell) {
         // If run out of room, go to next line so it doesn't go off page
-        cell.experience.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        cell.experience.lineBreakMode = NSLineBreakMode.byWordWrapping
         cell.experience.sizeToFit()
-        cell.name.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        cell.name.lineBreakMode = NSLineBreakMode.byWordWrapping
         cell.name.sizeToFit()
-        cell.dist.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        cell.dist.lineBreakMode = NSLineBreakMode.byWordWrapping
         cell.dist.sizeToFit()
     }
     

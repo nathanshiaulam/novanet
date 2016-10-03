@@ -12,7 +12,7 @@ import Parse
 import GoogleMaps
 
 protocol LocateOnTheMap{
-    func locateWithLongitude(lon:Double, andLatitude lat:Double, andTitle title: String)
+    func locateWithLongitude(_ lon:Double, andLatitude lat:Double, andTitle title: String)
 }
 
 class EventsSearchResults: TableViewController {
@@ -21,51 +21,54 @@ class EventsSearchResults: TableViewController {
     
     override func viewDidLoad() {
         self.searchResults = Array()
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "resultCell");
+        self.navigationController?.extendedLayoutIncludesOpaqueBars = true
+
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "resultCell");
     }
     
-    func reloadDataWithArray(array:[String]){
+
+    func reloadDataWithArray(_ array:[String]){
         self.searchResults = array
         self.tableView.reloadData()
     }
     
     /* TABLEVIEW DELEGATE METHODS */
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.searchResults.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("resultCell", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "resultCell", for: indexPath)
         
-        cell.textLabel?.text = self.searchResults[indexPath.row]
+        cell.textLabel?.text = self.searchResults[(indexPath as NSIndexPath).row]
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.dismissViewControllerAnimated(true, completion: nil);
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.dismiss(animated: true, completion: nil);
         
-        let correctedAddress:String! = self.searchResults[indexPath.row].stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.symbolCharacterSet())
-        let url = NSURL(string: "https://maps.googleapis.com/maps/api/geocode/json?address=\(correctedAddress)&sensor=false");
+        let correctedAddress:String! = self.searchResults[(indexPath as NSIndexPath).row].addingPercentEncoding(withAllowedCharacters: CharacterSet.symbols)
+        let url = URL(string: "https://maps.googleapis.com/maps/api/geocode/json?address=\(correctedAddress)&sensor=false");
         
-        let task = NSURLSession.sharedSession().dataTaskWithURL(url!) {
+        let task = URLSession.shared.dataTask(with: url!, completionHandler: {
             (data, response, error) -> Void in
             do {
                 if data != nil{
-                    let dic = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableLeaves) as!  NSDictionary
+                    let dic = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableLeaves) as!  NSDictionary
                     
-                    let lat = dic["results"]?.valueForKey("geometry")?.valueForKey("location")?.valueForKey("lat")?.objectAtIndex(0) as! Double
-                    let lon = dic["results"]?.valueForKey("geometry")?.valueForKey("location")?.valueForKey("lng")?.objectAtIndex(0) as! Double
-                    self.delegate.locateWithLongitude(lon, andLatitude: lat, andTitle: self.searchResults[indexPath.row] )
+                    let lat = ((((dic["results"] as AnyObject).value(forKey: "geometry") as AnyObject).value(forKey: "location") as AnyObject).value(forKey: "lat") as AnyObject).object(at: 0) as! Double
+                    let lon = ((((dic["results"] as AnyObject).value(forKey: "geometry") as AnyObject).value(forKey: "location") as AnyObject).value(forKey: "lng") as AnyObject).object(at: 0) as! Double
+                    self.delegate.locateWithLongitude(lon, andLatitude: lat, andTitle: self.searchResults[(indexPath as NSIndexPath).row] )
                 }
             } catch {
                 print("Error")
             }
-        }
+        }) 
         task.resume();
     }
 

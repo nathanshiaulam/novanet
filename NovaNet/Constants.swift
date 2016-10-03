@@ -41,6 +41,8 @@ struct Constants {
         static let feedbackEmptyText = "Please fill out the form."
         static let placeHolderAbout = "A sentence or two illustrating what you're about. Who are you in a nutshell?"
         static let placeHolderDesc = "Describe your event. Who should go?"
+        static let experiencePlaceholder = "e.g. Systems Engineer"
+        static let seekingPlaceholder = "Novas."
     }
     struct SelectedUserKeys {
         static let selectedUsernameKey = "selectedUsernameKey"
@@ -56,8 +58,8 @@ struct Constants {
         
     }
     struct ScreenDimensions {
-        static let screenHeight = UIScreen.mainScreen().bounds.size.height
-        static let screenWidth = UIScreen.mainScreen().bounds.size.width
+        static let screenHeight = UIScreen.main.bounds.size.height
+        static let screenWidth = UIScreen.main.bounds.size.width
         static let IPHONE_4_HEIGHT:CGFloat = 480
         static let IPHONE_5_HEIGHT:CGFloat = 568
         static let IPHONE_6_HEIGHT:CGFloat = 667

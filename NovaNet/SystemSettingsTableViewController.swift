@@ -14,26 +14,27 @@ class SystemSettingsTableViewController: TableViewController {
     
     @IBOutlet weak var footerView: UIView!
     @IBOutlet weak var logoutButton: UIButton!
-    @IBAction func backButtonPressed(sender: UIBarButtonItem) {
-            self.dismissViewControllerAnimated(true, completion: nil);
+    @IBAction func backButtonPressed(_ sender: UIBarButtonItem) {
+            self.dismiss(animated: true, completion: nil);
     }
     
     @IBOutlet weak var greetingTemplate: UITextView!
     // Set up local datastore
-    let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+    let defaults:UserDefaults = UserDefaults.standard;
     
     // Logout user and reset datastore
-    @IBAction func userLogOut(sender: UIButton) {
+    @IBAction func userLogOut(_ sender: UIButton) {
         let query = PFQuery(className:"Profile")
-        let currentID = PFUser.currentUser()!.objectId
+        let currentID = PFUser.current()!.objectId
         query.whereKey("ID", equalTo:currentID!)
         
-        query.getFirstObjectInBackgroundWithBlock {
+        query.getFirstObjectInBackground {
             (profile: PFObject?, error: NSError?) -> Void in
             if error != nil || profile == nil {
                 print(error);
             } else if let profile = profile {
                 // Notes that the user is online
+                print("hello")
                 profile["Online"] = false
                 profile["Available"] = false
                 profile.saveInBackground()
@@ -43,52 +44,26 @@ class SystemSettingsTableViewController: TableViewController {
         
         let dict = defaults.dictionaryRepresentation();
         for key in dict.keys {
-            defaults.removeObjectForKey(key.debugDescription);
+            defaults.removeObject(forKey: key.debugDescription);
         }
         defaults.synchronize();
-        self.dismissViewControllerAnimated(true, completion: nil);
+        self.dismiss(animated: true, completion: nil);
     }
     
-    func logoutUser(sender: UIButton) {
-        let query = PFQuery(className:"Profile")
-        let currentID = PFUser.currentUser()!.objectId
-        query.whereKey("ID", equalTo:currentID!)
-        
-        query.getFirstObjectInBackgroundWithBlock {
-            (profile: PFObject?, error: NSError?) -> Void in
-            if error != nil || profile == nil {
-                print(error);
-            } else if let profile = profile {
-                // Notes that the user is online
-                profile["Online"] = false
-                profile["Available"] = false
-                profile.saveInBackground()
-                PFUser.logOut()
-            }
-        }
-        
-        let dict = defaults.dictionaryRepresentation();
-        for key in dict.keys {
-            defaults.removeObjectForKey(key.debugDescription);
-        }
-        defaults.synchronize();
-        self.dismissViewControllerAnimated(true, completion: nil);
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad();
         
         logoutButton.layer.cornerRadius = 5
         tableView.allowsSelection = false;
-        if let template = defaults.stringForKey(Constants.UserKeys.greetingKey) {
+        if let template = defaults.string(forKey: Constants.UserKeys.greetingKey) {
             greetingTemplate.text = template;
         } else {
-            defaults.setObject(Constants.ConstantStrings.greetingMessage, forKey: Constants.UserKeys.greetingKey);
+            defaults.set(Constants.ConstantStrings.greetingMessage, forKey: Constants.UserKeys.greetingKey);
             greetingTemplate.text = Constants.ConstantStrings.greetingMessage;
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         // Make footerview so it fill up size of the screen
@@ -99,22 +74,22 @@ class SystemSettingsTableViewController: TableViewController {
         if (Constants.ScreenDimensions.screenHeight == Constants.ScreenDimensions.IPHONE_4_HEIGHT) {
             footerHeight += 160
         }
-        self.footerView.frame = CGRectMake(0, 0, self.view.frame.size.width, footerHeight)
+        self.footerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: footerHeight)
         self.tableView.tableFooterView = self.footerView
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         if (self.userLoggedIn()) {
             let query:PFQuery = PFQuery(className: "Profile");
-            query.whereKey("ID", equalTo: PFUser.currentUser()!.objectId!);
+            query.whereKey("ID", equalTo: PFUser.current()!.objectId!);
             
-            query.getFirstObjectInBackgroundWithBlock {
+            query.getFirstObjectInBackground {
                 (profile: PFObject?, error: NSError?) -> Void in
                 if (error != nil || profile == nil) {
                     print(error);
                 } else if let profile = profile {
                     profile["Greeting"] = self.greetingTemplate.text;
-                    self.defaults.setObject(self.greetingTemplate.text, forKey: Constants.UserKeys.greetingKey);
+                    self.defaults.set(self.greetingTemplate.text, forKey: Constants.UserKeys.greetingKey);
                     profile.saveInBackground();
                 }
             }
@@ -127,7 +102,7 @@ class SystemSettingsTableViewController: TableViewController {
     
     // Checks if user is logged in
     func userLoggedIn() -> Bool{
-        let currentUser = PFUser.currentUser();
+        let currentUser = PFUser.current();
         if ((currentUser) != nil) {
             return true;
         }

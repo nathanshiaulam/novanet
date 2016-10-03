@@ -12,14 +12,34 @@ import Bolts
 import Parse
 import AddressBookUI
 import GoogleMaps
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class EventEditTableVC: TableViewController, UITextViewDelegate {
     
     
     var marker:GMSMarker!;
-    var selectedDate:NSDate!;
+    var selectedDate:Date!;
     
-    let defaults = NSUserDefaults.standardUserDefaults();
+    let defaults = UserDefaults.standard;
     
     var selectedEvent:PFObject!;
     
@@ -30,55 +50,55 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
     @IBOutlet weak var eventField: UITextField!
     @IBOutlet weak var addressField: UITextField!
     
-    @IBAction func deleteEvent(sender: UIButton) {
-        let alert:UIAlertController = UIAlertController(title: "Are you sure?", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+    @IBAction func deleteEvent(_ sender: UIButton) {
+        let alert:UIAlertController = UIAlertController(title: "Are you sure?", message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         
-        let deleteAction = UIAlertAction(title: "Delete Event", style: UIAlertActionStyle.Default) {
+        let deleteAction = UIAlertAction(title: "Delete Event", style: UIAlertActionStyle.default) {
             UIAlertAction in
             self.deleteEvent()
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style:UIAlertActionStyle.Cancel) {
+        let cancelAction = UIAlertAction(title: "Cancel", style:UIAlertActionStyle.cancel) {
             UIAlertAction in
         }
         alert.addAction(deleteAction)
         alert.addAction(cancelAction)
         
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
         
     }
     
     func deleteEvent() {
         
-        selectedEvent.deleteInBackgroundWithBlock {
+        selectedEvent.deleteInBackground {
             (succeeded: Bool, error: NSError?) -> Void in
             if (succeeded) {
-                self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
-                NSNotificationCenter.defaultCenter().postNotificationName("eventDeleted", object: nil);                
+                self.navigationController?.dismiss(animated: true, completion: nil)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "eventDeleted"), object: nil);                
             } else {
                 print(error)
             }
         }
     }
-    @IBAction func editEvent(sender: AnyObject) {
+    @IBAction func editEvent(_ sender: AnyObject) {
         
-        if (titleField.text?.characters.count > 0 && dateField.text?.characters.count > 0 && descField.text.characters.count > 0 && addressField.text!.characters.count > 0 && descField.textColor != UIColor.lightGrayColor()) {
+        if (titleField.text?.characters.count > 0 && dateField.text?.characters.count > 0 && descField.text.characters.count > 0 && addressField.text!.characters.count > 0 && descField.textColor != UIColor.lightGray) {
             let point:PFGeoPoint = PFGeoPoint(latitude: marker.position.latitude, longitude: marker.position.longitude);
             
             selectedEvent["Title"] = titleField.text;
             selectedEvent["Description"] = descField.text;
-            selectedEvent["Creator"] = PFUser.currentUser()?.objectId;
-            selectedEvent["CreatorName"] = defaults.objectForKey(Constants.UserKeys.nameKey);
+            selectedEvent["Creator"] = PFUser.current()?.objectId;
+            selectedEvent["CreatorName"] = defaults.object(forKey: Constants.UserKeys.nameKey);
             selectedEvent["Date"] = selectedDate;
             selectedEvent["Position"] = point;
             selectedEvent["EventName"] = marker.title;
             selectedEvent["Local"] = true;
 
             selectedEvent.saveInBackground();
-            self.navigationController?.dismissViewControllerAnimated(true, completion: nil);
+            self.navigationController?.dismiss(animated: true, completion: nil);
         } else {
-            let alert = UIAlertController(title: "Submission Failure", message: "Please fill out all fields before creating an event.", preferredStyle: UIAlertControllerStyle.Alert);
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
-            self.presentViewController(alert, animated: true, completion: nil);
+            let alert = UIAlertController(title: "Submission Failure", message: "Please fill out all fields before creating an event.", preferredStyle: UIAlertControllerStyle.alert);
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil));
+            self.present(alert, animated: true, completion: nil);
             return;
         }
     }
@@ -86,46 +106,47 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
     override func viewDidLoad() {
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:))));
         tableView.allowsSelection = false;
-        titleField.autocapitalizationType = UITextAutocapitalizationType.Words
-        descField.autocapitalizationType = UITextAutocapitalizationType.Sentences
+        titleField.autocapitalizationType = UITextAutocapitalizationType.words
+        descField.autocapitalizationType = UITextAutocapitalizationType.sentences
         prepareView()
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(EventEditTableVC.saveNewLocation(_:)), name: "saveNewLocation", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(EventEditTableVC.saveNewLocation(_:)), name: NSNotification.Name(rawValue: "saveNewLocation"), object: nil)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         if marker == nil {
-            addressCell.hidden = true;
+            addressCell.isHidden = true;
         }
     }
     
-    @IBAction func backPressed(sender: UIBarButtonItem) {
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil);
+    @IBAction func backPressed(_ sender: UIBarButtonItem) {
+        
+        self.navigationController?.dismiss(animated: true, completion: nil);
     }
     
-    @IBAction func dateFieldPressed(sender: UITextField) {
+    @IBAction func dateFieldPressed(_ sender: UITextField) {
         let datePickerView  : UIDatePicker = UIDatePicker()
         if (sender.text?.characters.count > 0) {
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateStyle = NSDateFormatterStyle.LongStyle;
-            dateFormatter.timeStyle = NSDateFormatterStyle.LongStyle;
-            let currDate = dateFormatter.dateFromString(sender.text!);
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = DateFormatter.Style.long;
+            dateFormatter.timeStyle = DateFormatter.Style.long;
+            let currDate = dateFormatter.date(from: sender.text!);
             datePickerView.date = currDate!;
         }
         sender.inputView = datePickerView
-        datePickerView.addTarget(self, action: #selector(EventEditTableVC.handleDatePicker(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        datePickerView.addTarget(self, action: #selector(EventEditTableVC.handleDatePicker(_:)), for: UIControlEvents.valueChanged)
         handleDatePicker(datePickerView);
         
     }
     
-    func saveNewLocation(notification: NSNotification?) {
-        marker = notification?.valueForKey("object") as? GMSMarker;
+    func saveNewLocation(_ notification: Notification?) {
+        marker = notification?.value(forKey: "object") as? GMSMarker;
         let lat = marker.position.latitude;
         let lon = marker.position.longitude;
         let placeName = marker!.title
-        let placeTokens = placeName.characters.split{$0 == ","}.map(String.init)
+        let placeTokens = placeName?.characters.split{$0 == ","}.map(String.init)
         
-        self.eventField.text = placeTokens[0]
+        self.eventField.text = placeTokens?[0]
         let location = CLLocation(latitude: lat, longitude: lon);
         
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
@@ -138,7 +159,7 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
                 let pm = marks[0] as CLPlacemark;
                 let address = ABCreateStringWithAddressDictionary(pm.addressDictionary!, true);
                 self.addressField.text = address;
-                self.addressCell.hidden = false;
+                self.addressCell.isHidden = false;
             }
         })
         
@@ -146,11 +167,11 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
     
     func prepareView() {
         self.navigationController?.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = NSDateFormatterStyle.LongStyle;
-        dateFormatter.timeStyle = NSDateFormatterStyle.LongStyle;
-        selectedDate = selectedEvent["Date"] as? NSDate
-        let dateString = dateFormatter.stringFromDate(selectedDate!);
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = DateFormatter.Style.long;
+        dateFormatter.timeStyle = DateFormatter.Style.long;
+        selectedDate = selectedEvent["Date"] as? Date
+        let dateString = dateFormatter.string(from: selectedDate!);
         dateField.text = dateString;
         
         descField.text = selectedEvent["Description"] as? String
@@ -165,9 +186,9 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
         marker.position.longitude = lon
         
         let placeName = marker!.title
-        let placeTokens = placeName.characters.split{$0 == ","}.map(String.init)
+        let placeTokens = placeName?.characters.split{$0 == ","}.map(String.init)
         
-        self.eventField.text = placeTokens[0]
+        self.eventField.text = placeTokens?[0]
         let location = CLLocation(latitude: lat, longitude: lon)
         
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
@@ -180,26 +201,26 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
                 let pm = marks[0] as CLPlacemark;
                 let address = ABCreateStringWithAddressDictionary(pm.addressDictionary!, true);
                 self.addressField.text = address;
-                self.addressCell.hidden = false;
+                self.addressCell.isHidden = false;
             }
         })
     }
     
-    func handleDatePicker(sender: UIDatePicker) {
+    func handleDatePicker(_ sender: UIDatePicker) {
         
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = NSDateFormatterStyle.LongStyle;
-        dateFormatter.timeStyle = NSDateFormatterStyle.LongStyle;
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = DateFormatter.Style.long;
+        dateFormatter.timeStyle = DateFormatter.Style.long;
         
-        let dateString = dateFormatter.stringFromDate((sender.date))
+        let dateString = dateFormatter.string(from: (sender.date))
         selectedDate = sender.date;
         dateField.text = dateString;
     }
     
     /* TABLEVIEW DELEGATE METHODS*/
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 1 && descField.textColor != UIColor.lightGrayColor(){
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if (indexPath as NSIndexPath).section == 1 && descField.textColor != UIColor.lightGray{
             return descField.frame.height + 20;
         } else {
             return self.tableView.rowHeight;
@@ -208,24 +229,24 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
     }
     /* TEXTVIEW DELEGATE METHODS*/
     
-    func textViewDidBeginEditing(textView: UITextView) {
-        if textView.textColor == UIColor.lightGrayColor() {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
             textView.text = nil
-            textView.textColor = UIColor.blackColor()
+            textView.textColor = UIColor.black
         }
     }
     
-    func textViewDidEndEditing(textView: UITextView) {
+    func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = Constants.ConstantStrings.placeHolderDesc;
-            textView.textColor = UIColor.lightGrayColor()
+            textView.textColor = UIColor.lightGray
         }
     }
     
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         let fixedWidth = textView.frame.size.width
-        textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
-        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
+        textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
         var newFrame = textView.frame
         newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
         textView.frame = newFrame;
@@ -233,22 +254,22 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
         self.tableView.endUpdates()
     }
     
-    func textViewShouldEndEditing(textView: UITextView) -> Bool {
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
         textView.resignFirstResponder();
         return true;
     }
     
     // Moves to next field when hits enter
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder();
         return true;
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         
         // Create a new variable to store the instance of PlayerTableViewController
         if (segue.identifier == "toMapView") {
-            let navVC = segue.destinationViewController as! UINavigationController;
+            let navVC = segue.destination as! UINavigationController;
             let destinationVC = navVC.viewControllers.first as! EventsLocationFinder;
             if let location = marker {
                 destinationVC.selectedLocation = location;

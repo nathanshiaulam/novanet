@@ -9,9 +9,29 @@
 import UIKit
 import Parse
 import Bolts
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate,UINavigationControllerDelegate, UITextViewDelegate  {
-    let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+    let defaults:UserDefaults = UserDefaults.standard;
     @IBOutlet weak var profileImage: UIImageView!
 
     /* TEXTFIELDS */
@@ -36,18 +56,24 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
     let picker = UIImagePickerController();
     var popover:UIPopoverController? = nil;
     
-    @IBAction func updateValues(sender: UIButton) {
-        saveProfile()
-        NSNotificationCenter.defaultCenter().postNotificationName("setValues", object: nil)
-        self.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func updateValues(_ sender: UIButton) {
+        if (nameField.text?.characters.count > 0 && experienceField.text?.characters.count > 0) {
+            saveProfile()
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "setValues"), object: nil)
+            self.navigationController!.popViewController(animated: true)
+        } else {
+            let alert = UIAlertController(title: "Empty Field", message: "Please fill in your name and profession.", preferredStyle: UIAlertControllerStyle.alert);
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil));
+            self.present(alert, animated: true, completion: nil);
+        }
     }
     
-    private let firstInterestPlaceholder = "Nova"
-    private let secondInterestPlaceholder = "Reading"
-    private let thirdInterestPlaceholder = "Sports"
-    private let seekingPlaceholder = "Novas."
-    private let profileImageHeight = Constants.ScreenDimensions.screenHeight / 4.0 - 14.0
-    private var lightenedImage:Bool!
+    fileprivate let firstInterestPlaceholder = "Nova"
+    fileprivate let secondInterestPlaceholder = "Reading"
+    fileprivate let thirdInterestPlaceholder = "Sports"
+    fileprivate let seekingPlaceholder = "Novas."
+    fileprivate let profileImageHeight = Constants.ScreenDimensions.screenHeight / 4.0 - 14.0
+    fileprivate var lightenedImage:Bool!
     /* NIB LIFE CYCLE METHODS */
     override func viewDidLoad() {
         lightenedImage = false
@@ -59,8 +85,8 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         tapGestureRecognizer.delegate = self;
         
         self.profileImage.addGestureRecognizer(tapGestureRecognizer);
-        self.profileImage.userInteractionEnabled = true;
-        self.profileImage.frame = CGRectMake(0, 0, profileImageHeight, profileImageHeight)
+        self.profileImage.isUserInteractionEnabled = true;
+        self.profileImage.frame = CGRect(x: 0, y: 0, width: profileImageHeight, height: profileImageHeight)
         Utilities.formatImageWithWidth(profileImage, width: profileImageHeight)
 
         tableView.allowsSelection = false;
@@ -69,58 +95,39 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         prepareTextFields();
     }
     
-    override func viewDidAppear(animated: Bool) {
-        
-        super.viewDidAppear(true)
-    }
     override func viewWillLayoutSubviews() {
         let fontDict:[CGFloat : [UILabel]] = getChangeLabelDict()
         if (!lightenedImage) {
             self.profileImage.image = alpha(0.7, image: self.profileImage.image!)
             lightenedImage = true
         }
-        
         Utilities().formatImage(profileImage)
         Utilities.manageFontSizes(fontDict)
         super.viewWillLayoutSubviews()
     }
     
-    override func viewDidLayoutSubviews() {
-        
-        super.viewDidLayoutSubviews()
-    }
-    
     /* TEXTVIEW DELEGATE METHODS*/
     
-    private func capitalizeTextFieldLetter(textField: UITextField) {
-        textField.text!.replaceRange(textField.text!.startIndex...textField.text!.startIndex, with: String(textField.text![textField.text!.startIndex]).capitalizedString)
-    }
-    private func capitalizeTextViewLetter(textView: UITextView) {
-        textView.text!.replaceRange(textView.text!.startIndex...textView.text!.startIndex, with: String(textView.text![textView.text!.startIndex]).capitalizedString)
-    }
     
-    
-    func textViewDidBeginEditing(textView: UITextView) {
+    func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0) {
             textView.text = nil
-            textView.textColor = UIColor.blackColor()
+            textView.textColor = UIColor.black
         }
     }
     
-    func textViewDidEndEditing(textView: UITextView) {
+    func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = "A sentence or two illustrating what you're about. Who are you in a nutshell?";
             textView.textColor = Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)
-        } else {
-            capitalizeTextViewLetter(textView);
         }
     }
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let maxtext = 80
         //If the text is larger than the maxtext, the return is false
         return textView.text.characters.count + (text.characters.count - range.length) <= maxtext
     }
-    func textViewShouldReturn(textView: UITextView!) -> Bool {
+    func textViewShouldReturn(_ textView: UITextView!) -> Bool {
         self.view.endEditing(true)
         interestFieldOne.becomeFirstResponder()
         return true;
@@ -129,7 +136,7 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
     /* TEXTFIELD DELEGATE METHODS*/
     
     // Allows users to hit enter and move to the next text field
-    func textFieldShouldReturn(textField: UITextField)-> Bool {
+    func textFieldShouldReturn(_ textField: UITextField)-> Bool {
         if (textField == nameField) {
             experienceField.becomeFirstResponder();
         }
@@ -153,61 +160,60 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         return false;
     }
     // checks active field
-    func textFieldDidBeginEditing(textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         activeField = textField;
         
     }
-    
-    func textFieldDidEndEditing(textField: UITextField) {
-        if textField.text!.characters.count != 0 {
-            capitalizeTextFieldLetter(textField)
-        }
-    }
 
     // Sets the character limit of each text field
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        if (textField == nameField) {
-            return textField.text?.characters.count <= 29
-        } else if (textField == experienceField) {
-            return textField.text?.characters.count <= 30
-        } else if (textField == interestFieldOne ||
-            textField == interestFieldTwo ||
-            textField == interestFieldThree) {
-            return textField.text?.characters.count <= 9
+    func textField(_ textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        var limit:Int!
+        if (textField == nameField ||
+            textField == experienceField ||
+            textField == lookingForField)
+        {
+            limit = 30
         } else {
-            return textField.text?.characters.count <= 80
+            limit = 9
         }
+        
+        let currentCharacterCount = textField.text?.characters.count ?? 0
+        if (range.length + range.location > currentCharacterCount){
+            return false
+        }
+        let newLength = currentCharacterCount + string.characters.count - range.length
+        return newLength <= limit
     }
     
     // Removes keyboard when tap out of screen
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true);
     }
     
     /* IMAGE PICKER METHODS */
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        picker.dismissViewControllerAnimated(true, completion: nil);
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        picker.dismiss(animated: true, completion: nil);
         profileImage.image = info[UIImagePickerControllerOriginalImage] as? UIImage;
     }
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        picker.dismissViewControllerAnimated(true, completion: nil);
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil);
         print("Picker cancel.");
     }
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [AnyHashable: Any]!) {
         
         profileImage.image = image
-        self.dismissViewControllerAnimated(true, completion: { () -> Void in})
+        self.dismiss(animated: true, completion: { () -> Void in})
         
         let query = PFQuery(className:"Profile");
-        let currentID = PFUser.currentUser()!.objectId;
+        let currentID = PFUser.current()!.objectId;
         query.whereKey("ID", equalTo:currentID!);
         
         let pickedImage:UIImage = self.profileImage.image!;
         let imageData = UIImageJPEGRepresentation(pickedImage, 0.5);
         let imageFile:PFFile = PFFile(data: imageData!)
         
-        query.getFirstObjectInBackgroundWithBlock {
+        query.getFirstObjectInBackground {
             (profile: PFObject?, error: NSError?) -> Void in
             if error != nil || profile == nil {
                 print(error);
@@ -221,19 +227,19 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
     /* CAMERA METHODS */
     
     func tappedImage() {
-        let alert:UIAlertController = UIAlertController(title: "Choose an Image", message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet);
+        let alert:UIAlertController = UIAlertController(title: "Choose an Image", message: nil, preferredStyle: UIAlertControllerStyle.actionSheet);
         
-        let galleryAction = UIAlertAction(title: "Upload a Photo", style: UIAlertActionStyle.Default)
+        let galleryAction = UIAlertAction(title: "Upload a Photo", style: UIAlertActionStyle.default)
             {
                 UIAlertAction in
                 self.openGallery()
         }
-        let cameraAction = UIAlertAction(title: "Take a Photo", style: UIAlertActionStyle.Default)
+        let cameraAction = UIAlertAction(title: "Take a Photo", style: UIAlertActionStyle.default)
             {
                 UIAlertAction in
                 self.openCamera()
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel)
             {
                 UIAlertAction in
         }
@@ -243,26 +249,26 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         alert.addAction(cancelAction);
         
         // Present the actionsheet
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     func openGallery() {
-        picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone
+        picker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        if UIDevice.current.userInterfaceIdiom == .phone
         {
-            self.presentViewController(picker, animated: true, completion: nil)
+            self.present(picker, animated: true, completion: nil)
         }
         else
         {
             popover = UIPopoverController(contentViewController: picker);
-            popover?.presentPopoverFromRect(profileImage.frame, inView: self.view, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
+            popover?.present(from: profileImage.frame, in: self.view, permittedArrowDirections: UIPopoverArrowDirection.any, animated: true)
         }
     }
     
     func openCamera() {
-        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera))
+        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera))
         {
-            picker.sourceType = UIImagePickerControllerSourceType.Camera
-            self.presentViewController(picker, animated: true, completion: nil)
+            picker.sourceType = UIImagePickerControllerSourceType.camera
+            self.present(picker, animated: true, completion: nil)
         }
         else
         {
@@ -272,8 +278,8 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
 
     /* HELPER METHODS */
 
-    func trim(val: String) -> String {
-        return val.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+    func trim(_ val: String) -> String {
+        return val.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
     
     // Saves all necessary fields of the profile
@@ -283,11 +289,11 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         interestFieldTwo.text != nil ? interestsArr.append(trim(interestFieldTwo.text!)) : interestsArr.append(secondInterestPlaceholder)
         interestFieldThree.text != nil ? interestsArr.append(trim(interestFieldThree.text!)) : interestsArr.append(thirdInterestPlaceholder)
         
-        defaults.setObject(nameField.text, forKey: Constants.UserKeys.nameKey)
-        defaults.setObject(interestsArr, forKey: Constants.UserKeys.interestsKey)
-        defaults.setObject(experienceField.text, forKey: Constants.UserKeys.experienceKey)
-        defaults.setObject(lookingForField.text, forKey: Constants.UserKeys.lookingForKey)
-        defaults.setObject(aboutField.text, forKey: Constants.UserKeys.aboutKey)
+        defaults.set(nameField.text, forKey: Constants.UserKeys.nameKey)
+        defaults.set(interestsArr, forKey: Constants.UserKeys.interestsKey)
+        defaults.set(experienceField.text, forKey: Constants.UserKeys.experienceKey)
+        defaults.set(lookingForField.text, forKey: Constants.UserKeys.lookingForKey)
+        defaults.set(aboutField.text, forKey: Constants.UserKeys.aboutKey)
         Utilities().saveImage(profileImage.image!);
 
         let profileFields:Dictionary<String, AnyObject> = [
@@ -312,75 +318,77 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
     
     // Prepares all text fields
     func prepareTextFields() {
-        nameField.backgroundColor = UIColor.clearColor();
+        
+        nameField.autocapitalizationType = UITextAutocapitalizationType.words
+        interestFieldOne.autocapitalizationType = UITextAutocapitalizationType.words
+        interestFieldTwo.autocapitalizationType = UITextAutocapitalizationType.words
+        interestFieldThree.autocapitalizationType = UITextAutocapitalizationType.words
+        experienceField.autocapitalizationType = UITextAutocapitalizationType.words
+        lookingForField.autocapitalizationType = UITextAutocapitalizationType.words
+        aboutField.autocapitalizationType = UITextAutocapitalizationType.sentences
+        
+        nameField.backgroundColor = UIColor.clear;
         let nameFieldPlaceholder = NSAttributedString(string: "What's your name?", attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         nameField.attributedPlaceholder = nameFieldPlaceholder;
-        nameField.textColor = UIColor.blackColor();
-        nameField.borderStyle = UITextBorderStyle.None;
+        nameField.borderStyle = UITextBorderStyle.none;
         nameField.font = UIFont(name: "OpenSans", size: Constants.SMALL_FONT_SIZE);
-        
-        aboutField.backgroundColor = UIColor.clearColor();
+        aboutField.backgroundColor = UIColor.clear;
         aboutField.font = UIFont(name: "OpenSans", size: Constants.SMALL_FONT_SIZE);
         
-        interestFieldOne.backgroundColor = UIColor.clearColor();
+        interestFieldOne.backgroundColor = UIColor.clear;
         let interestsFieldOnePlaceholder = NSAttributedString(string: firstInterestPlaceholder, attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         interestFieldOne.attributedPlaceholder = interestsFieldOnePlaceholder;
-        interestFieldOne.textColor = UIColor.blackColor();
-        interestFieldOne.borderStyle = UITextBorderStyle.None
+        interestFieldOne.borderStyle = UITextBorderStyle.none
         interestFieldOne.font = UIFont(name: "OpenSans", size: Constants.SMALL_FONT_SIZE);
         
         let dotOneImage = UIImageView(image: UIImage(named: "orangeDot.png"))
         dotOneImage.frame = CGRect(x: 0, y: 0, width: dotOneImage.frame.width + 15, height: dotOneImage.frame.height)
-        dotOneImage.contentMode = UIViewContentMode.Center
+        dotOneImage.contentMode = UIViewContentMode.center
         interestFieldOne.leftView = dotOneImage
-        interestFieldOne.leftViewMode = UITextFieldViewMode.Always
+        interestFieldOne.leftViewMode = UITextFieldViewMode.always
         
-        interestFieldTwo.backgroundColor = UIColor.clearColor();
+        interestFieldTwo.backgroundColor = UIColor.clear;
         let interestsFieldTwoPlaceholder = NSAttributedString(string: secondInterestPlaceholder, attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         interestFieldTwo.attributedPlaceholder = interestsFieldTwoPlaceholder;
-        interestFieldTwo.textColor = UIColor.blackColor();
-        interestFieldTwo.borderStyle = UITextBorderStyle.None
+        interestFieldTwo.borderStyle = UITextBorderStyle.none
         interestFieldTwo.font = UIFont(name: "OpenSans", size: Constants.SMALL_FONT_SIZE);
         
         let dotTwoImage = UIImageView(image: UIImage(named: "orangeDot.png"))
         dotTwoImage.frame = CGRect(x: 0, y: 0, width: dotTwoImage.frame.width + 15, height: dotTwoImage.frame.height)
-        dotTwoImage.contentMode = UIViewContentMode.Center
+        dotTwoImage.contentMode = UIViewContentMode.center
         interestFieldTwo.leftView = dotTwoImage
-        interestFieldTwo.leftViewMode = UITextFieldViewMode.Always
+        interestFieldTwo.leftViewMode = UITextFieldViewMode.always
         
-        interestFieldThree.backgroundColor = UIColor.clearColor();
+        interestFieldThree.backgroundColor = UIColor.clear;
         let interestsFieldThreePlaceholder = NSAttributedString(string: thirdInterestPlaceholder, attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         interestFieldThree.attributedPlaceholder = interestsFieldThreePlaceholder;
-        interestFieldThree.textColor = UIColor.blackColor();
-        interestFieldThree.borderStyle = UITextBorderStyle.None
+        interestFieldThree.borderStyle = UITextBorderStyle.none
         interestFieldThree.font = UIFont(name: "OpenSans", size: Constants.SMALL_FONT_SIZE)
         
         let dotThreeImage = UIImageView(image: UIImage(named: "orangeDot.png"))
         dotThreeImage.frame = CGRect(x: 0, y: 0, width: dotThreeImage.frame.width + 15, height: dotThreeImage.frame.height)
-        dotThreeImage.contentMode = UIViewContentMode.Center
+        dotThreeImage.contentMode = UIViewContentMode.center
         interestFieldThree.leftView = dotThreeImage
-        interestFieldThree.leftViewMode = UITextFieldViewMode.Always
+        interestFieldThree.leftViewMode = UITextFieldViewMode.always
 
-        experienceField.backgroundColor = UIColor.clearColor();
+        experienceField.backgroundColor = UIColor.clear;
         let backgroundFieldPlaceholder = NSAttributedString(string: "e.g. Systems Engineer", attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         experienceField.attributedPlaceholder = backgroundFieldPlaceholder;
-        experienceField.textColor = UIColor.blackColor();
-        experienceField.borderStyle = UITextBorderStyle.None
+        experienceField.borderStyle = UITextBorderStyle.none
         experienceField.font = UIFont(name: "OpenSans", size: Constants.SMALL_FONT_SIZE);
         
-        lookingForField.backgroundColor = UIColor.clearColor();
+        lookingForField.backgroundColor = UIColor.clear;
         let goalsFieldPlaceholder = NSAttributedString(string: "What are you looking for?", attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         lookingForField.attributedPlaceholder = goalsFieldPlaceholder;
-        lookingForField.textColor = UIColor.blackColor();
-        lookingForField.borderStyle = UITextBorderStyle.None
+        lookingForField.borderStyle = UITextBorderStyle.none
         lookingForField.font = UIFont(name: "OpenSans", size: Constants.SMALL_FONT_SIZE);
         
         // Set texts if exists
-        if let name = defaults.stringForKey(Constants.UserKeys.nameKey) {
+        if let name = defaults.string(forKey: Constants.UserKeys.nameKey) {
             nameField.text = name;
         }
         // Set About Field View Text
-        if let about = defaults.stringForKey(Constants.UserKeys.aboutKey) {
+        if let about = defaults.string(forKey: Constants.UserKeys.aboutKey) {
             aboutField.text = about;
             if (about == Constants.ConstantStrings.aboutText) {
                 aboutField.textColor = Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0);
@@ -391,23 +399,23 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         }
         
         let interestsFields = [interestFieldOne, interestFieldTwo, interestFieldThree]
-        if let interests = defaults.arrayForKey(Constants.UserKeys.interestsKey) {
+        if let interests = defaults.array(forKey: Constants.UserKeys.interestsKey) {
             var interestsArr = interests;
             for i in 0..<interestsArr.count {
-                interestsFields[i].text = interestsArr[i] as? String
+                interestsFields[i]?.text = interestsArr[i] as? String
             }
 
         }
-        if let experience = defaults.stringForKey(Constants.UserKeys.experienceKey) {
+        if let experience = defaults.string(forKey: Constants.UserKeys.experienceKey) {
             experienceField.text = experience;
         }
-        if let looking = defaults.stringForKey(Constants.UserKeys.lookingForKey) {
+        if let looking = defaults.string(forKey: Constants.UserKeys.lookingForKey) {
             lookingForField.text = looking;
         }
         self.profileImage.image = Utilities().readImage();
     }
     
-    private func getChangeLabelDict() -> [CGFloat : [UILabel]]{
+    fileprivate func getChangeLabelDict() -> [CGFloat : [UILabel]]{
         var fontDict:[CGFloat : [UILabel]] = [CGFloat : [UILabel]]()
         
         var extraSmallLabels:[UILabel] = [UILabel]()
@@ -478,29 +486,29 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         return fontDict
     }
     
-    func alpha(value:CGFloat, image:UIImage)->UIImage
+    func alpha(_ value:CGFloat, image:UIImage)->UIImage
     {
         UIGraphicsBeginImageContextWithOptions(image.size, false, 0.0)
         
         let ctx = UIGraphicsGetCurrentContext();
         let area = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height);
         
-        CGContextScaleCTM(ctx, 1, -1);
-        CGContextTranslateCTM(ctx, 0, -area.size.height);
-        CGContextSetBlendMode(ctx, CGBlendMode.Multiply);
-        CGContextSetAlpha(ctx, value);
-        CGContextDrawImage(ctx, area, image.CGImage);
+        ctx?.scaleBy(x: 1, y: -1);
+        ctx?.translateBy(x: 0, y: -area.size.height);
+        ctx?.setBlendMode(CGBlendMode.multiply);
+        ctx?.setAlpha(value);
+        ctx?.draw(image.cgImage!, in: area);
         
         let newImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         
-        return newImage;
+        return newImage!;
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let screenHeight = Constants.ScreenDimensions.screenHeight
         
-        switch indexPath.row {
+        switch (indexPath as NSIndexPath).row {
         case 0:
             return screenHeight / 4.0
         case 3:

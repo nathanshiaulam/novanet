@@ -13,13 +13,13 @@ class EventAttendanceButton: UIButton {
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!
         
-        self.setTitleColor(Utilities().UIColorFromHex(0x879494, alpha: 1.0), forState: UIControlState.Normal)
-        self.setTitleColor(Utilities().UIColorFromHex(0xFC6706, alpha: 1.0), forState: UIControlState.Highlighted)
-        self.setTitleColor(Utilities().UIColorFromHex(0xFC6706, alpha: 1.0), forState: UIControlState.Selected)
+        self.setTitleColor(Utilities().UIColorFromHex(0x879494, alpha: 1.0), for: UIControlState())
+        self.setTitleColor(Utilities().UIColorFromHex(0xFC6706, alpha: 1.0), for: UIControlState.highlighted)
+        self.setTitleColor(Utilities().UIColorFromHex(0xFC6706, alpha: 1.0), for: UIControlState.selected)
         
         self.titleLabel!.font = UIFont(name: "OpenSans", size: 12.0)
         
-        self.backgroundColor = UIColor.whiteColor();
+        self.backgroundColor = UIColor.white;
         self.layer.borderWidth = 0.0;
         
     }

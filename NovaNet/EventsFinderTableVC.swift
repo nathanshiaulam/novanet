@@ -12,7 +12,7 @@ import Parse
 
 class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate   {
     
-    let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+    let defaults:UserDefaults = UserDefaults.standard;
     
     // Sets up pull to refresh
     var refreshControl:UIRefreshControl!
@@ -29,28 +29,28 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var addEventButton: UIBarButtonItem!
     @IBOutlet var tableView: UITableView!
     
-    @IBAction func findLocalEvents(sender: UIButton) {
+    @IBAction func findLocalEvents(_ sender: UIButton) {
         if localEvents == false {
             localEvents = true;
             let currentFont = localEventButton.titleLabel!.font
-            localEventButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: currentFont.pointSize)
+            localEventButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: (currentFont?.pointSize)!)
             
             let otherCurrentFont = memberEventButton.titleLabel!.font
-            memberEventButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Thin", size: otherCurrentFont.pointSize)
+            memberEventButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Thin", size: (otherCurrentFont?.pointSize)!)
             
             findAllEvents();
             
         }
     }
     
-    @IBAction func findMyEvents(sender: UIButton) {
+    @IBAction func findMyEvents(_ sender: UIButton) {
         if localEvents == true {
             localEvents = false;
             let currentFont = localEventButton.titleLabel!.font
-            localEventButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Thin", size: currentFont.pointSize)
+            localEventButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Thin", size: (currentFont?.pointSize)!)
             
             let otherCurrentFont = memberEventButton.titleLabel!.font
-            memberEventButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: otherCurrentFont.pointSize)
+            memberEventButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: (otherCurrentFont?.pointSize)!)
             
             findSavedEvents();
         }
@@ -60,15 +60,14 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         
         eventsList = NSArray()
         distList = NSArray()
-        
         self.tableView.rowHeight = 100.0
         self.tabBarController!.navigationItem.title = "MEETUPS"
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ConversationListTableViewController.phoneVibrate), name: "phoneVibrate", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ConversationListTableViewController.phoneVibrate), name: NSNotification.Name(rawValue: "phoneVibrate"), object: nil)
         
         let border = CALayer()
         let width = CGFloat(1.0)
-        border.borderColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0).CGColor
+        border.borderColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0).cgColor
         border.frame = CGRect(x: 0, y: eventHeaderView.frame.size.height - width, width:  eventHeaderView.frame.size.width, height: eventHeaderView.frame.size.height)
         border.borderWidth = width
         eventHeaderView.layer.addSublayer(border)
@@ -79,7 +78,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
 
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         self.tabBarController!.navigationItem.title = "MEETUPS";
         self.tabBarController!.navigationItem.leftBarButtonItem = addEventButton;
         self.oldTitleView = self.tabBarController!.navigationItem.titleView
@@ -87,18 +86,18 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         tableView.addSubview(self.refreshControl)
         if localEvents == true {
             findAllEvents();
-            refreshControl.removeTarget(self, action: #selector(EventsFinderTableVC.findSavedEvents), forControlEvents: UIControlEvents.ValueChanged)
-            refreshControl.addTarget(self, action: #selector(EventsFinderTableVC.findAllEvents), forControlEvents: UIControlEvents.ValueChanged)
+            refreshControl.removeTarget(self, action: #selector(EventsFinderTableVC.findSavedEvents), for: UIControlEvents.valueChanged)
+            refreshControl.addTarget(self, action: #selector(EventsFinderTableVC.findAllEvents), for: UIControlEvents.valueChanged)
             
         } else {
             findSavedEvents();
-            refreshControl.removeTarget(self, action: #selector(EventsFinderTableVC.findAllEvents), forControlEvents: UIControlEvents.ValueChanged)
-            refreshControl.addTarget(self, action: #selector(EventsFinderTableVC.findSavedEvents), forControlEvents: UIControlEvents.ValueChanged)
+            refreshControl.removeTarget(self, action: #selector(EventsFinderTableVC.findAllEvents), for: UIControlEvents.valueChanged)
+            refreshControl.addTarget(self, action: #selector(EventsFinderTableVC.findSavedEvents), for: UIControlEvents.valueChanged)
         }
         super.viewDidAppear(true);
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         self.tabBarController!.navigationItem.titleView = oldTitleView;
         self.tabBarController!.navigationItem.leftBarButtonItem = nil;
     }
@@ -113,11 +112,11 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     // Each of the buttons should only contain one of the ID, so we'll need a method to add in the button pressed and remove the other two
 
     func findAllEvents() {
-        let lat = defaults.doubleForKey(Constants.UserKeys.latitudeKey);
-        let lon = defaults.doubleForKey(Constants.UserKeys.longitudeKey);
+        let lat = defaults.double(forKey: Constants.UserKeys.latitudeKey);
+        let lon = defaults.double(forKey: Constants.UserKeys.longitudeKey);
         let dist = Constants.DISCOVERY_RADIUS;
         
-        PFCloud.callFunctionInBackground("findAllEvents", withParameters: ["lat": lat, "lon": lon, "dist":dist]) {
+        PFCloud.callFunction(inBackground: "findAllEvents", withParameters: ["lat": lat, "lon": lon, "dist":dist]) {
             (result: AnyObject?, error:NSError?) -> Void in
             if error != nil {
                 print(error);
@@ -129,11 +128,11 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func findSavedEvents() {
-        let lat = defaults.doubleForKey(Constants.UserKeys.latitudeKey);
-        let lon = defaults.doubleForKey(Constants.UserKeys.longitudeKey);
+        let lat = defaults.double(forKey: Constants.UserKeys.latitudeKey);
+        let lon = defaults.double(forKey: Constants.UserKeys.longitudeKey);
         let dist = Constants.DISCOVERY_RADIUS;
         
-        PFCloud.callFunctionInBackground("findSavedEvents", withParameters: [:]) {
+        PFCloud.callFunction(inBackground: "findSavedEvents", withParameters: [:]) {
             (result: AnyObject?, error:NSError?) -> Void in
             if error != nil {
                 print(error);
@@ -145,8 +144,8 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         
     }
     
-    func findDistList(lon: Double, lat: Double, dist: Int, all:Bool) {
-        PFCloud.callFunctionInBackground("findEventsDist", withParameters: ["lat":lat, "lon":lon, "dist":dist, "all":all]) {
+    func findDistList(_ lon: Double, lat: Double, dist: Int, all:Bool) {
+        PFCloud.callFunction(inBackground: "findEventsDist", withParameters: ["lat":lat, "lon":lon, "dist":dist, "all":all]) {
             (result: AnyObject?, error:NSError?) -> Void in
             if error != nil {
                 print(error);
@@ -159,142 +158,143 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     }
     
     
-    func goingPressed(sender: EventAttendanceButton) {
+    func goingPressed(_ sender: EventAttendanceButton) {
         let maybeButton:EventAttendanceButton = self.tableView.viewWithTag(sender.tag + 1) as! EventAttendanceButton
         let notGoingButton:EventAttendanceButton = self.tableView.viewWithTag(sender.tag + 2)  as! EventAttendanceButton
         
         let event:PFObject! = eventsList[(sender.tag - 100) / 3] as! PFObject;
         
-        if (sender.selected) {
+        if (sender.isSelected) {
             var arr:[String]! = event["Going"] as! [String];
-            arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+            arr = arr.filter() {$0 != PFUser.current()!.objectId};
             event["Going"] = arr;
             event.saveInBackground();
             
         } else  {
-            if (maybeButton.selected) {
+            if (maybeButton.isSelected) {
                 var arr:[String]! = event["Maybe"] as! [String];
-                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                arr = arr.filter() {$0 != PFUser.current()!.objectId};
                 event["Maybe"] = arr;
                 event.saveInBackground();
-                maybeButton.highlighted = false;
-                maybeButton.selected = false;
+                maybeButton.isHighlighted = false;
+                maybeButton.isSelected = false;
             }
-            if (notGoingButton.selected) {
+            if (notGoingButton.isSelected) {
                 var arr:[String]! = event["NotGoing"] as! [String];
-                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                arr = arr.filter() {$0 != PFUser.current()!.objectId};
                 event["NotGoing"] = arr;
                 event.saveInBackground();
-                notGoingButton.highlighted = false;
-                notGoingButton.selected = false;
+                notGoingButton.isHighlighted = false;
+                notGoingButton.isSelected = false;
             }
             var arr:[String]! = event["Going"] as! [String];
-            if !arr.contains(PFUser.currentUser()!.objectId!) {
-                arr.append(PFUser.currentUser()!.objectId!);
+            if !arr.contains(PFUser.current()!.objectId!) {
+                arr.append(PFUser.current()!.objectId!);
             }
             event["Going"] = arr;
             event.saveInBackground();
             
         }
 
-        sender.selected = !sender.selected;
+        sender.isSelected = !sender.isSelected;
     }
     
-    func maybePressed(sender: EventAttendanceButton) {
+    func maybePressed(_ sender: EventAttendanceButton) {
         let goingButton:EventAttendanceButton = self.tableView.viewWithTag(sender.tag - 1) as! EventAttendanceButton
         let notGoingButton:EventAttendanceButton = self.tableView.viewWithTag(sender.tag + 1)  as! EventAttendanceButton
         
         let event:PFObject! = eventsList[(sender.tag - 100 - 1) / 3] as! PFObject;
 
-        if (sender.selected) {
+        if (sender.isSelected) {
             var arr:[String]! = event["Maybe"] as! [String];
-            arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+            arr = arr.filter() {$0 != PFUser.current()!.objectId};
             event["Maybe"] = arr;
             event.saveInBackground();
             
         } else  {
-            if (goingButton.selected) {
+            if (goingButton.isSelected) {
                 var arr:[String]! = event["Going"] as! [String];
-                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                arr = arr.filter() {$0 != PFUser.current()!.objectId};
                 event["Going"] = arr;
                 event.saveInBackground();
-                goingButton.highlighted = false;
-                goingButton.selected = false;
+                goingButton.isHighlighted = false;
+                goingButton.isSelected = false;
             }
-            if (notGoingButton.selected) {
+            if (notGoingButton.isSelected) {
                 var arr:[String]! = event["NotGoing"] as! [String];
-                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                arr = arr.filter() {$0 != PFUser.current()!.objectId};
                 event["NotGoing"] = arr;
                 event.saveInBackground();
-                notGoingButton.highlighted = false;
-                notGoingButton.selected = false;
+                notGoingButton.isHighlighted = false;
+                notGoingButton.isSelected = false;
             }
             var arr:[String]! = event["Maybe"] as! [String];
-            if !arr.contains(PFUser.currentUser()!.objectId!) {
-                arr.append(PFUser.currentUser()!.objectId!);
+            if !arr.contains(PFUser.current()!.objectId!) {
+                arr.append(PFUser.current()!.objectId!);
             }
             event["Maybe"] = arr;
             event.saveInBackground();
             
         }
-        sender.selected = !sender.selected;
+        sender.isSelected = !sender.isSelected;
     }
 
-    func notGoingPressed(sender: EventAttendanceButton) {
+    func notGoingPressed(_ sender: EventAttendanceButton) {
         let maybeButton:EventAttendanceButton = self.tableView.viewWithTag(sender.tag - 1) as! EventAttendanceButton
         let goingButton:EventAttendanceButton = self.tableView.viewWithTag(sender.tag - 2)  as! EventAttendanceButton
         
         let event:PFObject! = eventsList[(sender.tag - 100 - 2) / 3] as! PFObject;
         
-        if (sender.selected) {
+        if (sender.isSelected) {
             var arr:[String]! = event["NotGoing"] as! [String];
-            arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+            arr = arr.filter() {$0 != PFUser.current()!.objectId};
             event["NotGoing"] = arr;
             event.saveInBackground();
             
         } else  {
-            if (maybeButton.selected) {
+            if (maybeButton.isSelected) {
                 var arr:[String]! = event["Maybe"] as! [String];
-                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                arr = arr.filter() {$0 != PFUser.current()!.objectId};
                 event["Maybe"] = arr;
                 event.saveInBackground();
-                maybeButton.highlighted = false;
-                maybeButton.selected = false;
+                maybeButton.isHighlighted = false;
+                maybeButton.isSelected = false;
             }
-            if (goingButton.selected) {
+            if (goingButton.isSelected) {
                 var arr:[String]! = event["Going"] as! [String];
-                arr = arr.filter() {$0 != PFUser.currentUser()!.objectId};
+                arr = arr.filter() {$0 != PFUser.current()!.objectId};
                 event["Going"] = arr;
                 event.saveInBackground();
-                goingButton.highlighted = false;
-                goingButton.selected = false;
+                goingButton.isHighlighted = false;
+                goingButton.isSelected = false;
             }
             var arr:[String]! = event["NotGoing"] as! [String];
-            if !arr.contains(PFUser.currentUser()!.objectId!) {
-                arr.append(PFUser.currentUser()!.objectId!);
+            if !arr.contains(PFUser.current()!.objectId!) {
+                arr.append(PFUser.current()!.objectId!);
             }
             event["NotGoing"] = arr;
             event.saveInBackground();
         }
-        sender.selected = !sender.selected;
+        sender.isSelected = !sender.isSelected;
     }
     /*-------------------------------- TABLE VIEW METHODS ------------------------------------*/
     
     // Return the number of rows in the section.
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let backgroundLabel = UILabel()
         let backgroundView = UIView()
         var backgroundImage = UIImageView()
-        let button = UIButton(type: UIButtonType.System) as UIButton
+        let button = UIButton(type: UIButtonType.system) as UIButton
 
         let screenWidth = Constants.ScreenDimensions.screenWidth
         let screenHeight = Constants.ScreenDimensions.screenHeight
         
-        let midHeight = (screenHeight - (self.navigationController?.navigationBar.frame.height)! - (self.tabBarController?.tabBar.frame.height)!) * 0.5
+        
         let imageHeight = screenHeight / 7.0
         let buttonHeight:CGFloat = 44.0
         let buttonWidth = screenWidth * 0.7
         var fontSize:CGFloat = 13.0
+        let midHeight = (screenHeight - (self.tabBarController?.navigationController?.navigationBar.frame.height)! - (self.tabBarController?.tabBar.frame.height)!) * 0.5 - imageHeight * 0.7;
         if (Constants.ScreenDimensions.screenHeight >= Constants.ScreenDimensions.IPHONE_6_HEIGHT) {
             fontSize = 15.0
         }
@@ -311,57 +311,57 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             backgroundLabel.text = "There are no current meetups in your area. Want to create one?"
             backgroundLabel.font = UIFont(name: "OpenSans", size: fontSize)
             backgroundLabel.textColor = Utilities().UIColorFromHex(0x3A4A49, alpha: 1.0)
-            backgroundLabel.frame = CGRect(x: screenWidth * 0.5, y: midHeight, width:imageHeight * aspectRatio * 1.8, height: imageHeight)
+            backgroundLabel.frame = CGRect(x: screenWidth * 0.5, y: midHeight, width: imageHeight * aspectRatio * 1.8, height: imageHeight)
             backgroundLabel.numberOfLines = 0
-            backgroundLabel.textAlignment = NSTextAlignment.Left
+            backgroundLabel.textAlignment = NSTextAlignment.left
             backgroundLabel.sizeToFit()
             backgroundView.addSubview(backgroundLabel)
             
-            button.frame = CGRect(x: screenWidth * 0.5 - buttonWidth * 0.5, y: midHeight * 1.5, width: buttonWidth, height: buttonHeight)
+            button.frame = CGRect(x: screenWidth * 0.5 - buttonWidth * 0.5, y: midHeight * 1.6, width: buttonWidth, height: buttonHeight)
             button.backgroundColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
-            button.setTitle("CREATE MEETUP", forState: UIControlState.Normal)
-            button.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+            button.setTitle("CREATE MEETUP", for: UIControlState())
+            button.setTitleColor(UIColor.white, for: UIControlState())
             button.layer.cornerRadius = 5
             button.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: 18.0)
-            button.addTarget(self, action: #selector(EventsFinderTableVC.toCreateEvent(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+            button.addTarget(self, action: #selector(EventsFinderTableVC.toCreateEvent(_:)), for: UIControlEvents.touchUpInside)
             backgroundView.addSubview(button)
             
             backgroundView.backgroundColor = Utilities().UIColorFromHex(0xFBFBFB, alpha: 1.0)
 
-            tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.none
             tableView.backgroundView = backgroundView
         } else {
             
-            backgroundLabel.hidden = true
-            backgroundImage.hidden = true
-            tableView.backgroundView?.hidden = true
-            tableView.separatorStyle = UITableViewCellSeparatorStyle.SingleLine
+            backgroundLabel.isHidden = true
+            backgroundImage.isHidden = true
+            tableView.backgroundView?.isHidden = true
+            tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLine
         }
         return eventsList.count
     }
     
     // Return the number of sections.
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("EventCell", forIndexPath: indexPath) as! EventCell
-        let event = eventsList[indexPath.row] as! PFObject;
-        var dist = distList[indexPath.row] as! Double;
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath) as! EventCell
+        let event = eventsList[(indexPath as NSIndexPath).row] as! PFObject;
+        var dist = distList[(indexPath as NSIndexPath).row] as! Double;
         
-        cell.goingButton.tag = 100 + indexPath.row * 3
-        cell.maybeButton.tag = 100 + indexPath.row * 3 + 1
-        cell.notGoingButton.tag = 100 + indexPath.row * 3 + 2
+        cell.goingButton.tag = 100 + (indexPath as NSIndexPath).row * 3
+        cell.maybeButton.tag = 100 + (indexPath as NSIndexPath).row * 3 + 1
+        cell.notGoingButton.tag = 100 + (indexPath as NSIndexPath).row * 3 + 2
         
        
         cell.goingButton.titleLabel!.font = UIFont(name: "OpenSans", size: 12.0)
         cell.maybeButton.titleLabel?.font = UIFont(name: "OpenSans", size: 12.0)
         cell.notGoingButton.titleLabel!.font = UIFont(name: "OpenSans", size: 12.0)
         
-        cell.goingButton.addTarget(self, action: #selector(EventsFinderTableVC.goingPressed(_:)), forControlEvents: UIControlEvents.TouchUpInside);
-        cell.maybeButton.addTarget(self, action: #selector(EventsFinderTableVC.maybePressed(_:)), forControlEvents: UIControlEvents.TouchUpInside);
-        cell.notGoingButton.addTarget(self, action: #selector(EventsFinderTableVC.notGoingPressed(_:)), forControlEvents: UIControlEvents.TouchUpInside);
+        cell.goingButton.addTarget(self, action: #selector(EventsFinderTableVC.goingPressed(_:)), for: UIControlEvents.touchUpInside);
+        cell.maybeButton.addTarget(self, action: #selector(EventsFinderTableVC.maybePressed(_:)), for: UIControlEvents.touchUpInside);
+        cell.notGoingButton.addTarget(self, action: #selector(EventsFinderTableVC.notGoingPressed(_:)), for: UIControlEvents.touchUpInside);
 
         
         
@@ -369,8 +369,8 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         formatTableViewCell(event, cell: cell, dist: dist);
         cell.layoutIfNeeded();
         
-        let leftLine:UIView = UIView(frame: CGRectMake(1, 2.0, 0.5, cell.maybeButton.frame.size.height - 5.0))
-        let rightLine:UIView = UIView(frame: CGRectMake(cell.maybeButton.frame.size.width - 1.0, 2.0, 1.5, cell.maybeButton.frame.size.height - 5.0))
+        let leftLine:UIView = UIView(frame: CGRect(x: 1, y: 2.0, width: 0.5, height: cell.maybeButton.frame.size.height - 5.0))
+        let rightLine:UIView = UIView(frame: CGRect(x: cell.maybeButton.frame.size.width - 1.0, y: 2.0, width: 1.5, height: cell.maybeButton.frame.size.height - 5.0))
         
         leftLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
         rightLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
@@ -383,18 +383,18 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     }
     
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (eventsList.count > 0) {
-            self.selectedEvent = eventsList[indexPath.row] as! PFObject;
+            self.selectedEvent = eventsList[(indexPath as NSIndexPath).row] as! PFObject;
             
-            self.performSegueWithIdentifier("toEventDescription", sender: self);
+            self.performSegue(withIdentifier: "toEventDescription", sender: self);
         }
         
     }
     
     
-    func formatTableViewCell(event: PFObject, cell: EventCell, dist: Double) {
-        let date:NSDate = event["Date"] as! NSDate
+    func formatTableViewCell(_ event: PFObject, cell: EventCell, dist: Double) {
+        let date:Date = event["Date"] as! Date
         let title:String = event["Title"] as! String
         let creator:String = event["CreatorName"] as! String
         let locationName:String = event["EventName"] as! String
@@ -403,49 +403,49 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         let maybeList:[String] = event["Maybe"] as! [String]
         let notGoingList:[String] = event["NotGoing"] as! [String]
         
-        if goingList.contains(PFUser.currentUser()!.objectId!) {
+        if goingList.contains(PFUser.current()!.objectId!) {
 
-            cell.goingButton.selected = true
+            cell.goingButton.isSelected = true
             cell.goingButton.titleLabel?.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         } else {
             
-            cell.goingButton.selected = false
-            cell.goingButton.highlighted = false
+            cell.goingButton.isSelected = false
+            cell.goingButton.isHighlighted = false
         }
         
-        if maybeList.contains(PFUser.currentUser()!.objectId!) {
-            cell.maybeButton.selected = true
+        if maybeList.contains(PFUser.current()!.objectId!) {
+            cell.maybeButton.isSelected = true
             cell.maybeButton.titleLabel?.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         } else {
-            cell.maybeButton.selected = false
-            cell.maybeButton.highlighted = false
+            cell.maybeButton.isSelected = false
+            cell.maybeButton.isHighlighted = false
         }
         
-        if notGoingList.contains(PFUser.currentUser()!.objectId!) {
+        if notGoingList.contains(PFUser.current()!.objectId!) {
 
             cell.notGoingButton.titleLabel?.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
-            cell.notGoingButton.selected = true
+            cell.notGoingButton.isSelected = true
 
         } else {
 
-            cell.notGoingButton.selected = false
-            cell.notGoingButton.highlighted = false
+            cell.notGoingButton.isSelected = false
+            cell.notGoingButton.isHighlighted = false
         }
         
         
-        let components = NSCalendar.currentCalendar().components([.Hour, .Minute, .Month, .Day, .Year], fromDate: date)
+        let components = (Calendar.current as NSCalendar).components([.hour, .minute, .month, .day, .year], from: date)
         
         let day = components.day;
         
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM"
-        let month = dateFormatter.stringFromDate(date)
+        let month = dateFormatter.string(from: date)
         
         dateFormatter.dateFormat = "HH:mm"
-        let time = dateFormatter.stringFromDate(date);
+        let time = dateFormatter.string(from: date);
         
         let locationArr = locationName.characters.split{$0 == ","}.map(String.init)
-        cell.eventDay.text = String(day);
+        cell.eventDay.text = String(describing: day);
         cell.eventMonth.text = month;
         cell.eventTime.text = time;
         cell.eventTitle.text = title;
@@ -454,14 +454,14 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         cell.eventDistance.text = String(dist) + " km";
         
     }
-    func toCreateEvent(sender:UIButton!) {
-        performSegueWithIdentifier("toCreateEvent", sender: self)
+    func toCreateEvent(_ sender:UIButton!) {
+        performSegue(withIdentifier: "toCreateEvent", sender: self)
         
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         if segue.identifier == "toEventDescription" {
-            let destinationVC = segue.destinationViewController.childViewControllers[0] as! EventDescriptionTableVC
+            let destinationVC = segue.destination.childViewControllers[0] as! EventDescriptionTableVC
             destinationVC.selectedEvent = self.selectedEvent;
         }
     }

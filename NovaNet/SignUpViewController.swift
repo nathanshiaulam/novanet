@@ -30,16 +30,16 @@ class SignUpViewController: ViewController {
             Constants.ScreenDimensions.screenHeight ==
             Constants.ScreenDimensions.IPHONE_5_HEIGHT
     
-    @IBAction func cancelFunction(sender: UIBarButtonItem) {
-        self.dismissViewControllerAnimated(true, completion: nil);
+    @IBAction func cancelFunction(_ sender: UIBarButtonItem) {
+        self.dismiss(animated: true, completion: nil);
     }
-    @IBAction func signUpFunction(sender: UIButton) {
+    @IBAction func signUpFunction(_ sender: UIButton) {
         NetworkManager().createUser( emailField.text!, password:passwordField.text!, confPassword:confirmPasswordField.text!, sender: self);
     }
     
-    let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+    let defaults:UserDefaults = UserDefaults.standard;
 
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true);
     }
     
@@ -51,13 +51,13 @@ class SignUpViewController: ViewController {
    
     // Sets up installation so that the current user receives push notifications
     func setUpInstallations() {
-        let installation = PFInstallation.currentInstallation()
-        installation["user"] = PFUser.currentUser()
+        let installation = PFInstallation.current()
+        installation["user"] = PFUser.current()
         installation.saveInBackground()
     }
     
     // Allows users to hit enter and move to the next text field
-    func textFieldShouldReturn(textField: UITextField)-> Bool {
+    func textFieldShouldReturn(_ textField: UITextField)-> Bool {
         if (textField ==  emailField) {
             passwordField.becomeFirstResponder();
         }
@@ -66,40 +66,40 @@ class SignUpViewController: ViewController {
             confirmPasswordField.becomeFirstResponder();
         }
         else {
-            let confPassword:String =  confirmPasswordField.text!.stringByTrimmingCharactersInSet(
-                NSCharacterSet.whitespaceAndNewlineCharacterSet())
-            let password:String = passwordField.text!.stringByTrimmingCharactersInSet(
-                NSCharacterSet.whitespaceAndNewlineCharacterSet())
-            let email:String = emailField.text!.stringByTrimmingCharactersInSet(
-                NSCharacterSet.whitespaceAndNewlineCharacterSet())
+            let confPassword:String =  confirmPasswordField.text!.trimmingCharacters(
+                in: CharacterSet.whitespacesAndNewlines)
+            let password:String = passwordField.text!.trimmingCharacters(
+                in: CharacterSet.whitespacesAndNewlines)
+            let email:String = emailField.text!.trimmingCharacters(
+                in: CharacterSet.whitespacesAndNewlines)
             NetworkManager().createUser(email, password: password, confPassword: confPassword, sender: self);
             textField.resignFirstResponder();
         }
         return false;
     }
     
-    func keyboardWillShow(notification:NSNotification) {
+    func keyboardWillShow(_ notification:Notification) {
         let changeInHeight:CGFloat = -75.0
         if (!keyboardVisible) {
-            UIView.animateWithDuration(0.5, animations: { () -> Void in
+            UIView.animate(withDuration: 0.5, animations: { () -> Void in
                 self.centerConstraint.constant += changeInHeight
                 self.aboutTopConstraint.constant += changeInHeight
             })
         }
         keyboardVisible = true
-        novaLogo.hidden = hideLogo
+        novaLogo.isHidden = hideLogo
     }
     
-    func keyboardWillHide(notification:NSNotification) {
+    func keyboardWillHide(_ notification:Notification) {
         let changeInHeight:CGFloat = 75.0
         if (keyboardVisible) {
-            UIView.animateWithDuration(0.5, animations: { () -> Void in
+            UIView.animate(withDuration: 0.5, animations: { () -> Void in
                 self.centerConstraint.constant += changeInHeight
                 self.aboutTopConstraint.constant += changeInHeight
             })
         }
         keyboardVisible = false
-        novaLogo.hidden = false
+        novaLogo.isHidden = false
     }
 
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
@@ -108,11 +108,11 @@ class SignUpViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SignUpViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(SignUpViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SignUpViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SignUpViewController.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
-        passwordField.secureTextEntry = true;
-        confirmPasswordField.secureTextEntry = true;
+        passwordField.isSecureTextEntry = true;
+        confirmPasswordField.isSecureTextEntry = true;
 
         signupButton.layer.cornerRadius = 5
         var confPasswordFramRect =  confirmPasswordField.frame;
@@ -135,38 +135,38 @@ class SignUpViewController: ViewController {
  
         let email_image = UIImageView(image: UIImage(named: "login_email.png"))
         email_image.frame = CGRect(x: 0, y: 0, width: email_image.frame.width + 30, height: email_image.frame.height)
-        email_image.contentMode = UIViewContentMode.Center
+        email_image.contentMode = UIViewContentMode.center
         emailField.leftView = email_image
-        emailField.leftViewMode = UITextFieldViewMode.Always
+        emailField.leftViewMode = UITextFieldViewMode.always
         
         let password_image = UIImageView(image: UIImage(named: "login_password.png"))
         password_image.frame = CGRect(x: 0, y: 0, width: password_image.frame.width + 30, height: password_image.frame.height)
-        password_image.contentMode = UIViewContentMode.Center
+        password_image.contentMode = UIViewContentMode.center
         passwordField.leftView = password_image
-        passwordField.leftViewMode = UITextFieldViewMode.Always
+        passwordField.leftViewMode = UITextFieldViewMode.always
         
         let confirmPasswordImage = UIImageView(image: UIImage(named: "login_password.png"))
         confirmPasswordImage.frame = CGRect(x: 0, y: 0, width: confirmPasswordImage.frame.width + 30, height: confirmPasswordImage.frame.height)
-        confirmPasswordImage.contentMode = UIViewContentMode.Center
+        confirmPasswordImage.contentMode = UIViewContentMode.center
         confirmPasswordField.leftView = confirmPasswordImage
-        confirmPasswordField.leftViewMode = UITextFieldViewMode.Always
+        confirmPasswordField.leftViewMode = UITextFieldViewMode.always
         
-        let  confirmPasswordFieldPlaceholder = NSAttributedString(string: "Confirm Password", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        let  confirmPasswordFieldPlaceholder = NSAttributedString(string: "Confirm Password", attributes: [NSForegroundColorAttributeName : UIColor.white]);
          confirmPasswordField.attributedPlaceholder =  confirmPasswordFieldPlaceholder;
-         confirmPasswordField.textColor = UIColor.whiteColor();
+         confirmPasswordField.textColor = UIColor.white;
         
-        let passwordFieldPlaceholder = NSAttributedString(string: "Password", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        let passwordFieldPlaceholder = NSAttributedString(string: "Password", attributes: [NSForegroundColorAttributeName : UIColor.white]);
         passwordField.attributedPlaceholder = passwordFieldPlaceholder;
-        passwordField.textColor = UIColor.whiteColor();
+        passwordField.textColor = UIColor.white;
         
-        let emailFieldPlaceholder = NSAttributedString(string: "Email", attributes: [NSForegroundColorAttributeName : UIColor.whiteColor()]);
+        let emailFieldPlaceholder = NSAttributedString(string: "Email", attributes: [NSForegroundColorAttributeName : UIColor.white]);
         emailField.attributedPlaceholder = emailFieldPlaceholder;
-        emailField.textColor = UIColor.whiteColor();
+        emailField.textColor = UIColor.white;
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: self.view.window)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: self.view.window)
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
     }
     
     override func didReceiveMemoryWarning() {

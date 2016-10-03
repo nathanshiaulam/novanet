@@ -12,9 +12,9 @@ import Bolts
 import Parse
 
 class Utilities: NSObject {
-    let fileManager = NSFileManager.defaultManager()
+    let fileManager = FileManager.default
 
-    func UIColorFromHex(rgbValue:UInt32, alpha:Double)->UIColor {
+    func UIColorFromHex(_ rgbValue:UInt32, alpha:Double)->UIColor {
         let red = CGFloat((rgbValue & 0xFF0000) >> 16)/256.0
         let green = CGFloat((rgbValue & 0xFF00) >> 8)/256.0
         let blue = CGFloat(rgbValue & 0xFF)/256.0
@@ -23,34 +23,34 @@ class Utilities: NSObject {
     }
     
     func userLoggedIn() -> Bool{
-        let currentUser = PFUser.currentUser();
+        let currentUser = PFUser.current();
         if ((currentUser) != nil) {
             return true;
         }
         return false;
     }
 
-    func commaLimiter(textField: UITextField) {
+    func commaLimiter(_ textField: UITextField) {
         var ans: String! = textField.text!;
         let fullNameArr = ans.characters.split {$0 == ","}
         if fullNameArr.count <= 3 {
             let lastChar = textField.text?.characters.last;
             if (ans.characters.count > 1) {
-                let truncatedString = textField.text?.substringToIndex(textField.text!.endIndex.advancedBy(-1)); // Truncates String to get second to last
+                let truncatedString = textField.text?.substring(to: textField.text!.characters.index(textField.text!.endIndex, offsetBy: -1)); // Truncates String to get second to last
                 let secondToLastChar = truncatedString!.characters.last;
                 if (lastChar == " ") {
                     if (secondToLastChar != ",") {
-                        ans = ans.substringToIndex(ans.endIndex.advancedBy(-1)); // truncate last character
+                        ans = ans.substring(to: ans.index(ans.endIndex, offsetBy: -1)); // truncate last character
                         if fullNameArr.count < 3 {
                             ans = ans + ", ";
                         }
                     }
                 }
                 if (lastChar == ",") {
-                    let components =  ans.componentsSeparatedByString(",")
+                    let components =  ans.components(separatedBy: ",")
                     let numCommas = components.count - 1
                     if numCommas > 2 {
-                        ans = ans.substringToIndex(ans.endIndex.advancedBy(-1)); // truncate last character
+                        ans = ans.substring(to: ans.index(ans.endIndex, offsetBy: -1)); // truncate last character
                     } 
                 }
             }
@@ -61,35 +61,35 @@ class Utilities: NSObject {
     func readImage() -> UIImage {
         var oldImage =  UIImage(named: "selectImage")!
         
-        let relativePath = NSUserDefaults.standardUserDefaults().stringForKey(Constants.UserKeys.profileImageKey)
-        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+        let relativePath = UserDefaults.standard.string(forKey: Constants.UserKeys.profileImageKey)
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
         if (relativePath != nil) {
-            let fullPath = NSURL(fileURLWithPath: paths).URLByAppendingPathComponent(relativePath!).absoluteString
-            let truncatedPath = fullPath.substringFromIndex(fullPath.startIndex.advancedBy(7))
-            if (fileManager.fileExistsAtPath(truncatedPath)) {
+            let fullPath = URL(fileURLWithPath: paths).appendingPathComponent(relativePath!).absoluteString
+            let truncatedPath = fullPath.substring(from: fullPath.characters.index(fullPath.startIndex, offsetBy: 7))
+            if (fileManager.fileExists(atPath: truncatedPath)) {
                 oldImage = UIImage(contentsOfFile: truncatedPath)!
             }
         }
         return oldImage
     }
     
-    func saveImage(image: UIImage) {
+    func saveImage(_ image: UIImage) {
         let query = PFQuery(className:"Profile");
-        let currentID = PFUser.currentUser()!.objectId;
+        let currentID = PFUser.current()!.objectId;
         query.whereKey("ID", equalTo:currentID!);
 
         let imageData = UIImageJPEGRepresentation(image, 0.5)
-        let relativePath = "image_\(NSDate.timeIntervalSinceReferenceDate()).jpg"
+        let relativePath = "image_\(Date.timeIntervalSinceReferenceDate).jpg"
         
-        let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true);
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true);
         let path = paths[0];
         let fullPath = "\(path )/\(relativePath)"
 
-        fileManager.createFileAtPath(fullPath, contents: imageData, attributes: nil)
+        fileManager.createFile(atPath: fullPath, contents: imageData, attributes: nil)
 
         let imageFile:PFFile = PFFile(data: imageData!)
         
-        query.getFirstObjectInBackgroundWithBlock {
+        query.getFirstObjectInBackground {
             (profile: PFObject?, error: NSError?) -> Void in
             if error != nil || profile == nil {
                 print(error);
@@ -99,16 +99,16 @@ class Utilities: NSObject {
             }
         }
         print(relativePath);
-        NSUserDefaults.standardUserDefaults().setObject(relativePath, forKey: Constants.UserKeys.profileImageKey)
+        UserDefaults.standard.set(relativePath, forKey: Constants.UserKeys.profileImageKey)
 //        NSUserDefaults.standardUserDefaults().synchronize()
     }
     
     // Methods to format image and convert RGB to hex
-    func formatImage(profileImage: UIImageView) {
+    func formatImage(_ profileImage: UIImageView) {
         Utilities.formatImageWithWidth(profileImage, width: profileImage.frame.size.width)
     }
     
-    static func formatImageReturn(profileImage: UIImageView) -> UIImage {
+    static func formatImageReturn(_ profileImage: UIImageView) -> UIImage {
         let croppedImage: UIImage = ImageUtil.cropToSquare(image: profileImage.image!)
         profileImage.image = croppedImage
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
@@ -116,14 +116,14 @@ class Utilities: NSObject {
         return profileImage.image!
     }
     
-    static func formatImageWithWidth(profileImage: UIImageView, width: CGFloat) {
+    static func formatImageWithWidth(_ profileImage: UIImageView, width: CGFloat) {
         let croppedImage: UIImage = ImageUtil.cropToSquare(image: profileImage.image!)
         profileImage.image = croppedImage
         profileImage.layer.cornerRadius = width / 2;
         profileImage.clipsToBounds = true;
     }
     
-    static func manageFontSizes(sizeToTextField: [CGFloat:[UILabel]]) {
+    static func manageFontSizes(_ sizeToTextField: [CGFloat:[UILabel]]) {
         for (fontSize, textLabels) in sizeToTextField {
             for i in 0..<textLabels.count {
                 let textLabel = textLabels[i]

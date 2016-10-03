@@ -18,7 +18,7 @@ class UserProfileViewController: UIViewController {
     @IBOutlet weak var profileNameLabel: UILabel!
     @IBOutlet weak var profileImage: UIImageView!
     
-    @IBAction func urlClicked(sender: UIButton) {
+    @IBAction func urlClicked(_ sender: UIButton) {
         
     }
 }

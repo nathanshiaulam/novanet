@@ -26,6 +26,7 @@ class AboutContentVC: ViewController {
         super.viewDidLoad();
         self.tutorialImage.image = UIImage(named: self.imageFile);
         self.tutorialLabel.text = self.titleText;
+        self.view.backgroundColor = UIColor.white
         manageiOSModelType();
     }
     

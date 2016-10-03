@@ -24,7 +24,7 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
     @IBOutlet weak var editLabel: UIButton!
     let picker = UIImagePickerController()
     var popover:UIPopoverController? = nil
-    let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+    let defaults:UserDefaults = UserDefaults.standard
     
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
     
@@ -32,21 +32,21 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
         super.viewDidLoad()
         
         let dotOne = UIImageView(image: UIImage(named: "orangeDot.png"))
-        dotOne.frame = CGRectMake(-10, firstInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
-        dotOne.contentMode = UIViewContentMode.Center
+        dotOne.frame = CGRect(x: -10, y: firstInterestLabel.bounds.size.height / 2.0 - 5, width: 5, height: 5)
+        dotOne.contentMode = UIViewContentMode.center
         firstInterestLabel.addSubview(dotOne)
         
         let dotTwo = UIImageView(image: UIImage(named: "orangeDot.png"))
-        dotTwo.frame = CGRectMake(-10, secondInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
-        dotTwo.contentMode = UIViewContentMode.Center
+        dotTwo.frame = CGRect(x: -10, y: secondInterestLabel.bounds.size.height / 2.0 - 5, width: 5, height: 5)
+        dotTwo.contentMode = UIViewContentMode.center
         secondInterestLabel.addSubview(dotTwo)
         
         let dotThree = UIImageView(image: UIImage(named: "orangeDot.png"))
-        dotThree.frame = CGRectMake(-10, thirdInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
-        dotThree.contentMode = UIViewContentMode.Center
+        dotThree.frame = CGRect(x: -10, y: thirdInterestLabel.bounds.size.height / 2.0 - 5, width: 5, height: 5)
+        dotThree.contentMode = UIViewContentMode.center
         thirdInterestLabel.addSubview(dotThree)
         
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = UIColor.white
    
         self.tabBarController?.navigationItem.title = "PROFILE"
         
@@ -67,15 +67,15 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
     }
     
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         
         // Go to login page if no user logged in
         if (!NetworkManager.userLoggedIn()) {
             self.tabBarController?.selectedIndex = 0
             return
         }
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileViewController.setValues), name: "setValues", object: nil)
-
+        NotificationCenter.default.addObserver(self, selector: #selector(ProfileViewController.setValues), name: NSNotification.Name(rawValue: "setValues"), object: nil)
+        setValues()
         self.tabBarController?.navigationItem.title = "PROFILE"
 
         super.viewDidAppear(true)
@@ -89,7 +89,7 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
     
     /*-------------------------------- HELPER METHODS ------------------------------------*/
     
-    private func getChangeLabelDict() -> [CGFloat : [UILabel]]{
+    fileprivate func getChangeLabelDict() -> [CGFloat : [UILabel]]{
         var fontDict:[CGFloat : [UILabel]] = [CGFloat : [UILabel]]()
         
         var doubleExtraSmallLabels:[UILabel] = [UILabel]()
@@ -149,9 +149,9 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
     }
     
     // Sets all values of the user profile fields
-    @objc private func setValues() {
+    @objc fileprivate func setValues() {
         
-        if let name = defaults.stringForKey(Constants.UserKeys.nameKey) {
+        if let name = defaults.string(forKey: Constants.UserKeys.nameKey) {
             nameLabel.text = name
             if name.characters.count == 0 {
                 nameLabel.text = "Name"
@@ -159,7 +159,7 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
         } else {
             nameLabel.text = "Name"
         }
-        if let about = defaults.stringForKey(Constants.UserKeys.aboutKey) {
+        if let about = defaults.string(forKey: Constants.UserKeys.aboutKey) {
             aboutLabel.text = about
             if about.characters.count == 0 {
                 aboutLabel.text = "A sentence or two illustrating what you're about. Who are you, in a nutshell?"
@@ -167,7 +167,7 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
         } else {
             aboutLabel.text = "A sentence or two illustrating what you're about. Who are you, in a nutshell?"
         }
-        if let interests = defaults.arrayForKey(Constants.UserKeys.interestsKey) {
+        if let interests = defaults.array(forKey: Constants.UserKeys.interestsKey) {
             var interestsArr = interests
             if (interestsArr.count == 0) {
                 firstInterestLabel.text = "What are your interests?"
@@ -176,27 +176,15 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
                 interestsLabelArr.append(firstInterestLabel)
                 interestsLabelArr.append(secondInterestLabel)
                 interestsLabelArr.append(thirdInterestLabel)
-                var numInterests = 0
-                if interestsArr.count > Constants.MAX_NUM_INTERESTS {
-                    numInterests = Constants.MAX_NUM_INTERESTS
-                } else  {
-                    numInterests = interestsArr.count
-                }
-                for i in 0..<numInterests {
+
+                for i in 0..<interestsLabelArr.count {
                     let interest = interestsArr[i] as? String
-                    interestsLabelArr[i].text = interest!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-                }
-                for i in numInterests..<interestsLabelArr.count {
-                    interestsLabelArr[i].text = ""
-                }
-                let firstInterest = interestsArr[0] as? String
-                if (firstInterest!.characters.count == 0) {
-                    interestsLabelArr[0].text = "What are your interests?"
+                    interestsLabelArr[i].text = interest!.trimmingCharacters(in: CharacterSet.whitespaces)
                 }
             }
             
         }
-        if let experience = defaults.stringForKey(Constants.UserKeys.experienceKey) {
+        if let experience = defaults.string(forKey: Constants.UserKeys.experienceKey) {
             experienceLabel.text = experience
             if (experience.characters.count == 0) {
                 experienceLabel.text = "What's your experience?"
@@ -204,7 +192,7 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
         } else {
             experienceLabel.text = "What's your experience?"
         }
-        if let lookingFor = defaults.stringForKey(Constants.UserKeys.lookingForKey) {
+        if let lookingFor = defaults.string(forKey: Constants.UserKeys.lookingForKey) {
             let seekingString = NSMutableAttributedString(string: lookingFor)
             let seekingHeader = "Seeking // "
             
@@ -212,7 +200,7 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
             
             let boldedString = NSMutableAttributedString(string:seekingHeader, attributes:attrs)
             
-            boldedString.appendAttributedString(seekingString)
+            boldedString.append(seekingString)
             
             lookingForLabel.text = boldedString.string
             if (lookingFor.characters.count == 0) {
@@ -222,22 +210,22 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
             lookingForLabel.text = "Who are you looking for?"
         }
         
-        experienceLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        experienceLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         experienceLabel.sizeToFit()
         
-        nameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        nameLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         nameLabel.sizeToFit()
         
-        firstInterestLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        firstInterestLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         firstInterestLabel.sizeToFit()
         
-        secondInterestLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        secondInterestLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         secondInterestLabel.sizeToFit()
 
-        thirdInterestLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        thirdInterestLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         thirdInterestLabel.sizeToFit()
 
-        lookingForLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        lookingForLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         lookingForLabel.sizeToFit()
         
         self.profileImage.image = Utilities().readImage()

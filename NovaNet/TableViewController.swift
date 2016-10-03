@@ -13,44 +13,48 @@ import Bolts
 
 
 class TableViewController: UITableViewController, UITextFieldDelegate {
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent;
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent;
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.tableView.backgroundColor = Utilities().UIColorFromHex(0xFBFBFB, alpha: 1.0)
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "BrandonGrotesque-Medium", size: 18)!]
-        self.navigationController?.navigationBar.shadowImage = UIImage()
+
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "BrandonGrotesque-Medium", size: 18)!]
+        self.tableView.separatorColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
         self.navigationController?.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TableViewController.willEnterForeground(_:)), name: UIApplicationDidBecomeActiveNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(TableViewController.willEnterForeground(_:)), name: UIApplicationDidFinishLaunchingNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(TableViewController.willEnterForeground(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(TableViewController.willEnterForeground(_:)), name: NSNotification.Name.UIApplicationDidFinishLaunching, object: nil)
     }
     
 
     // Removes keyboard when tap outside
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true);
     }
     
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.separatorInset = UIEdgeInsets.zero
+        cell.layoutMargins = UIEdgeInsets.zero
+    }
     
-    func willEnterForeground(notification: NSNotification!) {
+    
+    func willEnterForeground(_ notification: Notification!) {
         if (Utilities().userLoggedIn()) {
             let query:PFQuery = PFQuery(className: "Profile");
-            let currentID = PFUser.currentUser()!.objectId;
+            let currentID = PFUser.current()!.objectId;
             query.whereKey("ID", equalTo:currentID!);
             
-            query.getFirstObjectInBackgroundWithBlock {
+            query.getFirstObjectInBackground {
                 (profile: PFObject?, error: NSError?) -> Void in
                 if (profile == nil || error != nil) {
                     print(error);
                 } else if let profile = profile {
-                    let dateFormatter = NSDateFormatter()
+                    let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "MM/dd/yyyy"
-                    profile["last_active"] = dateFormatter.stringFromDate(NSDate());
+                    profile["last_active"] = dateFormatter.string(from: Date());
                     profile["Available"] = true
                     profile.saveInBackground();
-                    print(dateFormatter.stringFromDate(NSDate()));
+                    print(dateFormatter.string(from: Date()));
                 }
             }
         }
@@ -59,6 +63,6 @@ class TableViewController: UITableViewController, UITextFieldDelegate {
     deinit {
         // make sure to remove the observer when this view controller is dismissed/deallocated
         
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: nil, object: nil)
+        NotificationCenter.default.removeObserver(self, name: nil, object: nil)
     }
 }

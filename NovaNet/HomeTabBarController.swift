@@ -15,14 +15,14 @@ class HomeTabBarController: UITabBarController {
     
  
     @IBOutlet var doneButton: UIBarButtonItem!
-    let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+    let defaults:UserDefaults = UserDefaults.standard;
     
     override func viewDidLoad() {
         self.navigationController?.navigationBar.shadowImage = UIImage()
-
         self.navigationController?.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: UIFont(name: "BrandonGrotesque-Medium", size: 18)!]
-        
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white,
+             NSFontAttributeName: UIFont(name: "BrandonGrotesque-Medium", size: 18)!]
+
         super.viewDidLoad();
         doneButton = nil;
         self.navigationItem.leftBarButtonItem = nil;
@@ -30,7 +30,7 @@ class HomeTabBarController: UITabBarController {
     }
     // Checks if user is logged in
     func userLoggedIn() -> Bool{
-        let currentUser = PFUser.currentUser();
+        let currentUser = PFUser.current();
         if ((currentUser) != nil) {
             return true;
         }

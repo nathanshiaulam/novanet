@@ -12,12 +12,32 @@ import Bolts
 import Parse
 import AddressBookUI
 import GoogleMaps
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class EventCreateTableVC: TableViewController, UITextViewDelegate {
     var marker:GMSMarker!
-    var selectedDate:NSDate!
+    var selectedDate:Date!
     
-    let defaults = NSUserDefaults.standardUserDefaults()
+    let defaults = UserDefaults.standard
     
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var dateField: UITextField!
@@ -26,20 +46,20 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
     @IBOutlet weak var eventField: UITextField!
     @IBOutlet weak var addressField: UITextField!
     
-    @IBAction func createEvent(sender: AnyObject) {
-        if (titleField.text?.characters.count > 0 && dateField.text?.characters.count > 0 && descField.text.characters.count > 0 && addressField.text!.characters.count > 0 && descField.textColor != UIColor.lightGrayColor()) {
-            let confirmEventAlert = UIAlertController(title: "Confirm Event Information", message: "Is all your information correct? A notification will be sent to all NovaNet members around the event once you press Ok.", preferredStyle: UIAlertControllerStyle.Alert)
-            let confirmEventButton = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default) {
+    @IBAction func createEvent(_ sender: AnyObject) {
+        if (titleField.text?.characters.count > 0 && dateField.text?.characters.count > 0 && descField.text.characters.count > 0 && addressField.text!.characters.count > 0 && descField.textColor != UIColor.lightGray) {
+            let confirmEventAlert = UIAlertController(title: "Confirm Event Information", message: "Is all your information correct? A notification will be sent to all NovaNet members around the event once you press Ok.", preferredStyle: UIAlertControllerStyle.alert)
+            let confirmEventButton = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default) {
                 action -> Void in self.createEventAction()
             }
-            let cancelEventButton = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Default, handler: nil)
+            let cancelEventButton = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil)
             confirmEventAlert.addAction(confirmEventButton)
             confirmEventAlert.addAction(cancelEventButton)
-            self.presentViewController(confirmEventAlert, animated: true, completion: nil)
+            self.present(confirmEventAlert, animated: true, completion: nil)
         } else {
-            let alert = UIAlertController(title: "Submission Failure", message: "Please fill out all fields before creating an event.", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: "Submission Failure", message: "Please fill out all fields before creating an event.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
             return
         }
     }
@@ -50,46 +70,46 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         let newEvent = PFObject(className: "Event")
         newEvent["Title"] = titleField.text
         newEvent["Description"] = descField.text
-        newEvent["Creator"] = PFUser.currentUser()?.objectId
-        newEvent["CreatorName"] = defaults.objectForKey(Constants.UserKeys.nameKey)
+        newEvent["Creator"] = PFUser.current()?.objectId
+        newEvent["CreatorName"] = defaults.object(forKey: Constants.UserKeys.nameKey)
         newEvent["Date"] = selectedDate
         newEvent["Position"] = point
         newEvent["EventName"] = marker.title
         newEvent["Local"] = true
-        newEvent["Going"] = [(PFUser.currentUser()?.objectId)!] as [String]
+        newEvent["Going"] = [(PFUser.current()?.objectId)!] as [String]
         newEvent["Maybe"] = [String]()
         newEvent["NotGoing"] = [String]()
         
-        newEvent.saveInBackgroundWithBlock( {
+        newEvent.saveInBackground( block: {
             (success: Bool, error: NSError?) -> Void in
             if error == nil {
                 self.sendEventsNotification(self.titleField.text!, latitude: point.latitude, longitude: point.longitude)
             }
         })
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+        self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    func sendEventsNotification(eventName: String, latitude: Double, longitude: Double) {
-        let distance = defaults.integerForKey(Constants.UserKeys.distanceKey)
+    func sendEventsNotification(_ eventName: String, latitude: Double, longitude: Double) {
+        let distance = defaults.integer(forKey: Constants.UserKeys.distanceKey)
         
-        PFCloud.callFunctionInBackground("findUsers", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {
+        PFCloud.callFunction(inBackground: "findUsers", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {
             (result: AnyObject?, error:NSError?) -> Void in
             if error == nil {
                 let profileList:[PFObject] = result as! [PFObject]
-                let ownName = self.defaults.stringForKey(Constants.UserKeys.nameKey)
-                let date = NSDate()
-                let dateFormatter = NSDateFormatter()
+                let ownName = self.defaults.string(forKey: Constants.UserKeys.nameKey)
+                let date = Date()
+                let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                let dateInFormat = dateFormatter.stringFromDate(date)
+                let dateInFormat = dateFormatter.string(from: date)
                 
                 var idList:[String] = [String]()
                 for profile in profileList {
                     idList.append(profile["ID"] as! String)
                 }
                 
-                let data:[NSObject : AnyObject]? = [
+                let data:[AnyHashable: Any]? = [
                     "alert": ownName! + " has created an event in your area: " + eventName,
-                    "id": (PFUser.currentUser()?.objectId)!,
+                    "id": (PFUser.current()?.objectId)!,
                     "date": dateInFormat,
                     "name": ownName!,
                     ]
@@ -113,48 +133,48 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:))))
         tableView.allowsSelection = false
         self.navigationController?.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
-        titleField.autocapitalizationType = UITextAutocapitalizationType.Words
-        descField.autocapitalizationType = UITextAutocapitalizationType.Sentences
+        titleField.autocapitalizationType = UITextAutocapitalizationType.words
+        descField.autocapitalizationType = UITextAutocapitalizationType.sentences
         descField.text = Constants.ConstantStrings.placeHolderDesc
-        descField.textColor = UIColor.lightGrayColor()
+        descField.textColor = UIColor.lightGray
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(EventCreateTableVC.saveNewLocation(_:)), name: "saveNewLocation", object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(EventCreateTableVC.saveNewLocation(_:)), name: NSNotification.Name(rawValue: "saveNewLocation"), object: nil)
         if marker == nil {
-            addressCell.hidden = true
+            addressCell.isHidden = true
         }
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         if marker == nil {
-            addressCell.hidden = true
+            addressCell.isHidden = true
         }
     }
     
-    @IBAction func backPressed(sender: UIBarButtonItem) {
-        self.navigationController?.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func backPressed(_ sender: UIBarButtonItem) {
+        self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func dateFieldPressed(sender: UITextField) {
+    @IBAction func dateFieldPressed(_ sender: UITextField) {
         let datePickerView  : UIDatePicker = UIDatePicker()
         if (sender.text?.characters.count > 0) {
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateStyle = NSDateFormatterStyle.LongStyle
-            dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
-            let currDate = dateFormatter.dateFromString(sender.text!)
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = DateFormatter.Style.long
+            dateFormatter.timeStyle = DateFormatter.Style.short
+            let currDate = dateFormatter.date(from: sender.text!)
             datePickerView.date = currDate!
         }
         sender.inputView = datePickerView
-        datePickerView.addTarget(self, action: #selector(EventCreateTableVC.handleDatePicker(_:)), forControlEvents: UIControlEvents.ValueChanged)
+        datePickerView.addTarget(self, action: #selector(EventCreateTableVC.handleDatePicker(_:)), for: UIControlEvents.valueChanged)
         handleDatePicker(datePickerView)
         
     }
     
-    func saveNewLocation(notification: NSNotification?) {
-        marker = notification?.valueForKey("object") as? GMSMarker
+    func saveNewLocation(_ notification: Notification?) {
+        marker = notification?.value(forKey: "object") as? GMSMarker
         let placeName = marker!.title
-        let placeTokens = placeName.characters.split{$0 == ","}.map(String.init)
+        let placeTokens = placeName?.characters.split{$0 == ","}.map(String.init)
         
-        self.eventField.text = placeTokens[0]
+        self.eventField.text = placeTokens?[0]
         let lat = marker.position.latitude
         let lon = marker.position.longitude
         
@@ -170,27 +190,27 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
                 let pm = marks[0] as CLPlacemark
                 let address = ABCreateStringWithAddressDictionary(pm.addressDictionary!, true)
                 self.addressField.text = address
-                self.addressCell.hidden = false
+                self.addressCell.isHidden = false
             }
         })
         
     }
 
-    func handleDatePicker(sender: UIDatePicker) {
+    func handleDatePicker(_ sender: UIDatePicker) {
         
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateStyle = NSDateFormatterStyle.LongStyle
-        dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = DateFormatter.Style.long
+        dateFormatter.timeStyle = DateFormatter.Style.short
         
-        let dateString = dateFormatter.stringFromDate((sender.date))
+        let dateString = dateFormatter.string(from: (sender.date))
         selectedDate = sender.date
         dateField.text = dateString
     }
     
     /* TABLEVIEW DELEGATE METHODS*/
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.section == 1 && descField.textColor != UIColor.lightGrayColor(){
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if (indexPath as NSIndexPath).section == 1 && descField.textColor != UIColor.lightGray{
             return descField.frame.height + 20
         } else {
             return self.tableView.rowHeight
@@ -199,24 +219,24 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
     }
     /* TEXTVIEW DELEGATE METHODS*/
     
-    func textViewDidBeginEditing(textView: UITextView) {
-        if textView.textColor == UIColor.lightGrayColor() {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
             textView.text = nil
-            textView.textColor = UIColor.blackColor()
+            textView.textColor = UIColor.black
         }
     }
     
-    func textViewDidEndEditing(textView: UITextView) {
+    func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = Constants.ConstantStrings.placeHolderDesc
-            textView.textColor = UIColor.lightGrayColor()
+            textView.textColor = UIColor.lightGray
         }
     }
     
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         let fixedWidth = textView.frame.size.width
-        textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
-        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.max))
+        textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+        let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
         var newFrame = textView.frame
         newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
         textView.frame = newFrame
@@ -224,19 +244,19 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         self.tableView.endUpdates()
     }
     
-    func textViewShouldEndEditing(textView: UITextView) -> Bool {
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
         textView.resignFirstResponder()
         return true
     }
     
     // Moves to next field when hits enter
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
     
     // Sets the character limit of each text field
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    func textField(_ textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
         
         if (range.length + range.location > textField.text?.characters.count )
         {
@@ -250,11 +270,11 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         return true
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         
         // Create a new variable to store the instance of PlayerTableViewController
         if (segue.identifier == "toMapView") {
-            let navVC = segue.destinationViewController as! UINavigationController
+            let navVC = segue.destination as! UINavigationController
             let destinationVC = navVC.viewControllers.first as! EventsLocationFinder
             if let location = marker {
                 destinationVC.selectedLocation = location

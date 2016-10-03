@@ -9,9 +9,29 @@
 import UIKit
 import Bolts
 import Parse
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class OnboardingTableViewController: TableViewController, UITextViewDelegate, UIGestureRecognizerDelegate {
-    let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults();
+    let defaults:UserDefaults = UserDefaults.standard;
     
     @IBOutlet weak var nameCheck: UIImageView!
     @IBOutlet weak var aboutCheck: UIImageView!
@@ -41,25 +61,25 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     @IBOutlet weak var aboutHeaderLabel: UILabel!
     @IBOutlet weak var nameHeaderLabel: UILabel!
     
-    private let firstInterestPlaceholder = "Nova"
-    private let secondInterestPlaceholder = "Reading"
-    private let thirdInterestPlaceholder = "Sports"
+    fileprivate let firstInterestPlaceholder = "Nova"
+    fileprivate let secondInterestPlaceholder = "Reading"
+    fileprivate let thirdInterestPlaceholder = "Sports"
     
-    private let seekingPlaceholder = "Novas."
+    fileprivate let seekingPlaceholder = "Novas."
     
-    @IBAction func skipTutorial(sender: UIButton) {
+    @IBAction func skipTutorial(_ sender: UIButton) {
         if (nameField.text?.characters.count > 0 && experienceField.text?.characters.count > 0) {
             
-            if interestFieldOne.text?.characters.count == 0 {
+            if interestFieldOne.text != nil {
                 interestFieldOne.text = firstInterestPlaceholder
             }
-            if interestFieldTwo.text?.characters.count == 0 {
+            if interestFieldTwo.text != nil {
                 interestFieldTwo.text = secondInterestPlaceholder
             }
-            if interestFieldThree.text?.characters.count == 0 {
+            if interestFieldThree.text != nil {
                 interestFieldThree.text = thirdInterestPlaceholder
             }
-            if lookingForField.text?.characters.count == 0 {
+            if lookingForField.text != nil {
                 lookingForField.text = seekingPlaceholder
             }
               
@@ -67,61 +87,51 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
             prepareDataStore()
             saveProfile()
             
-            NSNotificationCenter.defaultCenter().postNotificationName("selectProfileVC", object: nil)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "selectProfileVC"), object: nil)
             NetworkManager().onboardingComplete()
             
-            self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+            self.presentingViewController?.dismiss(animated: true, completion: nil)
 
         } else {
-            let alert = UIAlertController(title: "Empty Field", message: "In order to skip, please tell us your name and profession.", preferredStyle: UIAlertControllerStyle.Alert);
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
-            self.presentViewController(alert, animated: true, completion: nil);
+            let alert = UIAlertController(title: "Empty Field", message: "In order to skip, please tell us your name and profession.", preferredStyle: UIAlertControllerStyle.alert);
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil));
+            self.present(alert, animated: true, completion: nil);
         }
     }
     // Prepares local datastore for profile information and saves profile;
-    @IBAction func continueButtonPressed(sender: UIButton) {
-        if (nameField.text?.characters.count > 0 && experienceField.text?.characters.count > 0 && lookingForField.text!.characters.count > 0 && aboutField.text.characters.count > 0
-            && (interestFieldOne.text!.characters.count > 0 && interestFieldTwo.text!.characters.count > 0
-            && interestFieldThree.text!.characters.count > 0)) {
-
+    @IBAction func continueButtonPressed(_ sender: UIButton) {
+        if (nameField.text?.characters.count > 0 && experienceField.text?.characters.count > 0) {
             prepareDataStore()
             saveProfile()
         } else {
-            let alert = UIAlertController(title: "Empty Field", message: "Please enter all essential fields.", preferredStyle: UIAlertControllerStyle.Alert);
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil));
-            self.presentViewController(alert, animated: true, completion: nil);
+            let alert = UIAlertController(title: "Empty Field", message: "Please enter all essential fields.", preferredStyle: UIAlertControllerStyle.alert);
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil));
+            self.present(alert, animated: true, completion: nil);
         }
     }
     
-    private func saveTempImage() {
+    fileprivate func saveTempImage() {
         let tempImage = UIImageView(image: UIImage(named: "selectImage"))
         Utilities().saveImage(tempImage.image!)
     }
     
     // Takes user back to homeview after coming from uploadProfilePictureVC
     func backToHomeView() {
-        self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil);
-    }
-    
-    private func capitalizeTextFieldLetter(textField: UITextField) {
-        textField.text!.replaceRange(textField.text!.startIndex...textField.text!.startIndex, with: String(textField.text![textField.text!.startIndex]).capitalizedString)
-    }
-    private func capitalizeTextViewLetter(textView: UITextView) {
-        textView.text!.replaceRange(textView.text!.startIndex...textView.text!.startIndex, with: String(textView.text![textView.text!.startIndex]).capitalizedString)
+        self.presentingViewController?.dismiss(animated: true, completion: nil);
     }
     
     override func viewDidLoad() {
         super.viewDidLoad();
         self.title = "1 of 2";
-        tableView.separatorStyle = UITableViewCellSeparatorStyle.None;
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(OnboardingTableViewController.backToHomeView), name: "backToHomeView", object: nil);
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(OnboardingTableViewController.backToHomeView), name: NSNotification.Name(rawValue: "backToHomeView"), object: nil);
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
+
         continueButton.layer.cornerRadius = 5
-        nameCheck.hidden = true
-        professionCheck.hidden = true
-        aboutCheck.hidden = true
-        interestCheck.hidden = true
-        seekingCheck.hidden = true
+        nameCheck.isHidden = true
+        professionCheck.isHidden = true
+        aboutCheck.isHidden = true
+        interestCheck.isHidden = true
+        seekingCheck.isHidden = true
         
         self.tableView.tableHeaderView = nil
         tableView.allowsSelection = false
@@ -130,35 +140,34 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
         self.tableView.reloadData()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
     }
     
     /* TEXTVIEW DELEGATE METHODS*/
     
-    func textViewDidBeginEditing(textView: UITextView) {
+    func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0) {
             textView.text = nil
-            textView.textColor = UIColor.blackColor()
+            textView.textColor = UIColor.black
         }
     }
     
-    func textViewDidEndEditing(textView: UITextView) {
+    func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = Constants.ConstantStrings.placeHolderAbout;
             textView.textColor = Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)
-            aboutCheck.hidden = true
+            aboutCheck.isHidden = true
         } else {
-            aboutCheck.hidden = false
-            capitalizeTextViewLetter(textView)
+            aboutCheck.isHidden = false
         }
     }
-    func textViewShouldReturn(textView: UITextView!) -> Bool {
+    func textViewShouldReturn(_ textView: UITextView!) -> Bool {
         self.view.endEditing(true)
         interestFieldOne.becomeFirstResponder()
         return true;
     }
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let maxtext = 80
         //If the text is larger than the maxtext, the return is false
         return textView.text.characters.count + (text.characters.count - range.length) <= maxtext
@@ -168,7 +177,7 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     /* TEXTFIELD DELEGATE METHODS*/
     
     // Allows users to hit enter and move to the next text field
-    func textFieldShouldReturn(textField: UITextField)-> Bool {
+    func textFieldShouldReturn(_ textField: UITextField)-> Bool {
         if (textField == nameField) {
             experienceField.becomeFirstResponder();
         }
@@ -193,54 +202,69 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     }
     
     // checks active field
-    func textFieldDidBeginEditing(textField: UITextField) {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         activeField = textField;
-
     }
     
-    func textFieldDidEndEditing(textField: UITextField) {
-        if textField.text!.characters.count != 0 {
-            capitalizeTextFieldLetter(textField)
-        }
-    }
-    
-    private func setChecks(textField: UITextField, hidden: Bool) {
+    fileprivate func setChecks(_ textField: UITextField, hidden: Bool) {
         if textField == nameField {
-            nameCheck.hidden = hidden
+            nameCheck.isHidden = hidden
         } else if textField == experienceField {
-            professionCheck.hidden = hidden
+            professionCheck.isHidden = hidden
         } else if (textField == interestFieldOne ||
             textField == interestFieldTwo ||
             textField == interestFieldThree)
         {
-            interestCheck.hidden = hidden
+            interestCheck.isHidden = hidden
         } else if textField == lookingForField {
-            seekingCheck.hidden = hidden
+            seekingCheck.isHidden = hidden
         }
     }
     
     // Sets the character limit of each text field
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        
-        if (textField == nameField) {
-            return textField.text?.characters.count <= 29
-        } else if (textField == experienceField) {
-            return textField.text?.characters.count <= 30
-        } else if (textField == interestFieldOne ||
-            textField == interestFieldTwo ||
-            textField == interestFieldThree) {
-            return textField.text?.characters.count <= 9
+    func textField(_ textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        var limit:Int!
+        if (textField == nameField ||
+            textField == experienceField ||
+            textField == lookingForField)
+        {
+            limit = 29
         } else {
-            return textField.text?.characters.count <= 80
+            limit = 9
         }
+        
+        let currentCharacterCount = textField.text?.characters.count ?? 0
+        if (range.length + range.location > currentCharacterCount){
+            return false
+        }
+        let newLength = currentCharacterCount + string.characters.count - range.length
+        return newLength <= limit
     }
     
-    func textFieldDidChange(textField: UITextField) {
-        Utilities().commaLimiter(textField);
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        let isInterest = textField == interestFieldOne ||
+            textField == interestFieldTwo ||
+            textField == interestFieldThree
+        let emptyInterests = interestFieldOne.text?.characters.count == 0 &&
+            interestFieldTwo.text?.characters.count == 0 &&
+            interestFieldThree.text?.characters.count == 0
+        if (textField == nameField) {
+            setChecks(nameField, hidden: nameField.text?.characters.count == 0)
+        }
+        if (textField == experienceField) {
+            setChecks(experienceField, hidden: nameField.text?.characters.count == 0)
+        }
+        if (isInterest) {
+            setChecks(interestFieldOne, hidden: emptyInterests)
+        }
+        if (textField == lookingForField) {
+            setChecks(lookingForField, hidden: lookingForField.text?.characters.count == 0)
+        }
+        
     }
     
     // Removes keyboard when tap out of screen
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true);
     }
 
@@ -280,96 +304,95 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     
     // Sets up the user's local datastore for profile information. Online is already set at create
     func prepareDataStore() {
-        let tempInterestsArr:[String!] = [interestFieldOne.text!, interestFieldTwo.text!, interestFieldThree.text!]
         var interestsArr:[String] = [String]()
-        for i in 0..<tempInterestsArr.count {
-            if tempInterestsArr[i] != nil && tempInterestsArr[i].characters.count > 0 {
-                interestsArr.append(trim(tempInterestsArr[i]))
-            }
-        }
+        interestFieldOne.text != nil ? interestsArr.append(trim(interestFieldOne.text!)) : interestsArr.append(firstInterestPlaceholder)
+        interestFieldTwo.text != nil ? interestsArr.append(trim(interestFieldTwo.text!)) : interestsArr.append(secondInterestPlaceholder)
+        interestFieldThree.text != nil ? interestsArr.append(trim(interestFieldThree.text!)) : interestsArr.append(thirdInterestPlaceholder)
         
-        defaults.setObject(trim(nameField.text!), forKey: Constants.UserKeys.nameKey);
-        defaults.setObject(trim(aboutField.text), forKey: Constants.UserKeys.aboutKey);
-        defaults.setObject(trim(experienceField.text!), forKey: Constants.UserKeys.experienceKey);
-        defaults.setObject(interestsArr, forKey: Constants.UserKeys.interestsKey);
-        defaults.setObject(trim(lookingForField.text!), forKey: Constants.UserKeys.lookingForKey);
-        defaults.setBool(true, forKey: Constants.UserKeys.availableKey);
-        defaults.setBool(false, forKey: Constants.TempKeys.fromNew);
+        defaults.set(trim(nameField.text!), forKey: Constants.UserKeys.nameKey);
+        defaults.set(trim(aboutField.text), forKey: Constants.UserKeys.aboutKey);
+        defaults.set(trim(experienceField.text!), forKey: Constants.UserKeys.experienceKey);
+        defaults.set(interestsArr, forKey: Constants.UserKeys.interestsKey);
+        defaults.set(trim(lookingForField.text!), forKey: Constants.UserKeys.lookingForKey);
+        defaults.set(true, forKey: Constants.UserKeys.availableKey);
+        defaults.set(false, forKey: Constants.TempKeys.fromNew);
     }
     
-    func trim(val: String) -> String {
-        return val.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+    func trim(_ val: String) -> String {
+        return val.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
     
     func prepareTextFields() {
         
-        nameField.backgroundColor = UIColor.clearColor();
+        nameField.autocapitalizationType = UITextAutocapitalizationType.words
+        interestFieldOne.autocapitalizationType = UITextAutocapitalizationType.words
+        interestFieldTwo.autocapitalizationType = UITextAutocapitalizationType.words
+        interestFieldThree.autocapitalizationType = UITextAutocapitalizationType.words
+        experienceField.autocapitalizationType = UITextAutocapitalizationType.words
+        lookingForField.autocapitalizationType = UITextAutocapitalizationType.words
+        aboutField.autocapitalizationType = UITextAutocapitalizationType.sentences
+        
+        nameField.backgroundColor = UIColor.clear;
         let nameFieldPlaceholder = NSAttributedString(string: "What's your name?", attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         nameField.attributedPlaceholder = nameFieldPlaceholder;
-        nameField.textColor = UIColor.blackColor();
-        nameField.borderStyle = UITextBorderStyle.None;
+        nameField.borderStyle = UITextBorderStyle.none;
         nameField.font = UIFont(name: "OpenSans", size: 16);
         
-        aboutField.backgroundColor = UIColor.clearColor();
+        aboutField.backgroundColor = UIColor.clear;
         aboutField.text = Constants.ConstantStrings.aboutText;
         aboutField.textColor = Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0);
         aboutField.font = UIFont(name: "OpenSans", size: 16);
         
-        interestFieldOne.backgroundColor = UIColor.clearColor();
+        interestFieldOne.backgroundColor = UIColor.clear;
         let interestsFieldOnePlaceholder = NSAttributedString(string: firstInterestPlaceholder, attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         interestFieldOne.attributedPlaceholder = interestsFieldOnePlaceholder;
-        interestFieldOne.textColor = UIColor.blackColor();
-        interestFieldOne.borderStyle = UITextBorderStyle.None
+        interestFieldOne.borderStyle = UITextBorderStyle.none
         interestFieldOne.font = UIFont(name: "OpenSans", size: 16);
         
         let dotOneImage = UIImageView(image: UIImage(named: "orangeDot.png"))
         dotOneImage.frame = CGRect(x: 0, y: 0, width: dotOneImage.frame.width + 15, height: dotOneImage.frame.height)
-        dotOneImage.contentMode = UIViewContentMode.Center
+        dotOneImage.contentMode = UIViewContentMode.center
         interestFieldOne.leftView = dotOneImage
-        interestFieldOne.leftViewMode = UITextFieldViewMode.Always
+        interestFieldOne.leftViewMode = UITextFieldViewMode.always
         
-        interestFieldTwo.backgroundColor = UIColor.clearColor();
+        interestFieldTwo.backgroundColor = UIColor.clear;
         let interestsFieldTwoPlaceholder = NSAttributedString(string: secondInterestPlaceholder, attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         interestFieldTwo.attributedPlaceholder = interestsFieldTwoPlaceholder;
-        interestFieldTwo.textColor = UIColor.blackColor();
-        interestFieldTwo.borderStyle = UITextBorderStyle.None
+        interestFieldTwo.borderStyle = UITextBorderStyle.none
         interestFieldTwo.font = UIFont(name: "OpenSans", size: 16);
         
         let dotTwoImage = UIImageView(image: UIImage(named: "orangeDot.png"))
         dotTwoImage.frame = CGRect(x: 0, y: 0, width: dotTwoImage.frame.width + 15, height: dotTwoImage.frame.height)
-        dotTwoImage.contentMode = UIViewContentMode.Center
+        dotTwoImage.contentMode = UIViewContentMode.center
         interestFieldTwo.leftView = dotTwoImage
-        interestFieldTwo.leftViewMode = UITextFieldViewMode.Always
+        interestFieldTwo.leftViewMode = UITextFieldViewMode.always
         
-        interestFieldThree.backgroundColor = UIColor.clearColor();
+        interestFieldThree.backgroundColor = UIColor.clear;
         let interestsFieldThreePlaceholder = NSAttributedString(string: thirdInterestPlaceholder, attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         interestFieldThree.attributedPlaceholder = interestsFieldThreePlaceholder;
-        interestFieldThree.textColor = UIColor.blackColor();
-        interestFieldThree.borderStyle = UITextBorderStyle.None
+        interestFieldThree.borderStyle = UITextBorderStyle.none
         interestFieldThree.font = UIFont(name: "OpenSans", size: 16)
         
         let dotThreeImage = UIImageView(image: UIImage(named: "orangeDot.png"))
         dotThreeImage.frame = CGRect(x: 0, y: 0, width: dotThreeImage.frame.width + 15, height: dotThreeImage.frame.height)
-        dotThreeImage.contentMode = UIViewContentMode.Center
+        dotThreeImage.contentMode = UIViewContentMode.center
         interestFieldThree.leftView = dotThreeImage
-        interestFieldThree.leftViewMode = UITextFieldViewMode.Always
+        interestFieldThree.leftViewMode = UITextFieldViewMode.always
         
-        experienceField.backgroundColor = UIColor.clearColor();
+        experienceField.backgroundColor = UIColor.clear;
         let backgroundFieldPlaceholder = NSAttributedString(string: "e.g. systems engineer", attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         experienceField.attributedPlaceholder = backgroundFieldPlaceholder;
-        experienceField.textColor = UIColor.blackColor();
-        experienceField.borderStyle = UITextBorderStyle.None
+        experienceField.borderStyle = UITextBorderStyle.none
         experienceField.font = UIFont(name: "OpenSans", size: 16);
         
-        lookingForField.backgroundColor = UIColor.clearColor();
+        lookingForField.backgroundColor = UIColor.clear;
         let goalsFieldPlaceholder = NSAttributedString(string: seekingPlaceholder, attributes: [NSForegroundColorAttributeName : Utilities().UIColorFromHex(0xA6AAA9, alpha: 1.0)]);
         lookingForField.attributedPlaceholder = goalsFieldPlaceholder;
-        lookingForField.textColor = UIColor.blackColor();
-        lookingForField.borderStyle = UITextBorderStyle.None
+        lookingForField.borderStyle = UITextBorderStyle.none
         lookingForField.font = UIFont(name: "OpenSans", size: 16);
     }
     
-    private func getChangeLabelDict() -> [CGFloat : [UILabel]]{
+    fileprivate func getChangeLabelDict() -> [CGFloat : [UILabel]]{
         var fontDict:[CGFloat : [UILabel]] = [CGFloat : [UILabel]]()
         
         var extraSmallLabels:[UILabel] = [UILabel]()
@@ -445,17 +468,17 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     
     /* TABLEVIEW DELEGATE METHODS */
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // return the number of sections
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // return the number of rows
         return 7
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return nil
     }
     
@@ -464,12 +487,12 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
         // Dispose of any resources that can be recreated.
     }
 
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let screenHeight = Constants.ScreenDimensions.screenHeight
         
-        switch indexPath.row {
+        switch (indexPath as NSIndexPath).row {
         case 0:
-            return screenHeight / 5.0
+            return screenHeight / 7.0
         case 3:
             return screenHeight / 5.5
         case 4:

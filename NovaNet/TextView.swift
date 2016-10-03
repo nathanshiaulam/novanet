@@ -4,19 +4,19 @@ class TextField: UITextField {
     
     let padding = UIEdgeInsets(top: 0, left:0, bottom: 10, right: 0);
     
-    override func textRectForBounds(bounds: CGRect) -> CGRect {
+    override func textRect(forBounds bounds: CGRect) -> CGRect {
         return self.newBounds(bounds)
     }
     
-    override func placeholderRectForBounds(bounds: CGRect) -> CGRect {
+    override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
         return self.newBounds(bounds)
     }
     
-    override func editingRectForBounds(bounds: CGRect) -> CGRect {
+    override func editingRect(forBounds bounds: CGRect) -> CGRect {
         return self.newBounds(bounds)
     }
     
-    private func newBounds(bounds: CGRect) -> CGRect {
+    fileprivate func newBounds(_ bounds: CGRect) -> CGRect {
         
         var newBounds = bounds
         newBounds.origin.x += padding.left

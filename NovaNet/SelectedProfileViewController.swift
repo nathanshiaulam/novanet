@@ -29,17 +29,17 @@ class SelectedProfileViewController: ViewController {
     @IBOutlet weak var distanceArrow: UIImageView!
 
     var image:UIImage? = nil
-    let defaults:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+    let defaults:UserDefaults = UserDefaults.standard
     var fromMessage:Bool! = false;
     
-    @IBAction func chatButtonPressed(sender: UIButton) {
-        self.performSegueWithIdentifier("toMessageVC", sender: self)
+    @IBAction func chatButtonPressed(_ sender: UIButton) {
+        self.performSegue(withIdentifier: "toMessageVC", sender: self)
     }
-    @IBAction func backPressed(sender: UIBarButtonItem) {
+    @IBAction func backPressed(_ sender: UIBarButtonItem) {
         if (fromMessage == true) {
-            self.navigationController?.popViewControllerAnimated(true);
+            self.navigationController?.popViewController(animated: true);
         } else {
-            self.dismissViewControllerAnimated(true, completion: nil);
+            self.dismiss(animated: true, completion: nil);
         }
     }
     
@@ -47,18 +47,18 @@ class SelectedProfileViewController: ViewController {
         super.viewDidLoad();
         
         let dotOne = UIImageView(image: UIImage(named: "orangeDot.png"))
-        dotOne.frame = CGRectMake(-10 , firstInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
-        dotOne.contentMode = UIViewContentMode.Center
+        dotOne.frame = CGRect(x: -10 , y: firstInterestLabel.bounds.size.height / 2.0 - 5, width: 5, height: 5)
+        dotOne.contentMode = UIViewContentMode.center
         firstInterestLabel.addSubview(dotOne)
         
         let dotTwo = UIImageView(image: UIImage(named: "orangeDot.png"))
-        dotTwo.frame = CGRectMake(-10 , secondInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
-        dotTwo.contentMode = UIViewContentMode.Center
+        dotTwo.frame = CGRect(x: -10 , y: secondInterestLabel.bounds.size.height / 2.0 - 5, width: 5, height: 5)
+        dotTwo.contentMode = UIViewContentMode.center
         secondInterestLabel.addSubview(dotTwo)
         
         let dotThree = UIImageView(image: UIImage(named: "orangeDot.png"))
-        dotThree.frame = CGRectMake(-10 , firstInterestLabel.bounds.size.height / 2.0 - 5, 5, 5)
-        dotThree.contentMode = UIViewContentMode.Center
+        dotThree.frame = CGRect(x: -10 , y: firstInterestLabel.bounds.size.height / 2.0 - 5, width: 5, height: 5)
+        dotThree.contentMode = UIViewContentMode.center
         thirdInterestLabel.addSubview(dotThree)
         
         setValues()
@@ -68,7 +68,7 @@ class SelectedProfileViewController: ViewController {
         } else {
             profileImage.image = UIImage(named: "selectImage");
         }
-        self.view.backgroundColor = UIColor.whiteColor();
+        self.view.backgroundColor = UIColor.white;
         self.navigationController?.navigationBar.backgroundColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
     }
     
@@ -81,9 +81,9 @@ class SelectedProfileViewController: ViewController {
         Utilities().formatImage(self.profileImage)
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         if segue.identifier == "toMessageVC" {
-            let destinationVC = segue.destinationViewController.childViewControllers[0] as! MessagerViewController
+            let destinationVC = segue.destination.childViewControllers[0] as! MessagerViewController
             if (self.image != nil) {
                 destinationVC.nextImage = self.image;
             } else {
@@ -96,14 +96,14 @@ class SelectedProfileViewController: ViewController {
     /*-------------------------------- HELPER METHODS ------------------------------------*/
 
     // Methods to format image and convert RGB to hex
-    func formatImage( profileImage: UIImageView) {
+    func formatImage( _ profileImage: UIImageView) {
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2;
         profileImage.clipsToBounds = true;
     }
     // Sets all values of the user profile fields
     func setValues() {
         
-        if let name = defaults.stringForKey(Constants.SelectedUserKeys.selectedNameKey) {
+        if let name = defaults.string(forKey: Constants.SelectedUserKeys.selectedNameKey) {
             nameLabel.text = name;
             if name.characters.count == 0 {
                 nameLabel.text = "Name"
@@ -111,7 +111,7 @@ class SelectedProfileViewController: ViewController {
         } else {
             nameLabel.text = "Name"
         }
-        if let about = defaults.stringForKey(Constants.SelectedUserKeys.selectedAboutKey) {
+        if let about = defaults.string(forKey: Constants.SelectedUserKeys.selectedAboutKey) {
             aboutLabel.text = about;
             if about.characters.count == 0 {
                 aboutLabel.text = "A sentence or two illustrating what you're about. Who are you, in a nutshell?"
@@ -119,7 +119,7 @@ class SelectedProfileViewController: ViewController {
         } else {
             aboutLabel.text = "A sentence or two illustrating what you're about. Who are you, in a nutshell?"
         }
-        if let interests = defaults.arrayForKey(Constants.SelectedUserKeys.selectedInterestsKey) {
+        if let interests = defaults.array(forKey: Constants.SelectedUserKeys.selectedInterestsKey) {
             var interestsArr = interests;
             if (interestsArr.count == 0) {
                 firstInterestLabel.text = "What are your interests?"
@@ -147,7 +147,7 @@ class SelectedProfileViewController: ViewController {
             }
             
         }
-        if let experience = defaults.stringForKey(Constants.SelectedUserKeys.selectedExperienceKey) {
+        if let experience = defaults.string(forKey: Constants.SelectedUserKeys.selectedExperienceKey) {
             experienceLabel.text = experience;
             if (experience.characters.count == 0) {
                 experienceLabel.text = "What's your experience?"
@@ -155,7 +155,7 @@ class SelectedProfileViewController: ViewController {
         } else {
             experienceLabel.text = "What's your experience?"
         }
-        if let lookingFor = defaults.stringForKey(Constants.SelectedUserKeys.selectedLookingForKey) {
+        if let lookingFor = defaults.string(forKey: Constants.SelectedUserKeys.selectedLookingForKey) {
             let seekingString = NSMutableAttributedString(string: lookingFor)
             let seekingHeader = "Seeking // "
             
@@ -163,7 +163,7 @@ class SelectedProfileViewController: ViewController {
             
             let boldedString = NSMutableAttributedString(string:seekingHeader, attributes:attrs)
             
-            boldedString.appendAttributedString(seekingString)
+            boldedString.append(seekingString)
             
             lookingForLabel.text = boldedString.string
             if (lookingFor.characters.count == 0) {
@@ -173,41 +173,44 @@ class SelectedProfileViewController: ViewController {
             lookingForLabel.text = "Who are you looking for?"
         }
         
-        if let dist: AnyObject = defaults.objectForKey(Constants.SelectedUserKeys.selectedDistanceKey) {
+        if let dist: AnyObject = defaults.object(forKey: Constants.SelectedUserKeys.selectedDistanceKey) as AnyObject? {
             distLabel.text = String(stringInterpolationSegment: dist) + "km";
+            
         } else {
-            distLabel.hidden = true
-            distanceArrow.hidden = true
-            chatButton.layer.cornerRadius = 5
+            distLabel.isHidden = true
+            distanceArrow.isHidden = true
         }
         if (fromMessage == true) {
-            distLabel.hidden = true
-            distanceArrow.hidden = true
+            distLabel.isHidden = true
+            distanceArrow.isHidden = true
+        }
+        if (chatButton != nil) {
+            chatButton.layer.cornerRadius = 5
         }
         
-        experienceLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+        experienceLabel.lineBreakMode = NSLineBreakMode.byWordWrapping;
         experienceLabel.sizeToFit();
         
-        nameLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+        nameLabel.lineBreakMode = NSLineBreakMode.byWordWrapping;
         nameLabel.sizeToFit();
         
-        firstInterestLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+        firstInterestLabel.lineBreakMode = NSLineBreakMode.byWordWrapping;
         firstInterestLabel.sizeToFit();
         
-        secondInterestLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+        secondInterestLabel.lineBreakMode = NSLineBreakMode.byWordWrapping;
         secondInterestLabel.sizeToFit();
         
-        thirdInterestLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+        thirdInterestLabel.lineBreakMode = NSLineBreakMode.byWordWrapping;
         thirdInterestLabel.sizeToFit();
         
-        lookingForLabel.lineBreakMode = NSLineBreakMode.ByWordWrapping;
+        lookingForLabel.lineBreakMode = NSLineBreakMode.byWordWrapping;
         lookingForLabel.sizeToFit();
         
         self.title = nameLabel.text;
     }
     
     // Edits font sizes and image constraints to fit in each mode
-    private func getChangeLabelDict() -> [CGFloat : [UILabel]]{
+    fileprivate func getChangeLabelDict() -> [CGFloat : [UILabel]]{
         var fontDict:[CGFloat : [UILabel]] = [CGFloat : [UILabel]]()
         
         var doubleExtraSmallLabels:[UILabel] = [UILabel]()

@@ -48,7 +48,7 @@ class NetworkManager: NSObject {
         query.whereKey("ID", equalTo:currentID!);
         
         query.getFirstObjectInBackground {
-            (profile: PFObject?, error: NSError?) -> Void in
+            (profile: PFObject?, error: Error?) -> Void in
             if (error != nil || profile == nil) {
                 print(error);
             } else if let profile = profile {
@@ -63,7 +63,7 @@ class NetworkManager: NSObject {
         let currentID = PFUser.current()!.objectId;
         query.whereKey("ID", equalTo:currentID!);
         query.getFirstObjectInBackground {
-            (object: PFObject?, error: NSError?) -> Void in
+            (object: PFObject?, error: Error?) -> Void in
             if (object == nil || error != nil) {
                 print(error);
             } else if let object = object{
@@ -142,7 +142,7 @@ class NetworkManager: NSObject {
                 sender.dismiss(animated: true, completion: nil);
             } else {
                 // Show the errorString somewhere and let the user try again.
-                let errorString = error!.userInfo["error"] as! NSString;
+                let errorString = (error as! NSError).userInfo["error"] as! NSString;
                 let alert = UIAlertController(title: "Submission Failure", message: errorString as String, preferredStyle: UIAlertControllerStyle.alert);
                 alert.addAction(UIAlertAction(title:"Ok", style: UIAlertActionStyle.default, handler: nil));
                 sender.present(alert, animated: true, completion: nil);
@@ -166,7 +166,7 @@ class NetworkManager: NSObject {
         let userQuery = PFQuery(className: "_User");
         userQuery.whereKey("email", equalTo: email);
         userQuery.getFirstObjectInBackground {
-            (user: AnyObject?, error: NSError?) -> Void in
+            (user: AnyObject?, error: Error?) -> Void in
             if (error != nil || user == nil) {
                 let alert = UIAlertController(title: "Submission Failure", message: "Invalid email or password", preferredStyle: UIAlertControllerStyle.alert);
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil));
@@ -185,7 +185,7 @@ class NetworkManager: NSObject {
                         query.whereKey("ID", equalTo:currentID!);
                         
                         query.getFirstObjectInBackground {
-                            (profile: PFObject?, error: NSError?) -> Void in
+                            (profile: PFObject?, error: Error?) -> Void in
                             if error != nil || profile == nil {
                                 print(error);
                             } else if let profile = profile {

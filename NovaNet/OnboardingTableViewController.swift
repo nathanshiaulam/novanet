@@ -202,7 +202,7 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     }
     
     // checks active field
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    private func textFieldDidBeginEditing(_ textField: UITextField) {
         activeField = textField;
     }
     
@@ -241,7 +241,7 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
         return newLength <= limit
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    private func textFieldDidEndEditing(_ textField: UITextField) {
         let isInterest = textField == interestFieldOne ||
             textField == interestFieldTwo ||
             textField == interestFieldThree

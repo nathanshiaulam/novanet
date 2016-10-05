@@ -70,7 +70,7 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
     func deleteEvent() {
         
         selectedEvent.deleteInBackground {
-            (succeeded: Bool, error: NSError?) -> Void in
+            (succeeded: Bool, error: Error?) -> Void in
             if (succeeded) {
                 self.navigationController?.dismiss(animated: true, completion: nil)
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "eventDeleted"), object: nil);                
@@ -140,7 +140,7 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
     }
     
     func saveNewLocation(_ notification: Notification?) {
-        marker = notification?.value(forKey: "object") as? GMSMarker;
+        marker = notification?.object as? GMSMarker;
         let lat = marker.position.latitude;
         let lon = marker.position.longitude;
         let placeName = marker!.title

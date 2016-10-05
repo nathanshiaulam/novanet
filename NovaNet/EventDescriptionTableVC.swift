@@ -52,7 +52,7 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
         let query:PFQuery = PFQuery(className: "Profile")
         query.whereKey("ID", containedIn: list)
         query.findObjectsInBackground {
-            (objects: [AnyObject]?, error: NSError?) -> Void in
+            (objects:[PFObject]?, error: Error?) -> Void in
             if error == nil {
                 self.userList = objects as? [PFObject]
                 let maybeList = self.selectedEvent["Maybe"] as! [String]
@@ -323,11 +323,11 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
         query.whereKey("objectId", equalTo: id!);
         
         query.getFirstObjectInBackground {
-            (event:PFObject?, error: NSError?) -> Void in
+            (event:AnyObject?, error: Error?) -> Void in
             if error != nil || event == nil {
                 print(error)
             } else if let event = event {
-                self.selectedEvent = event;
+                self.selectedEvent = event as! PFObject
             }
         }
         
@@ -386,7 +386,7 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
                 let query : PFQuery = PFUser.query()!
                 query.whereKey("objectId", equalTo: creator)
                 query.getFirstObjectInBackground {
-                    (user: PFObject?, error: NSError?) -> Void in
+                    (user: PFObject?, error: Error?) -> Void in
                     if error != nil || user == nil {
                         print(error);
                     }

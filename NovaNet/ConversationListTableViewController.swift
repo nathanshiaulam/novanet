@@ -17,9 +17,9 @@ class ConversationListTableViewController: TableViewController {
     let defaults:UserDefaults = UserDefaults.standard
 
     // Sets up conversation lists to load in later
-    var conversationList:NSArray!
-    var conversationParticipantList:NSArray!
-    var otherProfileList:NSArray!
+    var conversationList:[PFObject]!
+    var conversationParticipantList:[PFObject]!
+    var otherProfileList:[PFObject]!
     var imageList:[UIImage?]!
     var nextImage:UIImage!
     var formattedImages:[UIImage?] = [UIImage]()
@@ -32,9 +32,9 @@ class ConversationListTableViewController: TableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        conversationList = NSArray()
-        conversationParticipantList = NSArray()
-        otherProfileList = NSArray()
+        conversationList = [PFObject]()
+        conversationParticipantList = [PFObject]()
+        otherProfileList = [PFObject]()
         imageList = [UIImage?]()
         nextImage = UIImage()
 
@@ -56,9 +56,9 @@ class ConversationListTableViewController: TableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         if (!self.userLoggedIn()) {
-            conversationList = NSArray()
-            conversationParticipantList = NSArray()
-            otherProfileList = NSArray()
+            conversationList = [PFObject]()
+            conversationParticipantList = [PFObject]()
+            otherProfileList = [PFObject]()
             tableView.reloadData()
 
             // Go to login page if no user logged in
@@ -158,9 +158,9 @@ class ConversationListTableViewController: TableViewController {
         imageList = [UIImage?](repeating: nil, count: otherProfileList.count)
         if (conversationList.count > 0) {
 
-            let conversationParticipant: AnyObject = conversationParticipantList[(indexPath as NSIndexPath).row]
-            let conversation: AnyObject = conversationList[(indexPath as NSIndexPath).row]
-            let profile:AnyObject = otherProfileList[(indexPath as NSIndexPath).row]
+            let conversationParticipant: AnyObject = conversationParticipantList[indexPath.row]
+            let conversation: AnyObject = conversationList[indexPath.row]
+            let profile:AnyObject = otherProfileList[indexPath.row]
             
 
             // Stores variables to mark unread messages and most recent message
@@ -245,7 +245,7 @@ class ConversationListTableViewController: TableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let profile: PFObject = otherProfileList[(indexPath as NSIndexPath).row] as! PFObject
+        let profile: PFObject = otherProfileList[(indexPath as NSIndexPath).row] 
         let image: UIImage! = imageList[(indexPath as NSIndexPath).row] as UIImage!
         if ((image) != nil) {
             self.nextImage = image
@@ -300,7 +300,7 @@ class ConversationListTableViewController: TableViewController {
     func findOtherProfiles() {
         let otherIDs:NSMutableArray = NSMutableArray()
         for i in 0..<conversationParticipantList.count {
-            let participant = conversationParticipantList[i] as! PFObject
+            let participant = conversationParticipantList[i] 
             otherIDs.add(participant["OtherUser"]!)
         }
         let query = PFQuery(className: "Profile")
@@ -308,7 +308,7 @@ class ConversationListTableViewController: TableViewController {
         query.order(byDescending: "MostRecent")
         
         query.findObjectsInBackgroundWithBlock {
-            (objects: [PFObject]?, error: Error?) -> Void in
+            (objects:[AnyObject]?, error: Error?) -> Void in
             if error == nil {
                 self.otherProfileList = objects!
                 self.tableView.reloadData()
@@ -322,7 +322,7 @@ class ConversationListTableViewController: TableViewController {
     // Finds all conversations initiated in background sorted by date of most recent message
     func findConversations() {
         PFCloud.callFunction(inBackground: "findConversations", withParameters: [:]) {
-            (result: AnyObject?, error:NSError?) -> Void in
+            (result: AnyObject!, error:Error!) -> Void in
             if error == nil {
                 self.conversationList = result as! NSArray
                 self.findOtherProfiles()
@@ -336,7 +336,7 @@ class ConversationListTableViewController: TableViewController {
     func findConversationParticipants() {
         
         PFCloud.callFunction(inBackground: "findConversationParticipants", withParameters: [:]) {
-            (result: AnyObject?, error:NSError?) -> Void in
+            (result: AnyObject?, error:Error?) -> Void in
             if error == nil {
                 self.conversationParticipantList = result as! NSArray
                 self.findConversations()

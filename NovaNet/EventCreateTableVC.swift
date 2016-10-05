@@ -81,7 +81,7 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         newEvent["NotGoing"] = [String]()
         
         newEvent.saveInBackground( block: {
-            (success: Bool, error: NSError?) -> Void in
+            (success: Bool, error: Error?) -> Void in
             if error == nil {
                 self.sendEventsNotification(self.titleField.text!, latitude: point.latitude, longitude: point.longitude)
             }
@@ -93,7 +93,7 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         let distance = defaults.integer(forKey: Constants.UserKeys.distanceKey)
         
         PFCloud.callFunction(inBackground: "findUsers", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {
-            (result: AnyObject?, error:NSError?) -> Void in
+            (result: AnyObject?, error:Error?) -> Void in
             if error == nil {
                 let profileList:[PFObject] = result as! [PFObject]
                 let ownName = self.defaults.string(forKey: Constants.UserKeys.nameKey)
@@ -170,7 +170,7 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
     }
     
     func saveNewLocation(_ notification: Notification?) {
-        marker = notification?.value(forKey: "object") as? GMSMarker
+        marker = notification?.object as? GMSMarker
         let placeName = marker!.title
         let placeTokens = placeName?.characters.split{$0 == ","}.map(String.init)
         

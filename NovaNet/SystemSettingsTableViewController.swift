@@ -29,7 +29,7 @@ class SystemSettingsTableViewController: TableViewController {
         query.whereKey("ID", equalTo:currentID!)
         
         query.getFirstObjectInBackground {
-            (profile: PFObject?, error: NSError?) -> Void in
+            (profile: PFObject?, error: Error?) -> Void in
             if error != nil || profile == nil {
                 print(error);
             } else if let profile = profile {
@@ -84,7 +84,7 @@ class SystemSettingsTableViewController: TableViewController {
             query.whereKey("ID", equalTo: PFUser.current()!.objectId!);
             
             query.getFirstObjectInBackground {
-                (profile: PFObject?, error: NSError?) -> Void in
+                (profile: PFObject?, error: Error?) -> Void in
                 if (error != nil || profile == nil) {
                     print(error);
                 } else if let profile = profile {

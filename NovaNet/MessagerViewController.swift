@@ -70,7 +70,7 @@ class MessagerViewController: JSQMessagesViewController {
         // Adds in the new message from the push notification
         let fullmessage = JSQMessage(senderId: selectedId, senderDisplayName: selectedId, date: recentDate, text: recentText)
         if (!self.messages.contains(fullmessage!)) {
-            self.messages += [fullmessage]
+            self.messages += [fullmessage!] as [JSQMessage]
         }
         
         self.collectionView!.reloadData()
@@ -109,7 +109,7 @@ class MessagerViewController: JSQMessagesViewController {
                     sender = message["Sender"] as! String
                     recentDate = message["Date"] as! Date
                     let fullmessage = JSQMessage(senderId: sender, senderDisplayName: sender, date: recentDate, text: recentText)
-                    self.messages += [fullmessage]
+                    self.messages += [fullmessage!] as [JSQMessage]
                 }
                 self.collectionView!.reloadData()
                 
@@ -201,7 +201,7 @@ class MessagerViewController: JSQMessagesViewController {
                         self.collectionView!.reloadData()
                         self.finishSendingMessage()
                     } else {
-                        let errorString = (error as NSError).userInfo["error"] as! NSString
+                        let errorString = (error as! NSError).userInfo["error"] as! NSString
                         let alert = UIAlertController(title: "Message not sent.", message: errorString as String, preferredStyle: UIAlertControllerStyle.alert)
                         alert.addAction(UIAlertAction(title:"Ok", style: UIAlertActionStyle.default, handler: nil))
                     }
@@ -262,7 +262,7 @@ class MessagerViewController: JSQMessagesViewController {
         senderProfileQuery.whereKey("ID", equalTo: self.senderId)
         
         senderProfileQuery.getFirstObjectInBackground {
-            (profile: AnyObject?, error: NSError?) -> Void in
+            (profile: AnyObject?, error: Error?) -> Void in
             if error == nil {
                 let prof1:PFObject = profile as! PFObject
                 let profDate:Date! = prof1["MostRecent"] as? Date
@@ -284,7 +284,7 @@ class MessagerViewController: JSQMessagesViewController {
         selectedProfileQuery.whereKey("ID", equalTo: self.selectedId)
         
         selectedProfileQuery.getFirstObjectInBackground {
-            (profile: AnyObject?, error: NSError?) -> Void in
+            (profile: AnyObject?, error: Error?) -> Void in
             if error == nil {
                 let prof2:PFObject = profile as! PFObject
                 
@@ -300,7 +300,7 @@ class MessagerViewController: JSQMessagesViewController {
         query.whereKey("User", equalTo: self.senderId)
         query.whereKey("ConversationID", equalTo: conversation.objectId!)
         query.getFirstObjectInBackground {
-            (convPart: PFObject?, error: NSError?) -> Void in
+            (convPart: PFObject?, error: Error?) -> Void in
             if (error != nil || convPart == nil) {
                 print(error)
             } else if let convPart = convPart {
@@ -327,7 +327,7 @@ class MessagerViewController: JSQMessagesViewController {
         query.whereKey("SecondParticipant", equalTo: participants[1]!)
         
         query.getFirstObjectInBackground {
-            (conversation: PFObject?, error: NSError?) -> Void in
+            (conversation: PFObject?, error: Error?) -> Void in
             if (error != nil || conversation == nil) {
                 print(error)
             } else if let conversation = conversation {

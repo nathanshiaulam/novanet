@@ -20,7 +20,7 @@ class FeedbackViewController: ViewController {
         let text = feedbackTextField.text;
         if (text?.characters.count)! > 0 && text != Constants.ConstantStrings.feedbackText {
             PFCloud.callFunction(inBackground: "sendMail", withParameters:["text":text]) {
-                (result: AnyObject?, error: NSError?) -> Void in
+                (result: AnyObject?, error: Error?) -> Void in
                 if error == nil {
                     let alert = UIAlertController(title: "Thanks so much- we've received your feedback.", message: Constants.ConstantStrings.feedbackAlertText, preferredStyle: UIAlertControllerStyle.alert);
                     alert.addAction(UIAlertAction(title: "GOT IT", style: UIAlertActionStyle.default, handler: nil));

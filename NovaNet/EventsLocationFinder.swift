@@ -95,7 +95,7 @@ class EventsLocationFinder: ViewController, UISearchBarDelegate, LocateOnTheMap 
     
     func centerOnSelf() {
         PFGeoPoint.geoPointForCurrentLocation {
-            (geoPoint: PFGeoPoint?, error: NSError?) -> Void in
+            (geoPoint: PFGeoPoint?, error: Error?) -> Void in
             if error == nil && geoPoint != nil {
                 let camera = GMSCameraPosition.camera(withLatitude: geoPoint!.latitude, longitude: geoPoint!.longitude, zoom: 15)
                 self.googleMapsView.camera = camera
@@ -133,8 +133,7 @@ class EventsLocationFinder: ViewController, UISearchBarDelegate, LocateOnTheMap 
             self.googleMapsView.camera = camera
             
             marker?.title = title
-            marker.map = self.googleMapsView
-//            marker.icon = UIImage(named: "mapAnnotationUp")
+            marker?.map = self.googleMapsView
             self.googleMapsView.selectedMarker = marker
         }
     }
@@ -144,7 +143,7 @@ class EventsLocationFinder: ViewController, UISearchBarDelegate, LocateOnTheMap 
         let bounds = GMSCoordinateBounds(coordinate: visibleRegion.nearLeft, coordinate: visibleRegion.nearRight)
         
         placesClient.autocompleteQuery(searchText, bounds: bounds, filter: nil) { (
-            results, error:NSError?) -> Void in
+            results, error:Error?) -> Void in
             self.resultsArray.removeAll()
             if results == nil {
                 print(error)

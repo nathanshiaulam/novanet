@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             query.whereKey("ID", equalTo:currentID!);
             
             query.getFirstObjectInBackground {
-                (profile: PFObject?, error: NSError?) -> Void in
+                (profile: PFObject?, error: Error?) -> Void in
                 if error != nil || profile == nil {
                     print(error);
                 } else if let profile = profile {
@@ -124,9 +124,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             if (PFUser.current() != nil) {
                 if let notificationPayload = launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as? NSDictionary {
-                    let name: AnyObject? = notificationPayload["name"]
+                    let name: AnyObject? = notificationPayload.value(forKey: "Name") as AnyObject?
                     let alert: String? = notificationPayload["alert"] as? String
-                    let id: AnyObject? = notificationPayload["id"]
+                    let id: AnyObject? = notificationPayload.value(forKey: "id") as AnyObject?
                     
                     print(((alert)! as NSString).substring(to: 7))
                     if (((alert)! as NSString).substring(to: 7) == "Events:") {
@@ -173,7 +173,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return formatter.date(from: date)!
     }
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        if error.code == 3010 {
+        if (error as NSError).code == 3010 {
             print("Push notifications are not supported in the iOS Simulator.")
         } else {
             print("application:didFailToRegisterForRemoteNotificationsWithError: %@", error)
@@ -184,8 +184,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         if (PFUser.current() != nil) {
             if let notificationPayload:NSDictionary = userInfo as NSDictionary? {
-                let name: AnyObject? = notificationPayload["name"];
-                let id: AnyObject? = notificationPayload["id"];
+                let name: AnyObject? = notificationPayload.value(forKey: "Name") as AnyObject?
+                let id: AnyObject? = notificationPayload.value(forKey: "id") as AnyObject?
 
                 defaults.set(notificationPayload, forKey: Constants.TempKeys.notificationPayloadKey);
                 defaults.set(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
@@ -218,7 +218,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             query.whereKey("ID", equalTo:currentID!);
             
             query.getFirstObjectInBackground {
-                (profile: PFObject?, error: NSError?) -> Void in
+                (profile: PFObject?, error: Error?) -> Void in
                 if (profile == nil || error != nil) {
                     print(error);
                 } else if let profile = profile {

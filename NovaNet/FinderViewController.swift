@@ -290,7 +290,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
             query.whereKey("ID", equalTo:currentID!)
             
             query.getFirstObjectInBackground {
-                (profile: PFObject?, error: NSError?) -> Void in
+                (profile: PFObject?, error: Error?) -> Void in
                 if error != nil || profile == nil {
                     print(error)
                 } else if let profile = profile {
@@ -307,7 +307,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         print("Error while updating location " + error.localizedDescription)
     }
     
-    func locationManager(_ manager: CLLocationManager!, error: NSError!) {
+    private func locationManager(_ manager: CLLocationManager!, error: NSError!) {
         print("Error while updating location " + error.localizedDescription)
     }
     
@@ -361,7 +361,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         // Wipes away old profiles in data stored
         // Might be useless, may remove key in near future
         PFCloud.callFunction(inBackground: "findUsers", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {
-            (result: AnyObject?, error:NSError?) -> Void in
+            (result: AnyObject?, error:Error?) -> Void in
             if error == nil {
                 self.profileList = result as! NSArray
                 self.findDistList(longitude, latitude: latitude, distance: distance)
@@ -375,7 +375,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     // Takes in geopoint + currentID and finds distances of users in range
     func findDistList(_ longitude: Double, latitude: Double, distance: Int) {
         PFCloud.callFunction(inBackground: "findDistances", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {
-            (result: AnyObject?, error:NSError?) -> Void in
+            (result: AnyObject?, error:Error?) -> Void in
             if error == nil {
                 self.distList = result as! NSArray
                 if (self.byDist == true) {
@@ -417,7 +417,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         let point:PFGeoPoint = PFGeoPoint(latitude: latitude, longitude: longitude)
         
         query.getFirstObjectInBackground {
-            (profile: PFObject?, error: NSError?) -> Void in
+            (profile: PFObject?, error: Error?) -> Void in
             if error != nil || profile == nil {
                 print(error)
             } else if let profile = profile {

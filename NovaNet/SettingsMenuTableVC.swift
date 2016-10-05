@@ -160,7 +160,7 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         return false;
     }
     // checks active field
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    private func textFieldDidBeginEditing(_ textField: UITextField) {
         activeField = textField;
         
     }
@@ -214,7 +214,7 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         let imageFile:PFFile = PFFile(data: imageData!)
         
         query.getFirstObjectInBackground {
-            (profile: PFObject?, error: NSError?) -> Void in
+            (profile: PFObject?, error: Error?) -> Void in
             if error != nil || profile == nil {
                 print(error);
             } else if let profile = profile {

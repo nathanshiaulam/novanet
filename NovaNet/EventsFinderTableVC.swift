@@ -117,7 +117,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         let dist = Constants.DISCOVERY_RADIUS;
         
         PFCloud.callFunction(inBackground: "findAllEvents", withParameters: ["lat": lat, "lon": lon, "dist":dist]) {
-            (result: AnyObject?, error:NSError?) -> Void in
+            (result: AnyObject?, error:Error?) -> Void in
             if error != nil {
                 print(error);
             } else if let result = result {
@@ -133,7 +133,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         let dist = Constants.DISCOVERY_RADIUS;
         
         PFCloud.callFunction(inBackground: "findSavedEvents", withParameters: [:]) {
-            (result: AnyObject?, error:NSError?) -> Void in
+            (result: AnyObject?, error:Error?) -> Void in
             if error != nil {
                 print(error);
             } else if let result = result {
@@ -146,7 +146,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     
     func findDistList(_ lon: Double, lat: Double, dist: Int, all:Bool) {
         PFCloud.callFunction(inBackground: "findEventsDist", withParameters: ["lat":lat, "lon":lon, "dist":dist, "all":all]) {
-            (result: AnyObject?, error:NSError?) -> Void in
+            (result: AnyObject?, error:Error?) -> Void in
             if error != nil {
                 print(error);
             } else if let result = result {

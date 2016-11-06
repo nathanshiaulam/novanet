@@ -9,6 +9,7 @@
 import Foundation
 import Bolts
 import Parse
+import AudioToolbox
 
 class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate   {
     
@@ -39,7 +40,8 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             memberEventButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Thin", size: (otherCurrentFont?.pointSize)!)
             
             findAllEvents();
-            
+            refreshControl.removeTarget(self, action: #selector(EventsFinderTableVC.findSavedEvents), for: UIControlEvents.valueChanged)
+            refreshControl.addTarget(self, action: #selector(EventsFinderTableVC.findAllEvents), for: UIControlEvents.valueChanged)
         }
     }
     
@@ -53,7 +55,13 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             memberEventButton.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: (otherCurrentFont?.pointSize)!)
             
             findSavedEvents();
+            refreshControl.removeTarget(self, action: #selector(EventsFinderTableVC.findAllEvents), for: UIControlEvents.valueChanged)
+            refreshControl.addTarget(self, action: #selector(EventsFinderTableVC.findSavedEvents), for: UIControlEvents.valueChanged)
         }
+    }
+    // Vibrates the phone when receives message
+    func phoneVibrate() {
+        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
     }
     override func viewDidLoad() {
         localEvents = true
@@ -117,7 +125,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         let dist = Constants.DISCOVERY_RADIUS;
         
         PFCloud.callFunction(inBackground: "findAllEvents", withParameters: ["lat": lat, "lon": lon, "dist":dist]) {
-            (result: AnyObject?, error:Error?) -> Void in
+            (result, error) -> Void in
             if error != nil {
                 print(error);
             } else if let result = result {
@@ -133,7 +141,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         let dist = Constants.DISCOVERY_RADIUS;
         
         PFCloud.callFunction(inBackground: "findSavedEvents", withParameters: [:]) {
-            (result: AnyObject?, error:Error?) -> Void in
+            (result, error) -> Void in
             if error != nil {
                 print(error);
             } else if let result = result {
@@ -146,7 +154,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
     
     func findDistList(_ lon: Double, lat: Double, dist: Int, all:Bool) {
         PFCloud.callFunction(inBackground: "findEventsDist", withParameters: ["lat":lat, "lon":lon, "dist":dist, "all":all]) {
-            (result: AnyObject?, error:Error?) -> Void in
+            (result, error) -> Void in
             if error != nil {
                 print(error);
             } else if let result = result {
@@ -353,7 +361,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         cell.goingButton.tag = 100 + (indexPath as NSIndexPath).row * 3
         cell.maybeButton.tag = 100 + (indexPath as NSIndexPath).row * 3 + 1
         cell.notGoingButton.tag = 100 + (indexPath as NSIndexPath).row * 3 + 2
-        
        
         cell.goingButton.titleLabel!.font = UIFont(name: "OpenSans", size: 12.0)
         cell.maybeButton.titleLabel?.font = UIFont(name: "OpenSans", size: 12.0)
@@ -375,7 +382,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         leftLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
         rightLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
 
-        
         cell.maybeButton.addSubview(leftLine)
         cell.maybeButton.addSubview(rightLine)
         
@@ -435,12 +441,12 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         
         let components = (Calendar.current as NSCalendar).components([.hour, .minute, .month, .day, .year], from: date)
         
-        let day = components.day;
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM"
         let month = dateFormatter.string(from: date)
-        
+        dateFormatter.dateFormat = "dd"
+        let day = dateFormatter.string(from: date)
         dateFormatter.dateFormat = "HH:mm"
         let time = dateFormatter.string(from: date);
         

@@ -83,7 +83,7 @@ class ConversationListTableViewController: TableViewController {
     
     
     func switchToFinder(_ sender:UIButton!) {
-        let tb:UITabBarController! = self.navigationController?.parent as! UITabBarController
+        let tb:UITabBarController! = self.parent as! UITabBarController
         tb.selectedIndex = 0
     }
     
@@ -307,24 +307,24 @@ class ConversationListTableViewController: TableViewController {
         query.whereKey("ID", containedIn: otherIDs as [AnyObject])
         query.order(byDescending: "MostRecent")
         
-        query.findObjectsInBackgroundWithBlock {
-            (objects:[AnyObject]?, error: Error?) -> Void in
+        query.findObjectsInBackground(block: {
+            (objects, error) -> Void in
             if error == nil {
-                self.otherProfileList = objects!
+                self.otherProfileList = objects as! [PFObject]!
                 self.tableView.reloadData()
                 self.refreshControl?.endRefreshing()
             } else {
                 print(error)
             }
-        }
+        })
     }
     
     // Finds all conversations initiated in background sorted by date of most recent message
     func findConversations() {
         PFCloud.callFunction(inBackground: "findConversations", withParameters: [:]) {
-            (result: AnyObject!, error:Error!) -> Void in
+            (result, error) -> Void in
             if error == nil {
-                self.conversationList = result as! NSArray
+                self.conversationList = result as! [PFObject]!
                 self.findOtherProfiles()
             } else {
                 print(error)
@@ -336,9 +336,9 @@ class ConversationListTableViewController: TableViewController {
     func findConversationParticipants() {
         
         PFCloud.callFunction(inBackground: "findConversationParticipants", withParameters: [:]) {
-            (result: AnyObject?, error:Error?) -> Void in
+            (result, error) -> Void in
             if error == nil {
-                self.conversationParticipantList = result as! NSArray
+                self.conversationParticipantList = result as! [PFObject]
                 self.findConversations()
             } else {
                 print(error)

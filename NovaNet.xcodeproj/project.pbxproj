@@ -32,6 +32,7 @@
 		16629EB11BDDD7C4003C4F05 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB01BDDD7C4003C4F05 /* ViewController.swift */; };
 		16629EB31BDDD7F2003C4F05 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB21BDDD7F2003C4F05 /* TableViewController.swift */; };
 		16629EB71BDDDAEA003C4F05 /* NSDateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */; };
+		16646A801DC1FA5500E3C621 /* ConfirmNovaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16646A7F1DC1FA5500E3C621 /* ConfirmNovaViewController.swift */; };
 		1668FEAD1CF78CE300D20F99 /* Brandon_bld_it.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEA11CF78CE200D20F99 /* Brandon_bld_it.otf */; };
 		1668FEAE1CF78CE300D20F99 /* Brandon_bld.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEA21CF78CE200D20F99 /* Brandon_bld.otf */; };
 		1668FEAF1CF78CE300D20F99 /* Brandon_blk_it.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEA31CF78CE200D20F99 /* Brandon_blk_it.otf */; };
@@ -127,6 +128,7 @@
 		16629EB01BDDD7C4003C4F05 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../ViewController.swift; sourceTree = "<group>"; };
 		16629EB21BDDD7F2003C4F05 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSDateExtensions.swift; path = ../NSDateExtensions.swift; sourceTree = "<group>"; };
+		16646A7F1DC1FA5500E3C621 /* ConfirmNovaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmNovaViewController.swift; sourceTree = "<group>"; };
 		1668FEA11CF78CE200D20F99 /* Brandon_bld_it.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_bld_it.otf; sourceTree = "<group>"; };
 		1668FEA21CF78CE200D20F99 /* Brandon_bld.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_bld.otf; sourceTree = "<group>"; };
 		1668FEA31CF78CE200D20F99 /* Brandon_blk_it.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_blk_it.otf; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 		1685FB2F1BE988E300E05CDE /* EventsFinderTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsFinderTableVC.swift; sourceTree = "<group>"; };
 		1685FB331BE98ADD00E05CDE /* EventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
 		1685FB351BEB5D5E00E05CDE /* EventAttendanceButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventAttendanceButton.swift; sourceTree = "<group>"; };
+		168956DC1DA9C465000ECC4D /* NovaNet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NovaNet.entitlements; sourceTree = "<group>"; };
 		169441131BDC29BC0049122C /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		169CEB9A1B8C998800CCF078 /* AboutContentVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutContentVC.swift; sourceTree = "<group>"; };
 		169CEB9C1B8C9DC800CCF078 /* AboutVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutVC.swift; sourceTree = "<group>"; };
@@ -363,12 +366,14 @@
 		16A0E6FC1B54FC7300DDAE95 /* NovaNet */ = {
 			isa = PBXGroup;
 			children = (
+				168956DC1DA9C465000ECC4D /* NovaNet.entitlements */,
 				160D1F351B60F49F00B3E4DB /* NovaNet-Bridging-Header.h */,
 				16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */,
 				16629EB01BDDD7C4003C4F05 /* ViewController.swift */,
 				16629EB21BDDD7F2003C4F05 /* TableViewController.swift */,
 				160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */,
 				16A0E7031B54FC7400DDAE95 /* Main.storyboard */,
+				16646A7F1DC1FA5500E3C621 /* ConfirmNovaViewController.swift */,
 				16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */,
 				167114C01B8299F90024DC3E /* ImageUtil.swift */,
 				163B19891CF9214800E0A469 /* TextView.swift */,
@@ -494,7 +499,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Nova;
 				TargetAttributes = {
 					16A0E6F91B54FC7300DDAE95 = {
@@ -508,10 +513,14 @@
 							com.apple.Maps.iOS = {
 								enabled = 1;
 							};
+							com.apple.Push = {
+								enabled = 1;
+							};
 						};
 					};
 					16A0E70E1B54FC7400DDAE95 = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = 5663662M75;
 						LastSwiftMigration = 0800;
 						TestTargetID = 16A0E6F91B54FC7300DDAE95;
 					};
@@ -668,6 +677,7 @@
 				16C1C8C71B7F50D100C6166C /* SelectedProfileViewController.swift in Sources */,
 				16A0E7411B55096F00DDAE95 /* LogInViewController.swift in Sources */,
 				16A0E7EC1B78CA1700DE06A9 /* ConversationTableViewCell.swift in Sources */,
+				16646A801DC1FA5500E3C621 /* ConfirmNovaViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -722,8 +732,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -769,8 +781,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -790,6 +804,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -801,6 +816,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = NovaNet/NovaNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -810,6 +826,7 @@
 					"$(PROJECT_DIR)/NovaNet.xcodeproj",
 				);
 				INFOPLIST_FILE = NovaNet/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nova.NovaNet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -828,6 +845,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = NovaNet/NovaNet.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -837,6 +855,7 @@
 					"$(PROJECT_DIR)/NovaNet.xcodeproj",
 				);
 				INFOPLIST_FILE = NovaNet/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nova.NovaNet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -852,6 +871,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 5663662M75;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -873,6 +893,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = 5663662M75;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",

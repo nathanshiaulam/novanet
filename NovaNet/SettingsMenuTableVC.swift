@@ -79,7 +79,7 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         lightenedImage = false
         super.viewDidLoad()
         updateButton.layer.cornerRadius = 5
-
+        
         // Allows user to upload photo
         let tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SettingsMenuTableVC.tappedImage));
         tapGestureRecognizer.delegate = self;
@@ -88,22 +88,12 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
         self.profileImage.isUserInteractionEnabled = true;
         self.profileImage.frame = CGRect(x: 0, y: 0, width: profileImageHeight, height: profileImageHeight)
         Utilities.formatImageWithWidth(profileImage, width: profileImageHeight)
-
+        picker.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+        picker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
         tableView.allowsSelection = false;
         picker.delegate = self;
-        
+
         prepareTextFields();
-    }
-    
-    override func viewWillLayoutSubviews() {
-        let fontDict:[CGFloat : [UILabel]] = getChangeLabelDict()
-        if (!lightenedImage) {
-            self.profileImage.image = alpha(0.7, image: self.profileImage.image!)
-            lightenedImage = true
-        }
-        Utilities().formatImage(profileImage)
-        Utilities.manageFontSizes(fontDict)
-        super.viewWillLayoutSubviews()
     }
     
     /* TEXTVIEW DELEGATE METHODS*/
@@ -194,7 +184,8 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         picker.dismiss(animated: true, completion: nil);
-        profileImage.image = info[UIImagePickerControllerOriginalImage] as? UIImage;
+        profileImage.image = info[UIImagePickerControllerOriginalImage] as? UIImage
+        Utilities.formatImageWithWidth(profileImage, width: profileImageHeight)
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil);
@@ -285,9 +276,9 @@ class SettingsMenuTableVC: TableViewController, UIGestureRecognizerDelegate, UIP
     // Saves all necessary fields of the profile
     func saveProfile() {
         var interestsArr:[String] = [String]()
-        interestFieldOne.text != nil ? interestsArr.append(trim(interestFieldOne.text!)) : interestsArr.append(firstInterestPlaceholder)
-        interestFieldTwo.text != nil ? interestsArr.append(trim(interestFieldTwo.text!)) : interestsArr.append(secondInterestPlaceholder)
-        interestFieldThree.text != nil ? interestsArr.append(trim(interestFieldThree.text!)) : interestsArr.append(thirdInterestPlaceholder)
+        interestFieldOne.text?.characters.count != 0 ? interestsArr.append(trim(interestFieldOne.text!)) : interestsArr.append(firstInterestPlaceholder)
+        interestFieldTwo.text?.characters.count != 0 ? interestsArr.append(trim(interestFieldTwo.text!)) : interestsArr.append(secondInterestPlaceholder)
+        interestFieldThree.text?.characters.count != 0 ? interestsArr.append(trim(interestFieldThree.text!)) : interestsArr.append(thirdInterestPlaceholder)
         
         defaults.set(nameField.text, forKey: Constants.UserKeys.nameKey)
         defaults.set(interestsArr, forKey: Constants.UserKeys.interestsKey)

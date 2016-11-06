@@ -31,9 +31,10 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
     @IBOutlet weak var descField: UITextView!
 
     @IBAction func contactOrganizer(_ sender: UIButton) {
-        let email = self.email
-        let url = URL(string: "mailto:\(email)")
-        UIApplication.shared.openURL(url!)
+        if let email = self.email {
+            let url = URL(string: "mailto:\(email)")
+            UIApplication.shared.openURL(url!)
+        }
     }
     @IBAction func goBack(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
@@ -52,21 +53,21 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
         let query:PFQuery = PFQuery(className: "Profile")
         query.whereKey("ID", containedIn: list)
         query.findObjectsInBackground {
-            (objects:[PFObject]?, error: Error?) -> Void in
+            (objects, error) -> Void in
             if error == nil {
                 self.userList = objects as? [PFObject]
                 let maybeList = self.selectedEvent["Maybe"] as! [String]
                 let maybeQuery:PFQuery = PFQuery(className: "Profile")
                 maybeQuery.whereKey("ID", containedIn: maybeList)
                 maybeQuery.findObjectsInBackground {
-                    (objects: [AnyObject]?, error: NSError?) -> Void in
+                    (objects, error) -> Void in
                     if error == nil {
                         self.maybeList = objects as? [PFObject]
                         let notGoingList = self.selectedEvent["NotGoing"] as! [String]
                         let notGoingQuery:PFQuery = PFQuery(className: "Profile")
                         notGoingQuery.whereKey("ID", containedIn: notGoingList)
                         notGoingQuery.findObjectsInBackground {
-                            (objects: [AnyObject]?, error: NSError?) -> Void in
+                            (objects, error) -> Void in
                             if error == nil {
                                 self.notGoingList = objects as? [PFObject]
                                 self.performSegue(withIdentifier: "toUserList", sender: self)
@@ -82,10 +83,7 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
                 print(error)
             }
         }
-        
-        
     }
-    
     
     @IBOutlet weak var goingButton: EventAttendanceButton!
     @IBOutlet weak var maybeButton: EventAttendanceButton!
@@ -120,9 +118,7 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
             (granted, error) in
             
             if (granted) && (error == nil) {
-                print("granted \(granted)")
-                print("error \(error)")
-                var venueName = self.selectedEvent["EventName"] as! String
+                var venueName = self.selectedEvent["Title"] as! String
                 var array:[String]!
                 do {
                     //Create a reggae and replace "," with any following spaces with just a comma
@@ -133,7 +129,6 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
                     //Bad regex created
                 }
                 let eventName = array[0]
-                
                 let event:EKEvent = EKEvent(eventStore: eventStore)
                 let startDate = (self.selectedEvent["Date"] as? Date)!
                 let endDate = startDate.addingTimeInterval(60 * 60 * 2)
@@ -146,8 +141,6 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
                     try eventStore.save(event, span: EKSpan.thisEvent, commit: true)
                 } catch {
                 }
-                
-                print("Saved Event") 
             } 
         })
     }
@@ -309,8 +302,10 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
         descField.isEditable = false;
         NotificationCenter.default.addObserver(self, selector: #selector(EventDescriptionTableVC.eventDeleted), name: NSNotification.Name(rawValue: "eventDeleted"), object: nil)
         firstCell.layoutIfNeeded()
+        setMap()
         super.viewDidLoad()
     }
+    
     
     func eventDeleted() {
         self.dismiss(animated: true, completion: nil)
@@ -334,14 +329,13 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
         super.viewDidAppear(true);
     }
     
-    override func viewDidLayoutSubviews() {
+    override func viewWillLayoutSubviews() {
         self.prepareView()
     }
     
-    
-    func prepareView() {
+    func setMap() {
+        
         if let event = selectedEvent {
-            let date:Date! = event["Date"] as! Date
             let position:PFGeoPoint = event["Position"] as! PFGeoPoint
             let lat = position.latitude;
             let lon = position.longitude;
@@ -377,6 +371,13 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
                     print("Problem with the data received from geocoder")
                 }
             })
+        }
+    }
+    
+    func prepareView() {
+        if let event = selectedEvent {
+            
+            let date:Date! = event["Date"] as! Date
             let id:String? = event["Creator"] as? String
             
             let creator:String!
@@ -421,8 +422,8 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
             maybeButton.titleLabel?.font = UIFont(name: "OpenSans", size: 12.0)
             notGoingButton.titleLabel!.font = UIFont(name: "OpenSans", size: 12.0)
             
-            let leftLine:UIView = UIView(frame: CGRect(x: 1, y: 2.0, width: 0.5, height: maybeButton.frame.size.height - 5.0))
-            let rightLine:UIView = UIView(frame: CGRect(x: maybeButton.frame.size.width - 1.0, y: 2.0, width: 1.5, height: maybeButton.frame.size.height - 5.0))
+            let leftLine:UIView = UIView(frame: CGRect(x: 1, y: 2.0, width: 0.5, height: 25.0))
+            let rightLine:UIView = UIView(frame: CGRect(x: maybeButton.frame.size.width - 1.0, y: 2.0, width: 1.5, height: 25.0))
             
             leftLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
             rightLine.backgroundColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0)
@@ -444,8 +445,12 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
                 notGoingButton.isSelected = true;
                 notGoingButton.titleLabel?.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
             }
-            
-           
+            let fixedWidth = descField.frame.size.width
+            descField.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+            let newSize = descField.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+            var newFrame = descField.frame
+            newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
+            descField.frame = newFrame;
         }
     }
     /* TABLEVIEW DELEGATE METHODS*/
@@ -464,8 +469,12 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if (indexPath as NSIndexPath).section == 0 {
             if (indexPath as NSIndexPath).row == 0 {
-                descField.sizeToFit()
-                descField.layoutIfNeeded()
+                let fixedWidth = descField.frame.size.width
+                descField.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+                let newSize = descField.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+                var newFrame = descField.frame
+                newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height + 10)
+                descField.frame = newFrame;
                 return 100 + descField.frame.height
             }
             if (indexPath as NSIndexPath).row >= 1 && (indexPath as NSIndexPath).row <= 4 {

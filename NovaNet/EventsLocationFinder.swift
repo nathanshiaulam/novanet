@@ -111,10 +111,13 @@ class EventsLocationFinder: ViewController, UISearchBarDelegate, LocateOnTheMap 
         marker.position = item.placemark.coordinate
         marker.map = self.googleMapsView
         marker.title = item.name
-        
+        marker.icon = UIImage(named: "mapAnnotationUp")
+
         let lat = item.placemark.coordinate.latitude
+        print(item.placemark.coordinate.latitude)
         let lon = item.placemark.coordinate.longitude
-        
+        print(item.placemark.coordinate.longitude)
+        print("Hello")
         let camera = GMSCameraPosition.camera(withLatitude: lat, longitude: lon, zoom: 15)
         
         self.googleMapsView.camera = camera
@@ -134,6 +137,8 @@ class EventsLocationFinder: ViewController, UISearchBarDelegate, LocateOnTheMap 
             
             marker?.title = title
             marker?.map = self.googleMapsView
+            marker?.icon = UIImage(named: "mapAnnotationUp")
+
             self.googleMapsView.selectedMarker = marker
         }
     }
@@ -160,7 +165,7 @@ class EventsLocationFinder: ViewController, UISearchBarDelegate, LocateOnTheMap 
     }
     
     func searchBarSearchButtonClicked (_ searchBar: UISearchBar) {
-       
+        print("Hello")
         self.dismiss(animated: true, completion: nil)
         let searchRequest:MKLocalSearchRequest = MKLocalSearchRequest()
         searchRequest.naturalLanguageQuery = searchBar.text
@@ -188,7 +193,7 @@ class EventsLocationFinder: ViewController, UISearchBarDelegate, LocateOnTheMap 
                     
                     let marker:GMSMarker = GMSMarker()
                     marker.position = item!.placemark.coordinate
-//                    marker.icon = UIImage(named: "mapAnnotationUp")
+                    marker.icon = UIImage(named: "mapAnnotationUp")
                     marker.map = self.googleMapsView
                     marker.title = item!.name
                 }

@@ -144,16 +144,18 @@ class MessagerViewController: JSQMessagesViewController {
         // Formats text and payload for push notification
         let ownName:String = defaults.string(forKey: Constants.UserKeys.nameKey)!
         let fulltext:String! = ownName + ": " + text as String
-        let data = [
-            "alert":fulltext,
-            "text": text,
-            "id": PFUser.current()?.objectId,
-            "date": DateInFormat,
-            "name": ownName,
-        ] as [String : Any]
-        
-        // Create push notification and push message and updates conversation counters
-        sendPush(text, senderId: senderId, date: date, data: data, newMessage: newMessage!)
+        if let id = PFUser.current()?.objectId {
+            let data = [
+                "alert":fulltext,
+                "text": text,
+                "id": id,
+                "date": DateInFormat,
+                "name": ownName,
+            ] as [String : Any]
+            
+            // Create push notification and push message and updates conversation counters
+            sendPush(text, senderId: senderId, date: date, data: data, newMessage: newMessage!)
+        }
     }
     
     
@@ -170,11 +172,10 @@ class MessagerViewController: JSQMessagesViewController {
         pushQuery!.whereKey("user", matchesQuery: innerQuery)
         push.setQuery(pushQuery)
         push.setData(data)
-        
         push.sendInBackground {
             (succeeded, error) -> Void in
             if (succeeded) {
-                
+
                 // Saves message to load for conversation
                 let message = PFObject(className: "Message")
 
@@ -201,6 +202,8 @@ class MessagerViewController: JSQMessagesViewController {
                         self.collectionView!.reloadData()
                         self.finishSendingMessage()
                     } else {
+                        print("fail")
+
                         let errorString = (error as! NSError).userInfo["error"] as! NSString
                         let alert = UIAlertController(title: "Message not sent.", message: errorString as String, preferredStyle: UIAlertControllerStyle.alert)
                         alert.addAction(UIAlertAction(title:"Ok", style: UIAlertActionStyle.default, handler: nil))

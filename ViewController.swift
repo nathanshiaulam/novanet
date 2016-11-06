@@ -29,7 +29,7 @@ class ViewController: UIViewController {
             query.whereKey("ID", equalTo:currentID!);
             
             query.getFirstObjectInBackground {
-                (profile: PFObject?, error: NSError?) -> Void in
+                (profile, error) -> Void in
                 if (profile == nil || error != nil) {
                     print(error);
                 } else if let profile = profile {

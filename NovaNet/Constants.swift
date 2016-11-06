@@ -31,6 +31,7 @@ struct Constants {
     struct TempKeys {
         static let fromNew = "fromNew"
         static let notificationPayloadKey = "notificationPayloadKey"
+        static let confirmed = "confirmed"
     }
     struct ConstantStrings {
         static let greetingMessage = "I saw you were in the same area as me. Would you like to meet up some time?"
@@ -43,6 +44,7 @@ struct Constants {
         static let placeHolderDesc = "Describe your event. Who should go?"
         static let experiencePlaceholder = "e.g. Systems Engineer"
         static let seekingPlaceholder = "Novas."
+        static let confirmKey = "nJesxTdJDB"
     }
     struct SelectedUserKeys {
         static let selectedUsernameKey = "selectedUsernameKey"

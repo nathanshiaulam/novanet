@@ -22,7 +22,8 @@ class HomeTabBarController: UITabBarController {
         self.navigationController?.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white,
              NSFontAttributeName: UIFont(name: "BrandonGrotesque-Medium", size: 18)!]
-
+        
+        self.tabBar.tintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         super.viewDidLoad();
         doneButton = nil;
         self.navigationItem.leftBarButtonItem = nil;

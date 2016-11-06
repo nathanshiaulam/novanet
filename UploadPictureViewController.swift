@@ -184,7 +184,6 @@ class UploadPictureViewController: ViewController, UIGestureRecognizerDelegate, 
         picker.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         picker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
         
-        bot = self.continueDistFromBot.constant - 10;
         self.title = "2 of 2";
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
 

@@ -19,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>3.8</string>
+	<string>3.18</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
@@ -29,8 +29,16 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Used to help with location tracking.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Please provide us access to your calendar so we can help manage events for you.</string>
+	<key>NSCameraUsageDescription</key>
+	<string></string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Please provide us access to your location so we can help you find new people in the area.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Please provide us access to your photos so you can upload a profile picture.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Brandon_thin.otf</string>

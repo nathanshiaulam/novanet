@@ -79,6 +79,13 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
             }
         }
     }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let maxtext = 130
+        //If the text is larger than the maxtext, the return is false
+        return textView.text.characters.count + (text.characters.count - range.length) <= maxtext
+    }
+    
     @IBAction func editEvent(_ sender: AnyObject) {
         
         if (titleField.text?.characters.count > 0 && dateField.text?.characters.count > 0 && descField.text.characters.count > 0 && addressField.text!.characters.count > 0 && descField.textColor != UIColor.lightGray) {

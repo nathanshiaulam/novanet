@@ -77,9 +77,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         NotificationCenter.default.addObserver(self, selector: #selector(FinderViewController.phoneVibrate), name: NSNotification.Name(rawValue: "phoneVibrate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(FinderViewController.selectProfileVC), name: NSNotification.Name(rawValue: "selectProfileVC"), object: nil)
         self.tableView.tableFooterView = UIView()
-        
-        self.tabBarController?.tabBar.tintColor = UIColor.black
-        
+                
         let border = CALayer()
         let width = CGFloat(1.0)
         border.borderColor = Utilities().UIColorFromHex(0xEEEEEE, alpha: 1.0).cgColor
@@ -94,7 +92,11 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         // Sets up the row height of Table View Cells
         self.tableView.rowHeight = 75.0
         self.tabBarController?.navigationItem.title = "FINDER"
-        
+        let confirmed = defaults.bool(forKey: Constants.TempKeys.confirmed)
+        // Go to confirmation page if not confirmed
+        if (!confirmed) {
+            self.performSegue(withIdentifier: "toConfirmationPage", sender: self)
+        }
         // Go to login page if no user logged in
         if (!self.userLoggedIn()) {
             self.performSegue(withIdentifier: "toUserLogin", sender: self)
@@ -361,7 +363,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
         // Wipes away old profiles in data stored
         // Might be useless, may remove key in near future
         PFCloud.callFunction(inBackground: "findUsers", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {
-            (result: AnyObject?, error:Error?) -> Void in
+            (result, error) -> Void in
             if error == nil {
                 self.profileList = result as! NSArray
                 self.findDistList(longitude, latitude: latitude, distance: distance)
@@ -375,7 +377,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     // Takes in geopoint + currentID and finds distances of users in range
     func findDistList(_ longitude: Double, latitude: Double, distance: Int) {
         PFCloud.callFunction(inBackground: "findDistances", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {
-            (result: AnyObject?, error:Error?) -> Void in
+            (result, error) -> Void in
             if error == nil {
                 self.distList = result as! NSArray
                 if (self.byDist == true) {
@@ -383,7 +385,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
                     let byDistList:NSMutableArray = NSMutableArray()
                     let sortedDistances:NSMutableArray = NSMutableArray()
                     for i in 0..<self.profileList.count {
-                        byDistDict[self.profileList[i] as! PFObject] = Double(self.distList[i].doubleValue)
+                        byDistDict[self.profileList[i] as! PFObject] = Double((self.distList[i] as AnyObject).doubleValue)
                     }
                     for (k,v) in (Array(byDistDict).sorted(by: {$0.1 < $1.1})) {
                         byDistList.add(k)

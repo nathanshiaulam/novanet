@@ -329,7 +329,7 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
         interestFieldTwo.autocapitalizationType = UITextAutocapitalizationType.words
         interestFieldThree.autocapitalizationType = UITextAutocapitalizationType.words
         experienceField.autocapitalizationType = UITextAutocapitalizationType.words
-        lookingForField.autocapitalizationType = UITextAutocapitalizationType.words
+        lookingForField.autocapitalizationType = UITextAutocapitalizationType.sentences
         aboutField.autocapitalizationType = UITextAutocapitalizationType.sentences
         
         nameField.backgroundColor = UIColor.clear;

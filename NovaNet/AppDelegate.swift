@@ -86,6 +86,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     
                 }
             }
+            let confirmed = self.defaults.bool(forKey: Constants.TempKeys.confirmed)
+            if (confirmed != true) {
+                defaults.set(false, forKey: Constants.TempKeys.confirmed)
+            }
         }
         
         let pageControl = UIPageControl.appearance()

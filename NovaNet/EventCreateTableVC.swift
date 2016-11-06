@@ -64,6 +64,12 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         }
     }
     
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let maxtext = 130
+        //If the text is larger than the maxtext, the return is false
+        return textView.text.characters.count + (text.characters.count - range.length) <= maxtext
+    }
+    
     func createEventAction() {
         let point:PFGeoPoint = PFGeoPoint(latitude: marker.position.latitude, longitude: marker.position.longitude)
         
@@ -93,7 +99,7 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
         let distance = defaults.integer(forKey: Constants.UserKeys.distanceKey)
         
         PFCloud.callFunction(inBackground: "findUsers", withParameters:["lat": latitude, "lon": longitude, "dist":distance]) {
-            (result: AnyObject?, error:Error?) -> Void in
+            (result, error) -> Void in
             if error == nil {
                 let profileList:[PFObject] = result as! [PFObject]
                 let ownName = self.defaults.string(forKey: Constants.UserKeys.nameKey)
@@ -107,21 +113,27 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
                     idList.append(profile["ID"] as! String)
                 }
                 
-                let data:[AnyHashable: Any]? = [
+                let data:[String: Any] = [
                     "alert": ownName! + " has created an event in your area: " + eventName,
                     "id": (PFUser.current()?.objectId)!,
                     "date": dateInFormat,
                     "name": ownName!,
-                    ]
+                    ] as [String : Any]
                 
                 let push = PFPush()
                 let innerQuery : PFQuery = PFUser.query()!
                 innerQuery.whereKey("objectId", containedIn: idList)
-                
                 let pushQuery = PFInstallation.query()
                 pushQuery!.whereKey("user", matchesQuery: innerQuery)
                 push.setQuery(pushQuery)
                 push.setData(data)
+                push.sendInBackground {
+                    (succeeded, error) -> Void in
+                    if (succeeded) {
+                    } else {
+                        print(error)
+                    }
+                }
             } else {
                 print(error)
             }

@@ -296,17 +296,23 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
         sender.isSelected = !sender.isSelected
       
     }
-
+    
+    func underlineText(label: String) -> NSAttributedString {
+        let underlineAttribute = [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue]
+        let underlineAttributedString = NSAttributedString(string: label, attributes: underlineAttribute)
+        return underlineAttributedString
+    }
+    
     override func viewDidLoad() {
         tableView.allowsSelection = false
         descField.isEditable = false;
         NotificationCenter.default.addObserver(self, selector: #selector(EventDescriptionTableVC.eventDeleted), name: NSNotification.Name(rawValue: "eventDeleted"), object: nil)
         firstCell.layoutIfNeeded()
         setMap()
+
         super.viewDidLoad()
     }
-    
-    
+
     func eventDeleted() {
         self.dismiss(animated: true, completion: nil)
     }
@@ -365,7 +371,7 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
                     let pm = placemarks![0]
                     let address = ABCreateStringWithAddressDictionary(pm.addressDictionary!, true);
                     let fullAddress = eventLocName! + ", " + address;
-                    self.addressLabel.text = fullAddress;
+                    self.addressLabel.attributedText = self.underlineText(label: fullAddress);
                 }
                 else {
                     print("Problem with the data received from geocoder")
@@ -407,7 +413,7 @@ class EventDescriptionTableVC: TableViewController, UITextViewDelegate {
             let dateString = dateFormatter.string(from: date)
             
             titleField.text = event["Title"] as? String
-            timeLabel.text = dateString;
+            timeLabel.attributedText = underlineText(label: dateString);
             
             
             descField.text = event["Description"] as? String

@@ -37,11 +37,9 @@ class ConversationListTableViewController: TableViewController {
         otherProfileList = [PFObject]()
         imageList = [UIImage?]()
         nextImage = UIImage()
-
         self.tableView.rowHeight = 75.0
         
         NotificationCenter.default.addObserver(self, selector: #selector(ConversationListTableViewController.loadConversations), name: NSNotification.Name(rawValue: "loadConversations"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ConversationListTableViewController.phoneVibrate), name: NSNotification.Name(rawValue: "phoneVibrate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ConversationListTableViewController.goToMessageVC), name: NSNotification.Name(rawValue: "goToMessageVC"), object: nil)
 
         self.tableView.tableFooterView = UIView()
@@ -67,6 +65,8 @@ class ConversationListTableViewController: TableViewController {
             return
         }
         else {
+            print("hi")
+            
             self.tabBarController?.navigationItem.title = "MESSAGES"
             loadConversations()
         }
@@ -94,47 +94,48 @@ class ConversationListTableViewController: TableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let screenWidth = Constants.ScreenDimensions.screenWidth
         let screenHeight = Constants.ScreenDimensions.screenHeight
-        
-       
-        let imageHeight = screenHeight / 7.0
-        let buttonHeight:CGFloat = 44.0
-        let buttonWidth = screenWidth * 0.7
-        var fontSize:CGFloat = 13.0
-        let midHeight = (screenHeight - (self.navigationController?.navigationBar.frame.height)! - (self.tabBarController?.tabBar.frame.height)!) * 0.5 - imageHeight * 0.7
-        if (Constants.ScreenDimensions.screenHeight >= Constants.ScreenDimensions.IPHONE_6_HEIGHT) {
-            fontSize = 15.0
-        }
 
         if (self.conversationList.count == 0) {
-            let imageName = "about_chat_bubbles.png"
-            let image = UIImage(named: imageName)
-            backgroundImage = UIImageView(image: image!)
-            let aspectRatio = backgroundImage.bounds.width / backgroundImage.bounds.height
-            backgroundImage.frame = CGRect(x: screenWidth * 0.5 - imageHeight * aspectRatio * 1.2, y: midHeight, width: imageHeight * aspectRatio, height: imageHeight)
-            backgroundView.addSubview(backgroundImage)
-            
-            backgroundLabel.text = "Don’t have any messages yet? Find Novas and get started!"
-            backgroundLabel.font = UIFont(name: "OpenSans", size: fontSize)
-            backgroundLabel.textColor = Utilities().UIColorFromHex(0x3A4A49, alpha: 1.0)
-            backgroundLabel.frame = CGRect(x: screenWidth * 0.5, y: midHeight, width:imageHeight * aspectRatio * 1.2, height: imageHeight)
-            backgroundLabel.numberOfLines = 0
-            backgroundLabel.textAlignment = NSTextAlignment.left
-            backgroundLabel.sizeToFit()
-            backgroundView.addSubview(backgroundLabel)
+            let imageHeight = screenHeight / 7.0
+            let buttonHeight:CGFloat = 44.0
+            let buttonWidth = screenWidth * 0.7
+            var fontSize:CGFloat = 13.0
+            if (self.tabBarController?.tabBar.frame.height) != nil {
+                //BUG IS HERE
+                let midHeight = (screenHeight - (self.navigationController?.navigationBar.frame.height)! - (self.tabBarController?.tabBar.frame.height)!) * 0.5 - imageHeight * 0.7
+                if (Constants.ScreenDimensions.screenHeight >= Constants.ScreenDimensions.IPHONE_6_HEIGHT) {
+                    fontSize = 15.0
+                }
+                let imageName = "about_chat_bubbles.png"
+                let image = UIImage(named: imageName)
+                backgroundImage = UIImageView(image: image!)
+                let aspectRatio = backgroundImage.bounds.width / backgroundImage.bounds.height
+                backgroundImage.frame = CGRect(x: screenWidth * 0.5 - imageHeight * aspectRatio * 1.2, y: midHeight, width: imageHeight * aspectRatio, height: imageHeight)
+                backgroundView.addSubview(backgroundImage)
+                
+                backgroundLabel.text = "Don’t have any messages yet? Find Novas and get started!"
+                backgroundLabel.font = UIFont(name: "OpenSans", size: fontSize)
+                backgroundLabel.textColor = Utilities().UIColorFromHex(0x3A4A49, alpha: 1.0)
+                backgroundLabel.frame = CGRect(x: screenWidth * 0.5, y: midHeight, width:imageHeight * aspectRatio * 1.2, height: imageHeight)
+                backgroundLabel.numberOfLines = 0
+                backgroundLabel.textAlignment = NSTextAlignment.left
+                backgroundLabel.sizeToFit()
+                backgroundView.addSubview(backgroundLabel)
 
-            button.frame = CGRect(x: screenWidth * 0.5 - buttonWidth * 0.5, y: midHeight * 1.6, width: buttonWidth, height: buttonHeight)
-            button.backgroundColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
-            button.setTitle("FIND NOVAS", for: UIControlState())
-            button.setTitleColor(UIColor.white, for: UIControlState())
-            button.layer.cornerRadius = 5
-            button.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: 18.0)
-            button.addTarget(self, action: #selector(ConversationListTableViewController.switchToFinder(_:)), for: UIControlEvents.touchUpInside)
-            backgroundView.addSubview(button)
-            
-            backgroundView.backgroundColor = Utilities().UIColorFromHex(0xFBFBFB, alpha: 1.0)
+                button.frame = CGRect(x: screenWidth * 0.5 - buttonWidth * 0.5, y: midHeight * 1.6, width: buttonWidth, height: buttonHeight)
+                button.backgroundColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+                button.setTitle("FIND NOVAS", for: UIControlState())
+                button.setTitleColor(UIColor.white, for: UIControlState())
+                button.layer.cornerRadius = 5
+                button.titleLabel!.font = UIFont(name: "BrandonGrotesque-Medium", size: 18.0)
+                button.addTarget(self, action: #selector(ConversationListTableViewController.switchToFinder(_:)), for: UIControlEvents.touchUpInside)
+                backgroundView.addSubview(button)
+                
+                backgroundView.backgroundColor = Utilities().UIColorFromHex(0xFBFBFB, alpha: 1.0)
 
-            tableView.separatorStyle = UITableViewCellSeparatorStyle.none
-            tableView.backgroundView = backgroundView
+                tableView.separatorStyle = UITableViewCellSeparatorStyle.none
+                tableView.backgroundView = backgroundView
+            }
         } else {
 
             backgroundLabel.isHidden = true
@@ -161,7 +162,6 @@ class ConversationListTableViewController: TableViewController {
             let conversationParticipant: AnyObject = conversationParticipantList[indexPath.row]
             let conversation: AnyObject = conversationList[indexPath.row]
             let profile:AnyObject = otherProfileList[indexPath.row]
-            
 
             // Stores variables to mark unread messages and most recent message
             let readConversationCount:Int = conversationParticipant["ReadMessageCount"] as! Int
@@ -189,6 +189,7 @@ class ConversationListTableViewController: TableViewController {
                 cell.nameLabel.font = UIFont(name: "OpenSans-Bold", size: (cell.nameLabel.font?.pointSize)!)
                 cell.timeString.textColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
             } else {
+                cell.nameLabel.font = UIFont(name: "OpenSans-Regular", size: (cell.nameLabel.font?.pointSize)!)
                 cell.timeString.textColor = Utilities().UIColorFromHex(0x53585F, alpha: 1.0)
             }
             cell.recentMessageLabel.text = recentMessage
@@ -262,6 +263,11 @@ class ConversationListTableViewController: TableViewController {
     
     /*-------------------------------- HELPER METHODS ------------------------------------*/
 
+    func phoneVibrate() {
+        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+        
+    }
+    
     // Checks if user is logged in
     func userLoggedIn() -> Bool{
         let currentUser = PFUser.current()
@@ -269,11 +275,6 @@ class ConversationListTableViewController: TableViewController {
             return true
         }
         return false
-    }
-    
-    // Vibrates the phone when receives message
-    func phoneVibrate() {
-        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
     }
     
     // Sets up local datastore
@@ -288,6 +289,33 @@ class ConversationListTableViewController: TableViewController {
     }
     
     func goToMessageVC() {
+        let id:String? = defaults.object(forKey: Constants.SelectedUserKeys.selectedIdKey) as? String
+        let query:PFQuery = PFQuery(className: "Profile")
+        query.whereKey("ID", equalTo:id!)
+        query.getFirstObjectInBackground {
+            (profile: PFObject?, error: Error?) -> Void in
+            if (profile == nil || error != nil) {
+                print(error!)
+            } else if let profile = profile {
+                self.prepareDataStore(profile)
+                var image = PFFile()
+                if let userImageFile = profile["Image"] as? PFFile {
+                    image = userImageFile
+                    image.getDataInBackground {
+                        (imageData, error) -> Void in
+                        if (error == nil) {
+                            self.nextImage = UIImage(data:imageData!)
+                        }
+                        else {
+                            print(error)
+                        }
+                    }
+                } else {
+                    self.nextImage = UIImage(named: "selectImage")!
+                }
+                
+            }
+        }
         self.performSegue(withIdentifier: "toMessageVC", sender: self)
     }
 

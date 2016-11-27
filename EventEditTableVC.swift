@@ -68,10 +68,42 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
     }
     
     func deleteEvent() {
-        
+        let goingList:[String] = self.selectedEvent["Going"] as! [String];
+        let maybeList:[String] = self.selectedEvent["Maybe"] as! [String];
+        let idList = goingList + maybeList
         selectedEvent.deleteInBackground {
             (succeeded: Bool, error: Error?) -> Void in
             if (succeeded) {
+                
+                let ownName = self.defaults.string(forKey: Constants.UserKeys.nameKey)
+                let eventName = self.titleField.text!
+                let date = Date()
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                let dateInFormat = dateFormatter.string(from: date)
+                
+                let data:[String: Any] = [
+                    "alert": "Events: " + ownName! + " has deleted the event - " + eventName,
+                    "id": (PFUser.current()?.objectId)!,
+                    "date": dateInFormat,
+                    "name": ownName!,
+                    ] as [String : Any]
+                
+                let push = PFPush()
+                let innerQuery : PFQuery = PFUser.query()!
+                innerQuery.whereKey("objectId", containedIn: idList)
+                let pushQuery = PFInstallation.query()
+                pushQuery!.whereKey("user", matchesQuery: innerQuery)
+                push.setQuery(pushQuery)
+                push.setData(data)
+                push.sendInBackground {
+                    (succeeded, error) -> Void in
+                    if (succeeded) {
+                    } else {
+                        print(error)
+                    }
+                }
+
                 self.navigationController?.dismiss(animated: true, completion: nil)
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "eventDeleted"), object: nil);                
             } else {
@@ -90,7 +122,7 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
         
         if (titleField.text?.characters.count > 0 && dateField.text?.characters.count > 0 && descField.text.characters.count > 0 && addressField.text!.characters.count > 0 && descField.textColor != UIColor.lightGray) {
             let point:PFGeoPoint = PFGeoPoint(latitude: marker.position.latitude, longitude: marker.position.longitude);
-            
+
             selectedEvent["Title"] = titleField.text;
             selectedEvent["Description"] = descField.text;
             selectedEvent["Creator"] = PFUser.current()?.objectId;
@@ -178,9 +210,9 @@ class EventEditTableVC: TableViewController, UITextViewDelegate {
         dateFormatter.dateStyle = DateFormatter.Style.long;
         dateFormatter.timeStyle = DateFormatter.Style.long;
         selectedDate = selectedEvent["Date"] as? Date
-        let dateString = dateFormatter.string(from: selectedDate!);
-        dateField.text = dateString;
-        
+        let dateString = dateFormatter.string(from: selectedDate!)
+        dateField.text = dateString
+    
         descField.text = selectedEvent["Description"] as? String
         titleField.text = selectedEvent["Title"] as? String
         

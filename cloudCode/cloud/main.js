@@ -66,7 +66,7 @@ Parse.Cloud.define("findSavedEvents", function(request, response) {
         var eventNotGoing = event.get("NotGoing");
         var timeDiff = eventDate.getTime() - currentDate.getTime();
         if (timeDiff >= 0) {
-          if (eventGoing.indexOf(currentID) != -1 || eventMaybe.indexOf(currentID) != -1 || eventNotGoing.indexOf(currentID) != -1) {
+          if ((eventGoing.indexOf(currentID) != -1 || eventMaybe.indexOf(currentID) != -1) && eventNotGoing.indexOf(currentID) == -1) {
               eventList.push(event);
           }
         }

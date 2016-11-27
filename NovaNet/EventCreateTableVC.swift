@@ -114,7 +114,7 @@ class EventCreateTableVC: TableViewController, UITextViewDelegate {
                 }
                 
                 let data:[String: Any] = [
-                    "alert": ownName! + " has created an event in your area: " + eventName,
+                    "alert": "Events: " + ownName! + " has created an event in your area - " + eventName,
                     "id": (PFUser.current()?.objectId)!,
                     "date": dateInFormat,
                     "name": ownName!,

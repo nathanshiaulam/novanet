@@ -9,7 +9,6 @@
 import Foundation
 import Bolts
 import Parse
-import AudioToolbox
 
 class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate   {
     
@@ -59,10 +58,7 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
             refreshControl.addTarget(self, action: #selector(EventsFinderTableVC.findSavedEvents), for: UIControlEvents.valueChanged)
         }
     }
-    // Vibrates the phone when receives message
-    func phoneVibrate() {
-        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
-    }
+
     override func viewDidLoad() {
         localEvents = true
         
@@ -70,8 +66,6 @@ class EventsFinderTableVC: ViewController, UITableViewDelegate, UITableViewDataS
         distList = NSArray()
         self.tableView.rowHeight = 100.0
         self.tabBarController!.navigationItem.title = "MEETUPS"
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(ConversationListTableViewController.phoneVibrate), name: NSNotification.Name(rawValue: "phoneVibrate"), object: nil)
         
         let border = CALayer()
         let width = CGFloat(1.0)

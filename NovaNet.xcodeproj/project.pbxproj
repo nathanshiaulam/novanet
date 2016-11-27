@@ -11,7 +11,6 @@
 		160BFEC71C675A07005D001A /* EventEditTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160BFEC61C675A07005D001A /* EventEditTableVC.swift */; };
 		160BFECB1C679EC1005D001A /* EventAttendanceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160BFECA1C679EC1005D001A /* EventAttendanceVC.swift */; };
 		160D1F281B5E903B00B3E4DB /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */; };
-		160D1F2A1B5EFA3A00B3E4DB /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */; };
 		160D1F2E1B5F85A200B3E4DB /* UploadPictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */; };
 		160D1F3D1B61080C00B3E4DB /* MessagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D1F3C1B61080C00B3E4DB /* MessagerViewController.swift */; };
 		1616B1891B55367800DBF11A /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1616B1881B55367800DBF11A /* SignUpViewController.swift */; };
@@ -106,7 +105,6 @@
 		160BFEC61C675A07005D001A /* EventEditTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventEditTableVC.swift; path = ../EventEditTableVC.swift; sourceTree = "<group>"; };
 		160BFECA1C679EC1005D001A /* EventAttendanceVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventAttendanceVC.swift; path = ../EventAttendanceVC.swift; sourceTree = "<group>"; };
 		160D1F271B5E903B00B3E4DB /* HomeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
-		160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		160D1F2D1B5F85A200B3E4DB /* UploadPictureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UploadPictureViewController.swift; path = ../UploadPictureViewController.swift; sourceTree = "<group>"; };
 		160D1F351B60F49F00B3E4DB /* NovaNet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NovaNet-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		160D1F3C1B61080C00B3E4DB /* MessagerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagerViewController.swift; sourceTree = "<group>"; };
@@ -371,7 +369,6 @@
 				16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */,
 				16629EB01BDDD7C4003C4F05 /* ViewController.swift */,
 				16629EB21BDDD7F2003C4F05 /* TableViewController.swift */,
-				160D1F291B5EFA3A00B3E4DB /* UserProfileViewController.swift */,
 				16A0E7031B54FC7400DDAE95 /* Main.storyboard */,
 				16646A7F1DC1FA5500E3C621 /* ConfirmNovaViewController.swift */,
 				16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */,
@@ -667,7 +664,6 @@
 				16A0E82A1B7E47D400DE06A9 /* SystemSettingsTableViewController.swift in Sources */,
 				160BFECB1C679EC1005D001A /* EventAttendanceVC.swift in Sources */,
 				169441141BDC29BC0049122C /* NetworkManager.swift in Sources */,
-				160D1F2A1B5EFA3A00B3E4DB /* UserProfileViewController.swift in Sources */,
 				16C1C8C51B7F494A00C6166C /* HomeTabBarController.swift in Sources */,
 				167114C11B8299F90024DC3E /* ImageUtil.swift in Sources */,
 				16D333611BCADE1600C1B405 /* OnboardingTableViewController.swift in Sources */,

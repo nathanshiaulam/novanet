@@ -10,13 +10,14 @@ import UIKit
 import Parse
 import Bolts
 import GoogleMaps
+import AudioToolbox
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    let defaults:UserDefaults = UserDefaults.standard;
-    var posted:Bool = false;
+    let defaults:UserDefaults = UserDefaults.standard
+    var posted:Bool = false
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         UIApplication.shared.statusBarStyle = .lightContent
         let navigationBarAppearance = UINavigationBar.appearance()
@@ -40,14 +41,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         PFAnalytics.trackAppOpened(launchOptions: launchOptions)
         
         if (PFUser.current() != nil) {
-            let query = PFQuery(className:"Profile");
-            let currentID = PFUser.current()!.objectId;
-            query.whereKey("ID", equalTo:currentID!);
+            let query = PFQuery(className:"Profile")
+            let currentID = PFUser.current()!.objectId
+            query.whereKey("ID", equalTo:currentID!)
             
             query.getFirstObjectInBackground {
                 (profile: PFObject?, error: Error?) -> Void in
                 if error != nil || profile == nil {
-                    print(error);
+                    print(error)
                 } else if let profile = profile {
                     
                     // Sets up local datastore
@@ -68,17 +69,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         
                         
                         // Stores image in local data store and refreshes image from Parse
-                        let userImageFile = profile["Image"] as! PFFile;
+                        let userImageFile = profile["Image"] as! PFFile
                         userImageFile.getDataInBackground {
                             (imageData, error) -> Void in
                             if (error == nil) {
-                                let image = UIImage(data:imageData!);
-                                Utilities().saveImage(image!);
+                                let image = UIImage(data:imageData!)
+                                Utilities().saveImage(image!)
                             }
                             else {
-                                let placeHolder = UIImage(named: "selectImage");
-                                Utilities().saveImage(placeHolder!);
-                                print(error);
+                                let placeHolder = UIImage(named: "selectImage")
+                                Utilities().saveImage(placeHolder!)
+                                print(error)
                             }
                         }
                         profile.saveInBackground()
@@ -117,36 +118,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UIApplication.shared.registerUserNotificationSettings(settings)
             application.registerForRemoteNotifications()
         } else {
-            application.registerForRemoteNotifications();
+            application.registerForRemoteNotifications()
         }
         if (launchOptions != nil) {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil);
-            let appDelegate  = UIApplication.shared.delegate as! AppDelegate
-            let navigation = appDelegate.window!.rootViewController as! UINavigationController
-            let messageVC = storyboard.instantiateViewController(withIdentifier: "MessageListVC") as! ConversationListTableViewController
-            let eventsListVC = storyboard.instantiateViewController(withIdentifier: "EventsListVC") as! EventsFinderTableVC
-
             if (PFUser.current() != nil) {
                 if let notificationPayload = launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as? NSDictionary {
-                    let name: AnyObject? = notificationPayload.value(forKey: "Name") as AnyObject?
-                    let alert: String? = notificationPayload["alert"] as? String
+                    let name: AnyObject? = notificationPayload.value(forKey: "name") as AnyObject?
+                    let aps:NSDictionary? = (notificationPayload["aps"] as? NSDictionary?)!
+                    let alert: String? = aps?["alert"] as? String
                     let id: AnyObject? = notificationPayload.value(forKey: "id") as AnyObject?
-                    
-                    print(((alert)! as NSString).substring(to: 7))
                     if (((alert)! as NSString).substring(to: 7) == "Events:") {
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "phoneVibrate"), object: nil)
                         posted = true
-                        navigation.pushViewController(eventsListVC, animated: true);
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "phoneVibrate"), object: nil)
+                        if let rootController = UIApplication.shared.delegate?.window??.rootViewController as? UINavigationController {
+                            let tabBarController = rootController.topViewController! as! HomeTabBarController
+                            tabBarController.selectedIndex = 1
+                        }
                     } else {
-                        defaults.set(notificationPayload, forKey: Constants.TempKeys.notificationPayloadKey);
+                        posted = true
+                        defaults.set(notificationPayload, forKey: Constants.TempKeys.notificationPayloadKey)
                         defaults.set(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
                         defaults.set(id, forKey: Constants.SelectedUserKeys.selectedIdKey)
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "phoneVibrate"), object: nil);
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "loadConversations"), object: nil);
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "loadData"), object: nil);
-                        posted = true
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goToMessageVC"), object: nil);
-                        navigation.pushViewController(messageVC, animated: true);
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "loadConversations"), object: nil)
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "loadData"), object: nil)
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goToMessageVC"), object: nil)
+                        if let rootController = UIApplication.shared.delegate?.window??.rootViewController as? UINavigationController {
+                            let tabBarController = rootController.topViewController! as! HomeTabBarController
+                            tabBarController.selectedIndex = 2
+                        }
                     }
                 }
             }
@@ -163,8 +162,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func application(_ application: UIApplication, didRegister settings: UIUserNotificationSettings) {
         if (settings.types != UIUserNotificationType()) {
-            print("Did register user");
-            application.registerForRemoteNotifications();
+            print("Did register user")
+            application.registerForRemoteNotifications()
         }
     }
     func dateFromString(_ date: String, format: String) -> Date {
@@ -185,25 +184,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
    
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+        let state: UIApplicationState = UIApplication.shared.applicationState
 
         if (PFUser.current() != nil) {
             if let notificationPayload:NSDictionary = userInfo as NSDictionary? {
-                let name: AnyObject? = notificationPayload.value(forKey: "Name") as AnyObject?
+                print(notificationPayload)
+                let name: AnyObject? = notificationPayload.value(forKey: "name") as AnyObject?
+                let aps:NSDictionary? = (notificationPayload["aps"] as? NSDictionary?)!
+                let alert: String? = aps?["alert"] as? String
                 let id: AnyObject? = notificationPayload.value(forKey: "id") as AnyObject?
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "phoneVibrate"), object: nil)
 
-                defaults.set(notificationPayload, forKey: Constants.TempKeys.notificationPayloadKey);
-                defaults.set(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
-                defaults.set(id, forKey: Constants.SelectedUserKeys.selectedIdKey)
-                if (!posted) {
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "phoneVibrate"), object: nil);
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "loadConversations"), object: nil);
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "loadData"), object: nil);
+                if (((alert)! as NSString).substring(to: 7) == "Events:") {
+                    posted = true
+                    if let rootController = UIApplication.shared.delegate?.window??.rootViewController as? UINavigationController {
+                        let tabBarController = rootController.topViewController! as! HomeTabBarController
+                        tabBarController.selectedIndex = 1
+                    }
+                } else {
+                    posted = true
+                    defaults.set(notificationPayload, forKey: Constants.TempKeys.notificationPayloadKey)
+                    defaults.set(name, forKey: Constants.SelectedUserKeys.selectedNameKey)
+                    defaults.set(id, forKey: Constants.SelectedUserKeys.selectedIdKey)
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "loadConversations"), object: nil)
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "loadData"), object: nil)
+                    if state == .inactive {
+                        if let rootController = UIApplication.shared.delegate?.window??.rootViewController as? UINavigationController {
+                            let tabBarController = rootController.topViewController! as! HomeTabBarController
+                            tabBarController.selectedIndex = 2
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goToMessageVC"), object: nil)
+                        }
+                    }
                 }
             }
         }
         PFAnalytics.trackAppOpened(withRemoteNotificationPayload: userInfo)
     }
-   
+
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -217,21 +234,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         if (Utilities().userLoggedIn()) {
-            let query:PFQuery = PFQuery(className: "Profile");
-            let currentID = PFUser.current()!.objectId;
-            query.whereKey("ID", equalTo:currentID!);
+            let query:PFQuery = PFQuery(className: "Profile")
+            let currentID = PFUser.current()!.objectId
+            query.whereKey("ID", equalTo:currentID!)
             
             query.getFirstObjectInBackground {
                 (profile: PFObject?, error: Error?) -> Void in
                 if (profile == nil || error != nil) {
-                    print(error);
+                    print(error)
                 } else if let profile = profile {
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "MM/dd/yyyy"
-                    profile["last_active"] = dateFormatter.string(from: Date());
+                    profile["last_active"] = dateFormatter.string(from: Date())
                     profile["Available"] = true
-                    profile.saveInBackground();
-                    print(dateFormatter.string(from: Date()));
+                    profile.saveInBackground()
+                    print(dateFormatter.string(from: Date()))
                 }
             }
         }

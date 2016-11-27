@@ -77,5 +77,6 @@ struct Constants {
     
     static let DISCOVERY_RADIUS = 35
     static let MAX_NUM_INTERESTS = 3
-
+    
+    static let NOVA_ORANGE:UIColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
 }

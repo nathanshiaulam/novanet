@@ -151,6 +151,7 @@ class MessagerViewController: JSQMessagesViewController {
                 "id": id,
                 "date": DateInFormat,
                 "name": ownName,
+                "sound": "default",
             ] as [String : Any]
             
             // Create push notification and push message and updates conversation counters
@@ -209,6 +210,8 @@ class MessagerViewController: JSQMessagesViewController {
                         alert.addAction(UIAlertAction(title:"Ok", style: UIAlertActionStyle.default, handler: nil))
                     }
                 }
+            } else {
+                print(error)
             }
         }
         
@@ -312,6 +315,8 @@ class MessagerViewController: JSQMessagesViewController {
                     convPart["MostRecent"] = date
                 }
                 convPart.saveInBackground()
+                print("hello")
+                self.finishReceivingMessage()
             }
         }
     }
@@ -383,20 +388,18 @@ class MessagerViewController: JSQMessagesViewController {
         return self.messages.count
     }
     override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!) {
-        
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
         sendMessage(text, senderId: senderId, senderDisplayName: senderDisplayName, date: Date())
         button.isEnabled = false
     }
-    override func didPressAccessoryButton(_ sender: UIButton!) {
-        
-//        self.inputToolbar!.contentView!.textView!.text = Constants.ConstantStrings.fikaText
-    }
+//    override func didPressAccessoryButton(_ sender: UIButton!) {
+//        
+//    }
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.navigationController?.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         
         // Ensures that it loads the data when you receive a message while in view
@@ -421,19 +424,16 @@ class MessagerViewController: JSQMessagesViewController {
         
         self.senderId = PFUser.current()!.objectId
         self.selectedId = defaults.string(forKey: Constants.SelectedUserKeys.selectedIdKey)!
-        
-        
+        self.automaticallyScrollsToMostRecentMessage = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-        
         // Generates queries based off of both users to load messages
         findMessages(senderId, selectedId: selectedId)
-        collectionView!.collectionViewLayout.springinessEnabled = true
+        collectionView!.collectionViewLayout.springinessEnabled = false
         self.automaticallyScrollsToMostRecentMessage = true
         self.collectionView!.reloadData()
-        
+        super.viewDidAppear(true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {

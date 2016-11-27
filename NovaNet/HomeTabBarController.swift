@@ -20,9 +20,10 @@ class HomeTabBarController: UITabBarController {
     override func viewDidLoad() {
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white,
-             NSFontAttributeName: UIFont(name: "BrandonGrotesque-Medium", size: 18)!]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "BrandonGrotesque-Medium", size: 18)!]
         
+        NotificationCenter.default.addObserver(self, selector: #selector(HomeTabBarController.goToConvList), name: NSNotification.Name(rawValue: "goToConvlist"), object: nil)
+
         self.tabBar.tintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
         super.viewDidLoad();
         doneButton = nil;
@@ -37,6 +38,12 @@ class HomeTabBarController: UITabBarController {
         }
         return false;
     }
+    func goToConvList() {
+        self.selectedIndex = 2
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "goToMessageVC"), object: nil);
+        print("again")
+    }
+
 }
 
 

@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'DD48A043D2B16F9E9F2BB486'
+               BlueprintIdentifier = 'B430E2D5D9615A9F577355D86D673620'
                BlueprintName = 'Pods-NovaNet'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libPods-NovaNet.a'>

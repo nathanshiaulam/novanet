@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'C18DB0505D0F142896A6D44A'
+               BlueprintIdentifier = '0A1E3F507D96344315BC24854586278E'
                BlueprintName = 'syncano-ios'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libsyncano-ios.a'>

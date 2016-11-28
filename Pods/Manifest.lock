@@ -27,6 +27,9 @@ PODS:
   - Mantle (2.0.5):
     - Mantle/extobjc (= 2.0.5)
   - Mantle/extobjc (2.0.5)
+  - Mixpanel (2.9.3):
+    - Mixpanel/Mixpanel (= 2.9.3)
+  - Mixpanel/Mixpanel (2.9.3)
   - syncano-ios (4.0.0):
     - AFNetworking (~> 2.5)
     - Mantle (~> 2.0)
@@ -36,6 +39,7 @@ PODS:
 DEPENDENCIES:
   - GoogleMaps
   - JSQMessagesViewController
+  - Mixpanel
   - syncano-ios
 
 SPEC CHECKSUMS:
@@ -44,7 +48,10 @@ SPEC CHECKSUMS:
   JSQMessagesViewController: 73cab48aa92fc2d512f3b6724f3425cc47a19eb5
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   Mantle: 1912395033f601de5adc8ee91e48f46e4c7051ad
+  Mixpanel: b9ff1c5d41fc07037d4b813bf2799c050ee3e49b
   syncano-ios: f52c99b6deba067cedbc943c0118c5f43b885a72
   UICKeyChainStore: c5719c814e8bd69e74e4a0fc09daf8f4d6257a59
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 40b78e26f5ce7e1ca179a0dfafb8c86b7bfbd46f
+
+COCOAPODS: 1.1.1

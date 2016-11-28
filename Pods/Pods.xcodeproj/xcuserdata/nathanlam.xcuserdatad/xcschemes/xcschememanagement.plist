@@ -24,7 +24,17 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Mixpanel.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-NovaNet.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-NovaNetTests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -42,37 +52,47 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>2EFEDBB649146422B0A076290AB959DE</key>
+		<key>0A1E3F507D96344315BC24854586278E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>33D35C9F49AA2A9AA857CA66A16A1E67</key>
+		<key>14AD7890DC9F754788CF44B89D9B2438</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>410B25DF16EA5C5B3E2698F74F9625FB</key>
+		<key>6E80F661F1647F55DEE8CE08D2314841</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>426BC4549A625B5E1E4200D5261A98BF</key>
+		<key>8E2F85A9EA167EFA71B3DCB5DF170059</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5F9D69D80399640269F450EBB7F9CE9E</key>
+		<key>92BED8EFAF78CE7D8FCA4EC2C8DE6918</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7C4BA3FCA845E372310F7855E57C18FA</key>
+		<key>A8E3D3760166CF6114286BA4ED279A6B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D607CE439EBD256738A38E8D3933E56F</key>
+		<key>AFAFB55453D161D2BB5CFB30C68A54D5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B430E2D5D9615A9F577355D86D673620</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B636CE7A05620C013435B65D6C706068</key>
 		<dict>
 			<key>primary</key>
 			<true/>

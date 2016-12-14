@@ -148,6 +148,8 @@ class NetworkManager: NSObject {
                 sender.present(alert, animated: true, completion: nil);
             }
         }
+        Mixpanel.sharedInstance().registerSuperProperties(["Email": email])
+        
     }
     
     func userLogin(_ email: String, password:String, vc: LogInViewController) {

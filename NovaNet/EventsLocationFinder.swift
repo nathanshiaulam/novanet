@@ -165,7 +165,6 @@ class EventsLocationFinder: ViewController, UISearchBarDelegate, LocateOnTheMap 
     }
     
     func searchBarSearchButtonClicked (_ searchBar: UISearchBar) {
-        print("Hello")
         self.dismiss(animated: true, completion: nil)
         let searchRequest:MKLocalSearchRequest = MKLocalSearchRequest()
         searchRequest.naturalLanguageQuery = searchBar.text

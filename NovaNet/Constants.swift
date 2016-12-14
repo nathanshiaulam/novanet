@@ -68,6 +68,12 @@ struct Constants {
         static let IPHONE_6_PLUS_HEIGHT:CGFloat = 736
     }
     
+    struct API_TOKENS {
+        static let MIXPANEL = "d1bef01e4a629cac3be228183d302f0b"
+        static let PARSE = "ni7bpwOhWr114Rom27cx4QSv27Ud3tyMl0tZchxw"
+        static let PARSE_CLIENT = "NqfIkHWioqiH93TsSijAvcoMNzWDgyx8Z9hoLJL2"
+    }
+    
     static let XXSMALL_FONT_SIZE:CGFloat = 10.0
     static let XSMALL_FONT_SIZE:CGFloat = 12.0
     static let SMALL_FONT_SIZE:CGFloat = 14.0

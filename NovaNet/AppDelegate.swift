@@ -18,86 +18,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     let defaults:UserDefaults = UserDefaults.standard
     var posted:Bool = false
+    var mixpanel: Mixpanel!
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        UIApplication.shared.statusBarStyle = .lightContent
-        let navigationBarAppearance = UINavigationBar.appearance()
-        let tabBarAppearance = UITabBar.appearance()
-
-        let cancelButtonAttributes: NSDictionary = [NSFontAttributeName: UIFont(name: "BrandonGrotesque-Medium", size: 16.0)!, NSForegroundColorAttributeName: UIColor.white]
-        let barButtonAppearance = UIBarButtonItem.appearance()
-        barButtonAppearance.setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: UIControlState())
-        navigationBarAppearance.shadowImage = UIImage()
-        navigationBarAppearance.isTranslucent = false
         
-        tabBarAppearance.barTintColor = UIColor.white
-        tabBarAppearance.layer.borderWidth = 0.50
-        tabBarAppearance.layer.borderColor = UIColor.clear.cgColor
-        tabBarAppearance.clipsToBounds = true
-        
-        Parse.enableLocalDatastore()
-        Parse.setApplicationId("ni7bpwOhWr114Rom27cx4QSv27Ud3tyMl0tZchxw",
-            clientKey: "NqfIkHWioqiH93TsSijAvcoMNzWDgyx8Z9hoLJL2")
-        GMSServices.provideAPIKey("AIzaSyBweBvAkvyDFpocqomLn9vNdM0OILJqBsQ")
-        PFAnalytics.trackAppOpened(launchOptions: launchOptions)
-        
-        if (PFUser.current() != nil) {
-            let query = PFQuery(className:"Profile")
-            let currentID = PFUser.current()!.objectId
-            query.whereKey("ID", equalTo:currentID!)
-            
-            query.getFirstObjectInBackground {
-                (profile: PFObject?, error: Error?) -> Void in
-                if error != nil || profile == nil {
-                    print(error)
-                } else if let profile = profile {
-                    
-                    // Sets up local datastore
-                    let fromNew:Bool = (profile["New"] as? Bool)!
-                    if (!fromNew) {
-                        profile["Available"] = true
-                        
-                        self.defaults.set(profile["Name"], forKey: Constants.UserKeys.nameKey)
-                        self.defaults.set(PFUser.current()!.email, forKey: Constants.UserKeys.emailKey)
-                        self.defaults.set(profile["InterestsList"], forKey: Constants.UserKeys.interestsKey)
-                        self.defaults.set(profile["About"], forKey: Constants.UserKeys.aboutKey)
-                        self.defaults.set(profile["Experience"], forKey: Constants.UserKeys.experienceKey)
-                        self.defaults.set(profile["Looking"], forKey: Constants.UserKeys.lookingForKey)
-                        self.defaults.set(profile["Distance"], forKey: Constants.UserKeys.distanceKey)
-                        self.defaults.set(profile["Available"], forKey: Constants.UserKeys.availableKey)
-                        self.defaults.set(profile["New"], forKey: Constants.TempKeys.fromNew)
-                        self.defaults.set(profile["Greeting"], forKey: Constants.UserKeys.greetingKey)
-                        
-                        
-                        // Stores image in local data store and refreshes image from Parse
-                        let userImageFile = profile["Image"] as! PFFile
-                        userImageFile.getDataInBackground {
-                            (imageData, error) -> Void in
-                            if (error == nil) {
-                                let image = UIImage(data:imageData!)
-                                Utilities().saveImage(image!)
-                            }
-                            else {
-                                let placeHolder = UIImage(named: "selectImage")
-                                Utilities().saveImage(placeHolder!)
-                                print(error)
-                            }
-                        }
-                        profile.saveInBackground()
-                    }
-                    
-                }
-            }
-            let confirmed = self.defaults.bool(forKey: Constants.TempKeys.confirmed)
-            if (confirmed != true) {
-                defaults.set(false, forKey: Constants.TempKeys.confirmed)
-            }
-        }
-        
-        let pageControl = UIPageControl.appearance()
-        pageControl.pageIndicatorTintColor = UIColor.lightGray
-        pageControl.currentPageIndicatorTintColor = UIColor.black
-        pageControl.backgroundColor = UIColor.white
-
+        setUI()
+        initThirdParty(launchOptions: launchOptions)
+        fetchData()
+       
         // Register for Push Notitications
         if application.applicationState != UIApplicationState.background {
             // Track an app open here if we launch with a push, unless
@@ -160,21 +88,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         installation.setDeviceTokenFrom(deviceToken)
         installation.saveInBackground()
     }
+    
     func application(_ application: UIApplication, didRegister settings: UIUserNotificationSettings) {
         if (settings.types != UIUserNotificationType()) {
             print("Did register user")
             application.registerForRemoteNotifications()
         }
     }
-    func dateFromString(_ date: String, format: String) -> Date {
-        let formatter = DateFormatter()
-        let locale = Locale(identifier: "en_US_POSIX")
-        
-        formatter.locale = locale
-        formatter.dateFormat = format
-        
-        return formatter.date(from: date)!
-    }
+    
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         if (error as NSError).code == 3010 {
             print("Push notifications are not supported in the iOS Simulator.")
@@ -262,7 +183,94 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+    
+    private func initThirdParty(launchOptions: [UIApplicationLaunchOptionsKey: Any]?) {
+        Parse.enableLocalDatastore()
+        Parse.setApplicationId(Constants.API_TOKENS.PARSE,
+                               clientKey: Constants.API_TOKENS.PARSE_CLIENT)
+        GMSServices.provideAPIKey("AIzaSyBweBvAkvyDFpocqomLn9vNdM0OILJqBsQ")
+        PFAnalytics.trackAppOpened(launchOptions: launchOptions)
+        mixpanel = Mixpanel.sharedInstance(withToken: Constants.API_TOKENS.MIXPANEL)
+    }
+    
+    private func setUI() {
+        UIApplication.shared.statusBarStyle = .lightContent
+        let navigationBarAppearance = UINavigationBar.appearance()
+        let tabBarAppearance = UITabBar.appearance()
+        
+        let cancelButtonAttributes: NSDictionary = [NSFontAttributeName: UIFont(name: "BrandonGrotesque-Medium", size: 16.0)!, NSForegroundColorAttributeName: UIColor.white]
+        let barButtonAppearance = UIBarButtonItem.appearance()
+        barButtonAppearance.setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: UIControlState())
+        navigationBarAppearance.shadowImage = UIImage()
+        navigationBarAppearance.isTranslucent = false
+        
+        tabBarAppearance.barTintColor = UIColor.white
+        tabBarAppearance.layer.borderWidth = 0.50
+        tabBarAppearance.layer.borderColor = UIColor.clear.cgColor
+        tabBarAppearance.clipsToBounds = true
+        
+        let pageControl = UIPageControl.appearance()
+        pageControl.pageIndicatorTintColor = UIColor.lightGray
+        pageControl.currentPageIndicatorTintColor = UIColor.black
+        pageControl.backgroundColor = UIColor.white
+    }
+    
+    private func fetchData() {
+        if (PFUser.current() != nil) {
+            let query = PFQuery(className:"Profile")
+            let currentID = PFUser.current()!.objectId
+            query.whereKey("ID", equalTo:currentID!)
+            
+            query.getFirstObjectInBackground {
+                (profile: PFObject?, error: Error?) -> Void in
+                if error != nil || profile == nil {
+                    print(error)
+                } else if let profile = profile {
+                    
+                    // Sets up local datastore
+                    let fromNew:Bool = (profile["New"] as? Bool)!
+                    if (!fromNew) {
+                        profile["Available"] = true
+                        
+                        self.defaults.set(profile["Name"], forKey: Constants.UserKeys.nameKey)
+                        self.defaults.set(PFUser.current()!.email, forKey: Constants.UserKeys.emailKey)
+                        self.defaults.set(profile["InterestsList"], forKey: Constants.UserKeys.interestsKey)
+                        self.defaults.set(profile["About"], forKey: Constants.UserKeys.aboutKey)
+                        self.defaults.set(profile["Experience"], forKey: Constants.UserKeys.experienceKey)
+                        self.defaults.set(profile["Looking"], forKey: Constants.UserKeys.lookingForKey)
+                        self.defaults.set(profile["Distance"], forKey: Constants.UserKeys.distanceKey)
+                        self.defaults.set(profile["Available"], forKey: Constants.UserKeys.availableKey)
+                        self.defaults.set(profile["New"], forKey: Constants.TempKeys.fromNew)
+                        self.defaults.set(profile["Greeting"], forKey: Constants.UserKeys.greetingKey)
+         
+                        self.mixpanel.registerSuperProperties(["Email": PFUser.current()!.email])
+                        
 
+                        // Stores image in local data store and refreshes image from Parse
+                        let userImageFile = profile["Image"] as! PFFile
+                        userImageFile.getDataInBackground {
+                            (imageData, error) -> Void in
+                            if (error == nil) {
+                                let image = UIImage(data:imageData!)
+                                Utilities().saveImage(image!)
+                            }
+                            else {
+                                let placeHolder = UIImage(named: "selectImage")
+                                Utilities().saveImage(placeHolder!)
+                                print(error)
+                            }
+                        }
+                        profile.saveInBackground()
+                    }
+                    
+                }
+            }
+            let confirmed = self.defaults.bool(forKey: Constants.TempKeys.confirmed)
+            if (confirmed != true) {
+                defaults.set(false, forKey: Constants.TempKeys.confirmed)
+            }
+        }
+    }
 
 }
 

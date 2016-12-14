@@ -51,7 +51,7 @@ class EventsSearchResults: TableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.dismiss(animated: true, completion: nil);
         
-        let correctedAddress:String! = self.searchResults[(indexPath as NSIndexPath).row]
+        let correctedAddress:String = self.searchResults[(indexPath as NSIndexPath).row]
         var urlString = "https://maps.googleapis.com/maps/api/geocode/json?address=\(correctedAddress)&sensor=false"
         urlString = urlString.addingPercentEscapes(using: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!
         print(urlString)

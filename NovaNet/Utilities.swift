@@ -131,4 +131,11 @@ class Utilities: NSObject {
             }
         }
     }
+    
+    // Present an error and let the user attempt the action again
+    static func presentStandardError(errorString: String, alertTitle: String, actionTitle: String, sender: AnyObject) {
+        let alert = UIAlertController(title: alertTitle, message: errorString, preferredStyle: UIAlertControllerStyle.alert);
+        alert.addAction(UIAlertAction(title: actionTitle, style: UIAlertActionStyle.default, handler: nil));
+        sender.present(alert, animated: true, completion: nil);
+    }
 }

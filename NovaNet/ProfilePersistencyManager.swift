@@ -9,5 +9,18 @@
 import UIKit
 
 class ProfilePersistencyManager: NSObject {
-
+    var userProfile: Profile! // Cache for own profile
+    var profileLists: [Profile]!
+    
+    override init() {
+        profileLists = [Profile]()
+    }
+    
+    public func setProfile(prof: Profile) {
+        userProfile = prof
+    }
+    
+    public func getUserProfile() -> Profile {
+        return userProfile
+    }
 }

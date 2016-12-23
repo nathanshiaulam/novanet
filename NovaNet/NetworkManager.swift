@@ -119,7 +119,6 @@ class NetworkManager: NSObject {
         newUser.password = password;
         newUser.username = email;
 
-        
         defaults.set(email, forKey: Constants.UserKeys.usernameKey)
         defaults.set(PFUser.current()?.email, forKey: Constants.UserKeys.emailKey)
         defaults.set(25, forKey: Constants.UserKeys.distanceKey)

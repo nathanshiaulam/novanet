@@ -7,10 +7,19 @@
 //
 
 import Foundation
-import Bolts
-import Parse
 
 struct Constants {
+    static let defaults:UserDefaults = UserDefaults.standard
+
+    struct ProfileDefaults {
+        static let interestOne = "Nova"
+        static let interestTwo = "Jobs"
+        static let interestThree = "Reading"
+        static let exp = "e.g. Systems Engineer"
+        static let about = "A sentence or two illustrating what you're about. Who are you in a nutshell?"
+        static let seeking = "Novas."
+    }
+        
     struct UserKeys {
         static let usernameKey = "usernameKey"
         static let nameKey = "nameKey"

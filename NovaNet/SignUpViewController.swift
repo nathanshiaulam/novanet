@@ -12,10 +12,6 @@ import Bolts
 
 class SignUpViewController: ViewController {
 
-    
-    var bot:CGFloat!;
-
-    
     @IBOutlet weak var novaLogo: UIImageView!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -34,10 +30,8 @@ class SignUpViewController: ViewController {
         self.dismiss(animated: true, completion: nil);
     }
     @IBAction func signUpFunction(_ sender: UIButton) {
-        NetworkManager().createUser( emailField.text!, password:passwordField.text!, confPassword:confirmPasswordField.text!, sender: self);
+        createUser()
     }
-    
-    let defaults:UserDefaults = UserDefaults.standard;
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true);
@@ -47,35 +41,65 @@ class SignUpViewController: ViewController {
     
     @IBOutlet weak var centerConstraint: NSLayoutConstraint!
     @IBOutlet weak var aboutTopConstraint: NSLayoutConstraint!
+    
     /*-------------------------------- HELPER METHODS ------------------------------------*/
-   
-    // Sets up installation so that the current user receives push notifications
-    func setUpInstallations() {
-        let installation = PFInstallation.current()
-        installation["user"] = PFUser.current()
-        installation.saveInBackground()
-    }
     
     // Allows users to hit enter and move to the next text field
     func textFieldShouldReturn(_ textField: UITextField)-> Bool {
         if (textField ==  emailField) {
-            passwordField.becomeFirstResponder();
+            passwordField.becomeFirstResponder()
         }
         else if (textField == passwordField) {
             textField.resignFirstResponder()
-            confirmPasswordField.becomeFirstResponder();
+            confirmPasswordField.becomeFirstResponder()
         }
         else {
-            let confPassword:String =  confirmPasswordField.text!.trimmingCharacters(
-                in: CharacterSet.whitespacesAndNewlines)
-            let password:String = passwordField.text!.trimmingCharacters(
-                in: CharacterSet.whitespacesAndNewlines)
-            let email:String = emailField.text!.trimmingCharacters(
-                in: CharacterSet.whitespacesAndNewlines)
-            NetworkManager().createUser(email, password: password, confPassword: confPassword, sender: self);
-            textField.resignFirstResponder();
+            createUser()
+            textField.resignFirstResponder()
         }
         return false;
+    }
+    
+    private func createUser() {
+        let confPassword:String =  confirmPasswordField.text!.trimmingCharacters(
+            in: CharacterSet.whitespacesAndNewlines)
+        let password:String = passwordField.text!.trimmingCharacters(
+            in: CharacterSet.whitespacesAndNewlines)
+        let email:String = emailField.text!.trimmingCharacters(
+            in: CharacterSet.whitespacesAndNewlines)
+        
+        if (validInput(email: email, password: password, confPassword: confPassword)) {
+            UserAPI.sharedInstance.create(email: email, password: password, completion: onUserCreate, error: errorHandler)
+        }
+    }
+    
+    public func onUserCreate() {
+        // Create Profile
+        let id:String = PFUser.current()!.objectId!
+        let prof = Profile(id: id, greeting: Constants.ConstantStrings.greetingMessage)
+        ProfileAPI.sharedInstance.create(prof: prof)
+        
+        // Dismiss to home
+        self.dismiss(animated: true, completion: { () -> Void in
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "dismissToHomePage"), object: nil);
+        })
+        
+    }
+    
+    public func errorHandler(error: String) {
+        Utilities.presentStandardError(errorString: error, alertTitle: "Submission Failure", actionTitle: "Ok", sender: self)
+    }
+    
+    private func validInput(email: String, password: String, confPassword: String) -> Bool {
+        if (email.characters.count == 0 || password.characters.count == 0 || confPassword.characters.count == 0) {
+            Utilities.presentStandardError(errorString: "Invalid password or email", alertTitle: "Submission Failure", actionTitle: "Ok", sender: self)
+            return false
+        }
+        if (password != confPassword) {
+            Utilities.presentStandardError(errorString: "Your passwords don't match!", alertTitle: "Submission Failure", actionTitle: "Ok", sender: self)
+            return false
+        }
+        return true
     }
     
     func keyboardWillShow(_ notification:Notification) {
@@ -171,6 +195,5 @@ class SignUpViewController: ViewController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }

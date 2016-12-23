@@ -13,6 +13,9 @@ class ProfileAPI: NSObject {
     // Edit profile information
     // Create profile
     // Read in specific profile
+    
+    // Cache own profile
+    // Update other profiles when profiles are loaded
     private let persistencyManager: ProfilePersistencyManager
     private let apiClient: APIClient
     
@@ -30,38 +33,61 @@ class ProfileAPI: NSObject {
         return Singleton.instance
     }
     
-    public func getProfileById(id: String, completion: (_: Profile)) {
-    
-    }
-    
-    public func getProfileByEmail(email: String, completion: (_:Profile)) {
-    
-    }
-    
-    public func getProfileListByIds(ids: [String], completion: (_: Profile)){
-    
-    }
-    
-    public func editProfileById(id: String, changeDict: [String: AnyObject]) {
-        
-    }
-    
-    public func editProfileByEmail(email: String, changeDict: [String: AnyObject]) {
-        
-    }
-    
-    public func createProfile(
-        id: String,
-        name: String,
-        email: String,
-        exp: String,
-        about: String,
-        seeking: String,
-        greeting: String,
-        interestsList: [String]) -> Profile?
+    public func create(prof: Profile)
     {
-        
-        return nil
+        persistencyManager.setProfile(prof: prof)
+        apiClient.createObject(table: TABLES.PROFILES, dict: prof.prof_dictRepresentation())
     }
     
+    public func getProfileById(id: String, completion: @escaping(Profile) -> Void) {
+        // Returns cached value if own profile
+        if id == persistencyManager.getUserProfile().getId() {
+            completion(persistencyManager.getUserProfile())
+            return
+        }
+        getProfileBy(key: COLS.PROFILE.ID, val: id as AnyObject, completion: completion)
+    }
+    
+    public func getProfileByEmail(email: String, completion: @escaping(Profile) -> Void) {
+        // Returns cached value if own profile
+        if email == persistencyManager.getUserProfile().getEmail() {
+            return completion(persistencyManager.getUserProfile())
+        }
+        getProfileBy(key: COLS.PROFILE.EMAIL, val: email as AnyObject, completion: completion)
+    }
+    
+    private func getProfileBy(key: String, val: AnyObject, completion: @escaping(Profile) -> Void) {
+        apiClient.fetchObject(
+            table: TABLES.PROFILES,
+            key: key,
+            val: val,
+            cols: COLS.PROFILE.COL_LIST,
+            completion: constructProfile,
+            setter: completion as! (AnyObject) -> Void)
+    }
+    
+    public func editProfileById(id: String, dict: [String: AnyObject]) {
+        let editedProfile = Profile.constructProfile(dict: dict)
+        self.persistencyManager.setProfile(prof: editedProfile)
+        editProfileBy(key: COLS.PROFILE.ID, val: id as AnyObject, dict: dict)
+    }
+    
+    public func editProfileByEmail(email: String, dict: [String:AnyObject]) {
+        let editedProfile = Profile.constructProfile(dict: dict)
+        self.persistencyManager.setProfile(prof: editedProfile)
+        editProfileBy(key: COLS.PROFILE.EMAIL, val: email as AnyObject, dict: dict)
+    }
+    
+    private func editProfileBy(key: String, val: AnyObject, dict: [String:AnyObject]) {
+        apiClient.setObject(
+            table: TABLES.PROFILES,
+            key: key,
+            val: val,
+            dict: dict)
+    }
+    
+    private func constructProfile(dict: [String:AnyObject], completion: (Profile) -> Void) {
+        let prof:Profile = Profile.constructProfile(dict: dict)
+        completion(prof)
+    }
 }

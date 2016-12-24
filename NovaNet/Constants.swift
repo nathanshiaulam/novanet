@@ -10,7 +10,7 @@ import Foundation
 
 struct Constants {
     static let defaults:UserDefaults = UserDefaults.standard
-
+    
     struct ProfileDefaults {
         static let interestOne = "Nova"
         static let interestTwo = "Jobs"

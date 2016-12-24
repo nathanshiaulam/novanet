@@ -54,9 +54,6 @@ class LogInViewController: ViewController, UITextFieldDelegate {
         
         usernameField.attributedPlaceholder = usernamePlaceholder;
         passwordField.attributedPlaceholder = passwordPlaceholder;
-        
-        
-        
         loginButton.layer.cornerRadius = 5
         
         NotificationCenter.default.addObserver(self, selector: #selector(LogInViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -94,6 +91,7 @@ class LogInViewController: ViewController, UITextFieldDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "dismissToHomePage"), object: nil);
     }
     
     override func didReceiveMemoryWarning() {
@@ -132,7 +130,6 @@ class LogInViewController: ViewController, UITextFieldDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true);
     }
-    
 
     // Dismisses to home
     func dismissToHomePage() {

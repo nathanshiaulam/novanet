@@ -73,23 +73,6 @@ class SignUpViewController: ViewController {
         }
     }
     
-    public func onUserCreate() {
-        // Create Profile
-        let id:String = PFUser.current()!.objectId!
-        let prof = Profile(id: id, greeting: Constants.ConstantStrings.greetingMessage)
-        ProfileAPI.sharedInstance.create(prof: prof)
-        
-        // Dismiss to home
-        self.dismiss(animated: true, completion: { () -> Void in
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "dismissToHomePage"), object: nil);
-        })
-        
-    }
-    
-    public func errorHandler(error: String) {
-        Utilities.presentStandardError(errorString: error, alertTitle: "Submission Failure", actionTitle: "Ok", sender: self)
-    }
-    
     private func validInput(email: String, password: String, confPassword: String) -> Bool {
         if (email.characters.count == 0 || password.characters.count == 0 || confPassword.characters.count == 0) {
             Utilities.presentStandardError(errorString: "Invalid password or email", alertTitle: "Submission Failure", actionTitle: "Ok", sender: self)
@@ -124,6 +107,27 @@ class SignUpViewController: ViewController {
         }
         keyboardVisible = false
         novaLogo.isHidden = false
+    }
+    
+    public func onUserCreate() {
+        // Extract email
+        let email:String = emailField.text!.trimmingCharacters(
+            in: CharacterSet.whitespacesAndNewlines)
+        
+        // Create Profile
+        let id:String = PFUser.current()!.objectId!
+        let prof = Profile(id: id, greeting: Constants.ConstantStrings.greetingMessage, email: email)
+        ProfileAPI.sharedInstance.create(prof: prof)
+        
+        // Dismiss to home
+        self.dismiss(animated: true, completion: { () -> Void in
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "dismissToHomePage"), object: nil);
+        })
+        
+    }
+    
+    public func errorHandler(error: String) {
+        Utilities.presentStandardError(errorString: error, alertTitle: "Submission Failure", actionTitle: "Ok", sender: self)
     }
 
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/

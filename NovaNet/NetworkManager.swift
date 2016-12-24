@@ -132,7 +132,7 @@ class NetworkManager: NSObject {
             if (error == nil) {
                 
                 // Sets up basic properites for uses
-                sender.setUpInstallations();
+//                sender.setUpInstallations();
                 self.createProfile();
                 
                 sender.dismiss(animated: true, completion: { () -> Void in

@@ -25,6 +25,7 @@ struct COLS {
         static let NEW = "New"
         static let GREETING = "Greeting"
         static let INTERESTS = "InterestsList"
-        static let COL_LIST = [ID, NAME, EMAIL, ABOUT, EXP, SEEKING, AVAILABLE, GREETING, INTERESTS]
+        static let LAST_ACTIVE = "last_active"
+        static let COL_LIST = [ID, NAME, EMAIL, ABOUT, EXP, SEEKING, AVAILABLE, GREETING, INTERESTS, LAST_ACTIVE]
     }
 }

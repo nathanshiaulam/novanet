@@ -17,6 +17,7 @@ extension Profile {
                 COLS.PROFILE.ABOUT: about as AnyObject,
                 COLS.PROFILE.SEEKING: seeking as AnyObject,
                 COLS.PROFILE.GREETING: greeting as AnyObject,
-                COLS.PROFILE.INTERESTS: interestsList as AnyObject]
+                COLS.PROFILE.INTERESTS: interestsList as AnyObject,
+                COLS.PROFILE.LAST_ACTIVE: DateFormatter().standardFormatter().formateString(date: last_active) as AnyObject]
     }
 }

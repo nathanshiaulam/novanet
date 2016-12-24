@@ -17,13 +17,16 @@ class Profile: NSObject {
     var seeking: String?
     var greeting: String?
     var interestsList: [String]?
+    var last_active: Date?
     private var available: Bool?
     private var new: Bool?
     
-    init(id: String, greeting: String) {
+    init(id: String, greeting: String, email: String, last_active: Date) {
         super.init()
         self.id = id
         self.greeting = greeting
+        self.email = email
+        self.last_active = last_active
         self.new = true
     }
     

@@ -91,6 +91,7 @@
 		16A0E82E1B7E4DCD00DE06A9 /* FinderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A0E82D1B7E4DCD00DE06A9 /* FinderViewController.swift */; };
 		16A111371BEBD224002CB7A1 /* EventDescriptionTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A111361BEBD224002CB7A1 /* EventDescriptionTableVC.swift */; };
 		16A111391BEBD3C1002CB7A1 /* EventCreateTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A111381BEBD3C1002CB7A1 /* EventCreateTableVC.swift */; };
+		16A614C71E0E283D00DF0349 /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16A614C61E0E283D00DF0349 /* DateExtensions.swift */; };
 		16C1C8C51B7F494A00C6166C /* HomeTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C1C8C41B7F494A00C6166C /* HomeTabBarController.swift */; };
 		16C1C8C71B7F50D100C6166C /* SelectedProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C1C8C61B7F50D000C6166C /* SelectedProfileViewController.swift */; };
 		16C1C8C91B7F5F5000C6166C /* ConversationListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C1C8C81B7F5F5000C6166C /* ConversationListTableViewController.swift */; };
@@ -200,6 +201,7 @@
 		16A0E82D1B7E4DCD00DE06A9 /* FinderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinderViewController.swift; sourceTree = "<group>"; };
 		16A111361BEBD224002CB7A1 /* EventDescriptionTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDescriptionTableVC.swift; sourceTree = "<group>"; };
 		16A111381BEBD3C1002CB7A1 /* EventCreateTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCreateTableVC.swift; sourceTree = "<group>"; };
+		16A614C61E0E283D00DF0349 /* DateExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		16C1C8C41B7F494A00C6166C /* HomeTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeTabBarController.swift; sourceTree = "<group>"; };
 		16C1C8C61B7F50D000C6166C /* SelectedProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectedProfileViewController.swift; sourceTree = "<group>"; };
 		16C1C8C81B7F5F5000C6166C /* ConversationListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationListTableViewController.swift; sourceTree = "<group>"; };
@@ -392,6 +394,7 @@
 				169DEDD91E007924003D35E2 /* Profile.swift */,
 				1664D2E21E086E09003C384A /* ProfileExtensions.swift */,
 				169DEDDB1E00B3B5003D35E2 /* Meetup.swift */,
+				16A614C61E0E283D00DF0349 /* DateExtensions.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -776,6 +779,7 @@
 				169FD2381B9C03F300A535D3 /* ForgotPasswordViewController.swift in Sources */,
 				169CEB9B1B8C998800CCF078 /* AboutContentVC.swift in Sources */,
 				16A0E82E1B7E4DCD00DE06A9 /* FinderViewController.swift in Sources */,
+				16A614C71E0E283D00DF0349 /* DateExtensions.swift in Sources */,
 				160D1F2E1B5F85A200B3E4DB /* UploadPictureViewController.swift in Sources */,
 				16629EB31BDDD7F2003C4F05 /* TableViewController.swift in Sources */,
 				16A0E82A1B7E47D400DE06A9 /* SystemSettingsTableViewController.swift in Sources */,

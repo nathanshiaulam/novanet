@@ -169,7 +169,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     profile["last_active"] = dateFormatter.string(from: Date())
                     profile["Available"] = true
                     profile.saveInBackground()
-                    print(dateFormatter.string(from: Date()))
                 }
             }
         }

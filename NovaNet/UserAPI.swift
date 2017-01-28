@@ -56,6 +56,10 @@ class UserAPI: NSObject {
         
     }
     
+    public func getId() -> String {
+        return persistencyManager.getId()
+    }
+    
     public func setUserDefaults(id: String, prof: Profile) {
         persistencyManager.setProfile(prof: prof)
         persistencyManager.setId(id: id)

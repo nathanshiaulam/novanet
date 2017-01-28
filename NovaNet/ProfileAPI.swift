@@ -59,13 +59,13 @@ class ProfileAPI: NSObject {
             setter: completion as! (AnyObject) -> Void)
     }
     
-    public func editProfileByUserId(userId: String, dict: [String: AnyObject]) {
+    public func editProfileByUserId(userId: String, dict: [String: AnyObject?]) {
         let editedProfile = Profile.constructProfile(dict: dict)
         self.persistencyManager.setProfile(id: userId, prof: editedProfile)
         editProfileBy(key: COLS.PROFILE.USER_ID, val: userId as AnyObject, dict: dict)
     }
 
-    private func editProfileBy(key: String, val: AnyObject, dict: [String:AnyObject]) {
+    private func editProfileBy(key: String, val: AnyObject, dict: [String:AnyObject?]) {
         apiClient.setObject(
             table: TABLES.PROFILES,
             key: key,

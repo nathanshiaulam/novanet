@@ -20,8 +20,8 @@ class Profile: NSObject {
     var interestsList: [String]?
     var last_active: Date?
     var image: UIImage?
-    private var available: Bool?
-    private var new: Bool?
+    var available: Bool?
+    var new: Bool?
     
     // Initializer when user creates account
     init(userId: String, greeting: String, email: String) {

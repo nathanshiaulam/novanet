@@ -65,11 +65,11 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     var interests: [String] = [Placeholders.INTEREST_ONE,
                                Placeholders.INTEREST_TWO,
                                Placeholders.INTEREST_THREE]
+    var currProfile: Profile!
     
     // Prepares local datastore for profile information and saves profile
     @IBAction func continueButtonPressed(_ sender: UIButton) {
         if name.length > 0 && experience.length > 0 {
-            prepareDataStore()
             saveProfile()
         } else {
             Utilities.presentStandardError(errorString: "In order to skip, please tell us your name and profession.", alertTitle: "Empty Field", actionTitle: "Ok", sender: self)
@@ -78,14 +78,14 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     
     @IBAction func skipTutorial(_ sender: UIButton) {
         if name.length > 0 && experience.length > 0 {
+            currProfile.setNew(new: false)
             saveTempImage()
-            prepareDataStore()
             saveProfile()
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "selectProfileVC"), object: nil)
-            NetworkManager().onboardingComplete()
             
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "selectProfileVC"), object: nil)
             self.presentingViewController?.dismiss(animated: true, completion: nil)
-
+            
+//            NetworkManager().onboardingComplete()
         } else {
             Utilities.presentStandardError(errorString: "In order to skip, please tell us your name and profession.", alertTitle: "Empty Field", actionTitle: "Ok", sender: self)
         }
@@ -93,21 +93,30 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     
     // Saves all necessary fields of the profile
     func saveProfile() {
+        let userId: String = UserAPI.sharedInstance.getId()
         
-        // get the current profile
-        // set its fields
-        // store it with the dict representation
-        let profileFields:Dictionary<String, AnyObject> = [
-            "Name" : name as AnyObject,
-            "About" : about as AnyObject,
-            "InterestsList" : interests as AnyObject,
-            "Experience" : experience as AnyObject,
-            "Looking" : lookingFor as AnyObject,
-            "Distance" : Constants.DISCOVERY_RADIUS as AnyObject,
-            "Available" : true as AnyObject
-        ]
+        currProfile.setName(name: name)
+        currProfile.setAbout(about: about)
+        currProfile.setInterests(interests: interests)
+        currProfile.setExp(experience: experience)
+        currProfile.setSeeking(seeking: lookingFor)
+        currProfile.setAvailability(available: true)
         
-        NetworkManager().updateObjectWithName("Profile", profileFields: profileFields, segueType: "NONE", sender: self)
+        UserAPI.sharedInstance.setUserDefaults(id: userId, prof: currProfile)
+        ProfileAPI.sharedInstance.editProfileByUserId(userId: userId,
+                                                      dict: currProfile.prof_dictRepresentation())
+        
+//        let profileFields:Dictionary<String, AnyObject> = [
+//            "Name" : name as AnyObject,
+//            "About" : about as AnyObject,
+//            "InterestsList" : interests as AnyObject,
+//            "Experience" : experience as AnyObject,
+//            "Looking" : lookingFor as AnyObject,
+//            "Distance" : Constants.DISCOVERY_RADIUS as AnyObject,
+//            "Available" : true as AnyObject
+//        ]
+//        
+//        NetworkManager().updateObjectWithName("Profile", profileFields: profileFields, segueType: "NONE", sender: self)
     }
     
     // Sets up the user's local datastore for profile information. Online is already set at create
@@ -287,6 +296,11 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "1 of 2"
+        
+        ProfileAPI.sharedInstance.getProfileByUserId(
+            userId: UserAPI.sharedInstance.getId(),
+            completion: {prof in self.currProfile = prof})
+        
         NotificationCenter.default.addObserver(self, selector: #selector(OnboardingTableViewController.backToHomeView), name: NSNotification.Name(rawValue: "backToHomeView"), object: nil)
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
         

@@ -50,7 +50,7 @@ class APIClient: NSObject {
         table: String,
         key: String,
         val: AnyObject,
-        dict:[String: AnyObject])
+        dict:[String: AnyObject?])
     {
         let query = PFQuery(className: table)
         query.whereKey(key, equalTo: val)

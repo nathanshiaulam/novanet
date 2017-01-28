@@ -156,7 +156,6 @@ Parse.Cloud.define("findUsers", function(request, response) {
         var currentID = Parse.User.current().id;
         var lastActive = object.get("last_active");
         var available = object.get("Available");
-        var online = object.get("Online");
   			var geopoint = object.get("Location"); // PFGeoPoint of other user's most recent location
   			
         var lastActiveDate = new Date(lastActive);
@@ -175,7 +174,7 @@ Parse.Cloud.define("findUsers", function(request, response) {
         if (geopoint != null) {
 	  			var dist = currLoc.kilometersTo(geopoint);
 
-	  			if (dist <= bound && currentID != object.get("ID") && available && online){
+	  			if (dist <= bound && currentID != object.get("ID") && available){
 	  				nearbyUserIDList.push(object);
              var name = object.get("Name");
 	  			}
@@ -211,7 +210,6 @@ Parse.Cloud.define("findUsersByDist", function(request, response) {
         var currentID = Parse.User.current().id;
         var lastActive = object.get("last_active");
         var available = object.get("Available");
-        var online = object.get("Online");
         var geopoint = object.get("Location"); // PFGeoPoint of other user's most recent location
         
         var lastActiveDate = new Date(lastActive);
@@ -231,7 +229,7 @@ Parse.Cloud.define("findUsersByDist", function(request, response) {
         if (geopoint != null) {
           var dist = currLoc.kilometersTo(geopoint);
 
-          if (dist <= bound && currentID != object.get("ID") && available && online){
+          if (dist <= bound && currentID != object.get("ID") && available){
             nearbyUserIDList.push(object);
           }
         }
@@ -366,12 +364,11 @@ Parse.Cloud.define("findDistances", function(request, response) {
         var object = results[i];
         var currentID = Parse.User.current().id;
         var available = object.get("Available");
-        var online = object.get("Online");
         var geopoint = object.get("Location"); // PFGeoPoint of other user's most recent location
         if (geopoint != null) {
 
           var dist = Math.ceil(currLoc.kilometersTo(geopoint));
-          if (dist <= bound && currentID != object.get("ID") && available && online){
+          if (dist <= bound && currentID != object.get("ID") && available){
             distanceList.push(dist);
           }
         }

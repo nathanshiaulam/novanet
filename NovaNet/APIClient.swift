@@ -50,8 +50,8 @@ class APIClient: NSObject {
         table: String,
         key: String,
         val: AnyObject,
-        dict:[String: AnyObject]) {
-        
+        dict:[String: AnyObject])
+    {
         let query = PFQuery(className: table)
         query.whereKey(key, equalTo: val)
         query.getFirstObjectInBackground {
@@ -66,24 +66,20 @@ class APIClient: NSObject {
     }
     
     public func createUser(
-        email: String,
+        username: String,
         password: String,
         completionHandler: @escaping() -> Void,
         errorHandler: @escaping(String) -> Void) {
         let newUser = PFUser();
         
         // Sets attributes of new users
-        newUser.email = email;
+        newUser.email = username;
+        newUser.username = username;
         newUser.password = password;
-        newUser.username = email;
-        
-        Constants.defaults.set(email, forKey: Constants.UserKeys.usernameKey)
-        Constants.defaults.set(true, forKey: Constants.TempKeys.fromNew)
-        Constants.defaults.set(email, forKey: Constants.UserKeys.emailKey);
-        
+
         newUser.signUpInBackground {
-            (succeeded, error) -> Void in
-            if (succeeded) {
+            (success, error) -> Void in
+            if (success) {
                 completionHandler()
                 self.installUser()
             } else {
@@ -92,6 +88,41 @@ class APIClient: NSObject {
                 }
             }
         }
+    }
+    
+    public func logInUser(
+        username: String,
+        password: String,
+        completionHandler: @escaping() -> Void,
+        errorHandler: @escaping(String) -> Void) {
+        PFUser.logInWithUsername(inBackground: username, password: password) {
+            (success, error) -> Void in
+            if (success != nil) {
+                completionHandler()
+                self.installUser()
+            }
+            else {
+                if let error = error as? NSError {
+                    errorHandler(error.userInfo["error"] as! String)
+                }
+            }
+        }
+    }
+    
+    public func resetPassword(
+        email: String,
+        completionHandler: @escaping() -> Void,
+        errorHandler: @escaping(String) -> Void) {
+        PFUser.requestPasswordResetForEmail(inBackground: email, block: {
+            (success, error) -> Void in
+            if (success) {
+                completionHandler()
+            } else {
+                if let error = error as? NSError {
+                    errorHandler(error.userInfo["error"] as! String)
+                }
+            }
+        })
     }
     
     // Returns a list of key->val mappings for a number of objects

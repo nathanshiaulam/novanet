@@ -25,6 +25,8 @@ class LogInViewController: ViewController, UITextFieldDelegate {
     @IBOutlet var createAccount: UIButton!
     @IBOutlet var forgotPassword: UIButton!
     
+    var username:String = ""
+    var password:String = ""
     var keyboardVisible:Bool = false
     var hideLogo:Bool =
         Constants.ScreenDimensions.screenHeight ==
@@ -33,22 +35,100 @@ class LogInViewController: ViewController, UITextFieldDelegate {
             Constants.ScreenDimensions.IPHONE_5_HEIGHT
     
     @IBAction func loginFunction(_ sender: UIButton) {
-        
-        let username = usernameField.text!.trimmingCharacters(
-            in: CharacterSet.whitespacesAndNewlines)
-        let password = passwordField.text!.trimmingCharacters(
-            in: CharacterSet.whitespacesAndNewlines)
-        NetworkManager().userLogin(username, password: password, vc: self);
+        loginUser()
     }
     
-    // Set up local data store
-    let defaults:UserDefaults = UserDefaults.standard;
+    private func loginUser() {
+        if (validInput()) {
+            UserAPI.sharedInstance.logIn(
+                username: username,
+                password: password,
+                completion: onUserLogin,
+                error: errorHandler)
+        }
+    }
+    
+    private func validInput() -> Bool {
+        if username.length == 0 || password.length == 0 {
+            Utilities.presentStandardError(errorString: "Invalid password or username", alertTitle: "Submission Failure", actionTitle: "Ok", sender: self)
+            return false
+        }
+        return true
+    }
+    
+    public func onUserLogin() {
+        let id = PFUser.current()!.objectId
+        ProfileAPI.sharedInstance.getProfileByUserId(userId: id!, completion: onFetchProfile)
+        
+        self.dismiss(animated: true, completion: nil);
+    }
+    
+    public func onFetchProfile(prof: Profile) {
+        ProfileAPI.sharedInstance.setAvailability(prof: prof, available: true)
+        UserAPI.sharedInstance.setUserDefaults(id: prof.getUserId(), prof: prof)
+    }
+    
+    public func errorHandler(error: String) {
+        Utilities.presentStandardError(errorString: error, alertTitle: "Submission Failure", actionTitle: "Ok", sender: self)
+    }
+    
+    /*-------------------------------- HELPER METHODS ------------------------------------*/
+    
+    func keyboardWillShow(_ notification:Notification) {
+        let changeInHeight:CGFloat = -60.0
+        if (!keyboardVisible) {
+            UIView.animate(withDuration: 0.5, animations: { () -> Void in
+                self.centerConstraint.constant += changeInHeight
+                self.aboutTopConstraint.constant += changeInHeight
+            })
+        }
+        keyboardVisible = true
+        novaLogo.isHidden = hideLogo
+    }
+    
+    func keyboardWillHide(_ notification:Notification) {
+        let changeInHeight:CGFloat = 60.0
+        if (keyboardVisible) {
+            UIView.animate(withDuration: 0.5, animations: { () -> Void in
+                self.centerConstraint.constant += changeInHeight
+                self.aboutTopConstraint.constant += changeInHeight
+            })
+        }
+        keyboardVisible = false
+        novaLogo.isHidden = false
+    }
+    
+    // Removes keyboard when tap outside
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        username = usernameField.text!.trimmed
+        password = passwordField.text!.trimmed
+        self.view.endEditing(true);
+    }
 
+    // Dismisses to home
+    public func dismissToHomePage() {
+        self.dismiss(animated: true, completion: nil);
+    }
+    
+    // Moves to next field when hits enter
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if (textField == usernameField) {
+            username = usernameField.text!.trimmed
+            passwordField.becomeFirstResponder();
+        }
+        else {
+            password = passwordField.text!.trimmed
+            loginUser()
+            textField.resignFirstResponder();
+        }
+        return true;
+    }
+    
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        
         let usernamePlaceholder = NSAttributedString(string: "   Username", attributes: [NSForegroundColorAttributeName : UIColor.gray]);
         let passwordPlaceholder = NSAttributedString(string: "   Password", attributes: [NSForegroundColorAttributeName : UIColor.gray]);
         
@@ -98,56 +178,6 @@ class LogInViewController: ViewController, UITextFieldDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    /*-------------------------------- HELPER METHODS ------------------------------------*/
-    
-    func keyboardWillShow(_ notification:Notification) {
-        let changeInHeight:CGFloat = -60.0
-        if (!keyboardVisible) {
-            UIView.animate(withDuration: 0.5, animations: { () -> Void in
-                self.centerConstraint.constant += changeInHeight
-                self.aboutTopConstraint.constant += changeInHeight
-            })
-        }
-        keyboardVisible = true
-        novaLogo.isHidden = hideLogo
-    }
-    
-    func keyboardWillHide(_ notification:Notification) {
-        let changeInHeight:CGFloat = 60.0
-        if (keyboardVisible) {
-            UIView.animate(withDuration: 0.5, animations: { () -> Void in
-                self.centerConstraint.constant += changeInHeight
-                self.aboutTopConstraint.constant += changeInHeight
-            })
-        }
-        keyboardVisible = false
-        novaLogo.isHidden = false
-    }
-
-    
-    // Removes keyboard when tap outside
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true);
-    }
-
-    // Dismisses to home
-    func dismissToHomePage() {
-        self.dismiss(animated: true, completion: nil);
-    }
-    
-    // Moves to next field when hits enter
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if (textField == usernameField) {
-            passwordField.becomeFirstResponder();
-        }
-        else {
-            NetworkManager().userLogin(usernameField.text!, password: passwordField.text!, vc: self);
-            textField.resignFirstResponder();
-        }
-        return true;
-    }
-    
    
 
 }

@@ -7,15 +7,11 @@
 //
 
 import UIKit
+import Parse
+import Bolts
 
 class ProfileAPI: NSObject {
-    // Read in profile list from datastore and into persistency manager
-    // Edit profile information
-    // Create profile
-    // Read in specific profile
-    
-    // Cache own profile
-    // Update other profiles when profiles are loaded
+
     private let persistencyManager: ProfilePersistencyManager
     private let apiClient: APIClient
     
@@ -33,27 +29,24 @@ class ProfileAPI: NSObject {
         return Singleton.instance
     }
     
+    /**
+     * Create's a profile for the current user and stores it
+     * in the user cache.
+     */
     public func create(prof: Profile)
     {
-        persistencyManager.setProfile(prof: prof)
+        persistencyManager.addProfile(id: prof.getUserId(), prof: prof)
         apiClient.createObject(table: TABLES.PROFILES, dict: prof.prof_dictRepresentation())
     }
-    
-    public func getProfileById(id: String, completion: @escaping(Profile) -> Void) {
+
+    public func getProfileByUserId(userId: String, completion: @escaping(Profile) -> Void) {
         // Returns cached value if own profile
-        if id == persistencyManager.getUserProfile().getId() {
-            completion(persistencyManager.getUserProfile())
+        let prof = persistencyManager.getProfWithId(id: userId)
+        if prof != nil {
+            completion(prof!)
             return
         }
-        getProfileBy(key: COLS.PROFILE.ID, val: id as AnyObject, completion: completion)
-    }
-    
-    public func getProfileByEmail(email: String, completion: @escaping(Profile) -> Void) {
-        // Returns cached value if own profile
-        if email == persistencyManager.getUserProfile().getEmail() {
-            return completion(persistencyManager.getUserProfile())
-        }
-        getProfileBy(key: COLS.PROFILE.EMAIL, val: email as AnyObject, completion: completion)
+        getProfileBy(key: COLS.PROFILE.USER_ID, val: userId as AnyObject, completion: completion)
     }
     
     private func getProfileBy(key: String, val: AnyObject, completion: @escaping(Profile) -> Void) {
@@ -66,18 +59,12 @@ class ProfileAPI: NSObject {
             setter: completion as! (AnyObject) -> Void)
     }
     
-    public func editProfileById(id: String, dict: [String: AnyObject]) {
+    public func editProfileByUserId(userId: String, dict: [String: AnyObject]) {
         let editedProfile = Profile.constructProfile(dict: dict)
-        self.persistencyManager.setProfile(prof: editedProfile)
-        editProfileBy(key: COLS.PROFILE.ID, val: id as AnyObject, dict: dict)
+        self.persistencyManager.setProfile(id: userId, prof: editedProfile)
+        editProfileBy(key: COLS.PROFILE.USER_ID, val: userId as AnyObject, dict: dict)
     }
-    
-    public func editProfileByEmail(email: String, dict: [String:AnyObject]) {
-        let editedProfile = Profile.constructProfile(dict: dict)
-        self.persistencyManager.setProfile(prof: editedProfile)
-        editProfileBy(key: COLS.PROFILE.EMAIL, val: email as AnyObject, dict: dict)
-    }
-    
+
     private func editProfileBy(key: String, val: AnyObject, dict: [String:AnyObject]) {
         apiClient.setObject(
             table: TABLES.PROFILES,
@@ -86,8 +73,31 @@ class ProfileAPI: NSObject {
             dict: dict)
     }
     
+    public func setAvailability(prof: Profile, available: Bool) {
+        prof.setAvailability(available: available)
+        ProfileAPI.sharedInstance.editProfileByUserId(userId: prof.getUserId(), dict: [COLS.PROFILE.AVAILABLE : true as AnyObject])
+    }
+    
     private func constructProfile(dict: [String:AnyObject], completion: (Profile) -> Void) {
+        let imageData:PFFile = dict[COLS.PROFILE.IMAGE] as! PFFile
+        
         let prof:Profile = Profile.constructProfile(dict: dict)
+        setImage(prof: prof, data: imageData)
         completion(prof)
+    }
+    
+    private func setImage(prof: Profile, data: PFFile) {
+        data.getDataInBackground {
+            (imageData, error) -> Void in
+            var image:UIImage?
+            if error == nil {
+                image = UIImage(data:imageData!)
+            }
+            else {
+                image = UIImage(named: "selectImage")
+            }
+            prof.setImage(image: image!)
+            Utilities().saveImage(image!)
+        }
     }
 }

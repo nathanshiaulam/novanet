@@ -98,9 +98,7 @@ class Utilities: NSObject {
                 profile.saveInBackground();
             }
         }
-        print(relativePath);
         UserDefaults.standard.set(relativePath, forKey: Constants.UserKeys.profileImageKey)
-//        NSUserDefaults.standardUserDefaults().synchronize()
     }
     
     // Methods to format image and convert RGB to hex

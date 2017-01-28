@@ -357,7 +357,7 @@ class FinderViewController:  ViewController, UITableViewDelegate, UITableViewDat
     // Takes in a few parameters and returns a list of users that are available and within range
     func findUsersInRange() {
         let longitude = defaults.double(forKey: Constants.UserKeys.longitudeKey)
-        let distance = defaults.integer(forKey: Constants.UserKeys.distanceKey)
+        let distance = Constants.DISCOVERY_RADIUS
         let latitude = defaults.double(forKey: Constants.UserKeys.latitudeKey)
 
         // Wipes away old profiles in data stored

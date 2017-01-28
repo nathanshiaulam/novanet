@@ -34,8 +34,6 @@ class SystemSettingsTableViewController: TableViewController {
                 print(error);
             } else if let profile = profile {
                 // Notes that the user is online
-                print("hello")
-                profile["Online"] = false
                 profile["Available"] = false
                 profile.saveInBackground()
                 PFUser.logOut()

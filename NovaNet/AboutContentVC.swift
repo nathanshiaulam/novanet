@@ -17,35 +17,34 @@ class AboutContentVC: ViewController {
     
     var pageIndex:Int!
     var titleText: String!
-    var imageFile: String!;
+    var imageFile: String!
     
     @IBOutlet var imageHeight: NSLayoutConstraint!
     @IBOutlet var labelWidth: NSLayoutConstraint!
     
     override func viewDidLoad() {
-        super.viewDidLoad();
-        self.tutorialImage.image = UIImage(named: self.imageFile);
-        self.tutorialLabel.text = self.titleText;
+        super.viewDidLoad()
+        self.tutorialImage.image = UIImage(named: self.imageFile)
+        self.tutorialLabel.text = self.titleText
         self.view.backgroundColor = UIColor.white
-        manageiOSModelType();
+        manageiOSModelType()
     }
     
     func manageiOSModelType() {
         if (Constants.ScreenDimensions.screenHeight == 480) {
-            self.imageHeight.constant = 230;
-            self.labelWidth.constant = 300;
-            return;
+            self.imageHeight.constant = 230
+            self.labelWidth.constant = 300
+            return
         } else if (Constants.ScreenDimensions.screenHeight == 568) {
             self.imageHeight.constant = 230
-            self.labelWidth.constant = 300;
-            return;
+            self.labelWidth.constant = 300
+            return
         } else if (Constants.ScreenDimensions.screenHeight == 667) {
-            return; // Do nothing because designed on iPhone 6 viewport
+            return
         } else if (Constants.ScreenDimensions.screenHeight == 736) {
             self.imageHeight.constant = 270
-            self.labelWidth.constant = 350;
-
-            return;
+            self.labelWidth.constant = 350
+            return
         }
     }
 

@@ -12,23 +12,66 @@ import Bolts
 
 class ForgotPasswordViewController: ViewController {
     
+    var keyboardVisible:Bool = false
+    var email:String = ""
+    
     @IBOutlet weak var novaLogo: UIImageView!
     @IBOutlet weak var centerConstraint: NSLayoutConstraint!
-    var keyboardVisible:Bool = false
     
     @IBAction func backLogin(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil);
-
-    }
-    @IBOutlet var emailField: UITextField!
-
-
-    @IBAction func sendResetEmail(_ sender: UIButton) {
-        NetworkManager().sendResetPasswordEmail(emailField, sender: self);
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    @IBOutlet var emailField: UITextField!
+    
+    @IBAction func sendResetEmail(_ sender: UIButton) {
+        resetPassword()
+    }
+    
+    private func resetPassword() {
+        if validInput() {
+            UserAPI.sharedInstance.resetPassword(
+                email: email,
+                completion: completionHandler,
+                error: errorHandler)
+        }
+    }
+    
+    public func completionHandler() {
+        let alert = UIAlertController(title: "E-mail Sent!", message: "Check your inbox to reset your password.", preferredStyle: UIAlertControllerStyle.alert);
+        let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default) {
+            UIAlertAction in
+            self.navigationController?.dismiss(animated: true, completion: nil);
+        }
+        alert.addAction(okAction);
+        self.present(alert, animated: true, completion: nil);
+    }
+    
+    public func errorHandler(error: String) {
+        Utilities.presentStandardError(errorString: error, alertTitle: "Submission Failure", actionTitle: "Ok", sender: self)
+    }
+    
+    private func validInput() -> Bool {
+        if email.length == 0 {
+            Utilities.presentStandardError(errorString: "Invalid email address", alertTitle: "Submission Failure", actionTitle: "Ok", sender: self)
+            return false
+        }
+        return true
+    }
+    
+    // Allows users to hit enter and move to the next text field
+    func textFieldShouldReturn(_ textField: UITextField)-> Bool {
+        if textField == emailField {
+            email = emailField.text!.trimmed
+            textField.resignFirstResponder();
+        }
+        return false;
+    }
+    
+    // Removes keyboard when tap outside
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        email = emailField.text!.trimmed
+        self.view.endEditing(true);
     }
     
     override func viewDidLoad() {
@@ -84,19 +127,6 @@ class ForgotPasswordViewController: ViewController {
     override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: self.view.window)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: self.view.window)
-    }
-
-    // Allows users to hit enter and move to the next text field
-    func textFieldShouldReturn(_ textField: UITextField)-> Bool {
-        if (textField == emailField) {
-            textField.resignFirstResponder();
-        }
-        return false;
-    }
-    
-    // Removes keyboard when tap outside
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true);
     }
     
 }

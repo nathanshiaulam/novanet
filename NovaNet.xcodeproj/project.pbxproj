@@ -29,12 +29,15 @@
 		16252C111CF7942800728497 /* OpenSans-SemiboldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 16252C071CF7942800728497 /* OpenSans-SemiboldItalic.ttf */; };
 		163B198A1CF9214800E0A469 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163B19891CF9214800E0A469 /* TextView.swift */; };
 		163B198C1CFA36B200E0A469 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 163B198B1CFA36B200E0A469 /* Images.xcassets */; };
+		164092EB1E15B73D002A4BAE /* UserPersistencyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164092EA1E15B73D002A4BAE /* UserPersistencyManager.swift */; };
 		16629EB11BDDD7C4003C4F05 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB01BDDD7C4003C4F05 /* ViewController.swift */; };
 		16629EB31BDDD7F2003C4F05 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB21BDDD7F2003C4F05 /* TableViewController.swift */; };
 		16629EB71BDDDAEA003C4F05 /* NSDateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */; };
 		16646A801DC1FA5500E3C621 /* ConfirmNovaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16646A7F1DC1FA5500E3C621 /* ConfirmNovaViewController.swift */; };
 		1664D2E31E086E09003C384A /* ProfileExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1664D2E21E086E09003C384A /* ProfileExtensions.swift */; };
 		1664D2E51E087A33003C384A /* UserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1664D2E41E087A33003C384A /* UserAPI.swift */; };
+		1666D0C51E3C8DA400CC87ED /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1666D0C41E3C8DA400CC87ED /* StringExtensions.swift */; };
+		1666D0C71E3C9FDD00CC87ED /* Placeholders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1666D0C61E3C9FDD00CC87ED /* Placeholders.swift */; };
 		1668FEAD1CF78CE300D20F99 /* Brandon_bld_it.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEA11CF78CE200D20F99 /* Brandon_bld_it.otf */; };
 		1668FEAE1CF78CE300D20F99 /* Brandon_bld.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEA21CF78CE200D20F99 /* Brandon_bld.otf */; };
 		1668FEAF1CF78CE300D20F99 /* Brandon_blk_it.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1668FEA31CF78CE200D20F99 /* Brandon_blk_it.otf */; };
@@ -134,12 +137,15 @@
 		16252C071CF7942800728497 /* OpenSans-SemiboldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-SemiboldItalic.ttf"; sourceTree = "<group>"; };
 		163B19891CF9214800E0A469 /* TextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		163B198B1CFA36B200E0A469 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		164092EA1E15B73D002A4BAE /* UserPersistencyManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPersistencyManager.swift; sourceTree = "<group>"; };
 		16629EB01BDDD7C4003C4F05 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../ViewController.swift; sourceTree = "<group>"; };
 		16629EB21BDDD7F2003C4F05 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSDateExtensions.swift; path = ../NSDateExtensions.swift; sourceTree = "<group>"; };
 		16646A7F1DC1FA5500E3C621 /* ConfirmNovaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmNovaViewController.swift; sourceTree = "<group>"; };
 		1664D2E21E086E09003C384A /* ProfileExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileExtensions.swift; sourceTree = "<group>"; };
 		1664D2E41E087A33003C384A /* UserAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAPI.swift; sourceTree = "<group>"; };
+		1666D0C41E3C8DA400CC87ED /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		1666D0C61E3C9FDD00CC87ED /* Placeholders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Placeholders.swift; sourceTree = "<group>"; };
 		1668FEA11CF78CE200D20F99 /* Brandon_bld_it.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_bld_it.otf; sourceTree = "<group>"; };
 		1668FEA21CF78CE200D20F99 /* Brandon_bld.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_bld.otf; sourceTree = "<group>"; };
 		1668FEA31CF78CE200D20F99 /* Brandon_blk_it.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Brandon_blk_it.otf; sourceTree = "<group>"; };
@@ -334,6 +340,28 @@
 			name = Profile;
 			sourceTree = "<group>";
 		};
+		1666D0C31E3C8D9200CC87ED /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				1664D2E21E086E09003C384A /* ProfileExtensions.swift */,
+				16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */,
+				16A614C61E0E283D00DF0349 /* DateExtensions.swift */,
+				1666D0C41E3C8DA400CC87ED /* StringExtensions.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		1666D0C81E3CAA1E00CC87ED /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				160B9C061BCF764800316AF3 /* Intro */,
+				160B9C051BCF763400316AF3 /* OnboardingProcess */,
+				160B9C071BCF768600316AF3 /* HomeView */,
+				160B9C081BCF769800316AF3 /* MainTabs */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
 		1668FEA01CF78CB600D20F99 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -384,6 +412,7 @@
 			children = (
 				1616B18E1B55560300DBF11A /* Constants.swift */,
 				1694D2F11E06477800EDA407 /* Schema.swift */,
+				1666D0C61E3C9FDD00CC87ED /* Placeholders.swift */,
 			);
 			name = Constants;
 			sourceTree = "<group>";
@@ -392,9 +421,7 @@
 			isa = PBXGroup;
 			children = (
 				169DEDD91E007924003D35E2 /* Profile.swift */,
-				1664D2E21E086E09003C384A /* ProfileExtensions.swift */,
 				169DEDDB1E00B3B5003D35E2 /* Meetup.swift */,
-				16A614C61E0E283D00DF0349 /* DateExtensions.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -404,10 +431,12 @@
 			children = (
 				169DEDDE1E00B9DC003D35E2 /* APIClient.swift */,
 				169DEDE01E00B9EE003D35E2 /* ProfilePersistencyManager.swift */,
+				164092EA1E15B73D002A4BAE /* UserPersistencyManager.swift */,
 				169DEDE21E00B9F7003D35E2 /* MeetupPersistencyManager.swift */,
 				169DEDE41E00B9FF003D35E2 /* ProfileAPI.swift */,
 				1664D2E41E087A33003C384A /* UserAPI.swift */,
 				169DEDE61E00BA0E003D35E2 /* MeetupAPI.swift */,
+				169441131BDC29BC0049122C /* NetworkManager.swift */,
 			);
 			name = API;
 			sourceTree = "<group>";
@@ -437,23 +466,19 @@
 			children = (
 				168956DC1DA9C465000ECC4D /* NovaNet.entitlements */,
 				160D1F351B60F49F00B3E4DB /* NovaNet-Bridging-Header.h */,
-				16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */,
-				16629EB01BDDD7C4003C4F05 /* ViewController.swift */,
-				169DEDDD1E00B3D7003D35E2 /* API */,
-				169DEDD81E0078F8003D35E2 /* Models */,
-				16629EB21BDDD7F2003C4F05 /* TableViewController.swift */,
 				16A0E7031B54FC7400DDAE95 /* Main.storyboard */,
-				16646A7F1DC1FA5500E3C621 /* ConfirmNovaViewController.swift */,
-				1694D2F01E06476300EDA407 /* Constants */,
 				16A0E6FF1B54FC7400DDAE95 /* AppDelegate.swift */,
+				16629EB21BDDD7F2003C4F05 /* TableViewController.swift */,
+				16629EB01BDDD7C4003C4F05 /* ViewController.swift */,
+				16646A7F1DC1FA5500E3C621 /* ConfirmNovaViewController.swift */,
 				167114C01B8299F90024DC3E /* ImageUtil.swift */,
 				163B19891CF9214800E0A469 /* TextView.swift */,
 				16D333621BCB063200C1B405 /* Utilities.swift */,
-				169441131BDC29BC0049122C /* NetworkManager.swift */,
-				160B9C061BCF764800316AF3 /* Intro */,
-				160B9C051BCF763400316AF3 /* OnboardingProcess */,
-				160B9C071BCF768600316AF3 /* HomeView */,
-				160B9C081BCF769800316AF3 /* MainTabs */,
+				1694D2F01E06476300EDA407 /* Constants */,
+				169DEDDD1E00B3D7003D35E2 /* API */,
+				169DEDD81E0078F8003D35E2 /* Models */,
+				1666D0C31E3C8D9200CC87ED /* Extensions */,
+				1666D0C81E3CAA1E00CC87ED /* ViewControllers */,
 				1668FEA01CF78CB600D20F99 /* Fonts */,
 				16A0E7081B54FC7400DDAE95 /* LaunchScreen.xib */,
 				163B198B1CFA36B200E0A469 /* Images.xcassets */,
@@ -772,6 +797,7 @@
 				1616B18F1B55560300DBF11A /* Constants.swift in Sources */,
 				160D1F281B5E903B00B3E4DB /* HomeTableViewCell.swift in Sources */,
 				169DEDE71E00BA0E003D35E2 /* MeetupAPI.swift in Sources */,
+				1666D0C51E3C8DA400CC87ED /* StringExtensions.swift in Sources */,
 				1685FB361BEB5D5E00E05CDE /* EventAttendanceButton.swift in Sources */,
 				16DB14061B8024EE0048E1AC /* FeedbackViewController.swift in Sources */,
 				1685FB341BE98ADD00E05CDE /* EventCell.swift in Sources */,
@@ -784,7 +810,9 @@
 				16629EB31BDDD7F2003C4F05 /* TableViewController.swift in Sources */,
 				16A0E82A1B7E47D400DE06A9 /* SystemSettingsTableViewController.swift in Sources */,
 				160BFECB1C679EC1005D001A /* EventAttendanceVC.swift in Sources */,
+				1666D0C71E3C9FDD00CC87ED /* Placeholders.swift in Sources */,
 				169441141BDC29BC0049122C /* NetworkManager.swift in Sources */,
+				164092EB1E15B73D002A4BAE /* UserPersistencyManager.swift in Sources */,
 				16C1C8C51B7F494A00C6166C /* HomeTabBarController.swift in Sources */,
 				167114C11B8299F90024DC3E /* ImageUtil.swift in Sources */,
 				16D333611BCADE1600C1B405 /* OnboardingTableViewController.swift in Sources */,

@@ -59,45 +59,37 @@ class ProfileAPI: NSObject {
             setter: completion as! (AnyObject) -> Void)
     }
     
-    public func editProfileByUserId(userId: String, dict: [String: AnyObject?]) {
+    public func editProfileByUserId(
+        userId: String,
+        dict: [String: AnyObject?],
+        completion: @escaping() -> Void)
+    {
         let editedProfile = Profile.constructProfile(dict: dict)
         self.persistencyManager.setProfile(id: userId, prof: editedProfile)
-        editProfileBy(key: COLS.PROFILE.USER_ID, val: userId as AnyObject, dict: dict)
+        editProfileBy(key: COLS.PROFILE.USER_ID, val: userId as AnyObject, dict: dict, completion: completion)
     }
 
-    private func editProfileBy(key: String, val: AnyObject, dict: [String:AnyObject?]) {
+    private func editProfileBy(
+        key: String,
+        val: AnyObject,
+        dict: [String:AnyObject?],
+        completion: @escaping() -> Void)
+    {
         apiClient.setObject(
             table: TABLES.PROFILES,
             key: key,
             val: val,
-            dict: dict)
+            dict: dict,
+            completion: completion)
     }
     
     public func setAvailability(prof: Profile, available: Bool) {
         prof.setAvailability(available: available)
-        ProfileAPI.sharedInstance.editProfileByUserId(userId: prof.getUserId(), dict: [COLS.PROFILE.AVAILABLE : true as AnyObject])
+        ProfileAPI.sharedInstance.editProfileByUserId(userId: prof.getUserId(), dict: [COLS.PROFILE.AVAILABLE : true as AnyObject], completion: {})
     }
     
     private func constructProfile(dict: [String:AnyObject], completion: (Profile) -> Void) {
-        let imageData:PFFile = dict[COLS.PROFILE.IMAGE] as! PFFile
-        
         let prof:Profile = Profile.constructProfile(dict: dict)
-        setImage(prof: prof, data: imageData)
         completion(prof)
-    }
-    
-    private func setImage(prof: Profile, data: PFFile) {
-        data.getDataInBackground {
-            (imageData, error) -> Void in
-            var image:UIImage?
-            if error == nil {
-                image = UIImage(data:imageData!)
-            }
-            else {
-                image = UIImage(named: "selectImage")
-            }
-            prof.setImage(image: image!)
-            Utilities().saveImage(image!)
-        }
     }
 }

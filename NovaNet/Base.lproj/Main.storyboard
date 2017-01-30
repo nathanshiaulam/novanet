@@ -381,52 +381,52 @@
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="CFg-Cy-hbR"/>
+                                <exclude reference="Tdn-wc-rde"/>
                                 <exclude reference="Xq0-v0-mWV"/>
+                                <exclude reference="c0C-eU-deK"/>
                                 <exclude reference="ogg-XS-eQZ"/>
                                 <exclude reference="zcF-0n-D6m"/>
                                 <exclude reference="EEH-Bf-RiP"/>
-                                <exclude reference="TVy-NT-eGN"/>
                                 <exclude reference="nW0-zg-ORE"/>
                                 <exclude reference="txv-oS-G3a"/>
-                                <exclude reference="9fn-Hv-5WZ"/>
-                                <exclude reference="LKc-e1-qsp"/>
+                                <exclude reference="7bb-SW-Syr"/>
                                 <exclude reference="9tp-za-5Hj"/>
-                                <exclude reference="Njp-hV-IzW"/>
+                                <exclude reference="QmI-Xs-Tms"/>
                                 <exclude reference="RwF-a6-eOr"/>
                                 <exclude reference="eUb-Eh-s1l"/>
                                 <exclude reference="mud-Rd-EzF"/>
                                 <exclude reference="Bn7-uv-aXD"/>
+                                <exclude reference="ESS-Ob-qh6"/>
                                 <exclude reference="Fr2-XC-Em2"/>
-                                <exclude reference="Yfc-Cm-ypC"/>
                                 <exclude reference="b21-Xc-TL8"/>
+                                <exclude reference="9fn-Hv-5WZ"/>
+                                <exclude reference="LKc-e1-qsp"/>
                                 <exclude reference="SP8-b4-yyH"/>
+                                <exclude reference="bca-wr-8eC"/>
                                 <exclude reference="vyw-RB-fdg"/>
                                 <exclude reference="bJX-bC-Rx6"/>
                                 <exclude reference="eaJ-Qd-uUr"/>
+                                <exclude reference="3Lr-13-te3"/>
                                 <exclude reference="gss-Hb-3K7"/>
                                 <exclude reference="0eL-Mm-f5j"/>
-                                <exclude reference="74j-QQ-13H"/>
                                 <exclude reference="LQW-5D-9sJ"/>
-                                <exclude reference="Rzx-Mu-zXu"/>
                                 <exclude reference="YAL-lX-n1O"/>
+                                <exclude reference="ZDX-Uf-Elc"/>
                                 <exclude reference="hxn-Ei-f1A"/>
                                 <exclude reference="82E-b1-Jsv"/>
                                 <exclude reference="pl2-M1-QXF"/>
-                                <exclude reference="wlh-88-M6T"/>
                                 <exclude reference="fGA-br-RUV"/>
-                                <exclude reference="Tdn-wc-rde"/>
-                                <exclude reference="c0C-eU-deK"/>
+                                <exclude reference="Njp-hV-IzW"/>
+                                <exclude reference="74j-QQ-13H"/>
+                                <exclude reference="FxO-yM-7U2"/>
+                                <exclude reference="Rzx-Mu-zXu"/>
+                                <exclude reference="SmO-yM-wun"/>
+                                <exclude reference="wlh-88-M6T"/>
+                                <exclude reference="Yfc-Cm-ypC"/>
                                 <exclude reference="1q5-Jp-rFD"/>
                                 <exclude reference="DGc-kE-vdz"/>
-                                <exclude reference="7bb-SW-Syr"/>
-                                <exclude reference="bca-wr-8eC"/>
+                                <exclude reference="TVy-NT-eGN"/>
                                 <exclude reference="tKm-8K-JfC"/>
-                                <exclude reference="QmI-Xs-Tms"/>
-                                <exclude reference="ESS-Ob-qh6"/>
-                                <exclude reference="3Lr-13-te3"/>
-                                <exclude reference="FxO-yM-7U2"/>
-                                <exclude reference="SmO-yM-wun"/>
-                                <exclude reference="ZDX-Uf-Elc"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -435,51 +435,51 @@
                             </mask>
                             <mask key="constraints">
                                 <include reference="CFg-Cy-hbR"/>
+                                <exclude reference="c0C-eU-deK"/>
                                 <exclude reference="nkU-bk-TPg"/>
                                 <exclude reference="pUc-Yh-62V"/>
                                 <exclude reference="zcF-0n-D6m"/>
+                                <exclude reference="2Os-QF-DmC"/>
                                 <exclude reference="Azs-pF-Vx7"/>
                                 <exclude reference="txv-oS-G3a"/>
-                                <include reference="9fn-Hv-5WZ"/>
-                                <include reference="LKc-e1-qsp"/>
-                                <exclude reference="7hw-Nb-Y3W"/>
                                 <include reference="9tp-za-5Hj"/>
-                                <exclude reference="Njp-hV-IzW"/>
+                                <include reference="QmI-Xs-Tms"/>
                                 <include reference="RwF-a6-eOr"/>
                                 <include reference="eUb-Eh-s1l"/>
                                 <include reference="mud-Rd-EzF"/>
                                 <exclude reference="0K7-JB-r0c"/>
                                 <include reference="Bn7-uv-aXD"/>
-                                <exclude reference="Gn1-gY-i8F"/>
-                                <exclude reference="Lpe-pm-cjg"/>
+                                <include reference="ESS-Ob-qh6"/>
                                 <include reference="Fr2-XC-Em2"/>
-                                <include reference="Yfc-Cm-ypC"/>
                                 <include reference="b21-Xc-TL8"/>
+                                <include reference="9fn-Hv-5WZ"/>
+                                <include reference="LKc-e1-qsp"/>
+                                <exclude reference="Lpe-pm-cjg"/>
                                 <exclude reference="NIv-fv-o3C"/>
                                 <exclude reference="Tnh-1v-2M0"/>
                                 <include reference="bJX-bC-Rx6"/>
                                 <include reference="eaJ-Qd-uUr"/>
+                                <include reference="3Lr-13-te3"/>
                                 <include reference="gss-Hb-3K7"/>
                                 <exclude reference="0eL-Mm-f5j"/>
-                                <exclude reference="74j-QQ-13H"/>
                                 <exclude reference="LQW-5D-9sJ"/>
-                                <exclude reference="Rzx-Mu-zXu"/>
                                 <include reference="YAL-lX-n1O"/>
+                                <exclude reference="ZDX-Uf-Elc"/>
                                 <exclude reference="fMu-AY-onk"/>
                                 <exclude reference="hxn-Ei-f1A"/>
                                 <include reference="82E-b1-Jsv"/>
                                 <exclude reference="pl2-M1-QXF"/>
-                                <exclude reference="wlh-88-M6T"/>
                                 <exclude reference="fGA-br-RUV"/>
-                                <exclude reference="c0C-eU-deK"/>
-                                <exclude reference="2Os-QF-DmC"/>
-                                <exclude reference="DGc-kE-vdz"/>
-                                <include reference="QmI-Xs-Tms"/>
-                                <include reference="ESS-Ob-qh6"/>
-                                <include reference="3Lr-13-te3"/>
+                                <exclude reference="7hw-Nb-Y3W"/>
+                                <exclude reference="Njp-hV-IzW"/>
+                                <exclude reference="Gn1-gY-i8F"/>
+                                <exclude reference="74j-QQ-13H"/>
                                 <include reference="FxO-yM-7U2"/>
+                                <exclude reference="Rzx-Mu-zXu"/>
                                 <include reference="SmO-yM-wun"/>
-                                <exclude reference="ZDX-Uf-Elc"/>
+                                <exclude reference="wlh-88-M6T"/>
+                                <include reference="Yfc-Cm-ypC"/>
+                                <exclude reference="DGc-kE-vdz"/>
                             </mask>
                         </variation>
                     </view>
@@ -512,7 +512,7 @@
         <scene sceneID="UDe-HT-fdO">
             <objects>
                 <navigationController id="H2R-Pp-N8b" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="dbH-ul-T9A">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="dbH-ul-T9A">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1003,7 +1003,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch_screen" translatesAutoresizingMaskIntoConstraints="NO" id="zjG-8o-guS">
-                                <rect key="frame" x="162" y="158.5" width="51" height="66"/>
+                                <rect key="frame" x="162" y="158" width="51" height="66"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="66" id="eWK-j6-X0s"/>
                                 </constraints>
@@ -1066,7 +1066,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NovaNet is designed to connect Nova members worldwide" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GTE-wD-N19">
-                                <rect key="frame" x="36" y="244.5" width="303" height="49.5"/>
+                                <rect key="frame" x="36" y="244" width="303" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="350" id="p0W-kF-IdR"/>
                                 </constraints>
@@ -1174,7 +1174,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We've got you covered. Simply enter in your email and we'll deliver a reset code to your inbox." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mHt-R5-jwL">
-                                <rect key="frame" x="26" y="301.5" width="323" height="65.5"/>
+                                <rect key="frame" x="26" y="301" width="323" height="66"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="350" id="lcS-70-Kt8"/>
                                 </constraints>
@@ -1220,7 +1220,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Forgot your password?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cZR-Qx-QPz">
-                                <rect key="frame" x="16" y="266.5" width="343" height="25"/>
+                                <rect key="frame" x="16" y="266" width="343" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="350" id="ZV0-JB-31v"/>
                                 </constraints>
@@ -1234,7 +1234,7 @@
                                 </variation>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch_screen" translatesAutoresizingMaskIntoConstraints="NO" id="xRX-U7-3YY">
-                                <rect key="frame" x="159" y="171.5" width="58" height="75"/>
+                                <rect key="frame" x="159" y="171" width="58" height="75"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="66" id="jNb-Rk-UQt"/>
                                     <constraint firstAttribute="width" secondItem="xRX-U7-3YY" secondAttribute="height" multiplier="7:9" id="jWL-hc-WtJ"/>
@@ -1419,7 +1419,7 @@
         <scene sceneID="RQ0-bF-9bV">
             <objects>
                 <navigationController id="Vup-Az-fhU" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="HO5-s5-dCU">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="HO5-s5-dCU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1919,7 +1919,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IVI-4Y-Jjo">
-                                    <rect key="frame" x="0.0" y="1" width="187.5" height="35"/>
+                                    <rect key="frame" x="0.0" y="1" width="188" height="35"/>
                                     <fontDescription key="fontDescription" name="BrandonGrotesque-Medium" family="Brandon Grotesque" pointSize="16"/>
                                     <state key="normal" title="DISTANCE">
                                         <color key="titleColor" red="0.17404840886592865" green="0.22653388977050781" blue="0.22198662161827087" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1930,7 +1930,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="khB-lv-sdc">
-                                    <rect key="frame" x="187.5" y="1" width="187.5" height="35"/>
+                                    <rect key="frame" x="188" y="1" width="187" height="35"/>
                                     <fontDescription key="fontDescription" name="BrandonGrotesque-Thin" family="Brandon Grotesque" pointSize="16"/>
                                     <state key="normal" title="A-Z">
                                         <color key="titleColor" red="0.17404840886592865" green="0.22653388977050781" blue="0.22198662161827087" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2127,13 +2127,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z7q-b5-e6W" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4818" y="1415"/>
+            <point key="canvasLocation" x="-5202" y="1439"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="kwh-Mt-2rt">
             <objects>
                 <navigationController id="tMZ-mv-aMB" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="ElL-VQ-WFp">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ElL-VQ-WFp">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -2149,7 +2149,7 @@
         <scene sceneID="oMC-c9-DJj">
             <objects>
                 <navigationController id="rhy-dm-146" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="nYu-6k-cwW">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="nYu-6k-cwW">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -2293,7 +2293,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="N4S-iB-Kmo">
-                                                    <rect key="frame" x="18" y="28" width="364" height="111"/>
+                                                    <rect key="frame" x="18" y="28" width="364" height="110"/>
                                                     <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="textColor" red="0.27000001072883606" green="0.27000001072883606" blue="0.27000001072883606" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
@@ -2385,7 +2385,7 @@
         <scene sceneID="No8-Xm-Pfi">
             <objects>
                 <navigationController id="kMa-af-brC" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="zF9-1B-VGj">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="zF9-1B-VGj">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -2439,7 +2439,7 @@
         <scene sceneID="AbU-5F-0fg">
             <objects>
                 <navigationController id="aWI-7g-C2P" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="cQG-h2-4rj">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="cQG-h2-4rj">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -3370,7 +3370,7 @@
                                 </variation>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Great! Now upload a picture. " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZDg-wh-Eph">
-                                <rect key="frame" x="25" y="113" width="350" height="90.5"/>
+                                <rect key="frame" x="25" y="113" width="350" height="90"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="350" id="g9x-jo-WDR"/>
                                 </constraints>
@@ -3413,7 +3413,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="749" text="This establishes trust and helps others find you at the event." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1mr-62-KBC">
-                                <rect key="frame" x="60" y="208.5" width="280" height="38.5"/>
+                                <rect key="frame" x="60" y="208" width="280" height="39"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="350" id="dYw-4W-h0f"/>
                                 </constraints>
@@ -3532,7 +3532,7 @@
         <scene sceneID="Qd1-1Y-OZ1">
             <objects>
                 <navigationController id="aTQ-Lq-Lod" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Gfq-hm-ScW">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Gfq-hm-ScW">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -4215,7 +4215,7 @@
         <scene sceneID="3hg-TU-n3J">
             <objects>
                 <navigationController id="W9E-P5-hq9" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="kxJ-CA-ESZ">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="kxJ-CA-ESZ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -5355,7 +5355,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qzh-my-m7F">
-                                    <rect key="frame" x="0.0" y="1" width="187.5" height="35"/>
+                                    <rect key="frame" x="0.0" y="1" width="188" height="35"/>
                                     <fontDescription key="fontDescription" name="BrandonGrotesque-Medium" family="Brandon Grotesque" pointSize="16"/>
                                     <state key="normal" title="ALL MEETUPS">
                                         <color key="titleColor" red="0.27000001072883606" green="0.27000001072883606" blue="0.27000001072883606" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -5366,7 +5366,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kgD-jA-G0L">
-                                    <rect key="frame" x="187.5" y="1" width="187.5" height="35"/>
+                                    <rect key="frame" x="188" y="1" width="187" height="35"/>
                                     <fontDescription key="fontDescription" name="BrandonGrotesque-Thin" family="Brandon Grotesque" pointSize="16"/>
                                     <state key="normal" title="MY MEETUPS">
                                         <color key="titleColor" red="0.25711801648139954" green="0.27394422888755798" blue="0.29979166388511658" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -5859,7 +5859,7 @@
         <scene sceneID="yWG-RY-FTH">
             <objects>
                 <navigationController id="kfD-vT-cln" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="EBE-uC-fSV">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="EBE-uC-fSV">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -5890,7 +5890,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="ex. Bonding event with Nova members!" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tnA-tE-ukp">
-                                                    <rect key="frame" x="8" y="8" width="359" height="28"/>
+                                                    <rect key="frame" x="8" y="8" width="359" height="27"/>
                                                     <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
@@ -5956,7 +5956,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="3ZJ-Gq-dRw">
-                                                    <rect key="frame" x="4" y="8" width="363" height="34"/>
+                                                    <rect key="frame" x="4" y="8" width="363" height="33"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
@@ -6017,7 +6017,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="ex. Monday, January 20 at 12:00PM" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="W6h-tz-frv">
-                                                    <rect key="frame" x="8" y="8" width="359" height="28"/>
+                                                    <rect key="frame" x="8" y="8" width="359" height="27"/>
                                                     <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -6083,7 +6083,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="ex. Nova Office" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Cw3-tN-gnC">
-                                                    <rect key="frame" x="8" y="8" width="359" height="28"/>
+                                                    <rect key="frame" x="8" y="8" width="359" height="27"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
@@ -6091,7 +6091,7 @@
                                                     </connections>
                                                 </textField>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BST-3B-Zsx">
-                                                    <rect key="frame" x="8" y="8" width="359" height="28"/>
+                                                    <rect key="frame" x="8" y="8" width="359" height="27"/>
                                                     <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
                                                     <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <connections>
@@ -6174,7 +6174,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HZw-NV-dux">
-                                                    <rect key="frame" x="8" y="8" width="359" height="28"/>
+                                                    <rect key="frame" x="8" y="8" width="359" height="27"/>
                                                     <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -6266,7 +6266,7 @@
         <scene sceneID="W2a-XC-4GG">
             <objects>
                 <navigationController id="ocO-qA-eUb" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="gtj-l1-H2z">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="gtj-l1-H2z">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -6421,7 +6421,7 @@
         <scene sceneID="iAx-DA-rXb">
             <objects>
                 <navigationController id="sxC-zD-IBz" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="8Ry-py-yQv">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="8Ry-py-yQv">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -6721,7 +6721,7 @@
                                                     </variation>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oWk-fm-LFP">
-                                                    <rect key="frame" x="48" y="12" width="279" height="17"/>
+                                                    <rect key="frame" x="48" y="11" width="279" height="17"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="Time">
                                                             <attributes>
@@ -6990,7 +6990,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gE3-Zc-lpW">
-                                                    <rect key="frame" x="8" y="-0.5" width="359" height="41"/>
+                                                    <rect key="frame" x="8" y="-1" width="359" height="42"/>
                                                     <fontDescription key="fontDescription" name="BrandonGrotesque-Regular" family="Brandon Grotesque" pointSize="20"/>
                                                     <connections>
                                                         <action selector="goingCountClicked:" destination="Su3-e5-b4J" eventType="touchUpInside" id="ksc-fs-dJe"/>
@@ -7238,7 +7238,7 @@
         <scene sceneID="GLO-UO-yjK">
             <objects>
                 <navigationController id="yxC-8f-5SS" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="8MV-Pa-ocE">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="8MV-Pa-ocE">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -7269,7 +7269,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="ex. Bonding event with Nova members!" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="haK-Of-GCr">
-                                                    <rect key="frame" x="8" y="8" width="384" height="28"/>
+                                                    <rect key="frame" x="8" y="8" width="384" height="27"/>
                                                     <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
@@ -7335,7 +7335,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="4O6-jw-Sc3">
-                                                    <rect key="frame" x="4" y="8" width="388" height="34"/>
+                                                    <rect key="frame" x="4" y="8" width="388" height="33"/>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
@@ -7395,7 +7395,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="ex. Monday, January 20 at 12:00PM" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="98J-xe-75u">
-                                                    <rect key="frame" x="8" y="8" width="384" height="28"/>
+                                                    <rect key="frame" x="8" y="8" width="384" height="27"/>
                                                     <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -7461,7 +7461,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="ex. Nova Office" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zJl-BA-d7y">
-                                                    <rect key="frame" x="8" y="8" width="384" height="28"/>
+                                                    <rect key="frame" x="8" y="8" width="384" height="27"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
@@ -7469,7 +7469,7 @@
                                                     </connections>
                                                 </textField>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SOu-Hz-yO4">
-                                                    <rect key="frame" x="8" y="8" width="384" height="28"/>
+                                                    <rect key="frame" x="8" y="8" width="384" height="27"/>
                                                     <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
                                                     <connections>
                                                         <segue destination="ocO-qA-eUb" kind="presentation" identifier="toMapView" id="3Vu-Zk-aHd"/>
@@ -7551,7 +7551,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Address" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Cur-BD-pI7">
-                                                    <rect key="frame" x="8" y="8" width="384" height="28"/>
+                                                    <rect key="frame" x="8" y="8" width="384" height="27"/>
                                                     <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
@@ -8044,7 +8044,7 @@
         <scene sceneID="0Mo-wT-rwU">
             <objects>
                 <navigationController id="I3T-Js-Mcm" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="hmW-Qt-1lT">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="hmW-Qt-1lT">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

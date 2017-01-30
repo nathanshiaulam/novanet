@@ -163,6 +163,7 @@ class Profile: NSObject {
                                     greeting: dict[COLS.PROFILE.GREETING] as! String,
                                     interestsList: dict[COLS.PROFILE.INTERESTS] as! [String])
         
+        prof.setImage(image: dict[COLS.PROFILE.IMAGE] as! UIImage)
         prof.setNew(new: dict[COLS.PROFILE.NEW] as! Bool)
         prof.setAvailability(available: dict[COLS.PROFILE.AVAILABLE] as! Bool)
         return prof

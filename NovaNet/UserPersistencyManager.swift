@@ -40,10 +40,34 @@ class UserPersistencyManager: NSObject {
         self.id = id
     }
     
-    public func setProfile(prof: Profile) {
+    public func clearDefaults() {
+        let dict = Constants.defaults.dictionaryRepresentation()
+        for key in dict.keys {
+            Constants.defaults.removeObject(forKey: key.debugDescription)
+        }
+        Constants.defaults.synchronize()
+    }
+    
+    func setImage(_ image: UIImage) {
+        let imageData = UIImageJPEGRepresentation(image, 0.5)
+        let relativePath = "image_\(Date.timeIntervalSinceReferenceDate).jpg"
+        
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true);
+        let path = paths[0];
+        let fullPath = "\(path )/\(relativePath)"
+        
+        FileManager.default.createFile(atPath: fullPath, contents: imageData, attributes: nil)
+        Constants.defaults.set(relativePath, forKey: Constants.UserKeys.profileImageKey)
+    }
+
+    
+    public func setProfDefaults(prof: Profile) {
         self.userProfile = prof
         
         // TODO: Remove dependency on nsuserdefaults
+        if prof.getImage() != nil {
+            setImage(prof.getImage()!)
+        }
         Constants.defaults.set(prof.getName(), forKey: Constants.UserKeys.nameKey)
         Constants.defaults.set(prof.getEmail(), forKey: Constants.UserKeys.emailKey)
         Constants.defaults.set(prof.getEmail(), forKey: Constants.UserKeys.usernameKey)

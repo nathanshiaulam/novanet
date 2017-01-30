@@ -78,14 +78,19 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     
     @IBAction func skipTutorial(_ sender: UIButton) {
         if name.length > 0 && experience.length > 0 {
-            currProfile.setNew(new: false)
-            saveTempImage()
             saveProfile()
+            currProfile.setNew(new: false)
+            currProfile.setImage(image: Constants.DEFAULT_IMAGE!)
             
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "selectProfileVC"), object: nil)
-            self.presentingViewController?.dismiss(animated: true, completion: nil)
-            
-//            NetworkManager().onboardingComplete()
+            ProfileAPI.sharedInstance
+                .editProfileByUserId(
+                    userId: UserAPI.sharedInstance.getId(),
+                    dict: currProfile.prof_dictRepresentation(),
+                    completion: {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "selectProfileVC"), object: nil)
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "setValues"), object: nil)
+                        self.presentingViewController?.dismiss(animated: true, completion: nil)
+                })
         } else {
             Utilities.presentStandardError(errorString: "In order to skip, please tell us your name and profession.", alertTitle: "Empty Field", actionTitle: "Ok", sender: self)
         }
@@ -93,8 +98,6 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     
     // Saves all necessary fields of the profile
     func saveProfile() {
-        let userId: String = UserAPI.sharedInstance.getId()
-        
         currProfile.setName(name: name)
         currProfile.setAbout(about: about)
         currProfile.setInterests(interests: interests)
@@ -102,37 +105,7 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
         currProfile.setSeeking(seeking: lookingFor)
         currProfile.setAvailability(available: true)
         
-        UserAPI.sharedInstance.setUserDefaults(id: userId, prof: currProfile)
-        ProfileAPI.sharedInstance.editProfileByUserId(userId: userId,
-                                                      dict: currProfile.prof_dictRepresentation())
-        
-//        let profileFields:Dictionary<String, AnyObject> = [
-//            "Name" : name as AnyObject,
-//            "About" : about as AnyObject,
-//            "InterestsList" : interests as AnyObject,
-//            "Experience" : experience as AnyObject,
-//            "Looking" : lookingFor as AnyObject,
-//            "Distance" : Constants.DISCOVERY_RADIUS as AnyObject,
-//            "Available" : true as AnyObject
-//        ]
-//        
-//        NetworkManager().updateObjectWithName("Profile", profileFields: profileFields, segueType: "NONE", sender: self)
-    }
-    
-    // Sets up the user's local datastore for profile information. Online is already set at create
-    func prepareDataStore() {
-        defaults.set(name, forKey: Constants.UserKeys.nameKey)
-        defaults.set(about, forKey: Constants.UserKeys.aboutKey)
-        defaults.set(experience, forKey: Constants.UserKeys.experienceKey)
-        defaults.set(interests, forKey: Constants.UserKeys.interestsKey)
-        defaults.set(lookingFor, forKey: Constants.UserKeys.lookingForKey)
-        defaults.set(true, forKey: Constants.UserKeys.availableKey)
-        defaults.set(false, forKey: Constants.TempKeys.fromNew)
-    }
-    
-    fileprivate func saveTempImage() {
-        let tempImage = UIImageView(image: UIImage(named: "selectImage"))
-        Utilities().saveImage(tempImage.image!)
+        UserAPI.sharedInstance.setUserDefaults(id: UserAPI.sharedInstance.getId(), prof: currProfile)
     }
 
     // Takes user back to homeview after coming from uploadProfilePictureVC

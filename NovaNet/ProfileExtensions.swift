@@ -21,6 +21,7 @@ extension Profile {
                 COLS.PROFILE.INTERESTS: interestsList as AnyObject,
                 COLS.PROFILE.NEW: new as AnyObject,
                 COLS.PROFILE.AVAILABLE: available as AnyObject,
+                COLS.PROFILE.IMAGE: image as AnyObject,
                 COLS.PROFILE.LAST_ACTIVE: DateFormatter().standardFormatter().string(from: last_active!) as AnyObject]
     }
 }

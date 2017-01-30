@@ -52,16 +52,26 @@ class UserAPI: NSObject {
         apiClient.resetPassword(email: email, completionHandler: completion, errorHandler: error)
     }
     
-    public func logOut() {
-        
+    public func logOut(completion: @escaping() -> Void) {
+        apiClient.logOut(completion: {
+            completion()            
+        })
     }
     
     public func getId() -> String {
         return persistencyManager.getId()
     }
     
+    public func getProfile() -> Profile {
+        return persistencyManager.getProfile()
+    }
+    
     public func setUserDefaults(id: String, prof: Profile) {
-        persistencyManager.setProfile(prof: prof)
+        persistencyManager.setProfDefaults(prof: prof)
         persistencyManager.setId(id: id)
-    }    
+    }
+    
+    public func clearUserDefaults() {
+        persistencyManager.clearDefaults()
+    }
 }

@@ -10,6 +10,7 @@ import Foundation
 
 struct Constants {
     static let defaults:UserDefaults = UserDefaults.standard
+    static let DEFAULT_IMAGE = UIImage(named: "selectImage")
     
     struct ProfileDefaults {
         static let interestOne = "Nova"

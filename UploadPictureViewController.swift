@@ -12,7 +12,10 @@ import Bolts
 
 class UploadPictureViewController: ViewController, UIGestureRecognizerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate {
     
-    var bot:CGFloat!;
+    var bot:CGFloat!
+    var currProfile: Profile!
+    let picker = UIImagePickerController()
+    var popover:UIPopoverController? = nil
     
     @IBOutlet weak var uploadedImage: UIImageView!
     
@@ -26,85 +29,48 @@ class UploadPictureViewController: ViewController, UIGestureRecognizerDelegate, 
     @IBOutlet weak var subWelcomeLabel: UILabel!
     
     @IBOutlet weak var finishButton: UIButton!
+    
+    var selectedImage: UIImage!
     // Finish button clicked, store all information and dismiss VC
     @IBAction func finishedOnboarding(_ sender: UIButton) {
-        
-        if uploadedImage.image != nil {
-            // Indicate that the user has finished onboarding and can have access to app
-            defaults.set(false, forKey: Constants.TempKeys.fromNew);
-        
-            // Saves image to local datastore and preps image to store into Parse
-            
-            uploadedImage.contentMode = .scaleAspectFit
-            Utilities().saveImage(uploadedImage.image!);
-            
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "selectProfileVC"), object: nil)
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "backToHomeView"), object: nil);
-            
-            NetworkManager().onboardingComplete()
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "setValues"), object: nil)
-
-            self.navigationController?.popToRootViewController(animated: true);
+        if selectedImage != nil {
+            completeOnboarding(image: selectedImage)
         } else {
-            let alert = UIAlertController(title: "Upload an Image", message: "Please upload an image first.", preferredStyle: UIAlertControllerStyle.alert);
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil));
-            self.present(alert, animated: true, completion: nil);
+            Utilities.presentStandardError(errorString: "Please upload an image first", alertTitle: "Upload an Image", actionTitle: "Ok", sender: self)
         }
     }
     
     @IBAction func skipUpload(_ sender: AnyObject) {
-        saveTempImage()
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "selectProfileVC"), object: nil)
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "backToHomeView"), object: nil)
-        NetworkManager().onboardingComplete()
-        self.navigationController?.popToRootViewController(animated: true);
-    }
-    // Prepares local data store and image picker
-    let picker = UIImagePickerController();
-    
-    var popover:UIPopoverController? = nil;
-    let defaults:UserDefaults = UserDefaults.standard;
-    
-    /*-------------------------------- HELPER METHODS ------------------------------------*/
- 
-    fileprivate func saveTempImage() {
-        let tempImage = UIImageView(image: UIImage(named: "selectImage"))
-        Utilities().saveImage(tempImage.image!)
-    }
-    
-    func manageiOSModelType() {
-        if (Constants.ScreenDimensions.screenHeight == 480) {
-            welcomeLabel.font = welcomeLabel.font.withSize(17.0);
-            imageY.constant = -35;
-            subWelcomeLabel.font = subWelcomeLabel.font.withSize(14.0);
-            imageHeight.constant = 160;
-            imageWidth.constant = 160;
-            buttonHeight.constant = 45;
-            self.continueDistFromBot.constant = bot;
-            return;
-        } else if (Constants.ScreenDimensions.screenHeight == 568) {
-            welcomeLabel.font = welcomeLabel.font.withSize(18.0);
-            subWelcomeLabel.font = subWelcomeLabel.font.withSize(14.0);
-            imageHeight.constant = 190
-            imageWidth.constant = 190
-            imageY.constant = -20
-            
-            return;
-        } else if (Constants.ScreenDimensions.screenHeight == 667) {
-            
-            return; // Do nothing because designed on iPhone 6 viewport
-        } else if (Constants.ScreenDimensions.screenHeight == 736) {
-            welcomeLabel.font = welcomeLabel.font.withSize(24.0);
-            subWelcomeLabel.font = subWelcomeLabel.font.withSize(18.0);
-            imageHeight.constant = 250
-            imageWidth.constant = 250
-            return;
+        if selectedImage == nil {
+            selectedImage = Constants.DEFAULT_IMAGE
         }
+        completeOnboarding(image: selectedImage)
     }
+    
+    private func completeOnboarding(image: UIImage) {
+        let userId:String = UserAPI.sharedInstance.getId()
+
+        currProfile.setNew(new: false)
+        currProfile.setImage(image: image)
+        
+        ProfileAPI.sharedInstance.editProfileByUserId(
+            userId: userId,
+            dict: self.currProfile.prof_dictRepresentation(),
+            completion: {
+                UserAPI.sharedInstance.setUserDefaults(id: userId, prof: self.currProfile)
+                
+                // Set notifications to send user to a completed profile page
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "selectProfileVC"), object: nil)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "backToHomeView"), object: nil)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "setValues"), object: nil)
+                self.navigationController?.popToRootViewController(animated: true)
+        })
+    }
+    /*-------------------------------- HELPER METHODS ------------------------------------*/
 
     // If image tapped, prompt user to upload or take photos
     func tappedImage() {
-        let alert:UIAlertController = UIAlertController(title: "Choose an Image", message: nil, preferredStyle: UIAlertControllerStyle.actionSheet);
+        let alert:UIAlertController = UIAlertController(title: "Choose an Image", message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
         
         let galleryAction = UIAlertAction(title: "Upload a Photo", style: UIAlertActionStyle.default)
             {
@@ -121,9 +87,9 @@ class UploadPictureViewController: ViewController, UIGestureRecognizerDelegate, 
                 UIAlertAction in
         }
         // Add the actions
-        alert.addAction(galleryAction);
-        alert.addAction(cameraAction);
-        alert.addAction(cancelAction);
+        alert.addAction(galleryAction)
+        alert.addAction(cameraAction)
+        alert.addAction(cancelAction)
         
         // Present the actionsheet
         self.present(alert, animated: true, completion: nil)
@@ -137,7 +103,7 @@ class UploadPictureViewController: ViewController, UIGestureRecognizerDelegate, 
         }
         else
         {
-            popover = UIPopoverController(contentViewController: picker);
+            popover = UIPopoverController(contentViewController: picker)
             popover?.present(from: uploadedImage.frame, in: self.view, permittedArrowDirections: UIPopoverArrowDirection.any, animated: true)
         }
     }
@@ -146,7 +112,7 @@ class UploadPictureViewController: ViewController, UIGestureRecognizerDelegate, 
         if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera))
         {
             picker.sourceType = UIImagePickerControllerSourceType.camera
-            self .present(picker, animated: true, completion: nil)
+            self.present(picker, animated: true, completion: nil)
         }
         else
         {
@@ -154,51 +120,87 @@ class UploadPictureViewController: ViewController, UIGestureRecognizerDelegate, 
         }
     }
     
-
-    
     /*-------------------------------- IMAGE PICKER DELEGATE METHODS ------------------------------------*/
 
     // Upload completion events
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        picker.dismiss(animated: true, completion: nil);
+        picker.dismiss(animated: true, completion: nil)
         
-        uploadedImage.image = info[UIImagePickerControllerOriginalImage] as? UIImage;
-        Utilities().formatImage(uploadedImage);
+        uploadedImage.image = info[UIImagePickerControllerOriginalImage] as? UIImage
+        Utilities().formatImage(uploadedImage)
+        uploadedImage.contentMode = .scaleAspectFit
+        selectedImage = uploadedImage.image
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil);
+        picker.dismiss(animated: true, completion: nil)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [AnyHashable: Any]!) {
         self.dismiss(animated: true, completion: { () -> Void in})
         uploadedImage.image = image
-        Utilities().formatImage(uploadedImage);
+        Utilities().formatImage(uploadedImage)
+        uploadedImage.contentMode = .scaleAspectFit
+        selectedImage = uploadedImage.image
+    }
+    
+    //TODO: remove
+    func manageiOSModelType() {
+        if (Constants.ScreenDimensions.screenHeight == 480) {
+            welcomeLabel.font = welcomeLabel.font.withSize(17.0)
+            imageY.constant = -35
+            subWelcomeLabel.font = subWelcomeLabel.font.withSize(14.0)
+            imageHeight.constant = 160
+            imageWidth.constant = 160
+            buttonHeight.constant = 45
+            self.continueDistFromBot.constant = bot
+            return
+        } else if (Constants.ScreenDimensions.screenHeight == 568) {
+            welcomeLabel.font = welcomeLabel.font.withSize(18.0)
+            subWelcomeLabel.font = subWelcomeLabel.font.withSize(14.0)
+            imageHeight.constant = 190
+            imageWidth.constant = 190
+            imageY.constant = -20
+            
+            return
+        } else if (Constants.ScreenDimensions.screenHeight == 667) {
+            
+            return // Do nothing because designed on iPhone 6 viewport
+        } else if (Constants.ScreenDimensions.screenHeight == 736) {
+            welcomeLabel.font = welcomeLabel.font.withSize(24.0)
+            subWelcomeLabel.font = subWelcomeLabel.font.withSize(18.0)
+            imageHeight.constant = 250
+            imageWidth.constant = 250
+            return
+        }
     }
     
     /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
 
     override func viewDidLoad() {
-        super.viewDidLoad();
+        super.viewDidLoad()
         
-        picker.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
-        picker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        ProfileAPI.sharedInstance.getProfileByUserId(
+            userId: UserAPI.sharedInstance.getId(),
+            completion: {prof in self.currProfile = prof})
         
-        self.title = "2 of 2";
+        self.title = "2 of 2"
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style:.plain, target:nil, action:nil)
-
-        // Initializes gesture recognizer
-        let tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UploadPictureViewController.tappedImage))
-        tapGestureRecognizer.delegate = self;
-        self.uploadedImage.addGestureRecognizer(tapGestureRecognizer);
-        self.uploadedImage.isUserInteractionEnabled = true;
-        // Initializes the delegate of the picker to the view controller
-        picker.delegate = self
         finishButton.layer.cornerRadius = 5
         
+        // Initializes the delegate of the picker to the view controller
+        picker.navigationBar.barTintColor = Utilities().UIColorFromHex(0xFC6706, alpha: 1.0)
+        picker.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        picker.delegate = self
+        
+        // Initializes gesture recognizer
+        let tapGestureRecognizer:UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UploadPictureViewController.tappedImage))
+        tapGestureRecognizer.delegate = self
+        self.uploadedImage.addGestureRecognizer(tapGestureRecognizer)
+        self.uploadedImage.isUserInteractionEnabled = true
     }
     override func viewDidLayoutSubviews() {
-        manageiOSModelType();
+        manageiOSModelType()
 
     }
 }

@@ -302,8 +302,8 @@
 		160B9C081BCF769800316AF3 /* MainTabs */ = {
 			isa = PBXGroup;
 			children = (
-				1685FB321BE988F600E05CDE /* Events */,
 				160B9C0A1BCF774000316AF3 /* Finder */,
+				1685FB321BE988F600E05CDE /* Events */,
 				160B9C0B1BCF775200316AF3 /* Profile */,
 				16DB14051B8024EE0048E1AC /* FeedbackViewController.swift */,
 				160B9C091BCF76B000316AF3 /* Messages */,
@@ -354,9 +354,9 @@
 		1666D0C81E3CAA1E00CC87ED /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				160B9C071BCF768600316AF3 /* HomeView */,
 				160B9C061BCF764800316AF3 /* Intro */,
 				160B9C051BCF763400316AF3 /* OnboardingProcess */,
-				160B9C071BCF768600316AF3 /* HomeView */,
 				160B9C081BCF769800316AF3 /* MainTabs */,
 			);
 			name = ViewControllers;
@@ -436,7 +436,6 @@
 				169DEDE41E00B9FF003D35E2 /* ProfileAPI.swift */,
 				1664D2E41E087A33003C384A /* UserAPI.swift */,
 				169DEDE61E00BA0E003D35E2 /* MeetupAPI.swift */,
-				169441131BDC29BC0049122C /* NetworkManager.swift */,
 			);
 			name = API;
 			sourceTree = "<group>";
@@ -474,6 +473,7 @@
 				167114C01B8299F90024DC3E /* ImageUtil.swift */,
 				163B19891CF9214800E0A469 /* TextView.swift */,
 				16D333621BCB063200C1B405 /* Utilities.swift */,
+				169441131BDC29BC0049122C /* NetworkManager.swift */,
 				1694D2F01E06476300EDA407 /* Constants */,
 				169DEDDD1E00B3D7003D35E2 /* API */,
 				169DEDD81E0078F8003D35E2 /* Models */,

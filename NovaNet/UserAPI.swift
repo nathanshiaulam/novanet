@@ -58,6 +58,10 @@ class UserAPI: NSObject {
         })
     }
     
+    public func loggedIn() -> Bool{
+        return apiClient.loggedIn()
+    }
+    
     public func getId() -> String {
         return persistencyManager.getId()
     }

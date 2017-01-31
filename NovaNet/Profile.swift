@@ -80,7 +80,7 @@ class Profile: NSObject {
         return self.about
     }
     
-    public func getSeeking() -> String? {
+    public func getLookingFor() -> String? {
         return self.seeking
     }
     
@@ -150,6 +150,10 @@ class Profile: NSObject {
     
     public func setNew(new: Bool) {
         self.new = new
+    }
+    
+    public func setInterest(interest: String, index: Int) {
+        self.interestsList?[index] = interest
     }
     
     public static func constructProfile(dict: [String:AnyObject?]) -> Profile {

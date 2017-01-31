@@ -10,7 +10,7 @@ import UIKit
 import Bolts
 import Parse
 
-class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopoverControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate,UINavigationControllerDelegate {
+class ProfileViewController: ViewController {
     
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -20,75 +20,33 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
     @IBOutlet weak var secondInterestLabel: UILabel!
     @IBOutlet weak var thirdInterestLabel: UILabel!
     @IBOutlet weak var lookingForLabel: UILabel!
-    
     @IBOutlet weak var editLabel: UIButton!
-    let picker = UIImagePickerController()
-    var popover:UIPopoverController? = nil
-    let defaults:UserDefaults = UserDefaults.standard
     
-    /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
+    private var currProfile: Profile!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        let dotOne = UIImageView(image: UIImage(named: "orangeDot.png"))
-        dotOne.frame = CGRect(x: -10, y: firstInterestLabel.bounds.size.height / 2.0 - 5, width: 5, height: 5)
-        dotOne.contentMode = UIViewContentMode.center
-        firstInterestLabel.addSubview(dotOne)
-        
-        let dotTwo = UIImageView(image: UIImage(named: "orangeDot.png"))
-        dotTwo.frame = CGRect(x: -10, y: secondInterestLabel.bounds.size.height / 2.0 - 5, width: 5, height: 5)
-        dotTwo.contentMode = UIViewContentMode.center
-        secondInterestLabel.addSubview(dotTwo)
-        
-        let dotThree = UIImageView(image: UIImage(named: "orangeDot.png"))
-        dotThree.frame = CGRect(x: -10, y: thirdInterestLabel.bounds.size.height / 2.0 - 5, width: 5, height: 5)
-        dotThree.contentMode = UIViewContentMode.center
-        thirdInterestLabel.addSubview(dotThree)
-        
-        self.view.backgroundColor = UIColor.white
-   
-        self.tabBarController?.navigationItem.title = "PROFILE"
-        
-        editLabel.layer.cornerRadius = 5
-        
-        picker.delegate = self
-        setValues()
-
-    }
-    
-    override func viewWillLayoutSubviews() {
-        let fontDict:[CGFloat : [UILabel]] = getChangeLabelDict()
-        Utilities.manageFontSizes(fontDict)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        Utilities().formatImage(self.profileImage)
-    }
-    
-    
-    override func viewDidAppear(_ animated: Bool) {
-        
-        // Go to login page if no user logged in
-        if (!NetworkManager.userLoggedIn()) {
-            self.tabBarController?.selectedIndex = 0
-            return
-        }
-        NotificationCenter.default.addObserver(self, selector: #selector(ProfileViewController.setValues), name: NSNotification.Name(rawValue: "setValues"), object: nil)
-        setValues()
-        self.tabBarController?.navigationItem.title = "PROFILE"
-
-        super.viewDidAppear(true)
-    }
-    
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     /*-------------------------------- HELPER METHODS ------------------------------------*/
-    
+    private func loadView(prof: Profile) {
+        nameLabel.text = prof.getName()
+        experienceLabel.text = prof.getExp()
+        aboutLabel.text = prof.getAbout()?.swapIfEmpty(replace: Placeholders.ABOUT)
+        
+        if let interests:[String] = prof.getInterests() {
+            firstInterestLabel.text = interests[0].swapIfEmpty(replace: Placeholders.INTEREST_ONE)
+            secondInterestLabel.text = interests[1].swapIfEmpty(replace: Placeholders.INTEREST_ONE)
+            thirdInterestLabel.text = interests[2].swapIfEmpty(replace: Placeholders.INTEREST_ONE)
+        }
+        
+        lookingForLabel.text = prof.getLookingFor()?.swapIfEmpty(replace: Placeholders.LOOKING_FOR)
+        self.profileImage.image = prof.getImage()
+        
+        for label in self.view.getLabelsInView() {
+            label.lineBreakMode = NSLineBreakMode.byWordWrapping
+            label.sizeToFit()
+        }
+    }
+
+    //TODO: REMOVE
     fileprivate func getChangeLabelDict() -> [CGFloat : [UILabel]]{
         var fontDict:[CGFloat : [UILabel]] = [CGFloat : [UILabel]]()
         
@@ -148,86 +106,65 @@ class ProfileViewController: ViewController, UIGestureRecognizerDelegate, UIPopo
         return fontDict
     }
     
-    // Sets all values of the user profile fields
-    @objc fileprivate func setValues() {
-        
-        if let name = defaults.string(forKey: Constants.UserKeys.nameKey) {
-            nameLabel.text = name
-            if name.characters.count == 0 {
-                nameLabel.text = "Name"
-            }
-        } else {
-            nameLabel.text = "Name"
-        }
-        if let about = defaults.string(forKey: Constants.UserKeys.aboutKey) {
-            aboutLabel.text = about
-            if about.characters.count == 0 {
-                aboutLabel.text = "A sentence or two illustrating what you're about. Who are you, in a nutshell?"
-            }
-        } else {
-            aboutLabel.text = "A sentence or two illustrating what you're about. Who are you, in a nutshell?"
-        }
-        if let interests = defaults.array(forKey: Constants.UserKeys.interestsKey) {
-            var interestsArr = interests
-            if (interestsArr.count == 0) {
-                firstInterestLabel.text = "What are your interests?"
-            } else {
-                var interestsLabelArr:[UILabel] = [UILabel]()
-                interestsLabelArr.append(firstInterestLabel)
-                interestsLabelArr.append(secondInterestLabel)
-                interestsLabelArr.append(thirdInterestLabel)
+       /*-------------------------------- NIB LIFE CYCLE METHODS ------------------------------------*/
 
-                for i in 0..<interestsLabelArr.count {
-                    let interest = interestsArr[i] as? String
-                    interestsLabelArr[i].text = interest!.trimmingCharacters(in: CharacterSet.whitespaces)
-                }
-            }
-            
-        }
-        if let experience = defaults.string(forKey: Constants.UserKeys.experienceKey) {
-            experienceLabel.text = experience
-            if (experience.characters.count == 0) {
-                experienceLabel.text = "What's your experience?"
-            }
-        } else {
-            experienceLabel.text = "What's your experience?"
-        }
-        if let lookingFor = defaults.string(forKey: Constants.UserKeys.lookingForKey) {
-            let seekingString = NSMutableAttributedString(string: lookingFor)
-            let seekingHeader = "Seeking // "
-            
-            let attrs:[String : AnyObject] =  [NSFontAttributeName : UIFont(name: "OpenSans-Bold", size: Constants.SMALL_FONT_SIZE)!, NSForegroundColorAttributeName: Utilities().UIColorFromHex(0x879494, alpha: 1.0)]
-            
-            let boldedString = NSMutableAttributedString(string:seekingHeader, attributes:attrs)
-            
-            boldedString.append(seekingString)
-            
-            lookingForLabel.text = boldedString.string
-            if (lookingFor.characters.count == 0) {
-                lookingForLabel.text = "Who are you looking for?"
-            }
-        } else {
-            lookingForLabel.text = "Who are you looking for?"
-        }
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        experienceLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        experienceLabel.sizeToFit()
+        let dotOne = UIImageView(image: UIImage(named: "orangeDot.png"))
+        dotOne.frame = CGRect(x: -10, y: firstInterestLabel.bounds.size.height / 2.0 - 5, width: 5, height: 5)
+        dotOne.contentMode = UIViewContentMode.center
+        firstInterestLabel.addSubview(dotOne)
         
-        nameLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        nameLabel.sizeToFit()
+        let dotTwo = UIImageView(image: UIImage(named: "orangeDot.png"))
+        dotTwo.frame = CGRect(x: -10, y: secondInterestLabel.bounds.size.height / 2.0 - 5, width: 5, height: 5)
+        dotTwo.contentMode = UIViewContentMode.center
+        secondInterestLabel.addSubview(dotTwo)
         
-        firstInterestLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        firstInterestLabel.sizeToFit()
+        let dotThree = UIImageView(image: UIImage(named: "orangeDot.png"))
+        dotThree.frame = CGRect(x: -10, y: thirdInterestLabel.bounds.size.height / 2.0 - 5, width: 5, height: 5)
+        dotThree.contentMode = UIViewContentMode.center
+        thirdInterestLabel.addSubview(dotThree)
         
-        secondInterestLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        secondInterestLabel.sizeToFit()
-
-        thirdInterestLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        thirdInterestLabel.sizeToFit()
-
-        lookingForLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
-        lookingForLabel.sizeToFit()
+        self.view.backgroundColor = UIColor.white
         
-        self.profileImage.image = Utilities().readImage()
+        editLabel.layer.cornerRadius = 5
     }
+
+    override func viewDidAppear(_ animated: Bool) {
+        
+        // Go to login page if no user logged in
+        if (!UserAPI.sharedInstance.loggedIn()) {
+            self.tabBarController?.selectedIndex = 0
+            return
+        }
+        
+        ProfileAPI.sharedInstance.getProfileByUserId(
+            userId: UserAPI.sharedInstance.getId(),
+            completion: {prof in
+                self.currProfile = prof
+                self.loadView(prof: prof)
+        })
+        
+        self.tabBarController?.navigationItem.title = "PROFILE"
+        super.viewDidAppear(true)
+    }
+    
+    override func viewWillLayoutSubviews() {
+        let fontDict:[CGFloat : [UILabel]] = getChangeLabelDict()
+        Utilities.manageFontSizes(fontDict)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        Utilities().formatImage(self.profileImage)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
+        if segue.identifier == "toEditProfile" {
+            let destinationVC = segue.destination.childViewControllers[0] as! SettingsMenuTableVC
+            destinationVC.currProfile = self.currProfile
+        }
+    }
+
+
 }

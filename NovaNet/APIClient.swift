@@ -129,6 +129,14 @@ class APIClient: NSObject {
         })
     }
     
+    public func loggedIn() -> Bool {
+        let currentUser = PFUser.current()
+        if ((currentUser) != nil) {
+            return true
+        }
+        return false
+    }
+    
     public func resetPassword(
         email: String,
         completionHandler: @escaping() -> Void,

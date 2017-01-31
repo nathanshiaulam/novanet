@@ -16,4 +16,11 @@ extension String {
     var trimmed: String {
         return self.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
+    
+    func swapIfEmpty(replace: String) -> String {
+        if self == nil {
+            return replace
+        }
+        return self.trimmed.length == 0 ? replace : self.trimmed
+    }
 }

@@ -172,19 +172,13 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     
     // Removes keyboard when tap out of screen
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        name = textOrPlaceholder(text: nameField.text!,
-                                       placeholder: "")
-        experience = textOrPlaceholder(text: experienceField.text!,
-                                       placeholder: "")
+        name = nameField.text!.swapIfEmpty(replace: "")
+        experience = experienceField.text!.swapIfEmpty(replace: "")
         about = aboutField.text!.trimmed
-        lookingFor = textOrPlaceholder(text: lookingForField.text!,
-                                       placeholder: Placeholders.LOOKING_FOR)
-        interests[0] = textOrPlaceholder(text: interestFieldOne.text!,
-                                         placeholder: Placeholders.INTEREST_ONE)
-        interests[1] = textOrPlaceholder(text: interestFieldTwo.text!,
-                                         placeholder: Placeholders.INTEREST_TWO)
-        interests[2] = textOrPlaceholder(text: interestFieldThree.text!,
-                                         placeholder: Placeholders.INTEREST_THREE)
+        lookingFor = lookingForField.text!.swapIfEmpty(replace: Placeholders.LOOKING_FOR)
+        interests[0] = interestFieldOne.text!.swapIfEmpty(replace: Placeholders.INTEREST_ONE)
+        interests[1] = interestFieldTwo.text!.swapIfEmpty(replace: Placeholders.INTEREST_TWO)
+        interests[2] = interestFieldThree.text!.swapIfEmpty(replace: Placeholders.INTEREST_THREE)
         
         self.view.endEditing(true)
     }
@@ -224,34 +218,28 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     // Allows users to hit enter and move to the next text field
     func textFieldShouldReturn(_ textField: UITextField)-> Bool {
         if (textField == nameField) {
-            name = textOrPlaceholder(text: nameField.text!,
-                                     placeholder: "")
+            name = nameField.text!.swapIfEmpty(replace: "")
             experienceField.becomeFirstResponder()
         }
         else if (textField == experienceField) {
-            experience = textOrPlaceholder(text: experienceField.text!,
-                                           placeholder: "")
+            experience = experienceField.text!.swapIfEmpty(replace: "")
             textField.resignFirstResponder()
             aboutField.becomeFirstResponder()
         }
         if (textField == interestFieldOne) {
-            interests[0] = textOrPlaceholder(text: interestFieldOne.text!,
-                                             placeholder: Placeholders.INTEREST_ONE)
+            interests[0] = interestFieldOne.text!.swapIfEmpty(replace: Placeholders.INTEREST_ONE)
             textField.resignFirstResponder()
             interestFieldTwo.becomeFirstResponder()
         } else if (textField == interestFieldTwo) {
-            interests[1] = textOrPlaceholder(text: interestFieldTwo.text!,
-                                             placeholder: Placeholders.INTEREST_TWO)
+            interests[1] = interestFieldTwo.text!.swapIfEmpty(replace: Placeholders.INTEREST_TWO)
             textField.resignFirstResponder()
             interestFieldThree.becomeFirstResponder()
         } else if (textField == interestFieldThree) {
-            interests[2] = textOrPlaceholder(text: interestFieldThree.text!,
-                                             placeholder: Placeholders.INTEREST_THREE)
+            interests[2] = interestFieldThree.text!.swapIfEmpty(replace: Placeholders.INTEREST_THREE)
             textField.resignFirstResponder()
             lookingForField.becomeFirstResponder()
         } else {
-            lookingFor = textOrPlaceholder(text: lookingForField.text!,
-                                           placeholder: Placeholders.LOOKING_FOR)
+            lookingFor = lookingForField.text!.swapIfEmpty(replace: Placeholders.LOOKING_FOR)
             textField.resignFirstResponder()
         }
         return false
@@ -260,10 +248,6 @@ class OnboardingTableViewController: TableViewController, UITextViewDelegate, UI
     // checks active field
     private func textFieldDidBeginEditing(_ textField: UITextField) {
         activeField = textField
-    }
-    
-    private func textOrPlaceholder(text: String, placeholder: String) -> String {
-        return text.trimmed.length == 0 ? placeholder : text.trimmed
     }
     
     override func viewDidLoad() {

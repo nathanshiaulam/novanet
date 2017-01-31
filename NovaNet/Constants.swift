@@ -11,7 +11,7 @@ import Foundation
 struct Constants {
     static let defaults:UserDefaults = UserDefaults.standard
     static let DEFAULT_IMAGE = UIImage(named: "selectImage")
-    
+    static let LOOKING_PREFIX = "Seeking // "
     struct ProfileDefaults {
         static let interestOne = "Nova"
         static let interestTwo = "Jobs"

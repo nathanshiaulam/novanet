@@ -30,6 +30,7 @@
 		163B198A1CF9214800E0A469 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163B19891CF9214800E0A469 /* TextView.swift */; };
 		163B198C1CFA36B200E0A469 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 163B198B1CFA36B200E0A469 /* Images.xcassets */; };
 		164092EB1E15B73D002A4BAE /* UserPersistencyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164092EA1E15B73D002A4BAE /* UserPersistencyManager.swift */; };
+		165E47531E4002D400163C87 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165E47521E4002D400163C87 /* UIViewExtensions.swift */; };
 		16629EB11BDDD7C4003C4F05 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB01BDDD7C4003C4F05 /* ViewController.swift */; };
 		16629EB31BDDD7F2003C4F05 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB21BDDD7F2003C4F05 /* TableViewController.swift */; };
 		16629EB71BDDDAEA003C4F05 /* NSDateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */; };
@@ -138,6 +139,7 @@
 		163B19891CF9214800E0A469 /* TextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		163B198B1CFA36B200E0A469 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		164092EA1E15B73D002A4BAE /* UserPersistencyManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserPersistencyManager.swift; sourceTree = "<group>"; };
+		165E47521E4002D400163C87 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtensions.swift; sourceTree = "<group>"; };
 		16629EB01BDDD7C4003C4F05 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../ViewController.swift; sourceTree = "<group>"; };
 		16629EB21BDDD7F2003C4F05 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSDateExtensions.swift; path = ../NSDateExtensions.swift; sourceTree = "<group>"; };
@@ -305,8 +307,8 @@
 				160B9C0A1BCF774000316AF3 /* Finder */,
 				1685FB321BE988F600E05CDE /* Events */,
 				160B9C0B1BCF775200316AF3 /* Profile */,
-				16DB14051B8024EE0048E1AC /* FeedbackViewController.swift */,
 				160B9C091BCF76B000316AF3 /* Messages */,
+				16DB14051B8024EE0048E1AC /* FeedbackViewController.swift */,
 			);
 			name = MainTabs;
 			sourceTree = "<group>";
@@ -345,6 +347,7 @@
 			children = (
 				1664D2E21E086E09003C384A /* ProfileExtensions.swift */,
 				16629EB61BDDDAEA003C4F05 /* NSDateExtensions.swift */,
+				165E47521E4002D400163C87 /* UIViewExtensions.swift */,
 				16A614C61E0E283D00DF0349 /* DateExtensions.swift */,
 				1666D0C41E3C8DA400CC87ED /* StringExtensions.swift */,
 			);
@@ -817,6 +820,7 @@
 				167114C11B8299F90024DC3E /* ImageUtil.swift in Sources */,
 				16D333611BCADE1600C1B405 /* OnboardingTableViewController.swift in Sources */,
 				1664D2E51E087A33003C384A /* UserAPI.swift in Sources */,
+				165E47531E4002D400163C87 /* UIViewExtensions.swift in Sources */,
 				16629EB11BDDD7C4003C4F05 /* ViewController.swift in Sources */,
 				160B9C0D1BCF7F1100316AF3 /* SettingsMenuTableVC.swift in Sources */,
 				169CEB9D1B8C9DC800CCF078 /* AboutVC.swift in Sources */,
